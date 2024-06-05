@@ -127,11 +127,11 @@ class MenstrualCyclePage extends StatelessWidget {
 
 # Bugs or Requests
 
-If you encounter any problems feel free to open an [issue](https://github.com/SandipVKalola/menstrual_cycle_widget/issues/new?template=bug_report.md). If you feel the library is missing a feature, please raise a [ticket](https://github.com/SandipVKalola/menstrual_cycle_widget/issues/new?template=feature_request.md) on GitHub.
+If you encounter any problems feel free to open an [issue](https://github.com/sandipkalola/menstrual_cycle_widget/issues/new?template=bug_report.md). If you feel the library is missing a feature, please raise a [ticket](https://github.com/sandipkalola/menstrual_cycle_widget/issues/new?template=feature_request.md) on GitHub.
 
 
 ## Github example link
-https://github.com/SandipVKalola/menstrual_cycle_widget
+https://github.com/sandipkalola/menstrual_cycle_widget
 
 # Donate
 > If you found this project helpful or you learned something from the source code and want to thank me, consider buying me a cup of :coffee:
