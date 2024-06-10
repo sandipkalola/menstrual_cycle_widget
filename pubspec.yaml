@@ -4,11 +4,17 @@ version: 0.0.3
 homepage: https://github.com/sandipkalola/menstrual_cycle_widget
 repository: https://github.com/sandipkalola/menstrual_cycle_widget
 issue_tracker: https://github.com/sandipkalola/menstrual_cycle_widget/issues
+funding:
+  - https://github.com/sponsors/sandipkalola
+
+platforms:
+  android:
+  ios:
+  web:
 
 environment:
   sdk: '>=3.3.0 <4.0.0'
   flutter: ">=1.17.0"
-
 
 dependencies:
   flutter:
@@ -20,3 +26,18 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
+
+topics:
+  - widgets
+  - menstrualcycle
+  - menstrualcyclehealth
+  - period
+  - sqlite
+  - health
+  - healthapp
+  - sharedpreference
+  - circleview
+  - menstruation
+  - follicularphase
+  - ovulation
+  - lutealphase

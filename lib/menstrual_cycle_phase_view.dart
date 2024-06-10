@@ -117,7 +117,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
     this.ovulationTextColor = defaultOvulationColor,
 
     // luteal Phase Params
-    this.lutealPhaseName = "Luteal phase",
+    this.lutealPhaseName = "Luteal Phase",
     this.lutealPhaseColor = defaultLutealPhaseColor,
     this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
     this.lutealPhaseTextColor = defaultLutealPhaseColor,
@@ -155,7 +155,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   MenstrualCyclePainter? _painter;
   ui.Image? _image;
 
-  String websiteUrl = "https://pub.dev/packages/menstrual_cycle_phases_view";
+  String websiteUrl = "https://pub.dev/packages/menstrual_cycle_widget";
   double selectedDayCircleSize = 15;
 
   Future<void> _init(String imagePath) async {
