@@ -9,7 +9,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  menstrual_cycle_widget: ^0.1.1
+  menstrual_cycle_widget: ^0.1.3
 ```
 
 ### 2. Install it
@@ -125,13 +125,13 @@ class MenstrualCyclePage extends StatelessWidget {
 # Theme example
 
 **1) MenstrualCycleTheme.basic**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic.jpg?raw=true" height = "400px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic.jpg?raw=true" height = "300px">
 
 **2) MenstrualCycleTheme.arcs**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arcs.jpg?raw=true" height = "400px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arcs.jpg?raw=true" height = "300px">
 
 **3) MenstrualCycleTheme.circle**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle.jpg?raw=true"  height = "400px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle.jpg?raw=true"  height = "300px">
 
 # Phase text boundaries example
 **1) PhaseTextBoundaries.inside**
