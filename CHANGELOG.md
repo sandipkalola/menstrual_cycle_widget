@@ -1,4 +1,4 @@
-## [0.1.0] - 4 June 2024
+## [0.1.1] - 16 June 2024
 * Added new params
 * Update README File description.
 

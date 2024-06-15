@@ -9,7 +9,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  menstrual_cycle_widget: ^0.0.3
+  menstrual_cycle_widget: ^0.1.1
 ```
 
 ### 2. Install it
