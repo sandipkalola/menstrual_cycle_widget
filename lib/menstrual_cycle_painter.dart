@@ -3,6 +3,7 @@ import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+
 import 'menstrual_cycle_utils.dart';
 
 class MenstrualCyclePainter extends CustomPainter {
@@ -17,6 +18,7 @@ class MenstrualCyclePainter extends CustomPainter {
   Color menstruationTextColor;
   int menstruationDayCount;
   Color menstruationBackgroundColor;
+  PhaseTextBoundaries phaseTextBoundaries;
 
   // Follicular Phase Params
   String follicularPhaseName;
@@ -50,7 +52,10 @@ class MenstrualCyclePainter extends CustomPainter {
   Color selectedDayTextColor;
   Color dayTextColor;
   Color selectedDayCircleBorderColor;
-  double phasesTextSize;
+  double insidePhasesTextSize;
+  double outsidePhasesTextSize;
+  int outsideTextSpaceFromArc;
+  int outsideTextCharSpace;
   bool isShowDayTitle;
   FontWeight dayFontWeight;
   double circleDaySize;
@@ -65,6 +70,7 @@ class MenstrualCyclePainter extends CustomPainter {
   int menstruationDayCountNew = 0;
   int follicularDayCountNew = 0;
   int ovulationDayCountNew = 0;
+  double arcStrokeWidth = 30;
 
   static const Color defaultBlackColor = Colors.black;
   static const defaultMenstruationColor = Color(0xFFff584f);
@@ -80,62 +86,66 @@ class MenstrualCyclePainter extends CustomPainter {
   // Default central central background color
   static const defaultCentralCircleBackgroundColor = Color(0xffed9dba);
 
-  MenstrualCyclePainter({
-    required this.totalCycleDays,
-    this.selectedDay = 0,
-    // Menstruation Params
-    this.menstruationName = "Menstruation",
-    required this.menstruationDayCount,
-    this.menstruationColor = defaultMenstruationColor,
-    this.menstruationBackgroundColor = defaultMenstruationColorBg,
-    this.menstruationDayTextColor = defaultBlackColor,
-    this.menstruationTextColor = defaultMenstruationColor,
+  MenstrualCyclePainter(
+      {required this.totalCycleDays,
+      this.selectedDay = 0,
+      // Menstruation Params
+      this.menstruationName = "Menstruation",
+      required this.menstruationDayCount,
+      this.menstruationColor = defaultMenstruationColor,
+      this.menstruationBackgroundColor = defaultMenstruationColorBg,
+      this.menstruationDayTextColor = defaultBlackColor,
+      this.menstruationTextColor = defaultMenstruationColor,
 
-    // Follicular Phase Params
-    this.follicularPhaseName = "Follicular phase",
-    required this.follicularDayCount,
-    this.follicularPhaseDayTextColor = defaultBlackColor,
-    this.follicularPhaseColor = defaultFollicularColor,
-    this.follicularBackgroundColor = defaultFollicularColorBg,
-    this.follicularTextColor = defaultFollicularColor,
+      // Follicular Phase Params
+      this.follicularPhaseName = "Follicular phase",
+      required this.follicularDayCount,
+      this.follicularPhaseDayTextColor = defaultBlackColor,
+      this.follicularPhaseColor = defaultFollicularColor,
+      this.follicularBackgroundColor = defaultFollicularColorBg,
+      this.follicularTextColor = defaultFollicularColor,
 
-    // ovulation Phase Params
-    this.ovulationName = "Ovulation",
-    required this.ovulationDayCount,
-    this.ovulationDayTextColor = defaultBlackColor,
-    this.ovulationColor = defaultOvulationColor,
-    this.ovulationBackgroundColor = defaultOvulationColorBg,
-    this.ovulationTextColor = defaultOvulationColor,
+      // ovulation Phase Params
+      this.ovulationName = "Ovulation",
+      required this.ovulationDayCount,
+      this.ovulationDayTextColor = defaultBlackColor,
+      this.ovulationColor = defaultOvulationColor,
+      this.ovulationBackgroundColor = defaultOvulationColorBg,
+      this.ovulationTextColor = defaultOvulationColor,
 
-    // luteal Phase Params
-    this.lutealPhaseName = "Luteal phase",
-    this.lutealPhaseColor = defaultLutealPhaseColor,
-    this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
-    this.lutealPhaseTextColor = defaultLutealPhaseColor,
-    this.lutealPhaseDayTextColor = defaultBlackColor,
+      // luteal Phase Params
+      this.lutealPhaseName = "Luteal phase",
+      this.lutealPhaseColor = defaultLutealPhaseColor,
+      this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
+      this.lutealPhaseTextColor = defaultLutealPhaseColor,
+      this.lutealPhaseDayTextColor = defaultBlackColor,
 
-    // Central Circle
-    this.imageAssets,
-    this.imgSize = 30,
-    this.centralCircleBackgroundColor = defaultCentralCircleBackgroundColor,
-    this.centralCircleSize = 25,
+      // Central Circle
+      this.imageAssets,
+      this.imgSize = 30,
+      this.centralCircleBackgroundColor = defaultCentralCircleBackgroundColor,
+      this.centralCircleSize = 25,
 
-    // Day Params
-    this.dayTitle = "Day",
-    this.dayTitleFontSize = 5,
-    this.dayFontSize = 12,
-    this.selectedDayFontSize = 18,
-    this.selectedDayCircleSize = 18,
-    this.dayTextColor = defaultBlackColor,
-    this.selectedDayBackgroundColor = Colors.white,
-    this.selectedDayTextColor = defaultBlackColor,
-    this.selectedDayCircleBorderColor = Colors.transparent,
-    this.phasesTextSize = 8,
-    this.isShowDayTitle = true,
-    this.circleDaySize = 13, //Only when Theme is MenstrualCycleTheme.circle
-    this.dayFontWeight = FontWeight.normal,
-    this.theme = MenstrualCycleTheme.basic,
-  });
+      // Day Params
+      this.dayTitle = "Day",
+      this.dayTitleFontSize = 5,
+      this.dayFontSize = 12,
+      this.selectedDayFontSize = 18,
+      this.selectedDayCircleSize = 18,
+      this.dayTextColor = defaultBlackColor,
+      this.selectedDayBackgroundColor = Colors.white,
+      this.selectedDayTextColor = defaultBlackColor,
+      this.selectedDayCircleBorderColor = Colors.transparent,
+      this.insidePhasesTextSize = 8,
+      this.isShowDayTitle = true,
+      this.circleDaySize = 13, //Only when Theme is MenstrualCycleTheme.circle
+      this.dayFontWeight = FontWeight.normal,
+      this.theme = MenstrualCycleTheme.basic,
+      this.phaseTextBoundaries = PhaseTextBoundaries.inside,
+      this.arcStrokeWidth = 30,
+      this.outsidePhasesTextSize = 12,
+      this.outsideTextCharSpace = 3,
+      this.outsideTextSpaceFromArc = 30});
 
   @override
   Future<void> paint(Canvas canvas, Size size) async {
@@ -149,7 +159,7 @@ class MenstrualCyclePainter extends CustomPainter {
     follicularDayCountNew = follicularDayCount + menstruationDayCount;
     ovulationDayCountNew = follicularDayCountNew + ovulationDayCount;
 
-    _drawPhase(
+    drawTopAndTextPhase(
         canvas,
         rect,
         center,
@@ -160,7 +170,7 @@ class MenstrualCyclePainter extends CustomPainter {
         menstruationBackgroundColor,
         menstruationName,
         menstruationTextColor);
-    _drawPhase(
+    drawTopAndTextPhase(
         canvas,
         rect,
         center,
@@ -171,7 +181,7 @@ class MenstrualCyclePainter extends CustomPainter {
         follicularBackgroundColor,
         follicularPhaseName,
         follicularTextColor);
-    _drawPhase(
+    drawTopAndTextPhase(
         canvas,
         rect,
         center,
@@ -182,7 +192,7 @@ class MenstrualCyclePainter extends CustomPainter {
         ovulationBackgroundColor,
         ovulationName,
         ovulationTextColor);
-    _drawPhase(
+    drawTopAndTextPhase(
         canvas,
         rect,
         center,
@@ -194,6 +204,26 @@ class MenstrualCyclePainter extends CustomPainter {
         lutealPhaseName,
         lutealPhaseTextColor);
 
+    // SK: Show outside phase text
+    if (phaseTextBoundaries == PhaseTextBoundaries.both ||
+        phaseTextBoundaries == PhaseTextBoundaries.outside) {
+      drawOutSide(canvas, radius, size, menstruationName, 0,
+          menstruationDayCountNew, menstruationTextColor);
+      drawOutSide(canvas, radius, size, follicularPhaseName,
+          menstruationDayCount, follicularDayCountNew, follicularTextColor);
+      drawOutSide(canvas, radius, size, ovulationName, follicularDayCountNew,
+          ovulationDayCountNew, ovulationTextColor);
+      drawOutSide(
+        canvas,
+        radius,
+        size,
+        lutealPhaseName,
+        ovulationDayCountNew,
+        totalCycleDays,
+        lutealPhaseTextColor,
+      );
+    }
+
     // SK: draw Circle background on center
     final Paint backgroundPaint = Paint()
       ..color = centralCircleBackgroundColor
@@ -203,8 +233,7 @@ class MenstrualCyclePainter extends CustomPainter {
     // SK: Draw the image at the center
     if (imageAssets != null) {
       final paint = Paint()..style = PaintingStyle.stroke;
-      final imageSize =
-          Size(imgSize, imgSize); // Adjust the size of the image as needed
+      final imageSize = Size(imgSize, imgSize);
       final imageOffset = Offset(
         center.dx - imageSize.width / 2,
         center.dy - imageSize.height / 2,
@@ -321,19 +350,63 @@ class MenstrualCyclePainter extends CustomPainter {
         canvas,
         textOffset,
       );
-      /*final dayRect = textOffset & textPainter.size;
-      dayRects[day] = dayRect;
-     /if (hitbox.contains(Offset(x, y))) {
-        onDayTap(day);
-      }*/
     }
   }
-
-  /* final Map<int, Rect> dayRects = {};*/
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
+  }
+
+  /// Draw Phase text outside circle like Menstruation, Ovulation etc
+  void drawOutSide(Canvas canvas, double radius1, Size size, String text,
+      int startDay, int endDay, Color color,
+      {Offset? offset, bool adjust = true}) {
+    final startAngle = (2 * pi / totalCycleDays) * startDay - pi / 2;
+    final sweepAngle = (2 * pi / totalCycleDays) * (endDay - startDay);
+
+    double radius =
+        radius1 + outsideTextSpaceFromArc; // Adjust space btn arc and text
+    double angle = startAngle;
+
+    if (adjust) {
+      angle += sweepAngle / 2 -
+          (text.length *
+              5 *
+              pi /
+              600); // Adjust starting angle for centering text
+    }
+
+    for (int i = 0; i < text.length; i++) {
+      final char = text[i];
+
+      double charAngle = angle +
+          i * outsideTextCharSpace * pi / 180; // Adjust character spacing
+      Offset charOffset = Offset(
+        size.width / 2 + radius * cos(charAngle),
+        size.height / 2 + radius * sin(charAngle),
+      );
+
+      TextPainter textPainter = TextPainter(
+        text: TextSpan(
+          text: char,
+          style: TextStyle(
+            color: color,
+            fontSize: outsidePhasesTextSize,
+          ),
+        ),
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
+      );
+
+      textPainter.layout();
+      canvas.save();
+      canvas.translate(charOffset.dx, charOffset.dy);
+      canvas.rotate(charAngle + pi / 2);
+      textPainter.paint(
+          canvas, Offset(-textPainter.width / 2, -textPainter.height / 2));
+      canvas.restore();
+    }
   }
 
   /// Get Selected day text color based on menstrual phase
@@ -381,7 +454,8 @@ class MenstrualCyclePainter extends CustomPainter {
     return selectedDayCircleBorderColor;
   }
 
-  void _drawPhase(
+  /// Draw top view and inside background
+  void drawTopAndTextPhase(
       Canvas canvas,
       Rect rect,
       Offset center,
@@ -392,15 +466,15 @@ class MenstrualCyclePainter extends CustomPainter {
       Color bgColor,
       String label,
       Color textColor) {
-    // Draw top view
-    final paint = Paint()
-      ..color = topColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 30; // SK: Manage Height of Outer circle
     final startAngle = (2 * pi / totalCycleDays) * startDay - pi / 2;
     final sweepAngle = (2 * pi / totalCycleDays) * (endDay - startDay);
 
+    // Draw top view
     if (theme == MenstrualCycleTheme.arcs) {
+      final paint = Paint()
+        ..color = topColor
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = arcStrokeWidth; // SK: Manage Height of Outer circle
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,
@@ -416,11 +490,15 @@ class MenstrualCyclePainter extends CustomPainter {
       ..style = PaintingStyle.fill;
     canvas.drawArc(rect, startAngle, sweepAngle, true, paint1);
 
-    // set text inside circle
-    drawPhaseTextInside(
-        canvas, center, radius, startDay, endDay, textColor, label);
+    //SK: set text inside circle
+    if (phaseTextBoundaries == PhaseTextBoundaries.both ||
+        phaseTextBoundaries == PhaseTextBoundaries.inside) {
+      drawPhaseTextInside(
+          canvas, center, radius, startDay, endDay, textColor, label);
+    }
   }
 
+  /// Draw Phase text inside circle like Menstruation, Ovulation etc
   void drawPhaseTextInside(Canvas canvas, Offset center, double radius,
       int startDay, int endDay, Color textColor, String label) {
     final startAngle = (2 * pi / totalCycleDays) * startDay - pi / 2;
@@ -453,7 +531,7 @@ class MenstrualCyclePainter extends CustomPainter {
       text: label,
       style: TextStyle(
         color: textColor,
-        fontSize: phasesTextSize,
+        fontSize: insidePhasesTextSize,
         fontWeight: FontWeight.bold,
       ),
     );

@@ -52,12 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: EdgeInsets.all(8.0),
             child: Center(
               child: MenstrualCyclePhaseView(
-                size: 300,
+                size: 1000,
                 totalCycleDays: 28,
                 menstruationDayCount: 5,
                 follicularDayCount: 7,
                 selectedDay: 5,
-                ovulationDayCount: 3,
+                ovulationDayCount: 5,
                 imageAssets: "assets/img6.png",
                 theme: MenstrualCycleTheme.circle,
               ),

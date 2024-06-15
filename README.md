@@ -99,7 +99,6 @@ class MenstrualCyclePage extends StatelessWidget {
 - **lutealPhaseTextColor**: Specifies the text color of follicular phase name. Default is **'Color(0xFFabcdf0)'**.
 
 - **phasesTextSize**: Specifies font size of the phase days ('Menstruation', 'Follicular phase', 'Ovulation' and 'Luteal phase'). Default is 8.
-
 - **selectedDay**: Specifies the current day of **'Menstrual Cycle Phase'**.
 - **selectedDayBackgroundColor**: Specifies the circle background of selected day. Default is **white**.
 - **selectedDayCircleBorderColor**: Specifies the circle border color of selected day. Default is based on selected day's background color.
@@ -109,8 +108,19 @@ class MenstrualCyclePage extends StatelessWidget {
 - **dayFontWeight** : Specifies the font weight of the day. Default is **FontWeight.normal**
 
 - **circleDaySize** : Specifies the size of the circle. NOTE: Only when Theme is MenstrualCycleTheme.circle
-- **theme** : Specifies the theme of your menstrual widget . Default id **'MenstrualCycleTheme.basic'**
+- **theme** : Specifies the theme of your menstrual widget . Default is **'MenstrualCycleTheme.basic'**
+- **phaseTextBoundaries** :  Specifies where you have to show phase text ('Menstruation', 'Follicular phase', 'Ovulation' and 'Luteal phase'). Either is **Inside circle (PhaseTextBoundaries.inside)**, **Outside circle (PhaseTextBoundaries.outside)** or **Both (PhaseTextBoundaries.both)**. Default is **'PhaseTextBoundaries.inside'**
+- **arcStrokeWidth** : Specifies the size of the arc Stroke. Default is **30**. NOTE: Only when Theme is MenstrualCycleTheme.circle
+- **outsidePhasesTextSize** : Specifies the font size of outside phase text. Default is **12**
+- **outsideTextCharSpace** : Specifies the text character spaces of outside phase text. Default is **3**
+- **outsideTextSpaceFromArc** : Specifies the space between Arc circle and phase text. Default is **30**
 
+
+## Platforms
+
+- [x] iOS
+- [x] Android
+- [x] Web
 
 # Theme example
 
@@ -123,6 +133,15 @@ class MenstrualCyclePage extends StatelessWidget {
 **3) MenstrualCycleTheme.circle**
 - <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle.jpg?raw=true"  height = "400px">
 
+# Phase text boundaries example
+**1) PhaseTextBoundaries.inside**
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arcs.jpg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic.jpg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle.jpg?raw=true"  height = "300px">
+
+**2) PhaseTextBoundaries.outside**
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arc_outside.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic_outside.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle_outside.jpeg?raw=true"  height = "300px">
+
+**3) PhaseTextBoundaries.both**
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arc_both.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic_both.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle_both.jpeg?raw=true"  height = "300px">
 
 
 # Bugs or Requests

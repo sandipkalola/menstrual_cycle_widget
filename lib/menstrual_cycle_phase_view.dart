@@ -2,6 +2,7 @@ library menstrual_cycle_widget;
 
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -20,6 +21,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final Color menstruationTextColor;
   final int menstruationDayCount;
   final Color menstruationBackgroundColor;
+  final PhaseTextBoundaries phaseTextBoundaries;
 
   // Follicular Phase Params
   final String follicularPhaseName;
@@ -54,6 +56,10 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final Color dayTextColor;
   final Color selectedDayCircleBorderColor;
   final double phasesTextSize;
+  final double outsidePhasesTextSize;
+  final int outsideTextCharSpace;
+  final int outsideTextSpaceFromArc;
+
   final bool isShowDayTitle;
   final FontWeight dayFontWeight;
   final double circleDaySize;
@@ -69,6 +75,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final int menstruationDayCountNew = 0;
   final int follicularDayCountNew = 0;
   final int ovulationDayCountNew = 0;
+  final double arcStrokeWidth;
 
   static const Color defaultBlackColor = Colors.black;
   static const defaultMenstruationColor = Color(0xFFff584f);
@@ -86,65 +93,69 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   // Default central central background color
   static const defaultCentralCircleBackgroundColor = Color(0xffed9dba);
 
-  const MenstrualCyclePhaseView({
-    super.key,
-    required this.totalCycleDays,
-    required this.size,
-    this.selectedDay = 0,
+  const MenstrualCyclePhaseView(
+      {super.key,
+      required this.totalCycleDays,
+      required this.size,
+      this.selectedDay = 0,
 
-    // Menstruation Params
-    this.menstruationName = "Menstruation",
-    required this.menstruationDayCount,
-    this.menstruationColor = defaultMenstruationColor,
-    this.menstruationBackgroundColor = defaultMenstruationColorBg,
-    this.menstruationDayTextColor = defaultBlackColor,
-    this.menstruationTextColor = defaultMenstruationColor,
+      // Menstruation Params
+      this.menstruationName = "Menstruation",
+      required this.menstruationDayCount,
+      this.menstruationColor = defaultMenstruationColor,
+      this.menstruationBackgroundColor = defaultMenstruationColorBg,
+      this.menstruationDayTextColor = defaultBlackColor,
+      this.menstruationTextColor = defaultMenstruationColor,
 
-    // Follicular Phase Params
-    this.follicularPhaseName = "Follicular Phase",
-    required this.follicularDayCount,
-    this.follicularPhaseDayTextColor = defaultBlackColor,
-    this.follicularPhaseColor = defaultFollicularColor,
-    this.follicularBackgroundColor = defaultFollicularColorBg,
-    this.follicularTextColor = defaultFollicularColor,
+      // Follicular Phase Params
+      this.follicularPhaseName = "Follicular Phase",
+      required this.follicularDayCount,
+      this.follicularPhaseDayTextColor = defaultBlackColor,
+      this.follicularPhaseColor = defaultFollicularColor,
+      this.follicularBackgroundColor = defaultFollicularColorBg,
+      this.follicularTextColor = defaultFollicularColor,
 
-    // ovulation Phase Params
-    this.ovulationName = "Ovulation",
-    required this.ovulationDayCount,
-    this.ovulationDayTextColor = defaultBlackColor,
-    this.ovulationColor = defaultOvulationColor,
-    this.ovulationBackgroundColor = defaultOvulationColorBg,
-    this.ovulationTextColor = defaultOvulationColor,
+      // ovulation Phase Params
+      this.ovulationName = "Ovulation",
+      required this.ovulationDayCount,
+      this.ovulationDayTextColor = defaultBlackColor,
+      this.ovulationColor = defaultOvulationColor,
+      this.ovulationBackgroundColor = defaultOvulationColorBg,
+      this.ovulationTextColor = defaultOvulationColor,
 
-    // luteal Phase Params
-    this.lutealPhaseName = "Luteal Phase",
-    this.lutealPhaseColor = defaultLutealPhaseColor,
-    this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
-    this.lutealPhaseTextColor = defaultLutealPhaseColor,
-    this.lutealPhaseDayTextColor = defaultBlackColor,
+      // luteal Phase Params
+      this.lutealPhaseName = "Luteal Phase",
+      this.lutealPhaseColor = defaultLutealPhaseColor,
+      this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
+      this.lutealPhaseTextColor = defaultLutealPhaseColor,
+      this.lutealPhaseDayTextColor = defaultBlackColor,
 
-    // Central Circle
-    this.imageAssets = "",
-    this.imgSize = 30,
-    this.centralCircleBackgroundColor = defaultCentralCircleBackgroundColor,
-    this.centralCircleSize = 25,
+      // Central Circle
+      this.imageAssets = "",
+      this.imgSize = 30,
+      this.centralCircleBackgroundColor = defaultCentralCircleBackgroundColor,
+      this.centralCircleSize = 25,
 
-    // Day Params
-    this.dayTitle = "Day",
-    this.dayTitleFontSize = 5,
-    this.dayFontSize = 12,
-    this.selectedDayCircleSize = 1, //  18 for Arc Theme, 15 for basic theme
-    this.dayTextColor = defaultBlackColor,
-    this.selectedDayBackgroundColor = Colors.white,
-    this.selectedDayFontSize = 12,
-    this.selectedDayTextColor = defaultBlackColor,
-    this.selectedDayCircleBorderColor = Colors.transparent,
-    this.phasesTextSize = 8,
-    this.isShowDayTitle = true,
-    this.dayFontWeight = FontWeight.normal,
-    this.theme = MenstrualCycleTheme.basic,
-    this.circleDaySize = 13, //Only when Theme is MenstrualCycleTheme.circle
-  });
+      // Day Params
+      this.dayTitle = "Day",
+      this.dayTitleFontSize = 5,
+      this.dayFontSize = 12,
+      this.selectedDayCircleSize = 1, //  18 for Arc Theme, 15 for basic theme
+      this.dayTextColor = defaultBlackColor,
+      this.selectedDayBackgroundColor = Colors.white,
+      this.selectedDayFontSize = 12,
+      this.selectedDayTextColor = defaultBlackColor,
+      this.selectedDayCircleBorderColor = Colors.transparent,
+      this.phasesTextSize = 8,
+      this.isShowDayTitle = true,
+      this.dayFontWeight = FontWeight.normal,
+      this.theme = MenstrualCycleTheme.basic,
+      this.circleDaySize = 13, //Only when Theme is MenstrualCycleTheme.circle
+      this.phaseTextBoundaries = PhaseTextBoundaries.inside,
+      this.arcStrokeWidth = 30,
+      this.outsidePhasesTextSize = 12,
+      this.outsideTextCharSpace = 3,
+      this.outsideTextSpaceFromArc = 30});
 
   @override
   State<MenstrualCyclePhaseView> createState() =>
@@ -157,6 +168,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
 
   String websiteUrl = "https://pub.dev/packages/menstrual_cycle_widget";
   double selectedDayCircleSize = 15;
+  double widgetSize = 0;
 
   Future<void> _init(String imagePath) async {
     if (imagePath.isNotEmpty) {
@@ -168,50 +180,54 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
       });
     }
     _painter = MenstrualCyclePainter(
-      totalCycleDays: widget.totalCycleDays,
-      menstruationDayCount: widget.menstruationDayCount,
-      follicularDayCount: widget.follicularDayCount,
-      ovulationDayCount: widget.ovulationDayCount,
-      imgSize: widget.imgSize,
-      imageAssets: (_image != null) ? _image : null,
-      centralCircleBackgroundColor: widget.centralCircleBackgroundColor,
-      centralCircleSize: widget.centralCircleSize,
-      dayFontSize: widget.dayFontSize,
-      selectedDayFontSize: widget.selectedDayFontSize,
-      dayTextColor: widget.dayTextColor,
-      dayTitle: widget.dayTitle,
-      dayTitleFontSize: widget.dayTitleFontSize,
-      follicularBackgroundColor: widget.follicularBackgroundColor,
-      follicularPhaseColor: widget.follicularPhaseColor,
-      follicularPhaseDayTextColor: widget.follicularPhaseDayTextColor,
-      follicularPhaseName: widget.follicularPhaseName,
-      follicularTextColor: widget.follicularTextColor,
-      isShowDayTitle: widget.isShowDayTitle,
-      lutealPhaseBackgroundColor: widget.lutealPhaseBackgroundColor,
-      lutealPhaseColor: widget.lutealPhaseColor,
-      lutealPhaseDayTextColor: widget.lutealPhaseDayTextColor,
-      lutealPhaseName: widget.lutealPhaseName,
-      lutealPhaseTextColor: widget.lutealPhaseTextColor,
-      menstruationBackgroundColor: widget.menstruationBackgroundColor,
-      menstruationColor: widget.menstruationColor,
-      menstruationDayTextColor: widget.menstruationDayTextColor,
-      menstruationName: widget.menstruationName,
-      menstruationTextColor: widget.menstruationTextColor,
-      ovulationBackgroundColor: widget.ovulationBackgroundColor,
-      ovulationColor: widget.ovulationColor,
-      ovulationDayTextColor: widget.ovulationDayTextColor,
-      ovulationName: widget.ovulationName,
-      ovulationTextColor: widget.ovulationTextColor,
-      phasesTextSize: widget.phasesTextSize,
-      selectedDay: widget.selectedDay,
-      selectedDayBackgroundColor: widget.selectedDayBackgroundColor,
-      selectedDayCircleBorderColor: widget.selectedDayCircleBorderColor,
-      selectedDayCircleSize: selectedDayCircleSize,
-      selectedDayTextColor: widget.selectedDayTextColor,
-      dayFontWeight: widget.dayFontWeight,
-      theme: widget.theme,
-      circleDaySize: widget.circleDaySize,
-    );
+        totalCycleDays: widget.totalCycleDays,
+        menstruationDayCount: widget.menstruationDayCount,
+        follicularDayCount: widget.follicularDayCount,
+        ovulationDayCount: widget.ovulationDayCount,
+        imgSize: widget.imgSize,
+        imageAssets: (_image != null) ? _image : null,
+        centralCircleBackgroundColor: widget.centralCircleBackgroundColor,
+        centralCircleSize: widget.centralCircleSize,
+        dayFontSize: widget.dayFontSize,
+        selectedDayFontSize: widget.selectedDayFontSize,
+        dayTextColor: widget.dayTextColor,
+        dayTitle: widget.dayTitle,
+        dayTitleFontSize: widget.dayTitleFontSize,
+        follicularBackgroundColor: widget.follicularBackgroundColor,
+        follicularPhaseColor: widget.follicularPhaseColor,
+        follicularPhaseDayTextColor: widget.follicularPhaseDayTextColor,
+        follicularPhaseName: widget.follicularPhaseName,
+        follicularTextColor: widget.follicularTextColor,
+        isShowDayTitle: widget.isShowDayTitle,
+        lutealPhaseBackgroundColor: widget.lutealPhaseBackgroundColor,
+        lutealPhaseColor: widget.lutealPhaseColor,
+        lutealPhaseDayTextColor: widget.lutealPhaseDayTextColor,
+        lutealPhaseName: widget.lutealPhaseName,
+        lutealPhaseTextColor: widget.lutealPhaseTextColor,
+        menstruationBackgroundColor: widget.menstruationBackgroundColor,
+        menstruationColor: widget.menstruationColor,
+        menstruationDayTextColor: widget.menstruationDayTextColor,
+        menstruationName: widget.menstruationName,
+        menstruationTextColor: widget.menstruationTextColor,
+        ovulationBackgroundColor: widget.ovulationBackgroundColor,
+        ovulationColor: widget.ovulationColor,
+        ovulationDayTextColor: widget.ovulationDayTextColor,
+        ovulationName: widget.ovulationName,
+        ovulationTextColor: widget.ovulationTextColor,
+        insidePhasesTextSize: widget.phasesTextSize,
+        selectedDay: widget.selectedDay,
+        selectedDayBackgroundColor: widget.selectedDayBackgroundColor,
+        selectedDayCircleBorderColor: widget.selectedDayCircleBorderColor,
+        selectedDayCircleSize: selectedDayCircleSize,
+        selectedDayTextColor: widget.selectedDayTextColor,
+        dayFontWeight: widget.dayFontWeight,
+        theme: widget.theme,
+        circleDaySize: widget.circleDaySize,
+        phaseTextBoundaries: widget.phaseTextBoundaries,
+        arcStrokeWidth: widget.arcStrokeWidth,
+        outsidePhasesTextSize: widget.outsidePhasesTextSize,
+        outsideTextCharSpace: widget.outsideTextCharSpace,
+        outsideTextSpaceFromArc: widget.outsideTextSpaceFromArc);
   }
 
   @override
@@ -227,6 +243,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     } else {
       selectedDayCircleSize = widget.selectedDayCircleSize;
     }
+    widgetSize = widget.size;
     if (widget.imageAssets.isNotEmpty) {
       _init(widget.imageAssets);
     } else {
@@ -254,8 +271,24 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
 
   @override
   Widget build(BuildContext context) {
+    if (Theme.of(context).platform == TargetPlatform.iOS ||
+        Theme.of(context).platform == TargetPlatform.android) {
+      if (MediaQuery.of(context).size.width < widget.size) {
+        if (widget.phaseTextBoundaries == PhaseTextBoundaries.both ||
+            widget.phaseTextBoundaries == PhaseTextBoundaries.outside) {
+          widgetSize = MediaQuery.of(context).size.width - 40;
+        } else {
+          widgetSize = MediaQuery.of(context).size.width - 10;
+        }
+      }
+    } else if (kIsWeb) {
+      if (MediaQuery.of(context).size.height < widget.size) {
+        widgetSize = MediaQuery.of(context).size.height - 100;
+      }
+    }
+
     return CustomPaint(
-      size: Size(widget.size, widget.size),
+      size: Size(widgetSize, widgetSize),
       painter: _painter,
     );
   }

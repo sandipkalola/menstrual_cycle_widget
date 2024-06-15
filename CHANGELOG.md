@@ -1,3 +1,7 @@
+## [0.1.0] - 4 June 2024
+* Added new params
+* Update README File description.
+
 ## [0.0.3] - 4 June 2024
 * Added example folder
 
