@@ -68,8 +68,24 @@ class MenstrualCyclePhaseView extends StatefulWidget {
 
   final double centralCircleSize;
   final Color centralCircleBackgroundColor;
+  final Color centralCircleBorderColor;
+  final int centralCircleBorderSize;
   final double imgSize;
-  final String imageAssets; // Add image as a parameter
+  final String imageAssets;
+  final bool isRemoveBackgroundPhaseColor;
+
+  final MenstrualCycleViewType viewType;
+
+  final String title;
+  final Color titleTextColor;
+  final double titleTextSize;
+  final FontWeight titleFontWeight;
+
+  final String message;
+  final Color messageTextColor;
+  final double messageTextSize;
+  final FontWeight messageFontWeight;
+  final int spaceBtnTitleMessage;
 
   // Other Variables
   final int menstruationDayCountNew = 0;
@@ -155,7 +171,20 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.arcStrokeWidth = 30,
       this.outsidePhasesTextSize = 12,
       this.outsideTextCharSpace = 3,
-      this.outsideTextSpaceFromArc = 30});
+      this.outsideTextSpaceFromArc = 30,
+      this.centralCircleBorderColor = Colors.transparent,
+      this.centralCircleBorderSize = 1,
+      this.isRemoveBackgroundPhaseColor = false,
+      this.viewType = MenstrualCycleViewType.none,
+      this.title = "",
+      this.titleTextColor = Colors.black,
+      this.titleTextSize = 20,
+      this.titleFontWeight = FontWeight.bold,
+      this.message = "",
+      this.messageTextColor = Colors.black45,
+      this.messageTextSize = 10,
+      this.messageFontWeight = FontWeight.normal,
+      this.spaceBtnTitleMessage = 20});
 
   @override
   State<MenstrualCyclePhaseView> createState() =>
@@ -169,6 +198,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   String websiteUrl = "https://pub.dev/packages/menstrual_cycle_widget";
   double selectedDayCircleSize = 15;
   double widgetSize = 0;
+  PhaseTextBoundaries? phaseTextBoundaries;
 
   Future<void> _init(String imagePath) async {
     if (imagePath.isNotEmpty) {
@@ -179,6 +209,18 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         _image = frame.image;
       });
     }
+
+    // Set default phase text boundaries to outside if MenstrualCycleViewType.text
+    if (widget.viewType == MenstrualCycleViewType.text) {
+      if (widget.phaseTextBoundaries == PhaseTextBoundaries.none) {
+        phaseTextBoundaries = widget.phaseTextBoundaries;
+      } else {
+        phaseTextBoundaries = PhaseTextBoundaries.outside;
+      }
+    } else {
+      phaseTextBoundaries = widget.phaseTextBoundaries;
+    }
+
     _painter = MenstrualCyclePainter(
         totalCycleDays: widget.totalCycleDays,
         menstruationDayCount: widget.menstruationDayCount,
@@ -223,11 +265,24 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         dayFontWeight: widget.dayFontWeight,
         theme: widget.theme,
         circleDaySize: widget.circleDaySize,
-        phaseTextBoundaries: widget.phaseTextBoundaries,
+        phaseTextBoundaries: phaseTextBoundaries!,
         arcStrokeWidth: widget.arcStrokeWidth,
         outsidePhasesTextSize: widget.outsidePhasesTextSize,
         outsideTextCharSpace: widget.outsideTextCharSpace,
-        outsideTextSpaceFromArc: widget.outsideTextSpaceFromArc);
+        outsideTextSpaceFromArc: widget.outsideTextSpaceFromArc,
+        centralCircleBorderColor: widget.centralCircleBorderColor,
+        centralCircleBorderSize: widget.centralCircleBorderSize,
+        isRemoveBackgroundPhaseColor: widget.isRemoveBackgroundPhaseColor,
+        viewType: widget.viewType,
+        title: widget.title,
+        message: widget.message,
+        messageFontWeight: widget.messageFontWeight,
+        messageTextColor: widget.messageTextColor,
+        messageTextSize: widget.messageTextSize,
+        titleFontWeight: widget.titleFontWeight,
+        titleTextColor: widget.titleTextColor,
+        titleTextSize: widget.titleTextSize,
+        spaceBtnTitleMessage: widget.spaceBtnTitleMessage);
   }
 
   @override

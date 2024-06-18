@@ -58,7 +58,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 follicularDayCount: 7,
                 selectedDay: 5,
                 ovulationDayCount: 3,
-                imageAssets: "assets/img6.png",
                 theme: MenstrualCycleTheme.circle,
               ),
             ),

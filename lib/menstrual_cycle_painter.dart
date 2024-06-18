@@ -59,10 +59,16 @@ class MenstrualCyclePainter extends CustomPainter {
   bool isShowDayTitle;
   FontWeight dayFontWeight;
   double circleDaySize;
+  bool isRemoveBackgroundPhaseColor;
 
   MenstrualCycleTheme theme;
   double centralCircleSize;
   Color centralCircleBackgroundColor;
+  Color centralCircleBorderColor;
+  int centralCircleBorderSize;
+
+  MenstrualCycleViewType viewType;
+
   double imgSize;
   ui.Image? imageAssets;
 
@@ -71,6 +77,17 @@ class MenstrualCyclePainter extends CustomPainter {
   int follicularDayCountNew = 0;
   int ovulationDayCountNew = 0;
   double arcStrokeWidth = 30;
+
+  String title;
+  Color titleTextColor;
+  double titleTextSize;
+  FontWeight titleFontWeight;
+
+  String message;
+  Color messageTextColor;
+  double messageTextSize;
+  FontWeight messageFontWeight;
+  int spaceBtnTitleMessage;
 
   static const Color defaultBlackColor = Colors.black;
   static const defaultMenstruationColor = Color(0xFFff584f);
@@ -145,12 +162,26 @@ class MenstrualCyclePainter extends CustomPainter {
       this.arcStrokeWidth = 30,
       this.outsidePhasesTextSize = 12,
       this.outsideTextCharSpace = 3,
-      this.outsideTextSpaceFromArc = 30});
+      this.outsideTextSpaceFromArc = 30,
+      this.centralCircleBorderColor = Colors.transparent,
+      this.centralCircleBorderSize = 1,
+      this.isRemoveBackgroundPhaseColor = false,
+      this.viewType = MenstrualCycleViewType.none,
+      this.title = "",
+      this.titleTextColor = Colors.black,
+      this.titleTextSize = 20,
+      this.titleFontWeight = FontWeight.bold,
+      this.message = "",
+      this.messageTextColor = Colors.black45,
+      this.messageTextSize = 10,
+      this.messageFontWeight = FontWeight.normal,
+      this.spaceBtnTitleMessage = 20});
 
   @override
   Future<void> paint(Canvas canvas, Size size) async {
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-
+    double centerX = size.width / 2;
+    double centerY = size.height / 2;
     final radius = min(size.width / 2, size.height / 2) -
         20; // SK: 20 is Manage circle outerline
     final center = Offset(size.width / 2, size.height / 2);
@@ -205,46 +236,105 @@ class MenstrualCyclePainter extends CustomPainter {
         lutealPhaseTextColor);
 
     // SK: Show outside phase text
-    if (phaseTextBoundaries == PhaseTextBoundaries.both ||
-        phaseTextBoundaries == PhaseTextBoundaries.outside) {
-      drawOutSide(canvas, radius, size, menstruationName, 0,
-          menstruationDayCountNew, menstruationTextColor);
-      drawOutSide(canvas, radius, size, follicularPhaseName,
-          menstruationDayCount, follicularDayCountNew, follicularTextColor);
-      drawOutSide(canvas, radius, size, ovulationName, follicularDayCountNew,
-          ovulationDayCountNew, ovulationTextColor);
-      drawOutSide(
-        canvas,
-        radius,
-        size,
-        lutealPhaseName,
-        ovulationDayCountNew,
-        totalCycleDays,
-        lutealPhaseTextColor,
-      );
+    if (phaseTextBoundaries != PhaseTextBoundaries.none) {
+      if (phaseTextBoundaries == PhaseTextBoundaries.both ||
+          phaseTextBoundaries == PhaseTextBoundaries.outside) {
+        drawOutSide(canvas, radius, size, menstruationName, 0,
+            menstruationDayCountNew, menstruationTextColor);
+        drawOutSide(canvas, radius, size, follicularPhaseName,
+            menstruationDayCount, follicularDayCountNew, follicularTextColor);
+        drawOutSide(canvas, radius, size, ovulationName, follicularDayCountNew,
+            ovulationDayCountNew, ovulationTextColor);
+        drawOutSide(
+          canvas,
+          radius,
+          size,
+          lutealPhaseName,
+          ovulationDayCountNew,
+          totalCycleDays,
+          lutealPhaseTextColor,
+        );
+      }
     }
 
-    // SK: draw Circle background on center
-    final Paint backgroundPaint = Paint()
-      ..color = centralCircleBackgroundColor
-      ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, centralCircleSize, backgroundPaint);
+    if (viewType != MenstrualCycleViewType.text) {
+      // SK: draw border of circle background on center
+      final Paint circleBorder = Paint()
+        ..color = centralCircleBorderColor
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(
+          center, centralCircleSize + centralCircleBorderSize, circleBorder);
 
-    // SK: Draw the image at the center
-    if (imageAssets != null) {
-      final paint = Paint()..style = PaintingStyle.stroke;
-      final imageSize = Size(imgSize, imgSize);
-      final imageOffset = Offset(
-        center.dx - imageSize.width / 2,
-        center.dy - imageSize.height / 2,
+      // SK: draw Circle background on center
+      final Paint backgroundPaint = Paint()
+        ..color = centralCircleBackgroundColor
+        ..style = PaintingStyle.fill;
+      canvas.drawCircle(center, centralCircleSize, backgroundPaint);
+    }
+
+    if (viewType == MenstrualCycleViewType.text) {
+      final centralTextPainter = TextPainter(
+        textAlign: TextAlign.center,
+        textDirection: TextDirection.ltr,
       );
-      canvas.drawImageRect(
-        imageAssets!,
-        Rect.fromLTWH(0, 0, imageAssets!.width.toDouble(),
-            imageAssets!.height.toDouble()),
-        imageOffset & imageSize,
-        paint,
+
+      // show title text
+      TextSpan titleLabel = TextSpan(
+        text: title,
+        style: TextStyle(
+          color: titleTextColor,
+          fontSize: titleTextSize,
+          fontWeight: titleFontWeight,
+        ),
       );
+      centralTextPainter.text = titleLabel;
+      centralTextPainter.layout();
+
+      final labelOffset = Offset(
+          center.dx - centralTextPainter.width / 2,
+          center.dx -
+              centralTextPainter.height / 2 -
+              (spaceBtnTitleMessage / 2));
+
+      centralTextPainter.paint(canvas, labelOffset);
+
+      // Show message text
+      TextSpan messageLabel = TextSpan(
+        text: message,
+        style: TextStyle(
+          color: messageTextColor,
+          fontSize: messageTextSize,
+          fontWeight: messageFontWeight,
+        ),
+      );
+      centralTextPainter.text = messageLabel;
+      centralTextPainter.layout();
+      final labelOffset2 = Offset(
+          center.dx - centralTextPainter.width / 2,
+          center.dx -
+              centralTextPainter.height / 2 +
+              (spaceBtnTitleMessage / 2));
+
+      centralTextPainter.paint(canvas, labelOffset2);
+    }
+
+    if (viewType == MenstrualCycleViewType.image) {
+      // SK: Draw the image at the center
+      if (imageAssets != null) {
+        final paint = Paint()..style = PaintingStyle.stroke;
+        final imageSize = Size(imgSize, imgSize);
+        final imageOffset = Offset(
+          center.dx - imageSize.width / 2,
+          center.dy - imageSize.height / 2,
+        );
+        canvas.drawImageRect(
+          imageAssets!,
+          Rect.fromLTWH(0, 0, imageAssets!.width.toDouble(),
+              imageAssets!.height.toDouble()),
+          imageOffset & imageSize,
+          paint,
+        );
+      }
     }
 
     // SK: For loop for display a Days
@@ -252,6 +342,18 @@ class MenstrualCyclePainter extends CustomPainter {
       final startAngle = (2 * pi / totalCycleDays) * (day - 1) - pi / 2;
       final endAngle = (2 * pi / totalCycleDays) * day - pi / 2;
       final middleAngle = (startAngle + endAngle) / 2;
+
+      // For / Arrow btn days
+      /*Paint paint = Paint()
+        ..color = Colors.black
+        ..strokeWidth = 2;
+      final newRadius = min(size.width / 2, size.height / 2) ;
+      double angle = (2 * pi / totalCycleDays) * day;
+      double startX = centerX + newRadius * cos(angle);
+      double startY = centerY + newRadius * sin(angle);
+      double endX = centerX + (newRadius - arcStrokeWidth) * cos(angle); // Shorter end inside
+      double endY = centerY + (newRadius - arcStrokeWidth) * sin(angle); // Shorter end inside
+      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);*/
 
       // Calculate Day position
       final textX = center.dx + radius * cos(middleAngle);
@@ -484,17 +586,21 @@ class MenstrualCyclePainter extends CustomPainter {
       );
     }
 
-    // Draw background
-    final paint1 = Paint()
-      ..color = bgColor
-      ..style = PaintingStyle.fill;
-    canvas.drawArc(rect, startAngle, sweepAngle, true, paint1);
+    if (!isRemoveBackgroundPhaseColor) {
+      // Draw background color based on phase
+      final paint1 = Paint()
+        ..color = bgColor
+        ..style = PaintingStyle.fill;
+      canvas.drawArc(rect, startAngle, sweepAngle, true, paint1);
+    }
 
     //SK: set text inside circle
-    if (phaseTextBoundaries == PhaseTextBoundaries.both ||
-        phaseTextBoundaries == PhaseTextBoundaries.inside) {
-      drawPhaseTextInside(
-          canvas, center, radius, startDay, endDay, textColor, label);
+    if (phaseTextBoundaries != PhaseTextBoundaries.none) {
+      if (phaseTextBoundaries == PhaseTextBoundaries.both ||
+          phaseTextBoundaries == PhaseTextBoundaries.inside) {
+        drawPhaseTextInside(
+            canvas, center, radius, startDay, endDay, textColor, label);
+      }
     }
   }
 
