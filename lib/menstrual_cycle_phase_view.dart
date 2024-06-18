@@ -306,6 +306,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     }
   }
 
+  /// Check Default Validation
   _checkValidation() {
     if (widget.size < 200) {
       throw "Invalid 'MenstrualCyclePhaseView' widget size. Size must be greater than or equal to 200. See $websiteUrl";
@@ -326,6 +327,8 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
 
   @override
   Widget build(BuildContext context) {
+
+    /// set dynamically size if provided size more then current screen size
     if (Theme.of(context).platform == TargetPlatform.iOS ||
         Theme.of(context).platform == TargetPlatform.android) {
       if (MediaQuery.of(context).size.width < widget.size) {

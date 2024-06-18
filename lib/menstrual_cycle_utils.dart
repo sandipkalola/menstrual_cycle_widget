@@ -14,6 +14,7 @@ enum PhaseTextBoundaries { inside, outside, both, none }
 
 enum MenstrualCycleViewType { image, text, none }
 
+/// Save your own logs into DB
 saveCustomSymptomsLogs(
     {required Map<String, dynamic>? userSymptomsData,
     String userId = "0",
@@ -97,6 +98,7 @@ printLogs(String message) {
   }
 }
 
+/// get Today's symptoms logs based on userId
 Future<List<UserSymptomsLogData>> getTodaySymptomsLog(
     {required String? userId}) async {
   List<UserSymptomsLogData> usersLogDataList = [];
@@ -121,6 +123,7 @@ Future<List<UserSymptomsLogData>> getTodaySymptomsLog(
   return usersLogDataList;
 }
 
+/// get symptoms report BETWEEN start & end date based on userId
 Future<List<UserSymptomsLogData>> getSymptomsLogReport(
     {required String? userId,
     required String? startDate,

@@ -16,7 +16,7 @@ class MenstrualCycleDbHelper {
   static const String columnID = "id";
   static const String columnCreatedDateTime = "createdAt";
 
-  // Symptoms data table
+  /// Symptoms data table
   static const String tableSymptomsData = "symptoms_data";
   static const String columnSymptomId = "symptomId";
   static const String columnSymptomName = "symptomName";
@@ -27,7 +27,7 @@ class MenstrualCycleDbHelper {
   static const String columnAssetPath = "assetPath";
   static const String columnIsCustomType = "isCustomType";
 
-  // daily Logs Table
+  /// daily Logs Table
   static const String tableDailyUserSymptomsLogsData =
       "daily_user_symptoms_logs";
   static const String columnUserId = "userid"; // optional. Default zero
@@ -68,12 +68,14 @@ class MenstrualCycleDbHelper {
 
   static Database? _database;
 
+  /// get database instance
   Future<Database?> get database async {
     if (_database != null) return _database;
     _database = await _initDatabase();
     return _database;
   }
 
+  /// initialize database
   _initDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
@@ -81,30 +83,34 @@ class MenstrualCycleDbHelper {
         version: _databaseVersion, onCreate: _onCreate, onUpgrade: _onUpgrade);
   }
 
+  /// List of queries which execute while creating a database
   Future _onCreate(Database db, int version) async {
     await db.execute(createTableSymptomsData);
     await db.execute(createTableDailyUserSymptomsLogsData);
     await _insertDefaultSymptomsData(db);
   }
 
+  /// insert daily logs report based on userId and log date
   Future<int> insertDailyLog(
       Map<String, dynamic> data, String logDate, String userId) async {
     Database? db = await instance.database;
+    /// Check if found logs on provided date
     int? recordExist = Sqflite.firstIntValue(await db!.rawQuery(
         "SELECT COUNT(*) FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnUserId='$userId'"));
     printLogs("Found Data : $recordExist");
     if (recordExist! > 0) {
+      /// remove old logs
       int deleted = await db.rawDelete(
           "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnUserId='$userId'");
       printLogs("Delete Data $deleted");
     }
+    ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
-
     printLogs("Insert Data");
-
     return id;
   }
 
+  /// insert default symptoms data
   _insertDefaultSymptomsData(db) async {
     int symptomsIndex = 1;
     for (int index = 0; index < defaultSymptomsData.length; index++) {
@@ -133,8 +139,10 @@ class MenstrualCycleDbHelper {
     printLogs("-------------Insert operation Successfully");
   }
 
+  /// this function is called when database version is upgrade
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {}
 
+  /// get all symptoms list
   Future<List<Symptoms>> getSymptoms() async {
     Database? db = await instance.database;
 
@@ -178,6 +186,7 @@ class MenstrualCycleDbHelper {
     return listSymptoms;
   }
 
+  /// get daily logs based on userID
   Future<List<UserSymptomsLogData>> getDailyLogs(String userId) async {
     Database? db = await instance.database;
 
