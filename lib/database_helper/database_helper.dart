@@ -94,6 +94,7 @@ class MenstrualCycleDbHelper {
   Future<int> insertDailyLog(
       Map<String, dynamic> data, String logDate, String userId) async {
     Database? db = await instance.database;
+
     /// Check if found logs on provided date
     int? recordExist = Sqflite.firstIntValue(await db!.rawQuery(
         "SELECT COUNT(*) FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnUserId='$userId'"));
@@ -104,6 +105,7 @@ class MenstrualCycleDbHelper {
           "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnUserId='$userId'");
       printLogs("Delete Data $deleted");
     }
+
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
     printLogs("Insert Data");

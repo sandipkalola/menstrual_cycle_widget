@@ -12,7 +12,7 @@ enum MenstrualCycleTheme { basic, arcs, circle }
 
 enum PhaseTextBoundaries { inside, outside, both, none }
 
-enum MenstrualCycleViewType { image, text, none }
+enum MenstrualCycleViewType { image, text, none, circleImage, circleText }
 
 /// Save your own logs into DB
 saveCustomSymptomsLogs(

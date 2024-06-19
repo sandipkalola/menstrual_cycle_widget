@@ -275,13 +275,13 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         isRemoveBackgroundPhaseColor: widget.isRemoveBackgroundPhaseColor,
         viewType: widget.viewType,
         title: widget.title,
+        titleFontWeight: widget.titleFontWeight,
+        titleTextColor: widget.titleTextColor,
+        titleTextSize: widget.titleTextSize,
         message: widget.message,
         messageFontWeight: widget.messageFontWeight,
         messageTextColor: widget.messageTextColor,
         messageTextSize: widget.messageTextSize,
-        titleFontWeight: widget.titleFontWeight,
-        titleTextColor: widget.titleTextColor,
-        titleTextSize: widget.titleTextSize,
         spaceBtnTitleMessage: widget.spaceBtnTitleMessage);
   }
 
@@ -327,7 +327,6 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
 
   @override
   Widget build(BuildContext context) {
-
     /// set dynamically size if provided size more then current screen size
     if (Theme.of(context).platform == TargetPlatform.iOS ||
         Theme.of(context).platform == TargetPlatform.android) {
@@ -344,7 +343,6 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         widgetSize = MediaQuery.of(context).size.height - 100;
       }
     }
-
     return CustomPaint(
       size: Size(widgetSize, widgetSize),
       painter: _painter,

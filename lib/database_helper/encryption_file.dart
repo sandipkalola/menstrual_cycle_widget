@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:encrypt/encrypt.dart';
 import 'package:crypto/crypto.dart';
+import 'package:encrypt/encrypt.dart';
 
 class Encryption {
   final String _utf8 = "11a1215l0119a140409p0919";

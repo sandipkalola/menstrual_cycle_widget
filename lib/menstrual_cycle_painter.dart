@@ -180,10 +180,10 @@ class MenstrualCyclePainter extends CustomPainter {
   @override
   Future<void> paint(Canvas canvas, Size size) async {
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    double centerX = size.width / 2;
-    double centerY = size.height / 2;
+    /* double centerX = size.width / 2;
+    double centerY = size.height / 2;*/
     final radius = min(size.width / 2, size.height / 2) -
-        20; /// 20 is Manage circle outerline
+        20; // 20 is Manage circle outerline
     final center = Offset(size.width / 2, size.height / 2);
 
     menstruationDayCountNew = menstruationDayCount;
@@ -257,7 +257,8 @@ class MenstrualCyclePainter extends CustomPainter {
       }
     }
 
-    if (viewType != MenstrualCycleViewType.text) {
+    if (viewType == MenstrualCycleViewType.circleImage ||
+        viewType == MenstrualCycleViewType.circleText) {
       /// draw border of circle background on center
       final Paint circleBorder = Paint()
         ..color = centralCircleBorderColor
@@ -272,7 +273,8 @@ class MenstrualCyclePainter extends CustomPainter {
       canvas.drawCircle(center, centralCircleSize, backgroundPaint);
     }
 
-    if (viewType == MenstrualCycleViewType.text) {
+    if (viewType == MenstrualCycleViewType.text ||
+        viewType == MenstrualCycleViewType.circleText) {
       final centralTextPainter = TextPainter(
         textAlign: TextAlign.center,
         textDirection: TextDirection.ltr,
@@ -318,7 +320,8 @@ class MenstrualCyclePainter extends CustomPainter {
       centralTextPainter.paint(canvas, labelOffset2);
     }
 
-    if (viewType == MenstrualCycleViewType.image) {
+    if (viewType == MenstrualCycleViewType.image ||
+        viewType == MenstrualCycleViewType.circleImage) {
       /// Draw the image at the center
       if (imageAssets != null) {
         final paint = Paint()..style = PaintingStyle.stroke;
@@ -379,10 +382,9 @@ class MenstrualCyclePainter extends CustomPainter {
       textPainter.text = dayLabel;
       textPainter.layout();
       final labelOffset = Offset(
-          textX - textPainter.width / 2,
-          textY -
-              textPainter.height / 3.5 -
-              10); /// 10 Mange space btn Day and 'Day' label
+          textX - textPainter.width / 2, textY - textPainter.height / 3.5 - 10);
+
+      /// 10 Mange space btn Day and 'Day' label
       if (isShowDayTitle) {
         textPainter.paint(canvas, labelOffset);
       }
@@ -434,6 +436,7 @@ class MenstrualCyclePainter extends CustomPainter {
       if (isShowDayTitle) {
         topPos = 2.5;
       }
+
       /// Display day(number)
       TextSpan dayText = TextSpan(
         text: day.toString(),
@@ -445,9 +448,8 @@ class MenstrualCyclePainter extends CustomPainter {
       );
       textPainter.text = dayText;
       textPainter.layout();
-      final textOffset = Offset(textX - textPainter.width / 2,
-          textY - textPainter.height / topPos); /// 2.5 Manage Pos of Day
-
+      final textOffset = Offset(
+          textX - textPainter.width / 2, textY - textPainter.height / topPos);
       textPainter.paint(
         canvas,
         textOffset,
@@ -468,7 +470,7 @@ class MenstrualCyclePainter extends CustomPainter {
     final sweepAngle = (2 * pi / totalCycleDays) * (endDay - startDay);
 
     double radius =
-        radius1 + outsideTextSpaceFromArc; /// Adjust space btn arc and text
+        radius1 + outsideTextSpaceFromArc; // Adjust space btn arc and text
     double angle = startAngle;
 
     if (adjust) {
@@ -476,14 +478,14 @@ class MenstrualCyclePainter extends CustomPainter {
           (text.length *
               5 *
               pi /
-              600); /// Adjust starting angle for centering text
+              600); // Adjust starting angle for centering text
     }
 
     for (int i = 0; i < text.length; i++) {
       final char = text[i];
 
       double charAngle = angle +
-          i * outsideTextCharSpace * pi / 180; /// Adjust character spacing
+          i * outsideTextCharSpace * pi / 180; // Adjust character spacing
       Offset charOffset = Offset(
         size.width / 2 + radius * cos(charAngle),
         size.height / 2 + radius * sin(charAngle),
@@ -576,7 +578,7 @@ class MenstrualCyclePainter extends CustomPainter {
       final paint = Paint()
         ..color = topColor
         ..style = PaintingStyle.stroke
-        ..strokeWidth = arcStrokeWidth; /// Manage Height of Outer circle
+        ..strokeWidth = arcStrokeWidth; // Manage Height of Outer circle
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,

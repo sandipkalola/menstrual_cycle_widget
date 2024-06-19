@@ -9,7 +9,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  menstrual_cycle_widget: ^0.1.3
+  menstrual_cycle_widget: ^0.1.5
 ```
 
 ### 2. Install it
@@ -65,8 +65,8 @@ class MenstrualCyclePage extends StatelessWidget {
 - **imgSize**: Specifies the size of the image in the central circle. Default is **30**.
 - **imageAssets**: Sets the image to be displayed inside the central circle.
 
-- **centralCircleBackgroundColor**: Sets the background color of the central circle. Default is **'Color(0xffed9dba)'**.
-- **centralCircleSize**: Specifies the size of the central circle. Default is **25**.
+- **centralCircleBackgroundColor**: Sets the background color of the central circle. Default is **'Color(0xffed9dba)'**. **NOTE**: Only when viewType is **MenstrualCycleViewType.circleImage** or **MenstrualCycleViewType.circleText**
+- **centralCircleSize**: Specifies the size of the central circle. Default is **25**. **NOTE**: Only when viewType is **MenstrualCycleViewType.circleImage** or **MenstrualCycleViewType.circleText**
 
 - **dayFontSize**: Specifies the font size of the day numbers (1, 2, 3, etc.). Default is **12**.
 - **dayTextColor**: Specifies the text color of the day numbers (1, 2, 3, etc.). Default is **'Colors.black'**.
@@ -115,6 +115,21 @@ class MenstrualCyclePage extends StatelessWidget {
 - **outsideTextCharSpace** : Specifies the text character spaces of outside phase text. Default is **3**
 - **outsideTextSpaceFromArc** : Specifies the space between Arc circle and phase text. Default is **30**
 
+- **centralCircleBorderColor**: Specifies the  color of the central circle border. Default is **'Colors.transparent'**. **NOTE**: Only when viewType is **MenstrualCycleViewType.circleImage** or **MenstrualCycleViewType.circleText**
+- **centralCircleBorderSize** : Specifies the size of the central circle border.  Default is **1**. **NOTE**: Only when viewType is **MenstrualCycleViewType.circleImage** or **MenstrualCycleViewType.circleText**
+
+- **isRemoveBackgroundPhaseColor** : Set as **true** if you want want background color of phase.
+- **viewType** : Specifies view of your **Menstrual Cycle Widget**.  Default is **MenstrualCycleViewType.none**.
+- **title** : Specifies the title text of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **titleTextColor** : Specifies the title text color of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **titleTextSize** : Specifies the title text size of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **titleFontWeight** : Specifies the title font weight of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **message** : Specifies the message text of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **messageTextColor** : Specifies the message text color of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **messageTextSize** : Specifies the message text size of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **messageFontWeight** : Specifies the message font weight of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+- **spaceBtnTitleMessage** : Specifies the space between title & message of your central view. **NOTE**: Only when viewType is **MenstrualCycleViewType.text** or **MenstrualCycleViewType.circleText**
+
 
 ## Platforms
 
@@ -125,23 +140,28 @@ class MenstrualCyclePage extends StatelessWidget {
 # Theme example
 
 **1) MenstrualCycleTheme.basic**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic.jpg?raw=true" height = "300px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/basic.jpg?raw=true" height = "200px">
 
 **2) MenstrualCycleTheme.arcs**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arcs.jpg?raw=true" height = "300px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/arcs.jpg?raw=true" height = "200px">
 
 **3) MenstrualCycleTheme.circle**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle.jpg?raw=true"  height = "300px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/circle.jpg?raw=true"  height = "200px">
 
 # Phase text boundaries example
 **1) PhaseTextBoundaries.inside**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arcs.jpg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic.jpg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle.jpg?raw=true"  height = "300px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/arcs.jpg?raw=true"  height = "200px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/basic.jpg?raw=true"  height = "200px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/circle.jpg?raw=true"  height = "200px">
 
 **2) PhaseTextBoundaries.outside**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arc_outside.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic_outside.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle_outside.jpeg?raw=true"  height = "300px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/arc_outside.jpeg?raw=true"  height = "200px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/basic_outside.jpeg?raw=true"  height = "200px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/circle_outside.jpeg?raw=true"  height = "200px">
 
 **3) PhaseTextBoundaries.both**
-- <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/arc_both.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/basic_both.jpeg?raw=true"  height = "300px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget/blob/master/menstrual_cycle_widget_example/assets/circle_both.jpeg?raw=true"  height = "300px">
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/arc_both.jpeg?raw=true"  height = "200px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/basic_both.jpeg?raw=true"  height = "200px"> <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/circle_both.jpeg?raw=true"  height = "200px">
+
+
+# viewType example
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/menstrual_cycle_view_type2.png"  height = "300px"> 
+- <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/menstrual_cycle_view_type1.png"  height = "300px"> 
 
 
 # Bugs or Requests
