@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'menstrual_cycle_painter.dart';
-import 'menstrual_cycle_utils.dart';
+import '../menstrual_cycle_widget.dart';
+import 'custom_painter/menstrual_cycle_painter.dart';
 
 class MenstrualCyclePhaseView extends StatefulWidget {
   final int totalCycleDays;
@@ -93,21 +93,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final int ovulationDayCountNew = 0;
   final double arcStrokeWidth;
 
-  static const Color defaultBlackColor = Colors.black;
-  static const defaultMenstruationColor = Color(0xFFff584f);
-  static const defaultFollicularColor = Color(0xFFeec9b7);
-  static const defaultOvulationColor = Color(0xFF22bc79);
-  static const defaultLutealPhaseColor = Color(0xFFabcdf0);
-
-  static const defaultMenstruationColorBg = Color(0x26ff584f);
-  static const defaultFollicularColorBg = Color(0x26eec9b7);
-  static const defaultOvulationColorBg = Color(0x2622bc79);
-  static const defaultLutealPhaseColorBg = Color(0x26abcdf0);
-
   final double size;
-
-  // Default central central background color
-  static const defaultCentralCircleBackgroundColor = Color(0xffed9dba);
 
   const MenstrualCyclePhaseView(
       {super.key,
@@ -116,7 +102,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.selectedDay = 0,
 
       // Menstruation Params
-      this.menstruationName = "Menstruation",
+      this.menstruationName = Strings.menstruationLabel,
       required this.menstruationDayCount,
       this.menstruationColor = defaultMenstruationColor,
       this.menstruationBackgroundColor = defaultMenstruationColorBg,
@@ -124,7 +110,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.menstruationTextColor = defaultMenstruationColor,
 
       // Follicular Phase Params
-      this.follicularPhaseName = "Follicular Phase",
+      this.follicularPhaseName = Strings.follicularPhaseLabel,
       required this.follicularDayCount,
       this.follicularPhaseDayTextColor = defaultBlackColor,
       this.follicularPhaseColor = defaultFollicularColor,
@@ -132,7 +118,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.follicularTextColor = defaultFollicularColor,
 
       // ovulation Phase Params
-      this.ovulationName = "Ovulation",
+      this.ovulationName = Strings.ovulationLabel,
       required this.ovulationDayCount,
       this.ovulationDayTextColor = defaultBlackColor,
       this.ovulationColor = defaultOvulationColor,
@@ -140,7 +126,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.ovulationTextColor = defaultOvulationColor,
 
       // luteal Phase Params
-      this.lutealPhaseName = "Luteal Phase",
+      this.lutealPhaseName = Strings.lutealPhaseLabel,
       this.lutealPhaseColor = defaultLutealPhaseColor,
       this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
       this.lutealPhaseTextColor = defaultLutealPhaseColor,
@@ -153,7 +139,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.centralCircleSize = 25,
 
       // Day Params
-      this.dayTitle = "Day",
+      this.dayTitle = Strings.dayLabel,
       this.dayTitleFontSize = 5,
       this.dayFontSize = 12,
       this.selectedDayCircleSize = 1, //  18 for Arc Theme, 15 for basic theme
@@ -195,7 +181,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   MenstrualCyclePainter? _painter;
   ui.Image? _image;
 
-  String websiteUrl = "https://pub.dev/packages/menstrual_cycle_widget";
+  String websiteUrl = Strings.pkgUrl;
   double selectedDayCircleSize = 15;
   double widgetSize = 0;
   PhaseTextBoundaries? phaseTextBoundaries;
@@ -309,19 +295,19 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   /// Check Default Validation
   _checkValidation() {
     if (widget.size < 200) {
-      throw "Invalid 'MenstrualCyclePhaseView' widget size. Size must be greater than or equal to 200. See $websiteUrl";
+      throw "${Strings.errorInvalidSize} $websiteUrl";
     }
     if (widget.totalCycleDays < 10) {
-      throw "Invalid 'totalCycleDays' count. Count must be greater than or equal to 10. See $websiteUrl";
+      throw "${Strings.errorInvalidCount} $websiteUrl";
     }
     if (widget.menstruationDayCount < 0) {
-      throw "Invalid 'menstruationDayCount' count. Count must be greater than or equal to 0. See $websiteUrl";
+      throw "${Strings.errorInvalidMenstruationDayCount} $websiteUrl";
     }
     if (widget.follicularDayCount < 0) {
-      throw "Invalid 'follicularDayCount' count. Count must be greater than or equal to 0. See $websiteUrl";
+      throw "${Strings.errorInvalidFollicularDayCount} $websiteUrl";
     }
     if (widget.ovulationDayCount < 0) {
-      throw "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See $websiteUrl";
+      throw "${Strings.errorInvalidOvulationDayCount} $websiteUrl";
     }
   }
 

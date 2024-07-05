@@ -4,20 +4,20 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-import '../menstrual_cycle_utils.dart';
-import 'database_utils.dart';
-import 'model/symptoms_data.dart';
-import 'model/user_symptoms_log_data.dart';
+import '../menstrual_cycle_widget.dart';
+import '../ui/calender_view/calender_view.dart';
 
 class MenstrualCycleDbHelper {
   static const _databaseName = "MenstrualCycleAppDatabase.db";
   static const _databaseVersion = 1;
 
+  /// Common Columns
   static const String columnID = "id";
   static const String columnCreatedDateTime = "createdAt";
+  static const String columnCustomerId = "customerId";
 
   /// Symptoms data table
-  static const String tableSymptomsData = "symptoms_data";
+  static const String tableSymptomsData = "tblSymptomsData";
   static const String columnSymptomId = "symptomId";
   static const String columnSymptomName = "symptomName";
   static const String columnCategoryId = "categoryId";
@@ -26,21 +26,6 @@ class MenstrualCycleDbHelper {
   static const String columnCategoryColor = "categoryColor";
   static const String columnAssetPath = "assetPath";
   static const String columnIsCustomType = "isCustomType";
-
-  /// daily Logs Table
-  static const String tableDailyUserSymptomsLogsData =
-      "daily_user_symptoms_logs";
-  static const String columnUserId = "userid"; // optional. Default zero
-  static const String columnUserEncryptDate = "symptomData";
-  static const String columnUserSymptomIds = "symptomIds";
-  static const String columnMeditationTime = "meditationTime";
-  static const String columnSleepTime = "sleepTime";
-  static const String columnWater = "waterValue";
-  static const String columnNotes = "notes";
-  static const String columnWeight = "weight";
-  static const String columnBodyTemperature = "bodyTemperature";
-  static const String columnLogDate = "logDate";
-
   static const String createTableSymptomsData =
       "CREATE TABLE $tableSymptomsData ("
       "$columnID INTEGER PRIMARY KEY,"
@@ -53,13 +38,34 @@ class MenstrualCycleDbHelper {
       "$columnIsVisibleCategory INTEGER DEFAULT 1, "
       "$columnIsCustomType INTEGER DEFAULT 0)";
 
+  /// daily Logs Table and columns
+  static const String tableDailyUserSymptomsLogsData =
+      "tblDailyUserSymptomsLogs";
+  static const String columnUserEncryptData = "symptomData";
+  static const String columnUserSymptomIds = "symptomIds";
+  static const String columnMeditationTime = "meditationTime";
+  static const String columnSleepTime = "sleepTime";
+  static const String columnWater = "waterValue";
+  static const String columnNotes = "notes";
+  static const String columnWeight = "weight";
+  static const String columnBodyTemperature = "bodyTemperature";
+  static const String columnLogDate = "logDate";
   static const String createTableDailyUserSymptomsLogsData =
       "CREATE TABLE $tableDailyUserSymptomsLogsData ("
       "$columnID INTEGER PRIMARY KEY,"
-      "$columnUserId TEXT DEFAULT '0', "
-      "$columnUserEncryptDate TEXT, "
+      "$columnCustomerId TEXT DEFAULT '0', "
+      "$columnUserEncryptData TEXT, "
       "$columnLogDate TEXT, "
       "$columnCreatedDateTime TEXT)";
+
+  /// periods log table  and column
+  static const String tableUserPeriodsLogsData = "tblUserPeriodsLogs";
+  static const String columnPeriodEncryptDate = "periodDate";
+  static const String createTableUserPeriodsLogsData =
+      "CREATE TABLE $tableUserPeriodsLogsData ("
+      "$columnID INTEGER PRIMARY KEY,"
+      "$columnCustomerId TEXT DEFAULT '0', "
+      "$columnPeriodEncryptDate TEXT)";
 
   MenstrualCycleDbHelper._privateConstructor();
 
@@ -87,29 +93,60 @@ class MenstrualCycleDbHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute(createTableSymptomsData);
     await db.execute(createTableDailyUserSymptomsLogsData);
+    await db.execute(createTableUserPeriodsLogsData);
     await _insertDefaultSymptomsData(db);
   }
 
   /// insert daily logs report based on userId and log date
   Future<int> insertDailyLog(
-      Map<String, dynamic> data, String logDate, String userId) async {
+      Map<String, dynamic> data, String logDate, String customerId) async {
     Database? db = await instance.database;
 
     /// Check if found logs on provided date
     int? recordExist = Sqflite.firstIntValue(await db!.rawQuery(
-        "SELECT COUNT(*) FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnUserId='$userId'"));
-    printLogs("Found Data : $recordExist");
+        "SELECT COUNT(*) FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'"));
+    //printLogs("Found Data : $recordExist");
     if (recordExist! > 0) {
       /// remove old logs
-      int deleted = await db.rawDelete(
-          "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnUserId='$userId'");
-      printLogs("Delete Data $deleted");
+      await db.rawDelete(
+          "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'");
+      //printLogs("Delete Data $deleted");
     }
 
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
-    printLogs("Insert Data");
+    //printLogs("Insert Data");
     return id;
+  }
+
+  /// Delete past period data
+  Future<int> clearPeriodLog(String customerId) async {
+    Database? db = await instance.database;
+    int deleted = await db!.rawDelete(
+        "DELETE FROM $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId'");
+    //printLogs("Clear Period Data");
+    return deleted;
+  }
+
+  /// insert user's period data on userId and log date
+  Future<int> insertPeriodLog(List<DateTime> selectedPeriodsDate) async {
+    //printLogs("selectedPeriodsDate ${selectedPeriodsDate.toString()}");
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+    Database? db = await instance.database;
+
+    for (int i = 0; i < selectedPeriodsDate.length; i++) {
+      Map<String, dynamic> data = {
+        columnCustomerId: customerId,
+        columnPeriodEncryptDate: Encryption.instance
+            .encrypt(CalenderDateUtils.dateDayFormat(selectedPeriodsDate[i])),
+      };
+
+      ///insert a new periods log
+      await db!.insert(tableUserPeriodsLogsData, data);
+    }
+    //printLogs("Insert Period Data");
+    return 0;
   }
 
   /// insert default symptoms data
@@ -131,14 +168,14 @@ class MenstrualCycleDbHelper {
           columnIsCustomType: catSymptoms.isCustomType,
         };
 
-        printLogs("---------Data Insert: ${row.toString()}");
+        //printLogs("---------Data Insert: ${row.toString()}");
 
         await db!.insert(tableSymptomsData, row);
         symptomsIndex = symptomsIndex + 1;
       }
     }
 
-    printLogs("-------------Insert operation Successfully");
+    //printLogs("-------------Insert operation Successfully");
   }
 
   /// this function is called when database version is upgrade
@@ -189,22 +226,108 @@ class MenstrualCycleDbHelper {
   }
 
   /// get daily logs based on userID
-  Future<List<UserSymptomsLogData>> getDailyLogs(String userId) async {
+  Future<List<UserSymptomsLogData>> getDailyLogs() async {
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
     Database? db = await instance.database;
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
-        "Select * from $tableDailyUserSymptomsLogsData WHERE $columnUserId='$userId'");
+        "Select * from $tableDailyUserSymptomsLogsData WHERE $columnCustomerId='$customerId'");
     List<UserSymptomsLogData> usersLogDataList = [];
     List.generate(queryResponse.length, (i) {
       UserSymptomsLogData userLogsData = UserSymptomsLogData();
       userLogsData.id = queryResponse[i][columnID];
-      userLogsData.userid = queryResponse[i][columnUserId];
-      userLogsData.symptomData = queryResponse[i][columnUserEncryptDate];
+      userLogsData.customerId = queryResponse[i][columnCustomerId];
+      userLogsData.symptomData = queryResponse[i][columnUserEncryptData];
       userLogsData.logDate = queryResponse[i][columnLogDate];
       userLogsData.createdAt = queryResponse[i][columnCreatedDateTime];
       usersLogDataList.add(userLogsData);
     });
 
     return usersLogDataList;
+  }
+
+  /// Return last periods start date
+  Future<String> getLastPeriodDate() async {
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+    String lastPeriodsDate = "";
+    //printLogs("customerId : $customerId");
+    Database? db = await instance.database;
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId' ORDER BY $columnPeriodEncryptDate DESC");
+
+    List<DateTime> selectedPeriodsDate = [];
+
+    List.generate(queryResponse.length, (i) {
+      selectedPeriodsDate.add(DateTime.parse(Encryption.instance
+          .decrypt(queryResponse[i][columnPeriodEncryptDate])));
+    });
+
+    selectedPeriodsDate.sort((a, b) => b.compareTo(a));
+    //printLogs("selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
+
+    int oneDaysCount = 0; // Only If user selected only one cycle of periods
+    if (selectedPeriodsDate.isNotEmpty) {
+      if (selectedPeriodsDate.length == 1) {
+        mInstance.lastPeriodLength = 1;
+        oneDaysCount = 1;
+        //printLogs("Count length ==1: ${selectedPeriodsDate.length}");
+        lastPeriodsDate =
+            CalenderDateUtils.dateDayFormat(selectedPeriodsDate[0]);
+      } else {
+        for (int index = 1; index < selectedPeriodsDate.length; index++) {
+          //printLogs(
+          //    "Days: ${selectedPeriodsDate[index - 1].difference(selectedPeriodsDate[index]).inDays} = ${selectedPeriodsDate[index]} = ${selectedPeriodsDate[index - 1]}");
+          int inDays = selectedPeriodsDate[index - 1]
+              .difference(selectedPeriodsDate[index])
+              .inDays;
+          if (inDays > 2) {
+            //printLogs("Count inDays >2: $oneDaysCount");
+            mInstance.lastPeriodLength = oneDaysCount + 1;
+            lastPeriodsDate =
+                CalenderDateUtils.dateDayFormat(selectedPeriodsDate[index - 1]);
+            break;
+          } else if (inDays == 1) {
+            oneDaysCount = oneDaysCount + 1;
+          }
+        }
+      }
+
+      // Only If user selected only one cycle of periods
+      if (lastPeriodsDate.isEmpty &&
+          oneDaysCount == selectedPeriodsDate.length - 1) {
+        mInstance.lastPeriodLength = oneDaysCount + 1;
+
+        //printLogs("Count --- isEmpty: $oneDaysCount");
+        lastPeriodsDate = CalenderDateUtils.dateDayFormat(
+            selectedPeriodsDate[selectedPeriodsDate.length - 1]);
+      }
+    }
+    if (oneDaysCount == 0) {
+      mInstance.lastPeriodLength = 0;
+    }
+    //printLogs("lastPeriodsDate ------ : $lastPeriodsDate");
+    return lastPeriodsDate;
+  }
+
+  /// Return range of last periods date
+  Future<List<String>> getPastPeriodDates() async {
+    final mInstance = MenstrualCycleWidget.instance!;
+    Database? db = await instance.database;
+    String customerId = mInstance.getCustomerId();
+    List<String> periodDays = [];
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId'");
+    List.generate(queryResponse.length, (i) {
+      String periodDate = Encryption.instance
+          .decrypt(queryResponse[i][columnPeriodEncryptDate]);
+      periodDays.add(periodDate);
+    });
+
+    //printLogs("Logs ${periodDays.toString()}");
+    return periodDays;
   }
 }

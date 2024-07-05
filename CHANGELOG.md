@@ -1,3 +1,9 @@
+## [1.0.0] - 06 July 2024
+* Added Calender view
+* Added Monthly calender view
+* Edit periods dates
+* Minor bug fixed
+
 ## [0.1.5] - 19 June 2024
 * Added "viewType" of 'Menstrual Cycle Widget'
 

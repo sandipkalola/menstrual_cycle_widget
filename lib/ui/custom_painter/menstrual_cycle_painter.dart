@@ -4,7 +4,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'menstrual_cycle_utils.dart';
+import '../../menstrual_cycle_widget.dart';
 
 class MenstrualCyclePainter extends CustomPainter {
   int totalCycleDays;
@@ -89,25 +89,11 @@ class MenstrualCyclePainter extends CustomPainter {
   FontWeight messageFontWeight;
   int spaceBtnTitleMessage;
 
-  static const Color defaultBlackColor = Colors.black;
-  static const defaultMenstruationColor = Color(0xFFff584f);
-  static const defaultFollicularColor = Color(0xFFeec9b7);
-  static const defaultOvulationColor = Color(0xFF22bc79);
-  static const defaultLutealPhaseColor = Color(0xFFabcdf0);
-
-  static const defaultMenstruationColorBg = Color(0x26ff584f);
-  static const defaultFollicularColorBg = Color(0x26eec9b7);
-  static const defaultOvulationColorBg = Color(0x2622bc79);
-  static const defaultLutealPhaseColorBg = Color(0x26abcdf0);
-
-  /// Default central central background color
-  static const defaultCentralCircleBackgroundColor = Color(0xffed9dba);
-
   MenstrualCyclePainter(
       {required this.totalCycleDays,
       this.selectedDay = 0,
       // Menstruation Params
-      this.menstruationName = "Menstruation",
+      this.menstruationName = Strings.menstruationLabel,
       required this.menstruationDayCount,
       this.menstruationColor = defaultMenstruationColor,
       this.menstruationBackgroundColor = defaultMenstruationColorBg,
@@ -115,7 +101,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.menstruationTextColor = defaultMenstruationColor,
 
       // Follicular Phase Params
-      this.follicularPhaseName = "Follicular phase",
+      this.follicularPhaseName = Strings.follicularPhaseLabel,
       required this.follicularDayCount,
       this.follicularPhaseDayTextColor = defaultBlackColor,
       this.follicularPhaseColor = defaultFollicularColor,
@@ -123,7 +109,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.follicularTextColor = defaultFollicularColor,
 
       // ovulation Phase Params
-      this.ovulationName = "Ovulation",
+      this.ovulationName = Strings.ovulationLabel,
       required this.ovulationDayCount,
       this.ovulationDayTextColor = defaultBlackColor,
       this.ovulationColor = defaultOvulationColor,
@@ -131,7 +117,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.ovulationTextColor = defaultOvulationColor,
 
       // luteal Phase Params
-      this.lutealPhaseName = "Luteal phase",
+      this.lutealPhaseName = Strings.lutealPhaseLabel,
       this.lutealPhaseColor = defaultLutealPhaseColor,
       this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
       this.lutealPhaseTextColor = defaultLutealPhaseColor,
@@ -144,7 +130,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.centralCircleSize = 25,
 
       // Day Params
-      this.dayTitle = "Day",
+      this.dayTitle = Strings.dayLabel,
       this.dayTitleFontSize = 5,
       this.dayFontSize = 12,
       this.selectedDayFontSize = 18,

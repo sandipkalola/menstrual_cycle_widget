@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:menstrual_cycle_widget/menstrual_cycle_phase_view.dart';
-import 'package:menstrual_cycle_widget/menstrual_cycle_utils.dart';
+import 'package:menstrual_cycle_widget/menstrual_cycle_widget.dart';
 
 void main() {
   runApp(const MyApp());
