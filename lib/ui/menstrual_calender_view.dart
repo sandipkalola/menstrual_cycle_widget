@@ -223,7 +223,7 @@ class _MenstrualCycleCalenderViewState
                                 MenstrualCycleMonthlyCalenderView(
                               themeColor: widget.themeColor,
                               hideInfoView: widget.hideInfoView!,
-                              isFromCalender: true,
+                              isShowCloseIcon: true,
                               onDataChanged: (value) {},
                             ),
                           ),

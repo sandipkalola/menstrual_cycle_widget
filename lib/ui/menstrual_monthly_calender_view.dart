@@ -7,14 +7,14 @@ class MenstrualCycleMonthlyCalenderView extends StatefulWidget {
   final String? themeColor;
   final Color? daySelectedColor;
   final bool hideInfoView;
-  final bool isFromCalender;
+  final bool isShowCloseIcon;
   final Function? onDataChanged;
 
   const MenstrualCycleMonthlyCalenderView(
       {super.key,
       this.themeColor = "000000",
       this.daySelectedColor,
-      this.isFromCalender = false,
+      this.isShowCloseIcon = false,
       this.onDataChanged,
       this.hideInfoView = false});
 
@@ -51,7 +51,7 @@ class _MenstrualCycleMonthlyCalenderViewState
             : Colors.grey,
         cycleLength: _instance.getCycleLength(),
         periodLength: _instance.getPeriodDuration(),
-        isFromCalender: widget.isFromCalender,
+        isFromCalender: widget.isShowCloseIcon,
         onDataChanged: (value) {
           widget.onDataChanged!.call(value);
         },

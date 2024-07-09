@@ -225,12 +225,14 @@ class CalenderExample extends StatelessWidget {
 ```
 ### Parameters
 
-| parameters         | Description                                                   |
-|--------------------|---------------------------------------------------------------|
-| `themeColor`       | Specifies the theme color to match the app’s style            |
-| `daySelectedColor` | Specifies the selected day color.                             |
-| `hideInfoView`     | Set true to hide information view. Default is false           |
-| `onDataChanged`    | Callback this function if change any data into calender view. |
+| parameters         | Description                                                                            |
+|--------------------|----------------------------------------------------------------------------------------|
+| `themeColor`       | Specifies the theme color to match the app’s style                                     |
+| `daySelectedColor` | Specifies the selected day color.                                                      |
+| `hideInfoView`     | Set true to hide information view. Default is false                                    |
+| `onDataChanged`    | Callback this function if change any data into calender view.                          |
+| `isShowCloseIcon`    | Set true to show (X) close icon on top left side of calender view. Default is false  . |
+
 
 ### Example
 

@@ -65,7 +65,8 @@ class MenstrualCycleWidget {
   void updateConfiguration(
       {required int? cycleLength,
       required int? periodDuration,
-      String? userId = ""}) {
+      String? userId = "",
+      DateTime? lastPeriodDate}) async {
     assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
     assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
     if (userId!.isNotEmpty) {
@@ -73,6 +74,22 @@ class MenstrualCycleWidget {
     }
     _cycleLength = cycleLength!;
     _periodDuration = periodDuration!;
+
+    // Generate periods days based on last selected period date
+    if (lastPeriodDate != null) {
+      final dbHelper = MenstrualCycleDbHelper.instance;
+      bool isFoundDate = await dbHelper.isPeriodDateFound(lastPeriodDate);
+      if (!isFoundDate) {
+        List<DateTime> selectedPeriodsDate = [];
+        DateTime lastPeriodDateTime = lastPeriodDate;
+        selectedPeriodsDate.add(lastPeriodDateTime);
+        for (int i = 1; i < periodDuration; i++) {
+          lastPeriodDateTime = lastPeriodDateTime.add(const Duration(days: 1));
+          selectedPeriodsDate.add(lastPeriodDateTime);
+        }
+        await dbHelper.insertPeriodLog(selectedPeriodsDate);
+      }
+    }
     calculateLastPeriodDate();
   }
 

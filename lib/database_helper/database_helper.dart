@@ -247,6 +247,33 @@ class MenstrualCycleDbHelper {
     return usersLogDataList;
   }
 
+  /// Check if found period date
+  Future<bool> isPeriodDateFound(DateTime periodDate) async {
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+    bool isFoundDate = false;
+    Database? db = await instance.database;
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId' ORDER BY $columnPeriodEncryptDate DESC");
+
+    List<DateTime> selectedPeriodsDate = [];
+
+    List.generate(queryResponse.length, (i) {
+      selectedPeriodsDate.add(DateTime.parse(Encryption.instance
+          .decrypt(queryResponse[i][columnPeriodEncryptDate])));
+    });
+
+    for (int index = 0; index < selectedPeriodsDate.length; index++) {
+      if (CalenderDateUtils.isSameDay(periodDate, selectedPeriodsDate[index])) {
+        isFoundDate = true;
+        break;
+      }
+    }
+
+    return isFoundDate;
+  }
+
   /// Return last periods start date
   Future<String> getLastPeriodDate() async {
     final mInstance = MenstrualCycleWidget.instance!;
