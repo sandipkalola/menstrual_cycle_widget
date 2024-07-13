@@ -8,9 +8,15 @@ class CalenderDateUtils {
   static final DateFormat _dayMonth = DateFormat('dd MMMM');
   static final DateFormat _firstDayFormat = DateFormat('MMM dd');
   static final DateFormat _fullDayFormat = DateFormat('EEE MMM dd, yyyy');
+  static final DateFormat _fullDayName = DateFormat('EEEE');
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  static final DateFormat _yearFormat = DateFormat('yyyy');
+
+  static String formatYear(DateTime d) => _yearFormat.format(d);
 
   static String formatMonth(DateTime d) => _monthFormat.format(d);
+
+  static String fullDayName(DateTime d) => _fullDayName.format(d);
 
   static String formatDayMonth(DateTime d) => _dayMonth.format(d);
 

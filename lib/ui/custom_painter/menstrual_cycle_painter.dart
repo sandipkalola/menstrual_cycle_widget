@@ -84,6 +84,7 @@ class MenstrualCyclePainter extends CustomPainter {
   FontWeight titleFontWeight;
 
   String message;
+  String message2;
   Color messageTextColor;
   double messageTextSize;
   FontWeight messageFontWeight;
@@ -158,10 +159,11 @@ class MenstrualCyclePainter extends CustomPainter {
       this.titleTextSize = 20,
       this.titleFontWeight = FontWeight.bold,
       this.message = "",
+      this.message2 = "",
       this.messageTextColor = Colors.black45,
       this.messageTextSize = 10,
       this.messageFontWeight = FontWeight.normal,
-      this.spaceBtnTitleMessage = 20});
+      this.spaceBtnTitleMessage = 5});
 
   @override
   Future<void> paint(Canvas canvas, Size size) async {
@@ -261,33 +263,16 @@ class MenstrualCyclePainter extends CustomPainter {
 
     if (viewType == MenstrualCycleViewType.text ||
         viewType == MenstrualCycleViewType.circleText) {
-      final centralTextPainter = TextPainter(
-        textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
-      );
+      final messageTextPainter = TextPainter(
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 2,
+          ellipsis: "...");
+      double totalHeight = 0;
+      List<TextPainter> textPainters = [];
 
       /// show title text
-      TextSpan titleLabel = TextSpan(
-        text: title,
-        style: TextStyle(
-          color: titleTextColor,
-          fontSize: titleTextSize,
-          fontWeight: titleFontWeight,
-        ),
-      );
-      centralTextPainter.text = titleLabel;
-      centralTextPainter.layout();
-
-      final labelOffset = Offset(
-          center.dx - centralTextPainter.width / 2,
-          center.dx -
-              centralTextPainter.height / 2 -
-              (spaceBtnTitleMessage / 2));
-
-      centralTextPainter.paint(canvas, labelOffset);
-
-      /// Show message text
-      TextSpan messageLabel = TextSpan(
+      TextSpan message1 = TextSpan(
         text: message,
         style: TextStyle(
           color: messageTextColor,
@@ -295,15 +280,75 @@ class MenstrualCyclePainter extends CustomPainter {
           fontWeight: messageFontWeight,
         ),
       );
-      centralTextPainter.text = messageLabel;
-      centralTextPainter.layout();
-      final labelOffset2 = Offset(
-          center.dx - centralTextPainter.width / 2,
-          center.dx -
-              centralTextPainter.height / 2 +
-              (spaceBtnTitleMessage / 2));
+      messageTextPainter.text = message1;
+      messageTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.60);
+      textPainters.add(messageTextPainter);
+      totalHeight += messageTextPainter.height;
 
-      centralTextPainter.paint(canvas, labelOffset2);
+      final titleTextPainter = TextPainter(
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 2,
+          ellipsis: "...");
+
+      /// Show title text
+      TextSpan titleText = TextSpan(
+        text: title,
+        style: TextStyle(
+          color: titleTextColor,
+          fontSize: titleTextSize,
+          fontWeight: titleFontWeight,
+        ),
+      );
+      titleTextPainter.text = titleText;
+      titleTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.70);
+      textPainters.add(titleTextPainter);
+      totalHeight += titleTextPainter.height;
+
+      final message2TextPainter = TextPainter(
+          textAlign: TextAlign.center,
+          textDirection: TextDirection.ltr,
+          maxLines: 2,
+          ellipsis: "...");
+
+      /// show message2 text
+      TextSpan messageText2 = TextSpan(
+        text: message2,
+        style: TextStyle(
+          color: messageTextColor,
+          fontSize: messageTextSize,
+          fontWeight: messageFontWeight,
+        ),
+      );
+      message2TextPainter.text = messageText2;
+      message2TextPainter.layout(minWidth: 0, maxWidth: size.width * 0.60);
+      textPainters.add(message2TextPainter);
+      totalHeight += message2TextPainter.height;
+
+      // Starting Y position
+      double startY = center.dy - totalHeight / 2;
+      Offset titleOffset =
+          Offset(center.dx - textPainters[0].width / 2, startY);
+
+      messageTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.60);
+      messageTextPainter.paint(canvas, titleOffset);
+
+      Offset messageOffset = Offset(
+        center.dx - textPainters[1].width / 2,
+        titleOffset.dy + textPainters[0].height + spaceBtnTitleMessage,
+      );
+
+      titleTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.70);
+      titleTextPainter.paint(canvas, messageOffset);
+
+      // Paint message2
+      Offset message2Offset = Offset(
+        center.dx - textPainters[2].width / 2,
+        messageOffset.dy + textPainters[1].height + spaceBtnTitleMessage,
+      );
+
+      message2TextPainter.layout(minWidth: 0, maxWidth: size.width * 0.60);
+      message2TextPainter.paint(canvas, message2Offset);
     }
 
     if (viewType == MenstrualCycleViewType.image ||

@@ -358,10 +358,10 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                               ),
                               height: 40,
                               width: 150,
-                              child: Center(
+                              child: const Center(
                                 child: Text(
                                   Strings.saveLabel,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white),
                                 ),
@@ -436,9 +436,9 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                             Radius.circular(10),
                           ),
                         ),
-                        child: Text(
+                        child: const Text(
                           Strings.editPeriodDateLabel,
-                          style: const TextStyle(
+                          style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.white),
                         ),
                       ),

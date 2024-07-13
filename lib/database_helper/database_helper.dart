@@ -9,7 +9,7 @@ import '../ui/calender_view/calender_view.dart';
 
 class MenstrualCycleDbHelper {
   static const _databaseName = "MenstrualCycleAppDatabase.db";
-  static const _databaseVersion = 1;
+  static const _databaseVersion = 2;
 
   /// Common Columns
   static const String columnID = "id";
@@ -67,6 +67,17 @@ class MenstrualCycleDbHelper {
       "$columnCustomerId TEXT DEFAULT '0', "
       "$columnPeriodEncryptDate TEXT)";
 
+  /// current user table  and column
+  static const String tableCurrentUserDetails = "tblCurrentUserDetails";
+  static const String columnCycleLength = "cycleLength";
+  static const String columnPeriodDuration = "periodDuration";
+  static const String createTableCurrentUserDetails =
+      "CREATE TABLE $tableCurrentUserDetails ("
+      "$columnID INTEGER PRIMARY KEY,"
+      "$columnCustomerId TEXT DEFAULT '0', "
+      "$columnPeriodDuration INTEGER, "
+      "$columnCycleLength INTEGER)";
+
   MenstrualCycleDbHelper._privateConstructor();
 
   static final MenstrualCycleDbHelper instance =
@@ -94,7 +105,15 @@ class MenstrualCycleDbHelper {
     await db.execute(createTableSymptomsData);
     await db.execute(createTableDailyUserSymptomsLogsData);
     await db.execute(createTableUserPeriodsLogsData);
+    await db.execute(createTableCurrentUserDetails);
     await _insertDefaultSymptomsData(db);
+  }
+
+  /// this function is called when database version is upgrade
+  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (newVersion == 2) {
+      await db.execute(createTableCurrentUserDetails);
+    }
   }
 
   /// insert daily logs report based on userId and log date
@@ -117,6 +136,43 @@ class MenstrualCycleDbHelper {
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
     //printLogs("Insert Data");
     return id;
+  }
+
+  /// insert current user info
+  Future<int> insertCurrentUserDetails(
+      {int? periodDuration, int? cycleLength, String? customerId}) async {
+    Database? db = await instance.database;
+    // Delete existing data
+    await db!.rawDelete("DELETE FROM $tableCurrentUserDetails");
+
+    Map<String, dynamic> data = {
+      columnCustomerId: customerId,
+      columnPeriodDuration: periodDuration,
+      columnCycleLength: cycleLength,
+    };
+
+    ///insert a new current  user details
+    int id = await db.insert(tableCurrentUserDetails, data);
+    return id;
+  }
+
+  /// get all symptoms list
+  void setCurrentUserDetail() async {
+    Database? db = await instance.database;
+
+    final List<Map<String, dynamic>> queryResponse =
+        await db!.rawQuery("Select * from $tableCurrentUserDetails");
+
+    printLogs(
+        "queryResponse[i][columnCustomerId] ${queryResponse[0][columnCustomerId]}");
+    if (queryResponse.isNotEmpty) {
+      List.generate(queryResponse.length, (i) {
+        MenstrualCycleWidget.instance!.setCurrentUserData(
+            queryResponse[i][columnCustomerId],
+            queryResponse[i][columnCycleLength],
+            queryResponse[i][columnPeriodDuration]);
+      });
+    }
   }
 
   /// Delete past period data
@@ -177,9 +233,6 @@ class MenstrualCycleDbHelper {
 
     //printLogs("-------------Insert operation Successfully");
   }
-
-  /// this function is called when database version is upgrade
-  Future _onUpgrade(Database db, int oldVersion, int newVersion) async {}
 
   /// get all symptoms list
   Future<List<Symptoms>> getSymptoms() async {
@@ -279,7 +332,9 @@ class MenstrualCycleDbHelper {
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
     String lastPeriodsDate = "";
-    //printLogs("customerId : $customerId");
+    printLogs("customerId : $customerId");
+    printLogs(
+        "customerId decrypt : ${Encryption.instance.decrypt(customerId)}");
     Database? db = await instance.database;
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
@@ -293,7 +348,7 @@ class MenstrualCycleDbHelper {
     });
 
     selectedPeriodsDate.sort((a, b) => b.compareTo(a));
-    //printLogs("selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
+    printLogs("selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
 
     int oneDaysCount = 0; // Only If user selected only one cycle of periods
     if (selectedPeriodsDate.isNotEmpty) {

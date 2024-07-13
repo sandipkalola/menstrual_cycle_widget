@@ -1,3 +1,10 @@
+## [1.1.0] - 13 July 2024
+* Added new params 'isAutoSetData' into MenstrualCyclePhaseView
+* Added new table for store current user details
+* Show dynamic messages into MenstrualCyclePhaseView
+* Update README.md File description.
+* Minor bug fixed
+
 ## [1.0.0] - 06 July 2024
 * Added Calender view
 * Added Monthly calender view

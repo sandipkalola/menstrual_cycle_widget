@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../menstrual_cycle_widget.dart';
+import '../utils/constant.dart';
+import 'calender_view/calender_view.dart';
 import 'custom_painter/menstrual_cycle_painter.dart';
 
 class MenstrualCyclePhaseView extends StatefulWidget {
@@ -82,6 +84,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final FontWeight titleFontWeight;
 
   final String message;
+  final String message2;
   final Color messageTextColor;
   final double messageTextSize;
   final FontWeight messageFontWeight;
@@ -92,18 +95,19 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final int follicularDayCountNew = 0;
   final int ovulationDayCountNew = 0;
   final double arcStrokeWidth;
-
   final double size;
+
+  final bool isAutoSetData;
 
   const MenstrualCyclePhaseView(
       {super.key,
-      required this.totalCycleDays,
+      this.totalCycleDays = defaultCycleLength,
       required this.size,
       this.selectedDay = 0,
 
       // Menstruation Params
       this.menstruationName = Strings.menstruationLabel,
-      required this.menstruationDayCount,
+      this.menstruationDayCount = defaultPeriodDuration,
       this.menstruationColor = defaultMenstruationColor,
       this.menstruationBackgroundColor = defaultMenstruationColorBg,
       this.menstruationDayTextColor = defaultBlackColor,
@@ -111,7 +115,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
 
       // Follicular Phase Params
       this.follicularPhaseName = Strings.follicularPhaseLabel,
-      required this.follicularDayCount,
+      this.follicularDayCount = defaultFollicularDay,
       this.follicularPhaseDayTextColor = defaultBlackColor,
       this.follicularPhaseColor = defaultFollicularColor,
       this.follicularBackgroundColor = defaultFollicularColorBg,
@@ -119,7 +123,7 @@ class MenstrualCyclePhaseView extends StatefulWidget {
 
       // ovulation Phase Params
       this.ovulationName = Strings.ovulationLabel,
-      required this.ovulationDayCount,
+      this.ovulationDayCount = defaultOvulationDay,
       this.ovulationDayTextColor = defaultBlackColor,
       this.ovulationColor = defaultOvulationColor,
       this.ovulationBackgroundColor = defaultOvulationColorBg,
@@ -167,10 +171,12 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       this.titleTextSize = 20,
       this.titleFontWeight = FontWeight.bold,
       this.message = "",
+      this.message2 = "",
       this.messageTextColor = Colors.black45,
       this.messageTextSize = 10,
       this.messageFontWeight = FontWeight.normal,
-      this.spaceBtnTitleMessage = 20});
+      this.spaceBtnTitleMessage = 5,
+      this.isAutoSetData = false});
 
   @override
   State<MenstrualCyclePhaseView> createState() =>
@@ -178,6 +184,8 @@ class MenstrualCyclePhaseView extends StatefulWidget {
 }
 
 class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
+  final _instance = MenstrualCycleWidget.instance!;
+
   MenstrualCyclePainter? _painter;
   ui.Image? _image;
 
@@ -185,8 +193,43 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   double selectedDayCircleSize = 15;
   double widgetSize = 0;
   PhaseTextBoundaries? phaseTextBoundaries;
+  int _totalCycleDays = 0;
+  int _menstruationDayCount = 0;
+  int _follicularDayCount = defaultFollicularDay;
+  int _ovulationDayCount = defaultOvulationDay;
+  int _selectedDay = 0;
+  String _title = "";
+  String _message = "";
+  String _message2 = "";
 
   Future<void> _init(String imagePath) async {
+    String lastPeriodDate = _instance.getLastPeriodDay();
+
+    if (widget.isAutoSetData) {
+      _totalCycleDays = _instance.getCycleLength();
+      _menstruationDayCount = _instance.getPeriodDuration();
+      _follicularDayCount = getFollicularDayCounts();
+      if (lastPeriodDate.isNotEmpty) {
+        DateTime lastPeriod = DateTime.parse(lastPeriodDate);
+        int inDays = DateTime.now().difference(lastPeriod).inDays;
+        printLogs("inDays: $inDays");
+        if (inDays > _totalCycleDays) {
+          _selectedDay = 0;
+        } else {
+          _selectedDay = (inDays + 1);
+        }
+      }
+      generateMessagesText(lastPeriodDate);
+    } else {
+      _title = widget.title;
+      _message = widget.message;
+      _message2 = widget.message2;
+      _totalCycleDays = widget.totalCycleDays;
+      _menstruationDayCount = widget.menstruationDayCount;
+      _follicularDayCount = widget.follicularDayCount;
+      _ovulationDayCount = widget.ovulationDayCount;
+      _selectedDay = widget.selectedDay;
+    }
     if (imagePath.isNotEmpty) {
       final ByteData data = await rootBundle.load(imagePath);
       final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
@@ -208,10 +251,10 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     }
 
     _painter = MenstrualCyclePainter(
-        totalCycleDays: widget.totalCycleDays,
-        menstruationDayCount: widget.menstruationDayCount,
-        follicularDayCount: widget.follicularDayCount,
-        ovulationDayCount: widget.ovulationDayCount,
+        totalCycleDays: _totalCycleDays,
+        menstruationDayCount: _menstruationDayCount,
+        follicularDayCount: _follicularDayCount,
+        ovulationDayCount: _ovulationDayCount,
         imgSize: widget.imgSize,
         imageAssets: (_image != null) ? _image : null,
         centralCircleBackgroundColor: widget.centralCircleBackgroundColor,
@@ -243,7 +286,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         ovulationName: widget.ovulationName,
         ovulationTextColor: widget.ovulationTextColor,
         insidePhasesTextSize: widget.phasesTextSize,
-        selectedDay: widget.selectedDay,
+        selectedDay: _selectedDay,
         selectedDayBackgroundColor: widget.selectedDayBackgroundColor,
         selectedDayCircleBorderColor: widget.selectedDayCircleBorderColor,
         selectedDayCircleSize: selectedDayCircleSize,
@@ -260,15 +303,158 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         centralCircleBorderSize: widget.centralCircleBorderSize,
         isRemoveBackgroundPhaseColor: widget.isRemoveBackgroundPhaseColor,
         viewType: widget.viewType,
-        title: widget.title,
+        title: _title,
         titleFontWeight: widget.titleFontWeight,
         titleTextColor: widget.titleTextColor,
         titleTextSize: widget.titleTextSize,
-        message: widget.message,
+        message: _message,
+        message2: _message2,
         messageFontWeight: widget.messageFontWeight,
         messageTextColor: widget.messageTextColor,
         messageTextSize: widget.messageTextSize,
         spaceBtnTitleMessage: widget.spaceBtnTitleMessage);
+  }
+
+  /// Generate dynamic messages based on different conditions
+  generateMessagesText(lastPeriodDate) {
+    if (lastPeriodDate.isNotEmpty) {
+      int totalDiffCurrentLastPeriod =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays;
+      printLogs("totalDiffCurrentLastPeriod : $totalDiffCurrentLastPeriod");
+      int totalDuration =
+          _instance.getPeriodDuration() + _instance.getCycleLength();
+      printLogs("totalDuration : $totalDuration");
+      printLogs("selected day : $_selectedDay");
+      int totalDayBeforeOvulationStart =
+          getFollicularDayCounts() + _instance.getPeriodDuration();
+      int totalDayBeforeOvulationEnd =
+          totalDayBeforeOvulationStart + defaultOvulationDay;
+      int conceiveDays =
+          totalDayBeforeOvulationStart - totalDiffCurrentLastPeriod;
+      printLogs("beforeOvulationDayCount : $totalDayBeforeOvulationStart");
+
+      // Check if last period date is more then current cycle length + period duration.
+      // Then show only total late period day
+      if (totalDiffCurrentLastPeriod >= totalDuration) {
+        _message = Strings.pastCycleLabel;
+        _title = "$totalDiffCurrentLastPeriod ${Strings.circleDaysLateLabel} ";
+        _message2 = Strings.lateLabel;
+        return;
+      }
+      // check if last period date is more then current cycle and less then total duration (current cycle length + period duration)
+      // The show below messages
+      else if (totalDiffCurrentLastPeriod >= _instance.getCycleLength() &&
+          totalDiffCurrentLastPeriod <= totalDuration) {
+        _message = Strings.timeForPregnancyTestLabel;
+        int dayTestCount = totalDuration - totalDiffCurrentLastPeriod - 1;
+        printLogs("dayTestCount : $dayTestCount");
+        if (dayTestCount == 0) {
+          _title = Strings.timeForPregnancyTestTitleLabel3;
+        } else {
+          if (dayTestCount > 1) {
+            _title =
+                "${Strings.timeForPregnancyTestTitleLabel} $dayTestCount ${Strings.timeForPregnancyTestTitleLabel4}";
+          } else {
+            _title =
+                "${Strings.timeForPregnancyTestTitleLabel} $dayTestCount ${Strings.timeForPregnancyTestTitleLabel2}";
+          }
+        }
+        _message2 =
+            "${Strings.predictPeriodLabel} ${totalDiffCurrentLastPeriod - _instance.getCycleLength() + 1}";
+        return;
+      }
+      // Check if period day started
+      // Then show below messages
+      else if (totalDiffCurrentLastPeriod >= 0 &&
+          totalDiffCurrentLastPeriod < _instance.getPeriodDuration()) {
+        _message = Strings.conceiveLabel;
+        _title = "$conceiveDays ${Strings.phaseDaysLabel}";
+        _message2 = "${Strings.periodPhaseLabel} $_selectedDay ";
+        return;
+      }
+      // Check if period over and before ovulation day
+      // Then show below messages
+      else if (totalDiffCurrentLastPeriod >= _instance.getPeriodDuration() &&
+          totalDiffCurrentLastPeriod < totalDayBeforeOvulationStart) {
+        _message = Strings.conceiveLabel;
+        if (conceiveDays > 1) {
+          _title = "$conceiveDays ${Strings.phaseDaysLabel}";
+        } else {
+          _title = "$conceiveDays ${Strings.phaseDayLabel}";
+        }
+        _message2 = Strings.pregnancyChanceMsg1;
+        return;
+      }
+      // Check if ovulation day started
+      // Then show below messages
+      else if (totalDiffCurrentLastPeriod >= totalDayBeforeOvulationStart &&
+          totalDiffCurrentLastPeriod < totalDayBeforeOvulationEnd) {
+        int dayOvulationDayCount =
+            totalDayBeforeOvulationEnd - totalDiffCurrentLastPeriod - 1;
+        int ovulationDay = _instance.getPeriodDuration() +
+            getFollicularDayCounts() +
+            defaultOvulationDay ~/ 2;
+        printLogs("ovulationDay $ovulationDay");
+
+        if (ovulationDay == totalDiffCurrentLastPeriod) {
+          _message = Strings.ovulationDayMsg1;
+          _title = Strings.ovulationDayTitle;
+          _message2 = Strings.pregnancyChanceMsg2;
+        } else {
+          _message = Strings.conceiveLabel2;
+          _message2 = Strings.pregnancyChanceMsg2;
+          if (dayOvulationDayCount == 0) {
+            _title = Strings.timeForPregnancyTestTitleLabel3;
+            _message2 = Strings.pregnancyChanceMsg3;
+          } else if (dayOvulationDayCount > 1) {
+            _title =
+                "${Strings.timeForPregnancyTestTitleLabel} $dayOvulationDayCount ${Strings.timeForPregnancyTestTitleLabel4}";
+          } else {
+            _title =
+                "${Strings.timeForPregnancyTestTitleLabel} $dayOvulationDayCount ${Strings.timeForPregnancyTestTitleLabel2}";
+          }
+        }
+      }
+      // Check if ovulation day is over and start luteal phase
+      else if (totalDiffCurrentLastPeriod >= totalDayBeforeOvulationEnd &&
+          totalDiffCurrentLastPeriod <= _instance.getCycleLength()) {
+        int totalRemainingDayForNextPeriod =
+            _instance.getCycleLength() - totalDiffCurrentLastPeriod;
+        if (totalRemainingDayForNextPeriod > 1) {
+          _message = Strings.predictPeriodDayStartLabel;
+          _title = "$totalRemainingDayForNextPeriod ${Strings.phaseDaysLabel}";
+        } else {
+          _message = Strings.predictPeriodDayStartLabel2;
+          _title = Strings.predictPeriodDayStartLabel1;
+        }
+        if (totalRemainingDayForNextPeriod < 2) {
+          _message2 = Strings.lateLabel;
+        } else {
+          _message2 = Strings.pregnancyChanceMsg4;
+        }
+      } else {
+        // Never found but still show current date time
+        DateTime todayDateTime = DateTime.now();
+        _message = CalenderDateUtils.fullDayName(todayDateTime);
+        _title = CalenderDateUtils.formatDayMonth(todayDateTime);
+        _message2 = CalenderDateUtils.formatYear(todayDateTime);
+      }
+    } else {
+      DateTime todayDateTime = DateTime.now();
+      _message = CalenderDateUtils.fullDayName(todayDateTime);
+      _title = CalenderDateUtils.formatDayMonth(todayDateTime);
+      _message2 = CalenderDateUtils.formatYear(todayDateTime);
+    }
+  }
+
+  /// Get follicular day count
+  int getFollicularDayCounts() {
+    int follicularDay = defaultFollicularDay;
+    int ovulationDay = _instance.getCycleLength() - 14;
+    follicularDay =
+        ovulationDay - _instance.getPeriodDuration() - defaultOvulationDay ~/ 2;
+    printLogs("follicularDay: $follicularDay");
+    return follicularDay - 1;
   }
 
   @override

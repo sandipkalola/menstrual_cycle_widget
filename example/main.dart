@@ -13,12 +13,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Menstrual Cycle Phases View Example',
+      title: 'Menstrual Cycle View Example',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Menstrual Cycle Phases View'),
+      home: const MyHomePage(title: 'Menstrual Cycle View'),
     );
   }
 }
@@ -43,21 +43,18 @@ class _MyHomePageState extends State<MyHomePage> {
           style: const TextStyle(fontSize: 20),
         ),
       ),
-      body: const Column(
+      body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Center(
-              child: MenstrualCyclePhaseView(
-                size: 300,
-                totalCycleDays: 28,
-                menstruationDayCount: 5,
-                follicularDayCount: 7,
-                selectedDay: 5,
-                ovulationDayCount: 3,
-                theme: MenstrualCycleTheme.circle,
+              child: MenstrualCycleMonthlyCalenderView(
+                themeColor: "000000",
+                daySelectedColor: Colors.blue,
+                hideInfoView: false,
+                onDataChanged: (value) {},
               ),
             ),
           ),

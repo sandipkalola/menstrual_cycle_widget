@@ -328,7 +328,7 @@ class _CalendarCellState extends State<CalendarCell> {
       DateTime ovulationDay = DateFormat("yyyy-MM-dd")
           .parse(widget.lastPeriodDate!)
           .add(Duration(days: widget.cycleLength))
-          .add(const Duration(days: -16));
+          .add(const Duration(days: -15));
       //  printLogs("ovulationDay ${defaultDateFormat.format(ovulationDay)}");
       bool isBefore = widget.currentDay!.isBefore(DateTime.now());
       if (!isBefore) {

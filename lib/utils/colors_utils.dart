@@ -13,4 +13,4 @@ const defaultLutealPhaseColorBg = Color(0x26abcdf0);
 const Color defaultBlackColor = Colors.black;
 
 /// Default central central background color
-const defaultCentralCircleBackgroundColor = Color(0xffed9dba);
+const defaultCentralCircleBackgroundColor = Colors.transparent;

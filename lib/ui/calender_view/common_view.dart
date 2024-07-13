@@ -15,7 +15,7 @@ initFuturePeriodDay() async {
   if (instance.lastPeriodDate.isNotEmpty) {
     DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
         .parse(instance.lastPeriodDate)
-        .add(Duration(days: cycleLength - 1));
+        .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
     for (int index = 0; index < generateMonth; index++) {
       for (int i = 1; i <= periodLength; i++) {
@@ -46,7 +46,7 @@ initFutureOvulationDay() async {
       // Ovulation day
       DateTime ovulationDate = nextPeriodDate
           .add(Duration(days: cycleLength))
-          .add(const Duration(days: -16)); // TODO get based on  cycleLength
+          .add(const Duration(days: -15)); // TODO get based on  cycleLength
       futureOvulationDays.add(defaultDateFormat.format(ovulationDate));
       //printLogs("Dates: ${defaultDateFormat.format(ovulationDate)}");
       DateTime newDatetime = nextPeriodDate.add(Duration(days: cycleLength));
@@ -78,9 +78,9 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             color: defaultMenstruationColor,
           ),
         ),
-        Text(
+        const Text(
           Strings.periodLabel,
-          style: const TextStyle(fontSize: fontSize),
+          style: TextStyle(fontSize: fontSize),
         ),
         const SizedBox(
           width: 5,
@@ -102,9 +102,9 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             ),
           ),
         ),
-        Text(
+        const Text(
           Strings.predictOvulationDateLabel,
-          style: const TextStyle(fontSize: fontSize),
+          style: TextStyle(fontSize: fontSize),
         ),
         const SizedBox(
           width: 5,
@@ -126,9 +126,9 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             ),
           ),
         ),
-        Text(
+        const Text(
           Strings.predictPeriodDateLabel,
-          style: const TextStyle(fontSize: fontSize),
+          style: TextStyle(fontSize: fontSize),
         ),
         const SizedBox(
           width: 5,
@@ -142,9 +142,9 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             color: daySelectedColor,
           ),
         ),
-        Text(
+        const Text(
           Strings.selectedDateLabel,
-          style: const TextStyle(fontSize: fontSize),
+          style: TextStyle(fontSize: fontSize),
         ),
         const SizedBox(
           width: 5,
@@ -158,9 +158,9 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             color: themeColor,
           ),
         ),
-        Text(
+        const Text(
           Strings.todayLabel,
-          style: const TextStyle(fontSize: fontSize),
+          style: TextStyle(fontSize: fontSize),
         ),
       ],
     ),

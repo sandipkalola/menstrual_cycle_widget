@@ -26,7 +26,7 @@ class MenstrualCycleWidget {
   List<String> pastAllPeriodDays = [];
 
   // customer id for storing date
-  static String _customerId = "0"; // Default is Zero
+  String _customerId = "0"; // Default is Zero
 
   static MenstrualCycleWidget? instance;
 
@@ -59,25 +59,36 @@ class MenstrualCycleWidget {
   void initialize({required String secretKey, required String ivKey}) {
     _aesSecretKey = secretKey;
     _aesIvKey = ivKey;
+
+    // get current user details
+    MenstrualCycleDbHelper.instance.setCurrentUserDetail();
+
   }
 
   /// Update configuration of MenstrualCycleWidget
   void updateConfiguration(
       {required int? cycleLength,
       required int? periodDuration,
-      String? userId = "",
+      String? userId = "0",
       DateTime? lastPeriodDate}) async {
     assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
     assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
+   // printLogs("userId $userId");
     if (userId!.isNotEmpty) {
       _customerId = userId;
     }
     _cycleLength = cycleLength!;
     _periodDuration = periodDuration!;
+    final dbHelper = MenstrualCycleDbHelper.instance;
+
+    // insert current user details
+    await dbHelper.insertCurrentUserDetails(
+        customerId: _customerId,
+        cycleLength: _cycleLength,
+        periodDuration: _periodDuration);
 
     // Generate periods days based on last selected period date
     if (lastPeriodDate != null) {
-      final dbHelper = MenstrualCycleDbHelper.instance;
       bool isFoundDate = await dbHelper.isPeriodDateFound(lastPeriodDate);
       if (!isFoundDate) {
         List<DateTime> selectedPeriodsDate = [];
@@ -90,6 +101,20 @@ class MenstrualCycleWidget {
         await dbHelper.insertPeriodLog(selectedPeriodsDate);
       }
     }
+    calculateLastPeriodDate();
+  }
+
+   setCurrentUserData(
+      String customerId, int cycleLength, int periodDuration) {
+   // printLogs("setCurrentUserData");
+
+    _customerId = customerId;
+    _cycleLength = cycleLength;
+    _periodDuration = periodDuration;
+    /*printLogs("_customerId $_customerId");
+    printLogs("cycleLength $_cycleLength");
+    printLogs("periodDuration $_periodDuration");
+    printLogs("periodDuration ${Encryption.instance.encrypt(_customerId)}");*/
     calculateLastPeriodDate();
   }
 
