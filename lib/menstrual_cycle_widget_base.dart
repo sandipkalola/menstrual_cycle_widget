@@ -62,7 +62,6 @@ class MenstrualCycleWidget {
 
     // get current user details
     MenstrualCycleDbHelper.instance.setCurrentUserDetail();
-
   }
 
   /// Update configuration of MenstrualCycleWidget
@@ -70,10 +69,11 @@ class MenstrualCycleWidget {
       {required int? cycleLength,
       required int? periodDuration,
       String? userId = "0",
-      DateTime? lastPeriodDate}) async {
+      DateTime? lastPeriodDate,
+      bool isClearData = false}) async {
     assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
     assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
-   // printLogs("userId $userId");
+    // printLogs("userId $userId");
     if (userId!.isNotEmpty) {
       _customerId = userId;
     }
@@ -81,9 +81,14 @@ class MenstrualCycleWidget {
     _periodDuration = periodDuration!;
     final dbHelper = MenstrualCycleDbHelper.instance;
 
+    // Clear Past log data
+    if (isClearData) {
+      String customerId = getCustomerId();
+      await dbHelper.clearPeriodLog(customerId);
+    }
     // insert current user details
     await dbHelper.insertCurrentUserDetails(
-        customerId: _customerId,
+        customerId: Encryption.instance.encrypt(_customerId),
         cycleLength: _cycleLength,
         periodDuration: _periodDuration);
 
@@ -104,17 +109,10 @@ class MenstrualCycleWidget {
     calculateLastPeriodDate();
   }
 
-   setCurrentUserData(
-      String customerId, int cycleLength, int periodDuration) {
-   // printLogs("setCurrentUserData");
-
-    _customerId = customerId;
+  setCurrentUserData(String customerId, int cycleLength, int periodDuration) {
+    _customerId = Encryption.instance.decrypt(customerId);
     _cycleLength = cycleLength;
     _periodDuration = periodDuration;
-    /*printLogs("_customerId $_customerId");
-    printLogs("cycleLength $_cycleLength");
-    printLogs("periodDuration $_periodDuration");
-    printLogs("periodDuration ${Encryption.instance.encrypt(_customerId)}");*/
     calculateLastPeriodDate();
   }
 
@@ -134,10 +132,6 @@ class MenstrualCycleWidget {
 
   String getCustomerId() {
     return Encryption.instance.encrypt(_customerId);
-  }
-
-  void printMyName() {
-    //printLogs(("SSKk");
   }
 
   /// Sae your own logs into DB
@@ -206,6 +200,14 @@ class MenstrualCycleWidget {
       returnDateTime = DateTime.parse(lastPeriodDate);
     }
     return returnDateTime;
+  }
+
+  /// Clear user's log details
+  clearPeriodLog(String userId) async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    final instance = MenstrualCycleWidget.instance!;
+    String encryptedUserid = instance.getCustomerId();
+    await dbHelper.clearPeriodLog(encryptedUserid);
   }
 
   /// get last period date. Default is []
