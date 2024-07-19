@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'menstrual_cycle_widget.dart';
+import 'ui/calender_view/calender_date_utils.dart';
 import 'utils/constant.dart';
+import 'utils/model/PeriodsDateRange.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -68,14 +70,14 @@ class MenstrualCycleWidget {
   void updateConfiguration(
       {required int? cycleLength,
       required int? periodDuration,
-      String? userId = "0",
+      String? customerId = "0",
       DateTime? lastPeriodDate,
       bool isClearData = false}) async {
     assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
     assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
     // printLogs("userId $userId");
-    if (userId!.isNotEmpty) {
-      _customerId = userId;
+    if (customerId!.isNotEmpty) {
+      _customerId = customerId;
     }
     _cycleLength = cycleLength!;
     _periodDuration = periodDuration!;
@@ -134,21 +136,25 @@ class MenstrualCycleWidget {
     return Encryption.instance.encrypt(_customerId);
   }
 
-  /// Sae your own logs into DB
-  saveCustomSymptomsLogs(
-      {required Map<String, dynamic>? userSymptomsData,
-      String symptomsLogDate = "",
-      required Function? onSuccess,
-      required Function? onError}) async {
+  /// ----------------------- Custom Functions -----------------------///
+
+  /// Save custom customer's symptom logs
+  saveCustomSymptomsLogs({
+    required Map<String, dynamic>? userSymptomsData,
+    required Function? onSuccess,
+    required Function? onError,
+    String customerId = "0",
+    DateTime? symptomsLogDate,
+  }) async {
     String currentDate = "";
     String logDate = "";
 
-    if (symptomsLogDate.isEmpty) {
+    if (symptomsLogDate == null) {
       var now = DateTime.now();
       logDate = defaultDateFormat.format(now);
     } else {
       try {
-        logDate = symptomsLogDate;
+        logDate = defaultDateFormat.format(symptomsLogDate);
       } catch (e) {
         throw Strings.errorInvalidSymptomsLogDate;
       }
@@ -160,21 +166,17 @@ class MenstrualCycleWidget {
 
     String encryptedData =
         Encryption.instance.encrypt(json.encode(userSymptomsData));
-    final instance = MenstrualCycleWidget.instance!;
-
-    String encryptedUserid = instance.getCustomerId();
-
-    //printLogs(("encryptedData $encryptedData");
 
     Map<String, dynamic> userData = {
-      MenstrualCycleDbHelper.columnCustomerId: encryptedUserid,
+      MenstrualCycleDbHelper.columnCustomerId:
+          Encryption.instance.encrypt(customerId),
       MenstrualCycleDbHelper.columnUserEncryptData: encryptedData,
       MenstrualCycleDbHelper.columnLogDate: logDate,
       MenstrualCycleDbHelper.columnCreatedDateTime: currentDate,
     };
 
-    // TODO set customLog tags to identify custom logs data
-    int id = await dbHelper.insertDailyLog(userData, logDate, encryptedUserid);
+    int id = await dbHelper.insertCustomDailyLog(
+        userData, logDate, Encryption.instance.encrypt(customerId));
     //printLogs(("Save Id: $id");
     if (id > 0) {
       //printLogs(("Save Data");
@@ -189,13 +191,18 @@ class MenstrualCycleWidget {
     }
   }
 
+  /// Get customer custom symptoms logs based on customer id
+  Future<List<UserSymptomsLogData>> getAllCustomSymptomsLogs(
+      {String customerId = "0"}) async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    return await dbHelper
+        .getCustomSymptomsLogs(Encryption.instance.encrypt(customerId));
+  }
+
   /// get last period date. Default is 1971-01-01
   Future<DateTime> getLastPeriodDate() async {
     String defaultDate = "1971-01-01";
-    String lastPeriodDate = "";
     DateTime returnDateTime = DateTime.parse(defaultDate);
-    final dbHelper = MenstrualCycleDbHelper.instance;
-    lastPeriodDate = await dbHelper.getLastPeriodDate();
     if (lastPeriodDate.isNotEmpty) {
       returnDateTime = DateTime.parse(lastPeriodDate);
     }
@@ -205,22 +212,106 @@ class MenstrualCycleWidget {
   /// Clear user's log details
   clearPeriodLog(String userId) async {
     final dbHelper = MenstrualCycleDbHelper.instance;
-    final instance = MenstrualCycleWidget.instance!;
-    String encryptedUserid = instance.getCustomerId();
+    String encryptedUserid = getCustomerId();
     await dbHelper.clearPeriodLog(encryptedUserid);
   }
 
-  /// get last period date. Default is []
-  Future<List<DateTime>> getLastPeriodDateRange() async {
-    List<DateTime> defaultDateRange = [];
+  /// get last period date. Default is object of PeriodsDateRange
+  Future<PeriodsDateRange> getLastPeriodDateRange() async {
+    PeriodsDateRange periodsDateRange = PeriodsDateRange(allPeriodDates: []);
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    if (allPeriodRange.isNotEmpty) {
+      periodsDateRange = allPeriodRange[0];
+    }
+    return periodsDateRange;
+  }
+
+  /// get all period details like period start date, period end date, period duration and all period dates.
+  /// Default is object of PeriodsDateRange
+  Future<List<PeriodsDateRange>> getAllPeriodsDetails() async {
+    List<PeriodsDateRange> listPeriodsDateRange = [];
     final dbHelper = MenstrualCycleDbHelper.instance;
+    List<DateTime> periodDateRange = [];
     List<String> lastPeriodRange = await dbHelper.getPastPeriodDates();
     if (lastPeriodRange.isNotEmpty) {
       for (int i = 0; i < lastPeriodRange.length; i++) {
-        defaultDateRange.add(DateTime.parse(lastPeriodRange[i]));
+        periodDateRange.add(DateTime.parse(lastPeriodRange[i]));
+      }
+      periodDateRange.sort((a, b) => a.compareTo(b));
+      int indexId = 1;
+      int periodDuration = 0;
+      List<String>? periodDates = [];
+
+      PeriodsDateRange periodsDateRange = PeriodsDateRange(allPeriodDates: []);
+      if (periodDateRange.length > 1) {
+        for (int i = 0; i < periodDateRange.length; i++) {
+          periodDuration = periodDuration + 1;
+          if (i == 0) {
+            periodsDateRange.id = indexId;
+            periodsDateRange.periodStartDate =
+                CalenderDateUtils.dateDayFormat(periodDateRange[i]);
+            periodDates!
+                .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
+          } else {
+            DateTime previousDate = periodDateRange[i - 1];
+            DateTime currentDate = periodDateRange[i];
+            int inDays = currentDate.difference(previousDate).inDays;
+            /* printLogs("inDays: $inDays");
+            printLogs(
+                "previousDate: ${CalenderDateUtils.dateDayFormat(previousDate)}");
+            printLogs(
+                "currentDate: ${CalenderDateUtils.dateDayFormat(currentDate)}");*/
+            if (inDays > 1) {
+              periodDates = [];
+              periodDuration = 1;
+              listPeriodsDateRange.add(periodsDateRange);
+              indexId = indexId + 1;
+              periodsDateRange = PeriodsDateRange(allPeriodDates: []);
+              periodsDateRange.id = indexId;
+              periodsDateRange.periodStartDate =
+                  CalenderDateUtils.dateDayFormat(currentDate);
+              periodDates
+                  .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
+            } else {
+              periodDates!
+                  .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
+              periodsDateRange.periodEndDate =
+                  CalenderDateUtils.dateDayFormat(currentDate);
+              periodsDateRange.periodDuration = periodDuration;
+              periodsDateRange.allPeriodDates = periodDates;
+            }
+          }
+        }
+        listPeriodsDateRange.add(periodsDateRange);
+      } else {
+        periodsDateRange.id = indexId;
+        periodsDateRange.periodStartDate =
+            CalenderDateUtils.dateDayFormat(periodDateRange[0]);
+        periodsDateRange.periodEndDate =
+            CalenderDateUtils.dateDayFormat(periodDateRange[0]);
+        periodsDateRange.periodDuration = periodDuration;
+        periodsDateRange.allPeriodDates!
+            .add(CalenderDateUtils.dateDayFormat(periodDateRange[0]));
+        listPeriodsDateRange.add(periodsDateRange);
       }
     }
-    return defaultDateRange;
+    listPeriodsDateRange = listPeriodsDateRange.reversed.toList();
+    return listPeriodsDateRange;
+  }
+
+  /// get average period duration. Default is 0
+  Future<int> getAvgPeriodDuration() async {
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    int avgPeriodDuration = 0;
+    if (allPeriodRange.isNotEmpty) {
+      int totalPeriodDuration = 0;
+      for (int i = 0; i < allPeriodRange.length; i++) {
+        totalPeriodDuration =
+            totalPeriodDuration + allPeriodRange[i].periodDuration!;
+      }
+      avgPeriodDuration = totalPeriodDuration ~/ allPeriodRange.length;
+    }
+    return avgPeriodDuration;
   }
 
 /* DateTime getCustomOvulationDate({DateTime? lastPeriodDate, int cycleLength = 28}) {

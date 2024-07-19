@@ -46,7 +46,7 @@ initFutureOvulationDay() async {
       // Ovulation day
       DateTime ovulationDate = nextPeriodDate
           .add(Duration(days: cycleLength))
-          .add(const Duration(days: -15)); // TODO get based on  cycleLength
+          .add(const Duration(days: -14));
       futureOvulationDays.add(defaultDateFormat.format(ovulationDate));
       //printLogs("Dates: ${defaultDateFormat.format(ovulationDate)}");
       DateTime newDatetime = nextPeriodDate.add(Duration(days: cycleLength));
@@ -55,6 +55,7 @@ initFutureOvulationDay() async {
   }
   return futureOvulationDays;
 }
+
 
 Widget getInformationView(Color daySelectedColor, Color themeColor) {
   const double fontSize = 6;

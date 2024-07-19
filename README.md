@@ -71,7 +71,7 @@ A `MenstrualCycleWidget` instance is used to update your configuration as well t
 #### 3.3. Update configuration
 Use `updateConfiguration` method to update configuration like
 ```dart
-      instance.updateConfiguration(cycleLength: 28, periodDuration: 5, userId: "1");
+      instance.updateConfiguration(cycleLength: 28, periodDuration: 5, customerId: "1");
 ```
 ###  Parameters
 
@@ -79,7 +79,7 @@ Use `updateConfiguration` method to update configuration like
 |-------------------|----------|--------------------------------------------------------------------------------|---------------|
 | `cycleLength`*    | int      | Required. Specifies the total number of cycle days in the menstrual cycle      | -             |
 | `periodDuration`* | int      | Required. Specifies the total number of period duration in the menstrual cycle | -             |
-| `userId`          | String   | Specifies the user id to store data.                                           | 0(Zero)       |
+| `customerId`      | String   | Specifies the user id to store data.                                           | 0(Zero)       |
 | `lastPeriodDate`  | DateTime | Specifies the last period date.                                                | Null          |
 
 

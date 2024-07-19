@@ -9,7 +9,7 @@ import '../ui/calender_view/calender_view.dart';
 
 class MenstrualCycleDbHelper {
   static const _databaseName = "MenstrualCycleAppDatabase.db";
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 3;
 
   /// Common Columns
   static const String columnID = "id";
@@ -50,8 +50,20 @@ class MenstrualCycleDbHelper {
   static const String columnWeight = "weight";
   static const String columnBodyTemperature = "bodyTemperature";
   static const String columnLogDate = "logDate";
+
   static const String createTableDailyUserSymptomsLogsData =
       "CREATE TABLE $tableDailyUserSymptomsLogsData ("
+      "$columnID INTEGER PRIMARY KEY,"
+      "$columnCustomerId TEXT DEFAULT '0', "
+      "$columnUserEncryptData TEXT, "
+      "$columnLogDate TEXT, "
+      "$columnCreatedDateTime TEXT)";
+
+  /// Custom daily Logs Table and columns
+  static const String tableCustomDailyUserSymptomsLogsData =
+      "tblCustomDailyUserSymptomsLogs";
+  static const String createTableCustomDailyUserSymptomsLogsData =
+      "CREATE TABLE $tableCustomDailyUserSymptomsLogsData ("
       "$columnID INTEGER PRIMARY KEY,"
       "$columnCustomerId TEXT DEFAULT '0', "
       "$columnUserEncryptData TEXT, "
@@ -106,6 +118,8 @@ class MenstrualCycleDbHelper {
     await db.execute(createTableDailyUserSymptomsLogsData);
     await db.execute(createTableUserPeriodsLogsData);
     await db.execute(createTableCurrentUserDetails);
+    await db.execute(createTableCustomDailyUserSymptomsLogsData);
+
     await _insertDefaultSymptomsData(db);
   }
 
@@ -113,6 +127,9 @@ class MenstrualCycleDbHelper {
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (newVersion == 2) {
       await db.execute(createTableCurrentUserDetails);
+    }
+    if (newVersion == 3) {
+      await db.execute(createTableCustomDailyUserSymptomsLogsData);
     }
   }
 
@@ -134,6 +151,28 @@ class MenstrualCycleDbHelper {
 
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
+    //printLogs("Insert Data");
+    return id;
+  }
+
+  /// insert daily custom logs report based on userId and log date
+  Future<int> insertCustomDailyLog(
+      Map<String, dynamic> data, String logDate, String customerId) async {
+    Database? db = await instance.database;
+
+    /// Check if found logs on provided date
+    int? recordExist = Sqflite.firstIntValue(await db!.rawQuery(
+        "SELECT COUNT(*) FROM $tableCustomDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'"));
+    //printLogs("Found Data : $recordExist");
+    if (recordExist! > 0) {
+      /// remove old logs
+      await db.rawDelete(
+          "DELETE FROM $tableCustomDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'");
+      //printLogs("Delete Data $deleted");
+    }
+
+    ///insert a new logs
+    int id = await db.insert(tableCustomDailyUserSymptomsLogsData, data);
     //printLogs("Insert Data");
     return id;
   }
@@ -300,6 +339,29 @@ class MenstrualCycleDbHelper {
     return usersLogDataList;
   }
 
+  /// get daily logs based on userID
+  Future<List<UserSymptomsLogData>> getCustomSymptomsLogs(
+      String customerId) async {
+    Database? db = await instance.database;
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from $tableDailyUserSymptomsLogsData WHERE $columnCustomerId='$customerId'");
+    List<UserSymptomsLogData> usersLogDataList = [];
+    List.generate(queryResponse.length, (i) {
+      UserSymptomsLogData userLogsData = UserSymptomsLogData();
+      userLogsData.id = queryResponse[i][columnID];
+      userLogsData.customerId =
+          Encryption.instance.decrypt(queryResponse[i][columnCustomerId]);
+      userLogsData.symptomData =
+          Encryption.instance.decrypt(queryResponse[i][columnUserEncryptData]);
+      userLogsData.logDate = queryResponse[i][columnLogDate];
+      userLogsData.createdAt = queryResponse[i][columnCreatedDateTime];
+      usersLogDataList.add(userLogsData);
+    });
+
+    return usersLogDataList;
+  }
+
   /// Check if found period date
   Future<bool> isPeriodDateFound(DateTime periodDate) async {
     final mInstance = MenstrualCycleWidget.instance!;
@@ -406,6 +468,7 @@ class MenstrualCycleDbHelper {
     List.generate(queryResponse.length, (i) {
       String periodDate = Encryption.instance
           .decrypt(queryResponse[i][columnPeriodEncryptDate]);
+
       periodDays.add(periodDate);
     });
 
