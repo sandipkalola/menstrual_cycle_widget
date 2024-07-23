@@ -12,9 +12,9 @@ initFuturePeriodDay() async {
   int generateMonth = 12; // TODO get from Configuration
   int cycleLength = instance.getCycleLength() - 1;
   int periodLength = instance.getPeriodDuration();
-  if (instance.lastPeriodDate.isNotEmpty) {
+  if (instance.getPreviousPeriodDay().isNotEmpty) {
     DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
-        .parse(instance.lastPeriodDate)
+        .parse(instance.getPreviousPeriodDay())
         .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
     for (int index = 0; index < generateMonth; index++) {
@@ -37,9 +37,9 @@ initFutureOvulationDay() async {
   List<String> futureOvulationDays = [];
   int generateMonth = 12; // get from configuration
   int cycleLength = instance.getCycleLength() - 1;
-  if (instance.lastPeriodDate.isNotEmpty) {
+  if (instance.getPreviousPeriodDay().isNotEmpty) {
     DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
-        .parse(instance.lastPeriodDate)
+        .parse(instance.getPreviousPeriodDay())
         .add(Duration(days: cycleLength - 1));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
     for (int index = 0; index < generateMonth; index++) {

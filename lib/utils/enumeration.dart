@@ -15,3 +15,19 @@ enum AvailableGestures { none, verticalSwipe, horizontalSwipe, all }
 enum CalendarFormat { month, twoWeeks, week }
 
 enum SwipeDetectionMoment { onEnd, onUpdate }
+
+
+enum WaterUnits {
+  ml,
+  flOz,
+}
+
+enum BodyTemperatureUnits {
+  celsius,
+  fahrenheit,
+}
+
+enum WeightUnits {
+  kg,
+  lb,
+}

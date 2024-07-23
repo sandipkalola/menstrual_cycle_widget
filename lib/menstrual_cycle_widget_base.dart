@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'dart:math';
+
+import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
-import 'ui/calender_view/calender_date_utils.dart';
-import 'utils/constant.dart';
-import 'utils/model/PeriodsDateRange.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -19,7 +19,7 @@ class MenstrualCycleWidget {
   static int _periodDuration = defaultPeriodDuration; // Default 5 days
 
   // last period date
-  String lastPeriodDate = "";
+  String _lastPeriodDate = "";
 
   // last period length
   int lastPeriodLength = 0;
@@ -32,10 +32,10 @@ class MenstrualCycleWidget {
 
   static MenstrualCycleWidget? instance;
 
-  // Return last period day
-  String getLastPeriodDay() => lastPeriodDate;
+  // Return previous period day into string
+  String getPreviousPeriodDay() => _lastPeriodDate;
 
-  int getLastPeriodLength() => lastPeriodLength;
+  int getPreviousCycleLength() => lastPeriodLength;
 
   String getSecretKey() => _aesSecretKey;
 
@@ -121,9 +121,9 @@ class MenstrualCycleWidget {
   /// get last period and all past period date from database based on configuration
   Future<List<String>> calculateLastPeriodDate() async {
     final dbHelper = MenstrualCycleDbHelper.instance;
-    lastPeriodDate = await dbHelper.getLastPeriodDate();
+    _lastPeriodDate = await dbHelper.getLastPeriodDate();
     // get all past periods date
-    if (lastPeriodDate.isNotEmpty) {
+    if (_lastPeriodDate.isNotEmpty) {
       final dbHelper = MenstrualCycleDbHelper.instance;
       pastAllPeriodDays = await dbHelper.getPastPeriodDates();
     } else {
@@ -138,17 +138,44 @@ class MenstrualCycleWidget {
 
   /// ----------------------- Custom Functions -----------------------///
 
-  /// Save custom customer's symptom logs
-  saveCustomSymptomsLogs({
-    required Map<String, dynamic>? userSymptomsData,
+  String next(int min, int max) {
+    final _random = Random();
+    return "${min + _random.nextInt(max - min)}";
+  }
+
+  /// insert user's period data on userId and log date
+  saveSymptomsLogs({
+    required List<SymptomsData>? userSymptomsData,
     required Function? onSuccess,
     required Function? onError,
-    String customerId = "0",
     DateTime? symptomsLogDate,
+    String meditationTime = "0",
+    String sleepTime = "0",
+    String waterValue = "0",
+    String waterUnit = "",
+    String customNotes = "N/A",
+    String weight = "0",
+    String weightUnit = "",
+    String bodyTemperature = "0",
+    String bodyTemperatureUnit = "",
+    bool isCustomLogs = true,
   }) async {
     String currentDate = "";
     String logDate = "";
+    weightUnit = (weightUnit.isEmpty) ? WeightUnits.kg.toString() : weightUnit;
+    bodyTemperatureUnit = (bodyTemperatureUnit.isEmpty)
+        ? BodyTemperatureUnits.celsius.toString()
+        : bodyTemperatureUnit;
+    waterUnit = (waterUnit.isEmpty) ? WaterUnits.ml.toString() : waterUnit;
 
+    meditationTime = next(5, 200);
+    sleepTime = next(5, 200);
+    weight = next(10, 100);
+    waterValue = next(5, 200);
+    customNotes = "N/A";
+    bodyTemperature = next(5, 150);
+
+    // TODO add condition to now allow blank value on meditation time, sleep time etc
     if (symptomsLogDate == null) {
       var now = DateTime.now();
       logDate = defaultDateFormat.format(now);
@@ -168,15 +195,32 @@ class MenstrualCycleWidget {
         Encryption.instance.encrypt(json.encode(userSymptomsData));
 
     Map<String, dynamic> userData = {
-      MenstrualCycleDbHelper.columnCustomerId:
-          Encryption.instance.encrypt(customerId),
+      MenstrualCycleDbHelper.columnCustomerId: getCustomerId(),
       MenstrualCycleDbHelper.columnUserEncryptData: encryptedData,
+      MenstrualCycleDbHelper.columnMeditationTime:
+          Encryption.instance.encrypt(meditationTime),
+      MenstrualCycleDbHelper.columnSleepTime:
+          Encryption.instance.encrypt(sleepTime),
+      MenstrualCycleDbHelper.columnWater:
+          Encryption.instance.encrypt(waterValue),
+      MenstrualCycleDbHelper.columnWaterUnit:
+          Encryption.instance.encrypt(waterUnit),
+      MenstrualCycleDbHelper.columnBodyTemperatureUnit:
+          Encryption.instance.encrypt(bodyTemperatureUnit),
+      MenstrualCycleDbHelper.columnWeightUnit:
+          Encryption.instance.encrypt(weightUnit),
+      MenstrualCycleDbHelper.columnNotes:
+          Encryption.instance.encrypt(customNotes),
+      MenstrualCycleDbHelper.columnWeight: Encryption.instance.encrypt(weight),
+      MenstrualCycleDbHelper.columnBodyTemperature:
+          Encryption.instance.encrypt(bodyTemperature),
       MenstrualCycleDbHelper.columnLogDate: logDate,
       MenstrualCycleDbHelper.columnCreatedDateTime: currentDate,
+      MenstrualCycleDbHelper.columnIsCustomLog: (isCustomLogs) ? "1" : "0"
     };
 
-    int id = await dbHelper.insertCustomDailyLog(
-        userData, logDate, Encryption.instance.encrypt(customerId));
+    printLogs("logDate : ---------- ${logDate}");
+    int id = await dbHelper.insertDailyLog(userData, logDate, getCustomerId());
     //printLogs(("Save Id: $id");
     if (id > 0) {
       //printLogs(("Save Data");
@@ -191,33 +235,116 @@ class MenstrualCycleWidget {
     }
   }
 
-  /// Get customer custom symptoms logs based on customer id
-  Future<List<UserSymptomsLogData>> getAllCustomSymptomsLogs(
-      {String customerId = "0"}) async {
-    final dbHelper = MenstrualCycleDbHelper.instance;
-    return await dbHelper
-        .getCustomSymptomsLogs(Encryption.instance.encrypt(customerId));
+  /// get Today's symptoms logs
+  Future<List<UserLogReportData>> getTodaySymptomsLog() async {
+    List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
+        startDate: DateTime.now(), endDate: DateTime.now());
+    return usersLogDataList;
   }
 
-  /// get last period date. Default is 1971-01-01
-  Future<DateTime> getLastPeriodDate() async {
-    String defaultDate = "1971-01-01";
-    DateTime returnDateTime = DateTime.parse(defaultDate);
-    if (lastPeriodDate.isNotEmpty) {
-      returnDateTime = DateTime.parse(lastPeriodDate);
-    }
-    return returnDateTime;
+  /// get symptoms log report BETWEEN start & end date based on userId
+  Future<List<UserLogReportData>> getSymptomsLogReport(
+      {required DateTime? startDate, required DateTime? endDate}) async {
+    // TODO Add validation for start and end date like not null, end date after start date or equal etc
+
+    String logStartDate = defaultDateFormat.format(startDate!);
+    String logEndDate = defaultDateFormat.format(endDate!);
+    List<UserLogReportData> usersLogDataList = [];
+    final dbHelper = MenstrualCycleDbHelper.instance;
+
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+    Database? db = await dbHelper.database;
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate'");
+    List.generate(queryResponse.length, (i) {
+      UserLogReportData userLogsData = UserLogReportData();
+      userLogsData.id = queryResponse[i][MenstrualCycleDbHelper.columnID];
+      userLogsData.customerId =
+          queryResponse[i][MenstrualCycleDbHelper.columnCustomerId];
+      String symptomsData = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
+      List<dynamic> jsonData = json.decode(symptomsData.trim());
+      userLogsData.symptomsData =
+          jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList();
+      userLogsData.bodyTemperature = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]);
+      userLogsData.bodyTemperatureUnit = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
+      userLogsData.weightUnit = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
+      userLogsData.weight = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]);
+      userLogsData.waterUnit = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
+      userLogsData.waterValue = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]);
+      userLogsData.sleepTime = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
+      userLogsData.notes = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
+      userLogsData.meditationTime = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]);
+      userLogsData.logDate = DateTime.parse(
+          queryResponse[i][MenstrualCycleDbHelper.columnLogDate]);
+      userLogsData.createdAt =
+          queryResponse[i][MenstrualCycleDbHelper.columnCreatedDateTime];
+      usersLogDataList.add(userLogsData);
+    });
+
+    usersLogDataList.sort((a, b) {
+      DateTime aDate = a.logDate!;
+      DateTime bDate = b.logDate!;
+      return bDate.compareTo(aDate);
+    });
+    return usersLogDataList;
   }
 
   /// Clear user's log details
-  clearPeriodLog(String userId) async {
+  clearPeriodLog() async {
     final dbHelper = MenstrualCycleDbHelper.instance;
     String encryptedUserid = getCustomerId();
     await dbHelper.clearPeriodLog(encryptedUserid);
   }
 
+  /// get last period date. Default is 1971-01-01
+  Future<DateTime> getPreviousPeriodDate() async {
+    String defaultDate = "1971-01-01";
+    DateTime returnDateTime = DateTime.parse(defaultDate);
+    if (_lastPeriodDate.isNotEmpty) {
+      returnDateTime = DateTime.parse(_lastPeriodDate);
+    }
+    return returnDateTime;
+  }
+
+  /// get average period duration. Default is 0
+  Future<int> getAvgPeriodDuration() async {
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    int avgPeriodDuration = 0;
+    if (allPeriodRange.isNotEmpty) {
+      int totalPeriodDuration = 0;
+      for (int i = 0; i < allPeriodRange.length; i++) {
+        totalPeriodDuration =
+            totalPeriodDuration + allPeriodRange[i].periodDuration!;
+      }
+      avgPeriodDuration = totalPeriodDuration ~/ allPeriodRange.length;
+    }
+    return avgPeriodDuration;
+  }
+
+  /// get last period duration. Default is 0
+  Future<int> getPreviousPeriodDuration() async {
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    int lastPeriodDuration = 0;
+    if (allPeriodRange.isNotEmpty) {
+      lastPeriodDuration = allPeriodRange[0].allPeriodDates!.length;
+    }
+    return lastPeriodDuration;
+  }
+
   /// get last period date. Default is object of PeriodsDateRange
-  Future<PeriodsDateRange> getLastPeriodDateRange() async {
+  Future<PeriodsDateRange> getPreviousPeriodDateRange() async {
     PeriodsDateRange periodsDateRange = PeriodsDateRange(allPeriodDates: []);
     List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
     if (allPeriodRange.isNotEmpty) {
@@ -297,21 +424,6 @@ class MenstrualCycleWidget {
     }
     listPeriodsDateRange = listPeriodsDateRange.reversed.toList();
     return listPeriodsDateRange;
-  }
-
-  /// get average period duration. Default is 0
-  Future<int> getAvgPeriodDuration() async {
-    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
-    int avgPeriodDuration = 0;
-    if (allPeriodRange.isNotEmpty) {
-      int totalPeriodDuration = 0;
-      for (int i = 0; i < allPeriodRange.length; i++) {
-        totalPeriodDuration =
-            totalPeriodDuration + allPeriodRange[i].periodDuration!;
-      }
-      avgPeriodDuration = totalPeriodDuration ~/ allPeriodRange.length;
-    }
-    return avgPeriodDuration;
   }
 
 /* DateTime getCustomOvulationDate({DateTime? lastPeriodDate, int cycleLength = 28}) {

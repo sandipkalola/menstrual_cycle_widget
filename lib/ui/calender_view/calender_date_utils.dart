@@ -28,6 +28,9 @@ class CalenderDateUtils {
 
   static String dateDayFormat(DateTime d) => _dateFormat.format(d);
 
+  /// May 2024
+  static var monthYear = DateFormat('MMM yyyy');
+
   static const List<String> weekTitles = [
     'Sun',
     'Mon',

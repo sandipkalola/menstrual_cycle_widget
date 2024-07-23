@@ -165,7 +165,7 @@ class _MenstrualCycleCalenderViewState
           onDateSelected: () => handleSelectedDateCallback(day),
           currentDay: day,
           multipleDateSelectionCallBack: () {},
-          lastPeriodDate: _instance.getLastPeriodDay(),
+          previousPeriodDate: _instance.getPreviousPeriodDay(),
           pastAllPeriodsDays: pastAllPeriodsDays,
           futurePeriodDays: futurePeriodDays,
           futureOvulationDays: futureOvulationDays,

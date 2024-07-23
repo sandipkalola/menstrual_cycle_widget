@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../menstrual_cycle_widget.dart';
-import '../utils/constant.dart';
-import 'calender_view/calender_view.dart';
 import 'custom_painter/menstrual_cycle_painter.dart';
 
 class MenstrualCyclePhaseView extends StatefulWidget {
@@ -203,7 +201,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   String _message2 = "";
 
   Future<void> _init(String imagePath) async {
-    String lastPeriodDate = _instance.getLastPeriodDay();
+    String lastPeriodDate = _instance.getPreviousPeriodDay();
 
     if (widget.isAutoSetData) {
       _totalCycleDays = _instance.getCycleLength();

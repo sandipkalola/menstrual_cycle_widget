@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 
 import '../../menstrual_cycle_widget.dart';
-import '../../utils/constant.dart';
 import 'calender_view.dart';
 
 class CalendarCell extends StatefulWidget {
@@ -16,7 +15,7 @@ class CalendarCell extends StatefulWidget {
   final Widget? child;
   final Color? selectedColor;
   final Color? todayColor;
-  final String? lastPeriodDate;
+  final String? previousPeriodDate;
   final List<String>? futurePeriodDays;
   final List<String>? pastAllPeriodsDays;
   final List<String>? futureOvulationDays;
@@ -48,7 +47,7 @@ class CalendarCell extends StatefulWidget {
       this.cycleLength = defaultCycleLength,
       this.periodDuration = defaultPeriodDuration,
       required this.multipleDateSelectionCallBack,
-      this.lastPeriodDate = ""});
+      this.previousPeriodDate = ""});
 
   @override
   State<CalendarCell> createState() => _CalendarCellState();
@@ -232,7 +231,7 @@ class _CalendarCellState extends State<CalendarCell> {
   /// Return true if current day is future period day else return false
   bool checkIsFuturePeriodDay() {
     bool isMatchDate = false;
-    if (widget.lastPeriodDate!.isNotEmpty) {
+    if (widget.previousPeriodDate!.isNotEmpty) {
       String currentDate = defaultDateFormat.format(widget.currentDay!);
       int index = widget.futurePeriodDays!.indexOf(currentDate);
       if (index != -1) {
@@ -245,7 +244,7 @@ class _CalendarCellState extends State<CalendarCell> {
   /// Return true if current day is past period day else return false
   bool checkIsPastPeriodDay() {
     bool isPeriodDay = false;
-    if (widget.lastPeriodDate!.isNotEmpty) {
+    if (widget.previousPeriodDate!.isNotEmpty) {
       String currentDate = defaultDateFormat.format(widget.currentDay!);
       List<String> periodDays = widget.pastAllPeriodsDays!;
       for (int index = 0; index < periodDays.length; index++) {
@@ -261,18 +260,18 @@ class _CalendarCellState extends State<CalendarCell> {
   /// Return true if current day is period day else return false
   bool checkIsPeriodDay() {
     bool isPeriodDay = false;
-    if (widget.lastPeriodDate!.isNotEmpty) {
+    if (widget.previousPeriodDate!.isNotEmpty) {
       DateTime lastPeriodDate = DateFormat("yyyy-MM-dd")
-          .parse(widget.lastPeriodDate!)
+          .parse(widget.previousPeriodDate!)
           .add(const Duration(days: -1));
 
       DateTime endPeriodDate = DateFormat("yyyy-MM-dd")
-          .parse(widget.lastPeriodDate!)
+          .parse(widget.previousPeriodDate!)
           .add(Duration(days: widget.periodDuration));
 
       int inDays = lastPeriodDate.difference(DateTime.now()).inDays;
       //  printLogs("inDays $inDays");
-      DateTime startPeriodDate = DateTime.parse(widget.lastPeriodDate!);
+      DateTime startPeriodDate = DateTime.parse(widget.previousPeriodDate!);
 
       bool isCurrentDateBtnPeriodsDays =
           (startPeriodDate.isBefore(widget.currentDay!) &&
@@ -310,7 +309,7 @@ class _CalendarCellState extends State<CalendarCell> {
   /// Return true if period day after current date else return false
   bool checkIsPeriodDayAfterCurrentDate() {
     bool isPeriodDayAfterCurrentDate = false;
-    if (widget.lastPeriodDate!.isNotEmpty) {
+    if (widget.previousPeriodDate!.isNotEmpty) {
       if (checkIsPeriodDay()) {
         bool isAfter = widget.currentDay!.isAfter(DateTime.now());
         if (widget.currentDay!.compareTo(DateTime.now()) == 0 || isAfter) {
@@ -324,9 +323,9 @@ class _CalendarCellState extends State<CalendarCell> {
   /// Return true if current day is ovulation day else return false
   bool checkIsOvulationDay() {
     bool isOvlDay = false;
-    if (widget.lastPeriodDate!.isNotEmpty) {
+    if (widget.previousPeriodDate!.isNotEmpty) {
       DateTime ovulationDay = DateFormat("yyyy-MM-dd")
-          .parse(widget.lastPeriodDate!)
+          .parse(widget.previousPeriodDate!)
           .add(Duration(days: widget.cycleLength))
           .add(const Duration(days: -14)); // TODO get backed on period cycle
       //  printLogs("ovulationDay ${defaultDateFormat.format(ovulationDay)}");

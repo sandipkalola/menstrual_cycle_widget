@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../menstrual_cycle_widget.dart';
-import '../../utils/constant.dart';
 import 'calender_view.dart';
 
 class CalenderMonthlyView extends StatefulWidget {
@@ -152,7 +151,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     List<DateTime> dayWidgets = [];
     List<DateTime>? calendarDays = _daysInMonth(selectedDate);
 
-    monthTitle.add(monthYear.format(selectedDate));
+    monthTitle.add(CalenderDateUtils.monthYear.format(selectedDate));
     for (var day in calendarDays) {
       day = CalenderDateUtils.getDay(day);
       if (day.hour > 0) {
@@ -310,7 +309,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                         monthWidgets[index][childIndex]),
                                 currentDay: monthWidgets[index][childIndex],
                                 isBlankDay: (monthStarted) ? false : true,
-                                lastPeriodDate: _instance.getLastPeriodDay(),
+                                previousPeriodDate: _instance.getPreviousPeriodDay(),
                                 pastAllPeriodsDays: pastAllPeriodsDays,
                                 futurePeriodDays: futurePeriodDays,
                                 futureOvulationDays: futureOvulationDays,

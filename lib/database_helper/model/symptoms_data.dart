@@ -3,23 +3,21 @@ class Symptoms {
   int? isVisibleCategory;
   String? categoryName;
   String? categoryColor;
-  int? isCustomType;
   List<SymptomsData>? symptomsData;
 
-  Symptoms(
-      {this.categoryId = 0,
-      this.categoryName,
-      this.symptomsData,
-      this.categoryColor = "#000000",
-      this.isVisibleCategory = 1,
-      this.isCustomType = 0});
+  Symptoms({
+    this.categoryId = 0,
+    this.categoryName,
+    this.symptomsData,
+    this.categoryColor = "#000000",
+    this.isVisibleCategory = 1,
+  });
 
   Symptoms.fromJson(Map<String, dynamic> json) {
     categoryId = json['categoryId'];
     isVisibleCategory = json['isVisibleCategory'];
     categoryName = json['categoryName'];
     categoryColor = json['categoryColor'];
-    isCustomType = json['isCustomType'];
     if (json['symptomsData'] != null) {
       symptomsData = <SymptomsData>[];
       json['symptomsData'].forEach((v) {
@@ -34,7 +32,6 @@ class Symptoms {
     data['categoryName'] = categoryName;
     data['isVisibleCategory'] = isVisibleCategory;
     data['categoryColor'] = categoryColor;
-    data['isCustomType'] = isCustomType;
     if (symptomsData != null) {
       data['symptomsData'] = symptomsData!.map((v) => v.toJson()).toList();
     }
@@ -43,20 +40,17 @@ class Symptoms {
 }
 
 class SymptomsData {
-  int? id;
   int? symptomId;
   String? symptomName;
   bool isSelected = false;
 
   SymptomsData({
-    this.id = 0,
     this.symptomName,
     this.symptomId = 0,
     this.isSelected = false,
   });
 
   SymptomsData.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
     symptomName = json['symptomName'];
     isSelected = json['isSelected'];
     symptomId = json['symptomId'];
@@ -64,11 +58,26 @@ class SymptomsData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
     data['symptomName'] = symptomName;
     data['symptomId'] = symptomId;
     data['isSelected'] = isSelected;
 
     return data;
+  }
+
+  factory SymptomsData.fromMap(Map<String, dynamic> map) {
+    return SymptomsData(
+      symptomName: map['symptomName'],
+      symptomId: map['symptomId'],
+      isSelected: map['isSelected'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'symptomName': symptomName,
+      'symptomId': symptomId,
+      'isSelected': isSelected,
+    };
   }
 }
