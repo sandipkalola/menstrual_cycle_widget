@@ -230,7 +230,7 @@ class CalenderExample extends StatelessWidget {
         title: Text('Monthly Calender View'),
       ),
       body: MenstrualCycleMonthlyCalenderView(
-        themeColor: "000000",
+        themeColor: Colors.black,
         hideInfoView: false,
         daySelectedColor: Colors.blue,
         onDataChanged: (value) {},
@@ -243,7 +243,7 @@ class CalenderExample extends StatelessWidget {
 
 | Parameters         | Datatype | Description                                                                            | Default Value |
 |--------------------|----------|----------------------------------------------------------------------------------------|---------------|
-| `themeColor`       | String   | Specifies the theme color to match the app’s style                                     | "000000"      |
+| `themeColor`       | Color    | Specifies the theme color to match the app’s style                                     | "000000"      |
 | `daySelectedColor` | Color    | Specifies the selected day color.                                                      | Colors.grey   |
 | `hideInfoView`     | bool     | Set true to hide information view. Default is false                                    | false         |
 | `onDataChanged`    | Function | Callback this function if change any data into calender view.                          | -             |
@@ -270,10 +270,10 @@ class CalenderExample extends StatelessWidget {
         title: Text('Calender View'),
       ),
       body: MenstrualCycleCalenderView(
-        themeColor: "000000",
+        themeColor: Colors.black,
         daySelectedColor: Colors.blue,
         logPeriodText: "Log Period",
-        backgroundColorCode: "FFFFFF",
+        backgroundColorCode: Colors.white,
         hideInfoView: false,
         onDateSelected: (date) {},
         onDataChanged: (value) {},
@@ -289,12 +289,12 @@ class CalenderExample extends StatelessWidget {
 
 | Parameters            | Datatype | Description                                                                | Default Value |
 |-----------------------|----------|----------------------------------------------------------------------------|---------------|
-| `themeColor`          | String   | Specifies the theme color to match the app’s style                         | "000000"      |
+| `themeColor`          | Color    | Specifies the theme color to match the app’s style                         | "000000"      |
 | `daySelectedColor`    | Color    | Specifies the selected day color.                                          | Colors.grey   |
 | `hideInfoView`        | bool     | Set true to hide information view. Default is false                        | false         |
 | `onDataChanged`       | Function | Callback this function if change any data into calender view.              | -             |
 | `logPeriodText`       | String   | Specifies text of your log period button.                                  | Log Period    |
-| `backgroundColorCode` | String   | Specifies the background color of your calender view to match app's style. | "ffffff"      |
+| `backgroundColorCode` | Color    | Specifies the background color of your calender view to match app's style. | "ffffff"      |
 | `hideBottomBar`       | bool     | Set true to hide bottom view of calender.                                  | false         |
 | `hideLogPeriodButton` | bool     | Set true to hide log period button from calender.                          | false         |
 | `isExpanded`          | bool     | Set true to show monthly style calender view.                              | false         |

@@ -64,4 +64,12 @@ class Strings {
       "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
   static const String errorInvalidSymptomsLogDate =
       "Invalid symptoms log date. Date format is yyyy-MM-dd";
+
+  static const String graphCycleStartDate = "Cycle start date";
+  static const String loading = "Loading...";
+  static const String graphCycleTrends = "Cycle trends";
+  static const String graphCycleLengthDays = "Cycle length days";
+  static const String graphCycleNormalDays = "Normal days";
+
+
 }

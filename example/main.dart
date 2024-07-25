@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.all(8.0),
             child: Center(
               child: MenstrualCycleMonthlyCalenderView(
-                themeColor: "000000",
+                themeColor: Colors.black,
                 daySelectedColor: Colors.blue,
                 hideInfoView: false,
                 onDataChanged: (value) {},

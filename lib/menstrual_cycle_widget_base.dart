@@ -219,7 +219,6 @@ class MenstrualCycleWidget {
       MenstrualCycleDbHelper.columnIsCustomLog: (isCustomLogs) ? "1" : "0"
     };
 
-    printLogs("logDate : ---------- ${logDate}");
     int id = await dbHelper.insertDailyLog(userData, logDate, getCustomerId());
     //printLogs(("Save Id: $id");
     if (id > 0) {
@@ -391,6 +390,7 @@ class MenstrualCycleWidget {
             if (inDays > 1) {
               periodDates = [];
               periodDuration = 1;
+              periodsDateRange.cycleDuration = inDays;
               listPeriodsDateRange.add(periodsDateRange);
               indexId = indexId + 1;
               periodsDateRange = PeriodsDateRange(allPeriodDates: []);
@@ -417,6 +417,7 @@ class MenstrualCycleWidget {
         periodsDateRange.periodEndDate =
             CalenderDateUtils.dateDayFormat(periodDateRange[0]);
         periodsDateRange.periodDuration = periodDuration;
+        periodsDateRange.cycleDuration = 1;
         periodsDateRange.allPeriodDates!
             .add(CalenderDateUtils.dateDayFormat(periodDateRange[0]));
         listPeriodsDateRange.add(periodsDateRange);

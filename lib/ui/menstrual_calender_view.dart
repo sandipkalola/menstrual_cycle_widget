@@ -8,8 +8,8 @@ import 'calender_view/calender_view.dart';
 class MenstrualCycleCalenderView extends StatefulWidget {
   final Color? daySelectedColor;
   final String? logPeriodText;
-  final String? themeColor;
-  final String? backgroundColorCode;
+  final Color? themeColor;
+  final Color? backgroundColorCode;
   final bool? hideInfoView;
   final bool? hideBottomBar;
   final bool? hideLogPeriodButton;
@@ -20,8 +20,8 @@ class MenstrualCycleCalenderView extends StatefulWidget {
   const MenstrualCycleCalenderView(
       {super.key,
       this.daySelectedColor,
-      this.themeColor = "000000",
-      this.backgroundColorCode = "ffffff",
+      this.themeColor = Colors.black,
+      this.backgroundColorCode = Colors.white,
       this.logPeriodText = Strings.logPeriodLabel,
       this.hideLogPeriodButton = false,
       this.hideBottomBar = false,
@@ -54,9 +54,6 @@ class _MenstrualCycleCalenderViewState
   List<String> futureOvulationDays = [];
   List<String>? pastAllPeriodsDays = [];
 
-  Color? _backgroundColorCode = Colors.white;
-  Color? _themeColor = Colors.black;
-
   List<String> weekTitles = CalenderDateUtils.weekTitles;
 
   Color? selectedColor = Colors.grey;
@@ -80,12 +77,6 @@ class _MenstrualCycleCalenderViewState
   }
 
   init() async {
-    _backgroundColorCode = Color(
-      int.parse("0xff${widget.backgroundColorCode}"),
-    );
-    _themeColor = Color(
-      int.parse("0xff${widget.themeColor}"),
-    );
     selectedColor = (widget.daySelectedColor != null)
         ? widget.daySelectedColor
         : Colors.grey;
@@ -127,14 +118,16 @@ class _MenstrualCycleCalenderViewState
     for (var day in weekTitles) {
       dayWidgets.add(
         CalendarCell(
-          themeColor: _themeColor!,
+          themeColor: widget.themeColor!,
           selectedColor: selectedColor,
           todayColor: defaultMenstruationColor,
           isDayOfWeek: true,
           dayOfWeek: day,
           multipleDateSelectionCallBack: () {},
           dayOfWeekStyle: TextStyle(
-              color: _themeColor!, fontWeight: FontWeight.w800, fontSize: 11),
+              color: widget.themeColor,
+              fontWeight: FontWeight.w800,
+              fontSize: 11),
         ),
       );
     }
@@ -159,7 +152,7 @@ class _MenstrualCycleCalenderViewState
 
       dayWidgets.add(
         CalendarCell(
-          themeColor: _themeColor!,
+          themeColor: widget.themeColor!,
           selectedColor: selectedColor,
           todayColor: defaultMenstruationColor,
           onDateSelected: () => handleSelectedDateCallback(day),
@@ -182,7 +175,7 @@ class _MenstrualCycleCalenderViewState
   TextStyle configureDateStyle(monthStarted, monthEnded) {
     TextStyle? dateStyles;
     TextStyle normalTextStyle =
-        TextStyle(color: _themeColor!, fontWeight: FontWeight.normal);
+        TextStyle(color: widget.themeColor, fontWeight: FontWeight.normal);
 
     if (isExpanded) {
       final TextStyle body1StyleDisabled =
@@ -203,7 +196,7 @@ class _MenstrualCycleCalenderViewState
           height: 40,
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
-            color: _backgroundColorCode ?? Colors.black12,
+            color: widget.backgroundColorCode ?? Colors.black12,
             borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(12),
               bottomRight: Radius.circular(12),
@@ -243,13 +236,15 @@ class _MenstrualCycleCalenderViewState
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             shape: BoxShape.rectangle,
-                            border: Border.all(width: 1.0, color: _themeColor!),
+                            border: Border.all(
+                                width: 1.0, color: widget.themeColor!),
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(8)),
                           ),
                           child: Text(
                             widget.logPeriodText!,
-                            style: TextStyle(color: _themeColor, fontSize: 8),
+                            style: TextStyle(
+                                color: widget.themeColor!, fontSize: 8),
                           ),
                         ),
                       ),
@@ -257,7 +252,7 @@ class _MenstrualCycleCalenderViewState
               Text(
                 DateFormat("EEEE MMMM dd, yyyy", "en_US")
                     .format(selectedDateTime),
-                style: TextStyle(fontSize: 13, color: _themeColor!),
+                style: TextStyle(fontSize: 13, color: widget.themeColor!),
               ),
               IconButton(
                 onPressed: toggleExpanded,
@@ -267,11 +262,11 @@ class _MenstrualCycleCalenderViewState
                 icon: isExpanded
                     ? Icon(
                         Icons.arrow_drop_up,
-                        color: _themeColor!,
+                        color: widget.themeColor!,
                       )
                     : Icon(
                         Icons.arrow_drop_down,
-                        color: _themeColor!,
+                        color: widget.themeColor!,
                       ),
               ),
             ],
@@ -286,7 +281,7 @@ class _MenstrualCycleCalenderViewState
   @override
   Widget build(BuildContext buildContext) {
     return Card(
-      color: _backgroundColorCode,
+      color: widget.backgroundColorCode,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -304,14 +299,14 @@ class _MenstrualCycleCalenderViewState
                     children: <Widget>[
                       Icon(
                         Icons.calendar_today,
-                        color: _themeColor!,
+                        color: widget.themeColor!,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 3),
                         child: Text(
                           today,
                           style: TextStyle(
-                              color: _themeColor!,
+                              color: widget.themeColor!,
                               fontSize: 10.0,
                               fontWeight: FontWeight.bold),
                         ),
@@ -325,7 +320,7 @@ class _MenstrualCycleCalenderViewState
                 child: Text(
                   displayMonth,
                   style: TextStyle(
-                      color: _themeColor!,
+                      color: widget.themeColor!,
                       fontSize: 15.0,
                       fontWeight: FontWeight.bold),
                 ),
@@ -337,14 +332,14 @@ class _MenstrualCycleCalenderViewState
                     onPressed: isExpanded ? previousMonth : previousWeek,
                     icon: Icon(
                       Icons.chevron_left,
-                      color: _themeColor!,
+                      color: widget.themeColor!,
                     ),
                   ),
                   IconButton(
                     onPressed: isExpanded ? nextMonth : nextWeek,
                     icon: Icon(
                       Icons.chevron_right,
-                      color: _themeColor!,
+                      color: widget.themeColor!,
                     ),
                   ),
                 ],
@@ -361,7 +356,7 @@ class _MenstrualCycleCalenderViewState
           ),
           (widget.hideInfoView!)
               ? const SizedBox()
-              : getInformationView(selectedColor!, _themeColor!),
+              : getInformationView(selectedColor!, widget.themeColor!),
           (widget.hideBottomBar!) ? const SizedBox() : bottomView()
         ],
       ),

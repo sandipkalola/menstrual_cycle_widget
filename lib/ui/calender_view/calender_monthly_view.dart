@@ -309,7 +309,8 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                         monthWidgets[index][childIndex]),
                                 currentDay: monthWidgets[index][childIndex],
                                 isBlankDay: (monthStarted) ? false : true,
-                                previousPeriodDate: _instance.getPreviousPeriodDay(),
+                                previousPeriodDate:
+                                    _instance.getPreviousPeriodDay(),
                                 pastAllPeriodsDays: pastAllPeriodsDays,
                                 futurePeriodDays: futurePeriodDays,
                                 futureOvulationDays: futureOvulationDays,
