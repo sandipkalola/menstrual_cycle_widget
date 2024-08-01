@@ -71,5 +71,15 @@ class Strings {
   static const String graphCycleLengthDays = "Cycle length days";
   static const String graphCycleNormalDays = "Normal days";
 
+  static const String graphCyclePeriodDay = "Period days";
+  static const String graphCycleOtherDay = "Other cycle days";
 
+  static const String optionsDownloadImage = "Download Image";
+  static const String optionsDownloadPDF = "Download PDF";
+  static const String optionsViewLandscape = "Landscape mode";
+  static const String toolTip = "Show menu";
+  static const String noDataFound = "No data found";
+
+  static const String graphBodyTempDate = "Body temperature log date";
+  static const String graphBodyTempTitle = "Temperature unit";
 }

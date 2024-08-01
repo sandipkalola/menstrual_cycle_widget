@@ -11,6 +11,9 @@ class CalenderDateUtils {
   static final DateFormat _fullDayName = DateFormat('EEEE');
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
   static final DateFormat _yearFormat = DateFormat('yyyy');
+  static final DateFormat _fullDate = DateFormat('yyyy_MM_dd_hh_mm');
+
+  static String fullDateTime(DateTime d) => _fullDate.format(d);
 
   static String formatYear(DateTime d) => _yearFormat.format(d);
 

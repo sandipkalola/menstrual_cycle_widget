@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
+import 'ui/graphs_view/model/body_temperature_data.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -139,8 +140,8 @@ class MenstrualCycleWidget {
   /// ----------------------- Custom Functions -----------------------///
 
   String next(int min, int max) {
-    final _random = Random();
-    return "${min + _random.nextInt(max - min)}";
+    final random = Random();
+    return "${min + random.nextInt(max - min)}";
   }
 
   /// insert user's period data on userId and log date
@@ -239,6 +240,44 @@ class MenstrualCycleWidget {
     List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
         startDate: DateTime.now(), endDate: DateTime.now());
     return usersLogDataList;
+  }
+
+  /// get user's temperature data
+  Future<List<BodyTemperatureData>> getTemperatureLog(
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      BodyTemperatureUnits? bodyTemperatureUnits =
+          BodyTemperatureUnits.celsius}) async {
+    List<BodyTemperatureData> bodyTemperatureListData = [];
+
+    List<UserLogReportData> usersLogDataList =
+        await getSymptomsLogReport(startDate: startDate, endDate: endDate);
+    for (int i = 0; i < usersLogDataList.length; i++) {
+      BodyTemperatureData bodyTemperatureData = BodyTemperatureData();
+      UserLogReportData logReportData = usersLogDataList[i];
+      if (logReportData.bodyTemperature!.isNotEmpty) {
+        double bodyTemperature = 0.0;
+        if (logReportData.bodyTemperatureUnit ==
+            bodyTemperatureUnits.toString()) {
+          bodyTemperature = double.parse(logReportData.bodyTemperature!);
+        } else {
+          if (bodyTemperatureUnits == BodyTemperatureUnits.fahrenheit) {
+            bodyTemperature = celsiusToFahrenheit(
+                double.parse(logReportData.bodyTemperature!));
+          } else {
+            bodyTemperature = fahrenheitToCelsius(
+                double.parse(logReportData.bodyTemperature!));
+          }
+        }
+        bodyTemperatureData.bodyTemperature = bodyTemperature;
+        bodyTemperatureData.dateTime =
+            CalenderDateUtils.formatFirstDay(logReportData.logDate!);
+        bodyTemperatureData.bodyTemperatureUnit = bodyTemperatureUnits.toString();
+
+        bodyTemperatureListData.add(bodyTemperatureData);
+      }
+    }
+    return bodyTemperatureListData;
   }
 
   /// get symptoms log report BETWEEN start & end date based on userId
@@ -376,12 +415,14 @@ class MenstrualCycleWidget {
             periodsDateRange.id = indexId;
             periodsDateRange.periodStartDate =
                 CalenderDateUtils.dateDayFormat(periodDateRange[i]);
+            periodsDateRange.cycleStartDate =
+                CalenderDateUtils.dateDayFormat(periodDateRange[i]);
             periodDates!
                 .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
           } else {
             DateTime previousDate = periodDateRange[i - 1];
             DateTime currentDate = periodDateRange[i];
-            int inDays = currentDate.difference(previousDate).inDays;
+            int inDays = currentDate.difference(previousDate).inDays - 1;
             /* printLogs("inDays: $inDays");
             printLogs(
                 "previousDate: ${CalenderDateUtils.dateDayFormat(previousDate)}");
@@ -391,12 +432,18 @@ class MenstrualCycleWidget {
               periodDates = [];
               periodDuration = 1;
               periodsDateRange.cycleDuration = inDays;
+              periodsDateRange.cycleEndDate = CalenderDateUtils.dateDayFormat(
+                  currentDate.add(const Duration(days: -1)));
               listPeriodsDateRange.add(periodsDateRange);
+
               indexId = indexId + 1;
               periodsDateRange = PeriodsDateRange(allPeriodDates: []);
               periodsDateRange.id = indexId;
               periodsDateRange.periodStartDate =
                   CalenderDateUtils.dateDayFormat(currentDate);
+              periodsDateRange.cycleStartDate =
+                  CalenderDateUtils.dateDayFormat(currentDate);
+              periodsDateRange.cycleDuration = inDays;
               periodDates
                   .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
             } else {
@@ -409,10 +456,17 @@ class MenstrualCycleWidget {
             }
           }
         }
+        periodsDateRange.cycleDuration = DateTime.now()
+            .difference(DateTime.parse(periodsDateRange.cycleStartDate!))
+            .inDays;
         listPeriodsDateRange.add(periodsDateRange);
       } else {
         periodsDateRange.id = indexId;
         periodsDateRange.periodStartDate =
+            CalenderDateUtils.dateDayFormat(periodDateRange[0]);
+        periodsDateRange.cycleStartDate =
+            CalenderDateUtils.dateDayFormat(periodDateRange[0]);
+        periodsDateRange.cycleEndDate =
             CalenderDateUtils.dateDayFormat(periodDateRange[0]);
         periodsDateRange.periodEndDate =
             CalenderDateUtils.dateDayFormat(periodDateRange[0]);
