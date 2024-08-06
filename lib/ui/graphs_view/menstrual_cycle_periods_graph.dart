@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../menstrual_cycle_widget.dart';
+import '../calender_view/common_view.dart';
 import 'graph_util.dart';
 import 'model/chart_cycle_periods_data.dart';
 
@@ -54,53 +55,85 @@ class MenstrualCyclePeriodsGraph extends StatefulWidget {
 
 class _MenstrualCyclePeriodsGraphState
     extends State<MenstrualCyclePeriodsGraph> {
+  ChartSeriesController<ChartCyclePeriodsData, String>? seriesController;
+
   List<ChartCyclePeriodsData> periodCycleChartData = [];
   TooltipBehavior? _tooltipBehavior;
   late GlobalKey<SfCartesianChartState> _chartKey;
-
-  int minValue = 0;
+  late bool isLoadMoreView, isNeedToUpdateView, isDataUpdated;
+  num? oldAxisVisibleMin, oldAxisVisibleMax;
   int maxValue = 0;
   String fileName = "Cycle_periods_graph";
   bool isGetData = false;
+  List<PeriodsDateRange> allPeriodRange = [];
+  int itemsPerPage = 7;
+  int lastDataLength = 0;
+  late GlobalKey<State> globalKey;
+  late ZoomPanBehavior _zoomPanBehavior;
+  bool isLastRecord = false;
 
   @override
   void initState() {
-    _chartKey = GlobalKey();
-    _tooltipBehavior = TooltipBehavior(
-      enable: true,
-    );
+    _initializeVariables();
     init();
     super.initState();
   }
 
+  void _initializeVariables() async {
+    _chartKey = GlobalKey();
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+    );
+    isLoadMoreView = false;
+    isNeedToUpdateView = false;
+    isDataUpdated = true;
+    globalKey = GlobalKey<State>();
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+    );
+    _zoomPanBehavior = ZoomPanBehavior(
+      enablePanning: true,
+      enablePinching: true,
+      maximumZoomLevel: 0.3,
+      zoomMode: ZoomMode.x,
+    );
+  }
+
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    List<PeriodsDateRange> allPeriodRange =
-        await instance.getAllPeriodsDetails();
-
-    for (int i = allPeriodRange.length - 1; i > 0; i--) {
+    allPeriodRange = await instance.getAllPeriodsDetails();
+    for (int i = 0; i < allPeriodRange.length; i++) {
       int cycleDuration = allPeriodRange[i].cycleDuration!;
-      if (minValue == 0) {
-        minValue = cycleDuration;
-      }
       if (cycleDuration > 0) {
-        if (minValue >= cycleDuration) {
-          minValue = cycleDuration;
-        }
         if (maxValue <= cycleDuration) {
           maxValue = cycleDuration;
         }
-        DateTime startDate = DateTime.parse(allPeriodRange[i].periodStartDate!);
-        periodCycleChartData.add(ChartCyclePeriodsData(
-            dateTime: CalenderDateUtils.formatFirstDay(startDate),
-            cycleLength: cycleDuration,
-            periodsLength: allPeriodRange[i].periodDuration));
       }
     }
-    minValue = minValue - 5;
-    maxValue = maxValue + 5;
+    updateData();
+    maxValue = maxValue + 10;
     isGetData = true;
     setState(() {});
+  }
+
+  updateData() {
+    int start = periodCycleChartData.length;
+    int end = start + itemsPerPage;
+    if (end > allPeriodRange.length) end = allPeriodRange.length;
+    lastDataLength = 0;
+    for (int i = start; i < end; i++) {
+      int cycleDuration = allPeriodRange[i].cycleDuration!;
+      DateTime startDate = DateTime.parse(allPeriodRange[i].periodStartDate!);
+      periodCycleChartData.add(ChartCyclePeriodsData(
+          dateTime: CalenderDateUtils.dateWithYear(startDate),
+          cycleLength: cycleDuration,
+          periodsLength: allPeriodRange[i].periodDuration));
+      lastDataLength = lastDataLength + 1;
+    }
+
+    if (periodCycleChartData.length == allPeriodRange.length) {
+      isLastRecord = true;
+    }
   }
 
   @override
@@ -132,14 +165,26 @@ class _MenstrualCyclePeriodsGraphState
   SfCartesianChart _buildCyclePeriodsChart() {
     return SfCartesianChart(
       key: _chartKey,
+      zoomPanBehavior: _zoomPanBehavior,
+      onZooming: (ZoomPanArgs args) {},
+      onActualRangeChanged: (ActualRangeChangedArgs args) {
+        if (args.orientation == AxisOrientation.horizontal) {
+          if (isLoadMoreView) {
+            args.visibleMin = oldAxisVisibleMin;
+            args.visibleMax = oldAxisVisibleMax;
+          }
+          oldAxisVisibleMin = args.visibleMin as num;
+          oldAxisVisibleMax = args.visibleMax as num;
+          isLoadMoreView = false;
+        }
+      },
       plotAreaBorderWidth: 0,
       legend: Legend(
           isVisible: widget.isShowHeader,
           textStyle: widget.headerTitleTextStyle),
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
-        rangePadding: ChartRangePadding.normal,
-
+        labelRotation: -70,
         labelStyle: widget.xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
@@ -151,10 +196,11 @@ class _MenstrualCyclePeriodsGraphState
               ),
       ),
       primaryYAxis: NumericAxis(
-        rangePadding: ChartRangePadding.none,
+        //rangePadding: ChartRangePadding.none,
         axisLine: const AxisLine(width: 0),
         labelFormat: '{value}',
         maximum: maxValue.toDouble(),
+        minimum: 1,
         majorTickLines: const MajorTickLines(size: 0),
         labelStyle: widget.yAxisTitleTextStyle,
         title: (widget.isShowYAxisTitle)
@@ -168,7 +214,37 @@ class _MenstrualCyclePeriodsGraphState
       ),
       series: _getStackedColumnSeries(),
       tooltipBehavior: _tooltipBehavior,
+      loadMoreIndicatorBuilder:
+          (BuildContext context, ChartSwipeDirection direction) =>
+              getLoadMoreIndicatorBuilder(context, direction),
     );
+  }
+
+  Widget getLoadMoreIndicatorBuilder(
+      BuildContext context, ChartSwipeDirection direction) {
+    if (direction == ChartSwipeDirection.end) {
+      isNeedToUpdateView = true;
+      globalKey = GlobalKey<State>();
+      return StatefulBuilder(
+          key: globalKey,
+          builder: (BuildContext context, StateSetter stateSetter) {
+            Widget widget;
+            if (isNeedToUpdateView) {
+              widget = getProgressIndicator();
+              _updateView();
+              isDataUpdated = true;
+            } else {
+              widget = Container();
+            }
+            return widget;
+          });
+    } else {
+      return SizedBox.fromSize(size: Size.zero);
+    }
+  }
+
+  Widget getProgressIndicator() {
+    return (isLastRecord) ? const SizedBox() : progressIndicator();
   }
 
   /// Returns the list of chart series
@@ -179,6 +255,10 @@ class _MenstrualCyclePeriodsGraphState
       StackedColumnSeries<ChartCyclePeriodsData, String>(
         dataSource: periodCycleChartData,
         color: widget.periodDaysColor,
+        onRendererCreated:
+            (ChartSeriesController<ChartCyclePeriodsData, String>? controller) {
+          seriesController = controller;
+        },
         dataLabelSettings: const DataLabelSettings(isVisible: true),
         xValueMapper: (ChartCyclePeriodsData sales, _) => sales.dateTime,
         yValueMapper: (ChartCyclePeriodsData sales, _) => sales.periodsLength,
@@ -188,10 +268,49 @@ class _MenstrualCyclePeriodsGraphState
         dataSource: periodCycleChartData,
         color: widget.otherCycleDaysColor,
         dataLabelSettings: const DataLabelSettings(isVisible: true),
+        onRendererCreated:
+            (ChartSeriesController<ChartCyclePeriodsData, String>? controller) {
+          seriesController = controller;
+        },
         xValueMapper: (ChartCyclePeriodsData sales, _) => sales.dateTime,
         yValueMapper: (ChartCyclePeriodsData sales, _) => sales.cycleLength,
         name: widget.otherCycleDaysTitle,
       ),
     ];
+  }
+
+  Future<void> _updateView() async {
+    await Future<void>.delayed(const Duration(seconds: 1), () {
+      isNeedToUpdateView = false;
+      if (isDataUpdated) {
+        _updateData();
+        isDataUpdated = false;
+      }
+
+      if (globalKey.currentState != null) {
+        (globalKey.currentState as dynamic).setState(() {});
+      }
+    });
+  }
+
+  void _updateData() async {
+    updateData();
+    isLoadMoreView = true;
+    seriesController?.updateDataSource(
+        addedDataIndexes: getIndexes(lastDataLength));
+  }
+
+  List<int> getIndexes(int length) {
+    final List<int> indexes = <int>[];
+    for (int i = length - 1; i >= 0; i--) {
+      indexes.add(periodCycleChartData.length - 1 - i);
+    }
+    return indexes;
+  }
+
+  @override
+  void dispose() {
+    seriesController = null;
+    super.dispose();
   }
 }
