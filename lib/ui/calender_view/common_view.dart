@@ -56,7 +56,6 @@ initFutureOvulationDay() async {
   return futureOvulationDays;
 }
 
-
 Widget getInformationView(Color daySelectedColor, Color themeColor) {
   const double fontSize = 6;
   const double circleSize = 8;
@@ -164,6 +163,37 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           style: TextStyle(fontSize: fontSize),
         ),
       ],
+    ),
+  );
+}
+
+Widget progressIndicator() {
+  return Align(
+    alignment: Alignment.centerRight,
+    child: Padding(
+      padding: const EdgeInsets.only(),
+      child: Container(
+        width: 30,
+        alignment: Alignment.centerRight,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(colors: <Color>[
+            Color.fromRGBO(33, 33, 33, 0.0),
+            Color.fromRGBO(33, 33, 33, 0.74)
+          ], stops: <double>[
+            0.0,
+            1
+          ]),
+        ),
+        child: const SizedBox(
+          height: 20,
+          width: 20,
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+            backgroundColor: Colors.transparent,
+            strokeWidth: 3,
+          ),
+        ),
+      ),
     ),
   );
 }

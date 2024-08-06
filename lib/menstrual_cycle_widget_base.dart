@@ -288,7 +288,7 @@ class MenstrualCycleWidget {
     List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
         startDate: startDate,
         endDate: endDate,
-        isFullReport: false,
+        isRequiredPagination: true,
         itemsPerPage: itemsPerPage,
         pageNumber: pageNumber);
     for (int i = 0; i < usersLogDataList.length; i++) {
@@ -327,7 +327,7 @@ class MenstrualCycleWidget {
       required DateTime? endDate,
       int pageNumber = 1,
       int itemsPerPage = 7,
-      bool isFullReport = true}) async {
+      bool isRequiredPagination = false}) async {
     // TODO Add validation for start and end date like not null, end date after start date or equal etc
 
     String logStartDate = defaultDateFormat.format(startDate!);
@@ -339,12 +339,12 @@ class MenstrualCycleWidget {
     String customerId = mInstance.getCustomerId();
     Database? db = await dbHelper.database;
     final List<Map<String, dynamic>> queryResponse;
-    if (isFullReport) {
-      queryResponse = await db!.rawQuery(
-          "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate'");
-    } else {
+    if (isRequiredPagination) {
       queryResponse = await db!.rawQuery(
           "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate' ORDER BY ${MenstrualCycleDbHelper.columnLogDate} DESC LIMIT $itemsPerPage OFFSET $offset");
+    } else {
+      queryResponse = await db!.rawQuery(
+          "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate'");
     }
     List.generate(queryResponse.length, (i) {
       UserLogReportData userLogsData = UserLogReportData();

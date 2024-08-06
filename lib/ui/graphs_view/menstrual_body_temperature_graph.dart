@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
+import '../calender_view/common_view.dart';
 import 'graph_util.dart';
 import 'model/body_temperature_data.dart';
 
@@ -272,37 +273,7 @@ class _MenstrualBodyTemperatureGraphState
   }
 
   Widget getProgressIndicator() {
-    return (isLastRecord)
-        ? const SizedBox()
-        : Align(
-            alignment: Alignment.centerRight,
-            child: Padding(
-              // ignore: use_named_constants
-              padding: const EdgeInsets.only(),
-              child: Container(
-                width: 30,
-                alignment: Alignment.centerRight,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(colors: <Color>[
-                    Color.fromRGBO(33, 33, 33, 0.0),
-                    Color.fromRGBO(33, 33, 33, 0.74)
-                  ], stops: <double>[
-                    0.0,
-                    1
-                  ]),
-                ),
-                child: const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-                    backgroundColor: Colors.transparent,
-                    strokeWidth: 3,
-                  ),
-                ),
-              ),
-            ),
-          );
+    return (isLastRecord) ? const SizedBox() : progressIndicator();
   }
 
   List<int> getIndexes(int length) {
