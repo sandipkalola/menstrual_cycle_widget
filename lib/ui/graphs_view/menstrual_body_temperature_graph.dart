@@ -41,57 +41,66 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
 
 class _MenstrualBodyTemperatureGraphState
     extends State<MenstrualBodyTemperatureGraph> {
+  ChartSeriesController<BodyTemperatureData, String>? seriesController;
+
   List<BodyTemperatureData> allBodyTemperatureData = [];
   late GlobalKey<SfCartesianChartState> _chartKey;
-
+  late bool isLoadMoreView, isNeedToUpdateView, isDataUpdated;
+  num? oldAxisVisibleMin, oldAxisVisibleMax;
+  int pageNumber = 1;
+  int itemsPerPage = 7;
   double minValue = 0;
   double maxValue = 0;
   bool isGetData = false;
+  bool isLastRecord = false;
   String tempUnit = "C";
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Body_temperature_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
+  late GlobalKey<State> globalKey;
+
   @override
   void initState() {
-    _chartKey = GlobalKey();
-    _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: false);
-    _zoomPanBehavior = ZoomPanBehavior(
-      enablePanning: true,
-      enablePinching: true,
-      maximumZoomLevel: 0.5,
-      zoomMode: ZoomMode.x,
-    );
+    _initializeVariables();
     init();
     super.initState();
   }
 
+  void _initializeVariables() async {
+    _chartKey = GlobalKey();
+    isLoadMoreView = false;
+    isNeedToUpdateView = false;
+    isDataUpdated = true;
+    globalKey = GlobalKey<State>();
+    _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: false);
+    _zoomPanBehavior = ZoomPanBehavior(
+      enablePanning: true,
+      enablePinching: true,
+      maximumZoomLevel: 0.3,
+      zoomMode: ZoomMode.x,
+    );
+  }
+
   init() async {
     final instance = MenstrualCycleWidget.instance!;
+    Map<String, double> minMaxTemp = await instance.getMinMaxBodyTemperature();
+    minValue = minMaxTemp['min_temp']! - 10;
+    maxValue = minMaxTemp['max_temp']! + 10;
+
     allBodyTemperatureData = await instance.getTemperatureLog(
         startDate: DateTime.now().add(const Duration(days: -1000)),
         endDate: DateTime.now(),
-        bodyTemperatureUnits: widget.bodyTemperatureUnits);
-
-    for (int i = 0; i < allBodyTemperatureData.length; i++) {
-      tempUnit = (allBodyTemperatureData[i].bodyTemperatureUnit! ==
-              BodyTemperatureUnits.celsius.toString())
-          ? "C"
-          : "F";
-      double temp = allBodyTemperatureData[i].bodyTemperature!;
-      if (minValue == 0) {
-        minValue = temp;
-      }
-      if (temp > 0) {
-        if (minValue >= temp) {
-          minValue = temp;
-        }
-        if (maxValue <= temp) {
-          maxValue = temp;
-        }
-      }
+        bodyTemperatureUnits: widget.bodyTemperatureUnits,
+        pageNumber: pageNumber,
+        itemsPerPage: itemsPerPage);
+    if (allBodyTemperatureData.length < 7) {
+      isLastRecord = true;
     }
-    minValue = minValue - 5;
-    maxValue = maxValue + 5;
+
+    tempUnit = (widget.bodyTemperatureUnits.toString() ==
+            BodyTemperatureUnits.celsius.toString())
+        ? "C"
+        : "F";
     isGetData = true;
     setState(() {});
   }
@@ -126,9 +135,16 @@ class _MenstrualBodyTemperatureGraphState
     return SfCartesianChart(
       key: _chartKey,
       zoomPanBehavior: _zoomPanBehavior,
-      onZooming: (ZoomPanArgs args) {
-        if (args.axis is CategoryAxis) {
-          printLogs('Horizontal scroll position: ${args.currentZoomPosition}');
+      onZooming: (ZoomPanArgs args) {},
+      onActualRangeChanged: (ActualRangeChangedArgs args) {
+        if (args.orientation == AxisOrientation.horizontal) {
+          if (isLoadMoreView) {
+            args.visibleMin = oldAxisVisibleMin;
+            args.visibleMax = oldAxisVisibleMax;
+          }
+          oldAxisVisibleMin = args.visibleMin as num;
+          oldAxisVisibleMax = args.visibleMax as num;
+          isLoadMoreView = false;
         }
       },
       plotAreaBorderWidth: 0,
@@ -166,6 +182,9 @@ class _MenstrualBodyTemperatureGraphState
           majorTickLines: const MajorTickLines(color: Colors.transparent)),
       tooltipBehavior: _tooltipBehavior,
       series: _getGradientComparisonSeries(),
+      loadMoreIndicatorBuilder:
+          (BuildContext context, ChartSwipeDirection direction) =>
+              getLoadMoreIndicatorBuilder(context, direction),
     );
   }
 
@@ -182,6 +201,10 @@ class _MenstrualBodyTemperatureGraphState
               const <Color>[Colors.red, Colors.orange, Colors.yellow],
               <double>[0.3, 0.6, 0.9]);
         },
+        onRendererCreated:
+            (ChartSeriesController<BodyTemperatureData, String>? controller) {
+          seriesController = controller;
+        },
         name: 'Body Temperature',
         xValueMapper: (BodyTemperatureData sales, _) => sales.dateTime,
         yValueMapper: (BodyTemperatureData sales, _) => sales.bodyTemperature,
@@ -190,5 +213,109 @@ class _MenstrualBodyTemperatureGraphState
             const DataLabelSettings(isVisible: false, offset: Offset(0, -5)),
       ),
     ];
+  }
+
+  Widget getLoadMoreIndicatorBuilder(
+      BuildContext context, ChartSwipeDirection direction) {
+    if (direction == ChartSwipeDirection.end) {
+      isNeedToUpdateView = true;
+      globalKey = GlobalKey<State>();
+      return StatefulBuilder(
+          key: globalKey,
+          builder: (BuildContext context, StateSetter stateSetter) {
+            Widget widget;
+            if (isNeedToUpdateView) {
+              widget = getProgressIndicator();
+              _updateView();
+              isDataUpdated = true;
+            } else {
+              widget = Container();
+            }
+            return widget;
+          });
+    } else {
+      return SizedBox.fromSize(size: Size.zero);
+    }
+  }
+
+  Future<void> _updateView() async {
+    await Future<void>.delayed(const Duration(seconds: 1), () {
+      isNeedToUpdateView = false;
+      if (isDataUpdated) {
+        pageNumber = pageNumber + 1;
+        _updateData();
+        isDataUpdated = false;
+      }
+
+      if (globalKey.currentState != null) {
+        (globalKey.currentState as dynamic).setState(() {});
+      }
+    });
+  }
+
+  void _updateData() async {
+    final instance = MenstrualCycleWidget.instance!;
+    List<BodyTemperatureData> bodyTemperatureData =
+        await instance.getTemperatureLog(
+            startDate: DateTime.now().add(const Duration(days: -1000)),
+            endDate: DateTime.now(),
+            bodyTemperatureUnits: widget.bodyTemperatureUnits,
+            pageNumber: pageNumber,
+            itemsPerPage: itemsPerPage);
+    if (bodyTemperatureData.isEmpty) {
+      isLastRecord = true;
+    }
+    allBodyTemperatureData.addAll(bodyTemperatureData);
+    isLoadMoreView = true;
+    seriesController?.updateDataSource(
+        addedDataIndexes: getIndexes(bodyTemperatureData.length));
+  }
+
+  Widget getProgressIndicator() {
+    return (isLastRecord)
+        ? const SizedBox()
+        : Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              // ignore: use_named_constants
+              padding: const EdgeInsets.only(),
+              child: Container(
+                width: 30,
+                alignment: Alignment.centerRight,
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(colors: <Color>[
+                    Color.fromRGBO(33, 33, 33, 0.0),
+                    Color.fromRGBO(33, 33, 33, 0.74)
+                  ], stops: <double>[
+                    0.0,
+                    1
+                  ]),
+                ),
+                child: const SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
+                    backgroundColor: Colors.transparent,
+                    strokeWidth: 3,
+                  ),
+                ),
+              ),
+            ),
+          );
+  }
+
+  List<int> getIndexes(int length) {
+    final List<int> indexes = <int>[];
+    for (int i = length - 1; i >= 0; i--) {
+      indexes.add(allBodyTemperatureData.length - 1 - i);
+    }
+    return indexes;
+  }
+
+  @override
+  void dispose() {
+    seriesController = null;
+    super.dispose();
   }
 }

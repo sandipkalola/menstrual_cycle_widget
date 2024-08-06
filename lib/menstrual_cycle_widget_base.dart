@@ -242,16 +242,55 @@ class MenstrualCycleWidget {
     return usersLogDataList;
   }
 
+  /// Get min and max body temperature of current user
+  Future<Map<String, double>> getMinMaxBodyTemperature() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    double minValue = 0;
+    double maxValue = 0;
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+
+    List.generate(queryResponse.length, (i) {
+      double temp = double.parse(Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]));
+      if (minValue == 0) {
+        minValue = temp;
+      }
+      if (temp > 0) {
+        if (minValue >= temp) {
+          minValue = temp;
+        }
+        if (maxValue <= temp) {
+          maxValue = temp;
+        }
+      }
+    });
+
+    return {
+      'min_temp': minValue,
+      'max_temp': maxValue,
+    };
+  }
+
   /// get user's temperature data
   Future<List<BodyTemperatureData>> getTemperatureLog(
       {required DateTime? startDate,
       required DateTime? endDate,
-      BodyTemperatureUnits? bodyTemperatureUnits =
-          BodyTemperatureUnits.celsius}) async {
+      BodyTemperatureUnits? bodyTemperatureUnits = BodyTemperatureUnits.celsius,
+      int pageNumber = 1,
+      int itemsPerPage = 7}) async {
     List<BodyTemperatureData> bodyTemperatureListData = [];
 
-    List<UserLogReportData> usersLogDataList =
-        await getSymptomsLogReport(startDate: startDate, endDate: endDate);
+    List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
+        startDate: startDate,
+        endDate: endDate,
+        isFullReport: false,
+        itemsPerPage: itemsPerPage,
+        pageNumber: pageNumber);
     for (int i = 0; i < usersLogDataList.length; i++) {
       BodyTemperatureData bodyTemperatureData = BodyTemperatureData();
       UserLogReportData logReportData = usersLogDataList[i];
@@ -271,31 +310,42 @@ class MenstrualCycleWidget {
         }
         bodyTemperatureData.bodyTemperature = bodyTemperature;
         bodyTemperatureData.dateTime =
-            CalenderDateUtils.formatFirstDay(logReportData.logDate!);
-        bodyTemperatureData.bodyTemperatureUnit = bodyTemperatureUnits.toString();
+            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+        bodyTemperatureData.bodyTemperatureUnit =
+            bodyTemperatureUnits.toString();
 
         bodyTemperatureListData.add(bodyTemperatureData);
       }
     }
+    printLogs("bodyTemperatureListData ${bodyTemperatureListData.length}");
     return bodyTemperatureListData;
   }
 
   /// get symptoms log report BETWEEN start & end date based on userId
   Future<List<UserLogReportData>> getSymptomsLogReport(
-      {required DateTime? startDate, required DateTime? endDate}) async {
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      int pageNumber = 1,
+      int itemsPerPage = 7,
+      bool isFullReport = true}) async {
     // TODO Add validation for start and end date like not null, end date after start date or equal etc
 
     String logStartDate = defaultDateFormat.format(startDate!);
     String logEndDate = defaultDateFormat.format(endDate!);
     List<UserLogReportData> usersLogDataList = [];
     final dbHelper = MenstrualCycleDbHelper.instance;
-
+    int offset = (pageNumber - 1) * itemsPerPage;
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
     Database? db = await dbHelper.database;
-
-    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
-        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate'");
+    final List<Map<String, dynamic>> queryResponse;
+    if (isFullReport) {
+      queryResponse = await db!.rawQuery(
+          "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate'");
+    } else {
+      queryResponse = await db!.rawQuery(
+          "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate' ORDER BY ${MenstrualCycleDbHelper.columnLogDate} DESC LIMIT $itemsPerPage OFFSET $offset");
+    }
     List.generate(queryResponse.length, (i) {
       UserLogReportData userLogsData = UserLogReportData();
       userLogsData.id = queryResponse[i][MenstrualCycleDbHelper.columnID];
