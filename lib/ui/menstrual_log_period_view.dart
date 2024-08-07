@@ -88,9 +88,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         }
       }
     }
-
     printLogs("Selected Ids: ${userLogData.toString()}");
-
     final instance = MenstrualCycleWidget.instance!;
 
     instance.saveSymptomsLogs(

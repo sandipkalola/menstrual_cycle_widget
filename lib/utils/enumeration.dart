@@ -19,7 +19,11 @@ enum SwipeDetectionMoment { onEnd, onUpdate }
 
 enum WaterUnits {
   ml,
+  liters,
   flOz,
+  usGallon,
+  imperialGallons,
+  cups
 }
 
 enum BodyTemperatureUnits {

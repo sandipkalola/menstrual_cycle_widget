@@ -4,11 +4,11 @@ import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import 'graph_util.dart';
-import 'model/body_temperature_data.dart';
+import 'model/water_data.dart';
 
-class MenstrualBodyTemperatureGraph extends StatefulWidget {
+class MenstrualCycleWaterGraph extends StatefulWidget {
   final String loadingText;
-  final BodyTemperatureUnits? bodyTemperatureUnits;
+  final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
   final Function? onDownloadImagePath;
   final Function? onDownloadPdfPath;
@@ -19,16 +19,16 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
 
-  const MenstrualBodyTemperatureGraph(
+  const MenstrualCycleWaterGraph(
       {super.key,
-      this.bodyTemperatureUnits = BodyTemperatureUnits.celsius,
+      this.waterUnits = WaterUnits.ml,
       this.isShowMoreOptions = false,
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
-      this.yAxisTitle = Strings.graphBodyTempTitle,
+      this.yAxisTitle = Strings.graphWaterUnitTitle,
       this.onDownloadImagePath,
-      this.xAxisTitle = Strings.graphBodyTempDate,
+      this.xAxisTitle = Strings.graphWaterDrinkDate,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
@@ -36,15 +36,13 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
       this.onDownloadPdfPath});
 
   @override
-  State<MenstrualBodyTemperatureGraph> createState() =>
-      _MenstrualBodyTemperatureGraphState();
+  State<MenstrualCycleWaterGraph> createState() => _MenstrualWaterGraphState();
 }
 
-class _MenstrualBodyTemperatureGraphState
-    extends State<MenstrualBodyTemperatureGraph> {
-  ChartSeriesController<BodyTemperatureData, String>? seriesController;
+class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
+  ChartSeriesController<WaterData, String>? seriesController;
 
-  List<BodyTemperatureData> allBodyTemperatureData = [];
+  List<WaterData> allDrinkWaterData = [];
   late GlobalKey<SfCartesianChartState> _chartKey;
   late bool isLoadMoreView, isNeedToUpdateView, isDataUpdated;
   num? oldAxisVisibleMin, oldAxisVisibleMax;
@@ -54,9 +52,9 @@ class _MenstrualBodyTemperatureGraphState
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String tempUnit = "C";
+  String waterUnitLbl = "ml";
   TooltipBehavior? _tooltipBehavior;
-  String fileName = "Body_temperature_graph_";
+  String fileName = "Water_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
 
@@ -84,36 +82,43 @@ class _MenstrualBodyTemperatureGraphState
 
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    Map<String, double> minMaxTemp = await instance.getMinMaxBodyTemperature(
-        bodyTemperatureUnits: widget.bodyTemperatureUnits);
-    minValue = minMaxTemp['min_temp']! - 5;
-    maxValue = minMaxTemp['max_temp']! + 5;
-
+    Map<String, double> minMaxTemp = await instance.getMinMaxDrinkWater(waterUnits: widget.waterUnits);
+    minValue = minMaxTemp['min_value']!;
+    maxValue = minMaxTemp['max_value']! ;
     if (minValue < 0) {
       minValue = 0;
     }
-
-    allBodyTemperatureData = await instance.getTemperatureLog(
+    allDrinkWaterData = await instance.getDrinkWaterLog(
         startDate: DateTime.now().add(const Duration(days: -1000)),
         endDate: DateTime.now(),
-        bodyTemperatureUnits: widget.bodyTemperatureUnits,
+        waterUnits: widget.waterUnits,
         pageNumber: pageNumber,
         itemsPerPage: itemsPerPage);
-    if (allBodyTemperatureData.length < 7) {
+    if (allDrinkWaterData.length < 7) {
       isLastRecord = true;
     }
 
-    tempUnit = (widget.bodyTemperatureUnits.toString() ==
-            BodyTemperatureUnits.celsius.toString())
-        ? "C"
-        : "F";
+    waterUnitLbl = "ml";
+    WaterUnits waterUnits = widget.waterUnits!;
+    if (waterUnits == WaterUnits.liters) {
+      waterUnitLbl = "Liters";
+    } else if (waterUnits == WaterUnits.cups) {
+      waterUnitLbl = "Cups";
+    } else if (waterUnits == WaterUnits.flOz) {
+      waterUnitLbl = "flOz";
+    } else if (waterUnits == WaterUnits.imperialGallons) {
+      waterUnitLbl = "Imperial Gallons";
+    } else if (waterUnits == WaterUnits.usGallon) {
+      waterUnitLbl = "US Gallon";
+    }
+
     isGetData = true;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (allBodyTemperatureData.isNotEmpty) {
+    if (allDrinkWaterData.isNotEmpty) {
       return Stack(children: [
         _buildBodyTemperatureView(),
         (widget.isShowMoreOptions)
@@ -171,7 +176,7 @@ class _MenstrualBodyTemperatureGraphState
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
-          labelFormat: '{value}°$tempUnit',
+          labelFormat: '{value}',
           minimum: minValue,
           maximum: maxValue,
           interval: 20,
@@ -179,7 +184,7 @@ class _MenstrualBodyTemperatureGraphState
           labelStyle: widget.yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
-                  text: widget.yAxisTitle,
+                  text: "${widget.yAxisTitle} ($waterUnitLbl)" ,
                   textStyle: widget.yAxisTitleTextStyle,
                 )
               : const AxisTitle(
@@ -195,11 +200,11 @@ class _MenstrualBodyTemperatureGraphState
   }
 
   /// The method returns line series to chart.
-  List<CartesianSeries<BodyTemperatureData, String>>
+  List<CartesianSeries<WaterData, String>>
       _getGradientComparisonSeries() {
-    return <CartesianSeries<BodyTemperatureData, String>>[
-      ColumnSeries<BodyTemperatureData, String>(
-        dataSource: allBodyTemperatureData,
+    return <CartesianSeries<WaterData, String>>[
+      ColumnSeries<WaterData, String>(
+        dataSource: allDrinkWaterData,
         onCreateShader: (ShaderDetails details) {
           return ui.Gradient.linear(
               details.rect.topCenter,
@@ -208,12 +213,12 @@ class _MenstrualBodyTemperatureGraphState
               <double>[0.3, 0.6, 0.9]);
         },
         onRendererCreated:
-            (ChartSeriesController<BodyTemperatureData, String>? controller) {
+            (ChartSeriesController<WaterData, String>? controller) {
           seriesController = controller;
         },
-        name: 'Body Temperature',
-        xValueMapper: (BodyTemperatureData sales, _) => sales.dateTime,
-        yValueMapper: (BodyTemperatureData sales, _) => sales.bodyTemperature,
+        name: waterUnitLbl,
+        xValueMapper: (WaterData sales, _) => sales.dateTime,
+        yValueMapper: (WaterData sales, _) => sales.waterValue,
         animationDuration: 0,
         dataLabelSettings:
             const DataLabelSettings(isVisible: false, offset: Offset(0, -5)),
@@ -261,17 +266,17 @@ class _MenstrualBodyTemperatureGraphState
 
   void _updateData() async {
     final instance = MenstrualCycleWidget.instance!;
-    List<BodyTemperatureData> bodyTemperatureData =
-        await instance.getTemperatureLog(
+    List<WaterData> bodyTemperatureData =
+        await instance.getDrinkWaterLog(
             startDate: DateTime.now().add(const Duration(days: -1000)),
             endDate: DateTime.now(),
-            bodyTemperatureUnits: widget.bodyTemperatureUnits,
+            waterUnits: widget.waterUnits,
             pageNumber: pageNumber,
             itemsPerPage: itemsPerPage);
     if (bodyTemperatureData.isEmpty) {
       isLastRecord = true;
     }
-    allBodyTemperatureData.addAll(bodyTemperatureData);
+    allDrinkWaterData.addAll(bodyTemperatureData);
     isLoadMoreView = true;
     seriesController?.updateDataSource(
         addedDataIndexes: getIndexes(bodyTemperatureData.length));
@@ -284,7 +289,7 @@ class _MenstrualBodyTemperatureGraphState
   List<int> getIndexes(int length) {
     final List<int> indexes = <int>[];
     for (int i = length - 1; i >= 0; i--) {
-      indexes.add(allBodyTemperatureData.length - 1 - i);
+      indexes.add(allDrinkWaterData.length - 1 - i);
     }
     return indexes;
   }

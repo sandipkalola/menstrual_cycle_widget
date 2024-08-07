@@ -5,6 +5,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
 import 'ui/graphs_view/model/body_temperature_data.dart';
+import 'ui/graphs_view/model/water_data.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -172,7 +173,7 @@ class MenstrualCycleWidget {
     meditationTime = next(5, 200);
     sleepTime = next(5, 200);
     weight = next(10, 100);
-    waterValue = next(5, 200);
+    waterValue = next(3000, 10000);
     customNotes = "N/A";
     bodyTemperature = next(5, 150);
 
@@ -242,8 +243,9 @@ class MenstrualCycleWidget {
     return usersLogDataList;
   }
 
-  /// Get min and max body temperature of current user
-  Future<Map<String, double>> getMinMaxBodyTemperature() async {
+  /// Get min and max drink water of current user
+  Future<Map<String, double>> getMinMaxDrinkWater(
+      {WaterUnits? waterUnits = WaterUnits.ml}) async {
     final dbHelper = MenstrualCycleDbHelper.instance;
     Database? db = await dbHelper.database;
     double minValue = 0;
@@ -255,8 +257,128 @@ class MenstrualCycleWidget {
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
 
     List.generate(queryResponse.length, (i) {
-      double temp = double.parse(Encryption.instance.decrypt(
+      String waterUnit = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
+      double drinkWaterValue = double.parse(Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]));
+      double drinkWater = 0.0;
+      if (waterUnit == waterUnits.toString()) {
+        drinkWater = drinkWaterValue;
+      } else {
+        if (waterUnits == WaterUnits.liters) {
+          drinkWater = millilitersToLiters(drinkWaterValue);
+        } else if (waterUnits == WaterUnits.cups) {
+          drinkWater = millilitersToUSCups(drinkWaterValue);
+        } else if (waterUnits == WaterUnits.flOz) {
+          drinkWater = millilitersToUSFluidOunces(drinkWaterValue);
+        } else if (waterUnits == WaterUnits.imperialGallons) {
+          drinkWater = millilitersToImperialGallons(drinkWaterValue);
+        } else if (waterUnits == WaterUnits.usGallon) {
+          drinkWater = millilitersToUSGallons(drinkWaterValue);
+        }
+      }
+
+      if (minValue == 0) {
+        minValue = drinkWater;
+      }
+      if (drinkWater > 0) {
+        if (minValue >= drinkWater) {
+          minValue = drinkWater;
+        }
+        if (maxValue <= drinkWater) {
+          maxValue = drinkWater;
+        }
+      }
+    });
+
+    return {
+      'min_value': minValue,
+      'max_value': maxValue,
+    };
+  }
+
+  /// get user's drink water logs
+  Future<List<WaterData>> getDrinkWaterLog(
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      WaterUnits? waterUnits = WaterUnits.ml,
+      int pageNumber = 1,
+      int itemsPerPage = 7}) async {
+    List<WaterData> waterDataListData = [];
+
+    List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
+        startDate: startDate,
+        endDate: endDate,
+        isRequiredPagination: true,
+        itemsPerPage: itemsPerPage,
+        pageNumber: pageNumber);
+    for (int i = 0; i < usersLogDataList.length; i++) {
+      WaterData waterData = WaterData();
+      UserLogReportData logReportData = usersLogDataList[i];
+      if (logReportData.waterUnit!.isNotEmpty) {
+        double drinkWaterValue = double.parse(logReportData.waterValue!);
+
+       // printLogs("logReportData.waterUnit ${logReportData.waterUnit}");
+        double drinkWater = 0.0;
+        if (logReportData.waterUnit == waterUnits.toString()) {
+          drinkWater = drinkWaterValue;
+        } else {
+          if (waterUnits == WaterUnits.liters) {
+            drinkWater = millilitersToLiters(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.cups) {
+            drinkWater = millilitersToUSCups(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.flOz) {
+            drinkWater = millilitersToUSFluidOunces(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.imperialGallons) {
+            drinkWater = millilitersToImperialGallons(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.usGallon) {
+            drinkWater = millilitersToUSGallons(drinkWaterValue);
+          }
+
+        }
+        //printLogs("drinkWater =====$drinkWater");
+        waterData.waterValue = drinkWater;
+        waterData.dateTime =
+            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+        waterData.waterUnit = waterUnits.toString();
+
+        waterDataListData.add(waterData);
+      }
+    }
+  //  printLogs("waterDataListData ${waterDataListData.length}");
+    return waterDataListData;
+  }
+
+  /// Get min and max body temperature of current user
+  Future<Map<String, double>> getMinMaxBodyTemperature(
+      {BodyTemperatureUnits? bodyTemperatureUnits =
+          BodyTemperatureUnits.celsius}) async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    double minValue = 0;
+    double maxValue = 0;
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+
+    List.generate(queryResponse.length, (i) {
+      String tempUnit = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
+      double tempValue = double.parse(Encryption.instance.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]));
+      double temp = 0.0;
+      if (tempUnit == bodyTemperatureUnits.toString()) {
+        temp = tempValue;
+      } else {
+        if (bodyTemperatureUnits == BodyTemperatureUnits.fahrenheit) {
+          temp = celsiusToFahrenheit(tempValue);
+        } else {
+          temp = fahrenheitToCelsius(tempValue);
+        }
+      }
+
       if (minValue == 0) {
         minValue = temp;
       }

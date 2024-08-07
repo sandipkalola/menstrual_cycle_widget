@@ -115,25 +115,6 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
 
     allPeriodDates = await instance.getAllPeriodsDetails();
 
-    /* for (int i = allPeriodDates.length - 1; i > 0; i--) {
-      int cycleDuration =
-          allPeriodDates[i].cycleDuration! + allPeriodDates[i].periodDuration!;
-      if (minValue == 0) {
-        minValue = cycleDuration;
-      }
-      if (cycleDuration > 0) {
-        if (minValue >= cycleDuration) {
-          minValue = cycleDuration;
-        }
-        if (maxValue <= cycleDuration) {
-          maxValue = cycleDuration;
-        }
-        DateTime startDate = DateTime.parse(allPeriodDates[i].periodStartDate!);
-        periodCycleChartData.add(ChartCycleData(
-            dateTime: CalenderDateUtils.formatFirstDay(startDate),
-            cycleLength: cycleDuration));
-      }
-    }*/
     for (int i = 0; i < allPeriodDates.length; i++) {
       int cycleDuration =
           allPeriodDates[i].cycleDuration! + allPeriodDates[i].periodDuration!;
@@ -152,6 +133,9 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
     updateData();
     minValue = minValue - 5;
     maxValue = maxValue + 5;
+    if (minValue < 0) {
+      minValue = 0;
+    }
     isGetData = true;
     setState(() {});
   }

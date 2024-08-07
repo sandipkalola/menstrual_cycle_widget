@@ -82,4 +82,8 @@ class Strings {
 
   static const String graphBodyTempDate = "Body temperature log date";
   static const String graphBodyTempTitle = "Temperature unit";
+
+  static const String graphWaterDrinkDate = "Water drinking date";
+  static const String graphWaterUnitTitle = "Water unit";
+
 }

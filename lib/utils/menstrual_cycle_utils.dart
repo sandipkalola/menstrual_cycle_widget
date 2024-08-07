@@ -19,3 +19,24 @@ double celsiusToFahrenheit(double celsius) {
 double fahrenheitToCelsius(double fahrenheit) {
   return (fahrenheit - 32) * 5 / 9;
 }
+
+double millilitersToLiters(double milliliters) {
+  return milliliters * 0.001;
+}
+
+double millilitersToUSGallons(double milliliters) {
+  return milliliters * 0.000264172;
+}
+
+double millilitersToImperialGallons(double milliliters) {
+  return milliliters * 0.000219969;
+}
+
+double millilitersToUSFluidOunces(double milliliters) {
+  return milliliters * 0.033814;
+}
+
+double millilitersToUSCups(double milliliters) {
+  return milliliters * 0.00422675;
+}
+
