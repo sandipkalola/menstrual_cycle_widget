@@ -17,3 +17,10 @@ const List<String> choices = <String>[
   Strings.optionsDownloadImage,
   Strings.optionsDownloadPDF,
 ];
+
+const flutterPackageName = "menstrual_cycle_widget";
+const drinkWaterImage = "assets/images/drink_water.png";
+const sleepImage = "assets/images/sleep.png";
+const temperatureImage = "assets/images/temperature.png";
+const weightImage = "assets/images/weight.png";
+const yogaImage = "assets/images/yoga.png";

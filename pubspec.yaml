@@ -30,6 +30,8 @@ dev_dependencies:
 
 
 flutter:
+  assets:
+    - assets/images/
 
 # This package supports all platforms listed below.
 platforms:

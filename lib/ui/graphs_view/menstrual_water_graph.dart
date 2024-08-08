@@ -21,7 +21,7 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
 
   const MenstrualCycleWaterGraph(
       {super.key,
-      this.waterUnits = WaterUnits.ml,
+      this.waterUnits = WaterUnits.liters,
       this.isShowMoreOptions = false,
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
@@ -52,7 +52,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String waterUnitLbl = "ml";
+  String waterUnitLbl = "Liters";
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Water_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
@@ -82,9 +82,10 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
 
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    Map<String, double> minMaxTemp = await instance.getMinMaxDrinkWater(waterUnits: widget.waterUnits);
+    Map<String, double> minMaxTemp =
+        await instance.getMinMaxDrinkWater(waterUnits: widget.waterUnits);
     minValue = minMaxTemp['min_value']!;
-    maxValue = minMaxTemp['max_value']! ;
+    maxValue = minMaxTemp['max_value']!;
     if (minValue < 0) {
       minValue = 0;
     }
@@ -98,7 +99,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       isLastRecord = true;
     }
 
-    waterUnitLbl = "ml";
+    waterUnitLbl = "Liters";
     WaterUnits waterUnits = widget.waterUnits!;
     if (waterUnits == WaterUnits.liters) {
       waterUnitLbl = "Liters";
@@ -110,6 +111,8 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       waterUnitLbl = "Imperial Gallons";
     } else if (waterUnits == WaterUnits.usGallon) {
       waterUnitLbl = "US Gallon";
+    } else if (waterUnits == WaterUnits.ml) {
+      waterUnitLbl = "ml";
     }
 
     isGetData = true;
@@ -184,7 +187,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
           labelStyle: widget.yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
-                  text: "${widget.yAxisTitle} ($waterUnitLbl)" ,
+                  text: "${widget.yAxisTitle} ($waterUnitLbl)",
                   textStyle: widget.yAxisTitleTextStyle,
                 )
               : const AxisTitle(
@@ -200,8 +203,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   }
 
   /// The method returns line series to chart.
-  List<CartesianSeries<WaterData, String>>
-      _getGradientComparisonSeries() {
+  List<CartesianSeries<WaterData, String>> _getGradientComparisonSeries() {
     return <CartesianSeries<WaterData, String>>[
       ColumnSeries<WaterData, String>(
         dataSource: allDrinkWaterData,
@@ -266,13 +268,12 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
 
   void _updateData() async {
     final instance = MenstrualCycleWidget.instance!;
-    List<WaterData> bodyTemperatureData =
-        await instance.getDrinkWaterLog(
-            startDate: DateTime.now().add(const Duration(days: -1000)),
-            endDate: DateTime.now(),
-            waterUnits: widget.waterUnits,
-            pageNumber: pageNumber,
-            itemsPerPage: itemsPerPage);
+    List<WaterData> bodyTemperatureData = await instance.getDrinkWaterLog(
+        startDate: DateTime.now().add(const Duration(days: -1000)),
+        endDate: DateTime.now(),
+        waterUnits: widget.waterUnits,
+        pageNumber: pageNumber,
+        itemsPerPage: itemsPerPage);
     if (bodyTemperatureData.isEmpty) {
       isLastRecord = true;
     }

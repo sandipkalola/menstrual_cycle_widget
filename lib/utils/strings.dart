@@ -24,6 +24,8 @@ class Strings {
   static const String dayLabel = "Day";
   static const String logPeriodLabel = "Log Period";
 
+  static const String saveLogs = "Apply";
+
   /// Messages for circle text
   static const String pastCycleLabel = "Your period is";
   static const String circleDaysLateLabel = "Days late";
@@ -85,5 +87,10 @@ class Strings {
 
   static const String graphWaterDrinkDate = "Water drinking date";
   static const String graphWaterUnitTitle = "Water unit";
+
+  static const String graphWaterUnitLiter = "Liters";
+  static const String bodyTempC = "C";
+  static const String weightKg = "kg";
+  static const String bodyTempF = "F";
 
 }
