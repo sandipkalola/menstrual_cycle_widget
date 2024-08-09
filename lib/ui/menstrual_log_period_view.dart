@@ -2,18 +2,29 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../menstrual_cycle_widget.dart';
+import 'model/log_report.dart';
 
 // ignore: must_be_immutable
 class MenstrualLogPeriodView extends StatefulWidget {
   DateTime? symptomsLogDate;
   Function? onSuccess;
   Function? onError;
+  bool? isRequiredWaterView;
+  bool? isRequiredBodyTemperatureView;
+  bool? isRequiredWeightView;
+  bool? isRequiredSleepView;
+  bool? isRequiredMeditationView;
 
   MenstrualLogPeriodView(
       {super.key,
       this.symptomsLogDate,
       required this.onSuccess,
-      required this.onError});
+      required this.onError,
+      this.isRequiredWaterView = true,
+      this.isRequiredBodyTemperatureView = true,
+      this.isRequiredMeditationView = true,
+      this.isRequiredSleepView = true,
+      this.isRequiredWeightView = true});
 
   @override
   State<MenstrualLogPeriodView> createState() => _MenstrualLogPeriodViewState();
@@ -24,12 +35,16 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   final dbHelper = MenstrualCycleDbHelper.instance;
   final mInstance = MenstrualCycleWidget.instance!;
 
+  List<LogReport> logReportList = [
+    LogReport(type: "weight", mainValue: 20, subValue: 0),
+    LogReport(type: "bodyTemp", mainValue: 35, subValue: 1),
+    LogReport(type: "sleep", mainValue: 0, subValue: 0),
+    LogReport(type: "meditation", mainValue: 0, subValue: 0),
+    LogReport(type: "water")
+  ];
   String currentDate = "";
   String logDate = "";
   bool isLoading = true;
-
-  int wholePart = 36;
-  int fractionalPart = 4;
 
   @override
   void initState() {
@@ -81,15 +96,77 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     });
   }
 
-  saveBodyTempLog() {}
+  saveBodyTempLog() {
+    if (logReportList[1].subValue! > 0) {
+      if (logReportList[1].subValue! > 9) {
+        logReportList[1].finalValue =
+            "${logReportList[1].mainValue}.${logReportList[1].subValue}";
+      } else {
+        logReportList[1].finalValue =
+            "${logReportList[1].mainValue}.0${logReportList[1].subValue}";
+      }
+    } else {
+      logReportList[1].finalValue = "${logReportList[1].mainValue}";
+    }
+    setState(() {});
+  }
 
-  saveMeditationLog() {}
+  saveMeditationLog() {
+    String hour = "00";
+    String min = "00";
+    if (logReportList[3].mainValue! > 9) {
+      hour = "${logReportList[3].mainValue!}";
+    } else {
+      hour = "0${logReportList[3].mainValue!}";
+    }
+    if (logReportList[3].subValue! > 9) {
+      min = "${logReportList[3].subValue!}";
+    } else {
+      min = "0${logReportList[3].subValue!}";
+    }
+    logReportList[3].finalValue = "$hour h : $min m";
+    logReportList[3].totalMin =
+        (logReportList[3].mainValue! * 60) + logReportList[3].subValue!;
+    setState(() {});
+  }
 
-  saveSleepLog() {}
+  saveSleepLog() {
+    String hour = "00";
+    String min = "00";
+    if (logReportList[2].mainValue! > 9) {
+      hour = "${logReportList[2].mainValue!}";
+    } else {
+      hour = "0${logReportList[2].mainValue!}";
+    }
+    if (logReportList[2].subValue! > 9) {
+      min = "${logReportList[2].subValue!}";
+    } else {
+      min = "0${logReportList[2].subValue!}";
+    }
+    logReportList[2].finalValue = "$hour h : $min m";
+    logReportList[2].totalMin =
+        (logReportList[2].mainValue! * 60) + logReportList[2].subValue!;
+    setState(() {});
+  }
 
-  saveWaterLog() {}
+  saveWaterLog() {
+    if (logReportList[4].mainValue! > 9) {
+      logReportList[4].finalValue = "${logReportList[4].mainValue}";
+    } else {
+      logReportList[4].finalValue = "0${logReportList[4].mainValue}";
+    }
+    setState(() {});
+  }
 
-  saveWeightLog() {}
+  saveWeightLog() {
+    if (logReportList[0].subValue! > 0) {
+      logReportList[0].finalValue =
+          "${logReportList[0].mainValue}.${logReportList[0].subValue}00";
+    } else {
+      logReportList[0].finalValue = "${logReportList[0].mainValue}";
+    }
+    setState(() {});
+  }
 
   saveTodayLogs() async {
     List<SymptomsData> userLogData = [];
@@ -102,14 +179,24 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         }
       }
     }
-    //printLogs("Selected Ids: ${userLogData.toString()}");
     final instance = MenstrualCycleWidget.instance!;
 
     instance.saveSymptomsLogs(
         userSymptomsData: userLogData,
         onError: widget.onError,
         symptomsLogDate: widget.symptomsLogDate,
-        onSuccess: widget.onSuccess);
+        onSuccess: widget.onSuccess,
+        waterValue: (logReportList[4].finalValue!.isNotEmpty)
+            ? logReportList[4].finalValue.toString()
+            : "0",
+        bodyTemperature: (logReportList[1].finalValue!.isNotEmpty)
+            ? logReportList[1].finalValue.toString()
+            : "0",
+        weight: (logReportList[0].finalValue!.isNotEmpty)
+            ? logReportList[0].finalValue.toString()
+            : "0",
+        meditationTime: logReportList[3].totalMin!.toString(),
+        sleepTime: logReportList[2].totalMin!.toString());
 
     Navigator.pop(context);
   }
@@ -192,13 +279,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildPicker(
-          value: wholePart,
+          value: logReportList[4].mainIndex!,
           minValue: 0,
           maxValue: 20,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              wholePart = 35 + index;
-            });*/
+            logReportList[4].mainValue = 0 + index;
+            logReportList[4].mainIndex = index;
           },
         ),
       ],
@@ -210,13 +296,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildPicker(
-          value: wholePart,
+          value: logReportList[1].mainIndex!,
           minValue: 35,
           maxValue: 40,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              wholePart = 35 + index;
-            });*/
+            logReportList[1].mainValue = 35 + index;
+            logReportList[1].mainIndex = index;
           },
         ),
         const Text(
@@ -224,13 +309,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         _buildPicker(
-          value: fractionalPart,
+          value: logReportList[1].subIndex!,
           minValue: 1,
           maxValue: 99,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              fractionalPart = index;
-            });*/
+            logReportList[1].subValue = 1 + index;
+            logReportList[1].subIndex = index;
           },
         ),
       ],
@@ -242,13 +326,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildPicker(
-          value: wholePart,
+          value: logReportList[2].mainIndex!,
           minValue: 0,
           maxValue: 23,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              wholePart = 35 + index;
-            });*/
+            logReportList[2].mainValue = 0 + index;
+            logReportList[2].mainIndex = index;
           },
         ),
         const Text(
@@ -256,13 +339,46 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         _buildPicker(
-          value: fractionalPart,
+          value: logReportList[2].subIndex!,
           minValue: 0,
           maxValue: 60,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              fractionalPart = index;
-            });*/
+            logReportList[2].subValue = 0 + index;
+            logReportList[2].subIndex = index;
+          },
+        ),
+        const Text(
+          'm',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMeditationPicker() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildPicker(
+          value: logReportList[3].mainIndex!,
+          minValue: 0,
+          maxValue: 23,
+          onSelectedItemChanged: (index) {
+            logReportList[3].mainValue = 0 + index;
+            logReportList[3].mainIndex = index;
+          },
+        ),
+        const Text(
+          'h',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        _buildPicker(
+          value: logReportList[3].subIndex!,
+          minValue: 0,
+          maxValue: 60,
+          onSelectedItemChanged: (index) {
+            logReportList[3].subValue = 0 + index;
+            logReportList[3].subIndex = index;
           },
         ),
         const Text(
@@ -278,13 +394,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildPicker(
-          value: wholePart,
+          value: logReportList[0].mainIndex!,
           minValue: 20,
           maxValue: 300,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              wholePart = 35 + index;
-            });*/
+            logReportList[0].mainValue = 20 + index;
+            logReportList[0].mainIndex = index;
           },
         ),
         const Text(
@@ -292,14 +407,13 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         _buildPicker(
-          value: fractionalPart,
+          value: logReportList[0].subIndex!,
           minValue: 0,
           isForWeight: true,
           maxValue: 9,
           onSelectedItemChanged: (index) {
-            /* setState(() {
-              fractionalPart = index;
-            });*/
+            logReportList[0].subValue = 0 + index;
+            logReportList[0].subIndex = index;
           },
         ),
       ],
@@ -320,7 +434,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         magnification: 1.4,
         squeeze: 0.8,
         useMagnifier: true,
-        scrollController: FixedExtentScrollController(),
+        scrollController: FixedExtentScrollController(initialItem: value),
         itemExtent: 32.0,
         onSelectedItemChanged: onSelectedItemChanged,
         children: List.generate(maxValue - minValue + 1, (index) {
@@ -495,116 +609,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     ),
                   ],
                 ),
-                logView(
-                    title: "Weight",
-                    addIcon: const Icon(
-                      Icons.edit,
-                      size: 20,
-                    ),
-                    hintText: "000",
-                    image: weightImage,
-                    onAddClick: () {
-                      _showBottomSheetView(
-                          context: context,
-                          type: Strings.weightKg,
-                          onClick: saveWeightLog,
-                          childView: _buildWeightPicker(),
-                          title: "Log your weight");
-                    },
-                    onRemoveClick: () {},
-                    removeIcon: const Icon(
-                      Icons.delete,
-                      size: 20,
-                    ),
-                    typeString: "/ ${Strings.weightKg}"),
-                logView(
-                    title: "Body Temperature",
-                    addIcon: const Icon(
-                      Icons.edit,
-                      size: 20,
-                    ),
-                    hintText: "000",
-                    image: temperatureImage,
-                    onAddClick: () {
-                      _showBottomSheetView(
-                          context: context,
-                          title: "Log body temperature",
-                          childView: _buildTemperaturePicker(),
-                          onClick: saveBodyTempLog,
-                          type: "°${Strings.bodyTempC}");
-                    },
-                    onRemoveClick: () {},
-                    removeIcon: const Icon(
-                      Icons.delete,
-                      size: 20,
-                    ),
-                    typeString: "/ °${Strings.bodyTempC}"),
-                logView(
-                    title: "Sleep",
-                    addIcon: const Icon(
-                      Icons.edit,
-                      size: 20,
-                    ),
-                    hintText: "00 h:00 m",
-                    image: sleepImage,
-                    onAddClick: () {
-                      _showBottomSheetView(
-                          context: context,
-                          type: "",
-                          onClick: saveSleepLog,
-                          childView: _buildSleepPicker(),
-                          title: "Log your sleep time");
-                    },
-                    onRemoveClick: () {},
-                    removeIcon: const Icon(
-                      Icons.delete,
-                      size: 20,
-                    ),
-                    typeString: ""),
-                logView(
-                    title: "Meditation",
-                    addIcon: const Icon(
-                      Icons.edit,
-                      size: 20,
-                    ),
-                    hintText: "00 h:00 m",
-                    image: yogaImage,
-                    onAddClick: () {
-                      _showBottomSheetView(
-                          context: context,
-                          type: "",
-                          onClick: saveMeditationLog,
-                          childView: _buildSleepPicker(),
-                          title: "Log your meditation time");
-                    },
-                    onRemoveClick: () {},
-                    removeIcon: const Icon(
-                      Icons.delete,
-                      size: 20,
-                    ),
-                    typeString: ""),
-                logView(
-                    title: "Water",
-                    addIcon: const Icon(
-                      Icons.edit,
-                      size: 20,
-                    ),
-                    hintText: "00",
-                    image: drinkWaterImage,
-                    onAddClick: () {
-                      _showBottomSheetView(
-                          context: context,
-                          title: "Log your drink water",
-                          childView: _buildWaterPicker(),
-                          onClick: saveWaterLog,
-                          type: Strings.graphWaterUnitLiter);
-                    },
-                    onRemoveClick: () {},
-                    removeIcon: const Icon(
-                      Icons.delete,
-                      size: 20,
-                    ),
-                    typeString: "/ ${Strings.graphWaterUnitLiter}"),
                 (isLoading)
                     ? const SizedBox(
                         height: 150,
@@ -686,6 +690,136 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                           );
                         },
                       ),
+                (widget.isRequiredWeightView!)
+                    ? logView(
+                        title: "Weight",
+                        addIcon: const Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        hintText: (logReportList[0].finalValue!.isNotEmpty)
+                            ? logReportList[0].finalValue!
+                            : "000",
+                        image: weightImage,
+                        onAddClick: () {
+                          _showBottomSheetView(
+                              context: context,
+                              type: Strings.weightKg,
+                              onClick: saveWeightLog,
+                              childView: _buildWeightPicker(),
+                              title: "Log your weight");
+                        },
+                        onRemoveClick: () {},
+                        removeIcon: const Icon(
+                          Icons.delete,
+                          size: 20,
+                        ),
+                        typeString: "/ ${Strings.weightKg}")
+                    : const SizedBox(),
+                (widget.isRequiredBodyTemperatureView!)
+                    ? logView(
+                        title: "Body Temperature",
+                        addIcon: const Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        hintText: (logReportList[1].finalValue!.isNotEmpty)
+                            ? logReportList[1].finalValue!
+                            : "000",
+                        image: temperatureImage,
+                        onAddClick: () {
+                          _showBottomSheetView(
+                              context: context,
+                              title: "Log body temperature",
+                              childView: _buildTemperaturePicker(),
+                              onClick: saveBodyTempLog,
+                              type: "°${Strings.bodyTempC}");
+                        },
+                        onRemoveClick: () {},
+                        removeIcon: const Icon(
+                          Icons.delete,
+                          size: 20,
+                        ),
+                        typeString: "/ °${Strings.bodyTempC}")
+                    : const SizedBox(),
+                (widget.isRequiredSleepView!)
+                    ? logView(
+                        title: "Sleep",
+                        addIcon: const Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        hintText: (logReportList[2].finalValue!.isNotEmpty)
+                            ? logReportList[2].finalValue!
+                            : "00 h : 00 m",
+                        image: sleepImage,
+                        onAddClick: () {
+                          _showBottomSheetView(
+                              context: context,
+                              type: "",
+                              onClick: saveSleepLog,
+                              childView: _buildSleepPicker(),
+                              title: "Log your sleep time");
+                        },
+                        onRemoveClick: () {},
+                        removeIcon: const Icon(
+                          Icons.delete,
+                          size: 20,
+                        ),
+                        typeString: "")
+                    : const SizedBox(),
+                (widget.isRequiredMeditationView!)
+                    ? logView(
+                        title: "Meditation",
+                        addIcon: const Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        hintText: (logReportList[3].finalValue!.isNotEmpty)
+                            ? logReportList[3].finalValue!
+                            : "00 h : 00 m",
+                        image: yogaImage,
+                        onAddClick: () {
+                          _showBottomSheetView(
+                              context: context,
+                              type: "",
+                              onClick: saveMeditationLog,
+                              childView: _buildMeditationPicker(),
+                              title: "Log your meditation time");
+                        },
+                        onRemoveClick: () {},
+                        removeIcon: const Icon(
+                          Icons.delete,
+                          size: 20,
+                        ),
+                        typeString: "")
+                    : const SizedBox(),
+                (widget.isRequiredWaterView!)
+                    ? logView(
+                        title: "Water",
+                        addIcon: const Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                        hintText: (logReportList[4].finalValue!.isNotEmpty)
+                            ? logReportList[4].finalValue!
+                            : "00",
+                        image: drinkWaterImage,
+                        onAddClick: () {
+                          _showBottomSheetView(
+                              context: context,
+                              title: "Log your drink water",
+                              childView: _buildWaterPicker(),
+                              onClick: saveWaterLog,
+                              type: Strings.graphWaterUnitLiter);
+                        },
+                        onRemoveClick: () {},
+                        removeIcon: const Icon(
+                          Icons.delete,
+                          size: 20,
+                        ),
+                        typeString: "/ ${Strings.graphWaterUnitLiter}")
+                    : const SizedBox(),
                 GestureDetector(
                   onTap: () {
                     saveTodayLogs();

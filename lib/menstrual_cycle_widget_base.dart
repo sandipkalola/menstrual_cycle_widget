@@ -4,8 +4,8 @@ import 'dart:math';
 import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
-import 'ui/graphs_view/model/body_temperature_data.dart';
-import 'ui/graphs_view/model/water_data.dart';
+import 'ui/model/body_temperature_data.dart';
+import 'ui/model/water_data.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -154,30 +154,19 @@ class MenstrualCycleWidget {
     String meditationTime = "0",
     String sleepTime = "0",
     String waterValue = "0",
-    String waterUnit = "",
-    String customNotes = "N/A",
+    WaterUnits waterUnit = WaterUnits.liters,
+    String customNotes = "",
     String weight = "0",
-    String weightUnit = "",
+    WeightUnits weightUnit = WeightUnits.kg,
     String bodyTemperature = "0",
-    String bodyTemperatureUnit = "",
+    BodyTemperatureUnits bodyTemperatureUnit = BodyTemperatureUnits.celsius,
     bool isCustomLogs = true,
   }) async {
     String currentDate = "";
     String logDate = "";
-    weightUnit = (weightUnit.isEmpty) ? WeightUnits.kg.toString() : weightUnit;
-    bodyTemperatureUnit = (bodyTemperatureUnit.isEmpty)
-        ? BodyTemperatureUnits.celsius.toString()
-        : bodyTemperatureUnit;
-    waterUnit = (waterUnit.isEmpty) ? WaterUnits.ml.toString() : waterUnit;
 
-    meditationTime = next(5, 200);
-    sleepTime = next(5, 200);
-    weight = next(10, 100);
-    waterValue = next(3000, 10000);
     customNotes = "N/A";
-    bodyTemperature = next(5, 150);
 
-    // TODO add condition to now allow blank value on meditation time, sleep time etc
     if (symptomsLogDate == null) {
       var now = DateTime.now();
       logDate = defaultDateFormat.format(now);
@@ -206,11 +195,11 @@ class MenstrualCycleWidget {
       MenstrualCycleDbHelper.columnWater:
           Encryption.instance.encrypt(waterValue),
       MenstrualCycleDbHelper.columnWaterUnit:
-          Encryption.instance.encrypt(waterUnit),
+          Encryption.instance.encrypt(waterUnit.toString()),
       MenstrualCycleDbHelper.columnBodyTemperatureUnit:
-          Encryption.instance.encrypt(bodyTemperatureUnit),
+          Encryption.instance.encrypt(bodyTemperatureUnit.toString()),
       MenstrualCycleDbHelper.columnWeightUnit:
-          Encryption.instance.encrypt(weightUnit),
+          Encryption.instance.encrypt(weightUnit.toString()),
       MenstrualCycleDbHelper.columnNotes:
           Encryption.instance.encrypt(customNotes),
       MenstrualCycleDbHelper.columnWeight: Encryption.instance.encrypt(weight),
@@ -318,7 +307,7 @@ class MenstrualCycleWidget {
       if (logReportData.waterUnit!.isNotEmpty) {
         double drinkWaterValue = double.parse(logReportData.waterValue!);
 
-       // printLogs("logReportData.waterUnit ${logReportData.waterUnit}");
+        // printLogs("logReportData.waterUnit ${logReportData.waterUnit}");
         double drinkWater = 0.0;
         if (logReportData.waterUnit == waterUnits.toString()) {
           drinkWater = drinkWaterValue;
@@ -334,7 +323,6 @@ class MenstrualCycleWidget {
           } else if (waterUnits == WaterUnits.usGallon) {
             drinkWater = millilitersToUSGallons(drinkWaterValue);
           }
-
         }
         //printLogs("drinkWater =====$drinkWater");
         waterData.waterValue = drinkWater;
@@ -345,7 +333,7 @@ class MenstrualCycleWidget {
         waterDataListData.add(waterData);
       }
     }
-  //  printLogs("waterDataListData ${waterDataListData.length}");
+    //  printLogs("waterDataListData ${waterDataListData.length}");
     return waterDataListData;
   }
 

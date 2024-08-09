@@ -3,8 +3,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
+import '../model/water_data.dart';
 import 'graph_util.dart';
-import 'model/water_data.dart';
 
 class MenstrualCycleWaterGraph extends StatefulWidget {
   final String loadingText;

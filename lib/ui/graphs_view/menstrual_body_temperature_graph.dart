@@ -3,8 +3,8 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
+import '../model/body_temperature_data.dart';
 import 'graph_util.dart';
-import 'model/body_temperature_data.dart';
 
 class MenstrualBodyTemperatureGraph extends StatefulWidget {
   final String loadingText;

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
+import '../model/chart_cycle_data.dart';
 import 'graph_util.dart';
-import 'model/chart_cycle_data.dart';
 
 class MenstrualCycleTrendsGraph extends StatefulWidget {
   final bool isShowSeriesColor;
