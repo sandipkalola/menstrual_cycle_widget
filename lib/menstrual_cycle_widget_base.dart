@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
+import 'ui/model/sleep_data.dart';
 import 'ui/model/water_data.dart';
 
 class MenstrualCycleWidget {
@@ -152,7 +154,8 @@ class MenstrualCycleWidget {
     required Function? onError,
     DateTime? symptomsLogDate,
     String meditationTime = "0",
-    String sleepTime = "0",
+    TimeOfDay? sleepWakeUpTime,
+    TimeOfDay? sleepBedTime,
     String waterValue = "0",
     WaterUnits waterUnit = WaterUnits.liters,
     String customNotes = "",
@@ -164,7 +167,7 @@ class MenstrualCycleWidget {
   }) async {
     String currentDate = "";
     String logDate = "";
-
+    String sleepTime = "";
     customNotes = "N/A";
 
     if (symptomsLogDate == null) {
@@ -176,6 +179,11 @@ class MenstrualCycleWidget {
       } catch (e) {
         throw Strings.errorInvalidSymptomsLogDate;
       }
+    }
+
+    if (sleepBedTime != null && sleepWakeUpTime != null) {
+      sleepTime =
+          "${sleepBedTime.hour}:${sleepBedTime.minute}T${sleepWakeUpTime.hour}:${sleepWakeUpTime.minute}";
     }
 
     final dbHelper = MenstrualCycleDbHelper.instance;
@@ -251,22 +259,23 @@ class MenstrualCycleWidget {
       double drinkWaterValue = double.parse(Encryption.instance
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]));
       double drinkWater = 0.0;
-      if (waterUnit == waterUnits.toString()) {
-        drinkWater = drinkWaterValue;
-      } else {
-        if (waterUnits == WaterUnits.liters) {
-          drinkWater = millilitersToLiters(drinkWaterValue);
-        } else if (waterUnits == WaterUnits.cups) {
-          drinkWater = millilitersToUSCups(drinkWaterValue);
-        } else if (waterUnits == WaterUnits.flOz) {
-          drinkWater = millilitersToUSFluidOunces(drinkWaterValue);
-        } else if (waterUnits == WaterUnits.imperialGallons) {
-          drinkWater = millilitersToImperialGallons(drinkWaterValue);
-        } else if (waterUnits == WaterUnits.usGallon) {
-          drinkWater = millilitersToUSGallons(drinkWaterValue);
+      if (drinkWaterValue > 0) {
+        if (waterUnit == waterUnits.toString()) {
+          drinkWater = drinkWaterValue;
+        } else {
+          if (waterUnits == WaterUnits.liters) {
+            drinkWater = millilitersToLiters(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.cups) {
+            drinkWater = millilitersToUSCups(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.flOz) {
+            drinkWater = millilitersToUSFluidOunces(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.imperialGallons) {
+            drinkWater = millilitersToImperialGallons(drinkWaterValue);
+          } else if (waterUnits == WaterUnits.usGallon) {
+            drinkWater = millilitersToUSGallons(drinkWaterValue);
+          }
         }
       }
-
       if (minValue == 0) {
         minValue = drinkWater;
       }
@@ -304,7 +313,10 @@ class MenstrualCycleWidget {
     for (int i = 0; i < usersLogDataList.length; i++) {
       WaterData waterData = WaterData();
       UserLogReportData logReportData = usersLogDataList[i];
-      if (logReportData.waterUnit!.isNotEmpty) {
+      int waterValue = int.parse(logReportData.waterValue!);
+      if (logReportData.waterUnit!.isNotEmpty && waterValue > 0) {
+        printLogs("logReportData.waterValue ${logReportData.waterValue}");
+
         double drinkWaterValue = double.parse(logReportData.waterValue!);
 
         // printLogs("logReportData.waterUnit ${logReportData.waterUnit}");
@@ -337,14 +349,109 @@ class MenstrualCycleWidget {
     return waterDataListData;
   }
 
+  /// Get min and max sleep time log of current user
+  Future<Map<String, int>> getMinMaxSleepTimeLog() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    int minValue = 0;
+    int maxValue = 0;
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+
+    List.generate(queryResponse.length, (i) {
+      String sleepTime = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
+      List<String> time = sleepTime.split("T");
+      List<String> sleepBedTime = time[0].split(":");
+      List<String> sleepWakeUpTime = time[1].split(":");
+
+      int sleepBedTimeHrs = int.parse(sleepBedTime[0]);
+      int sleepWakeUpTimeHrs = int.parse(sleepWakeUpTime[0]);
+
+      if (sleepBedTimeHrs > sleepWakeUpTimeHrs) {
+        sleepWakeUpTimeHrs =
+            sleepBedTimeHrs + (23 - sleepBedTimeHrs) + sleepWakeUpTimeHrs;
+      }
+     // printLogs("sleepWakeUpTimeHrs $sleepWakeUpTimeHrs");
+
+      if (minValue >= sleepBedTimeHrs) {
+        minValue = sleepBedTimeHrs;
+      }
+      if (maxValue <= sleepWakeUpTimeHrs) {
+        maxValue = sleepWakeUpTimeHrs;
+      }
+
+    });
+
+    printLogs("min_temp $minValue");
+    printLogs("max_temp $maxValue");
+
+    return {
+      'min_temp': minValue,
+      'max_temp': maxValue,
+    };
+  }
+
+  /// get user's sleep data
+  Future<List<SleepData>> getSleepLog(
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      int pageNumber = 1,
+      int itemsPerPage = 7}) async {
+    List<SleepData> sleepListData = [];
+
+    List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
+        startDate: startDate,
+        endDate: endDate,
+        isRequiredPagination: true,
+        itemsPerPage: itemsPerPage,
+        pageNumber: pageNumber);
+    for (int i = 0; i < usersLogDataList.length; i++) {
+      SleepData sleepData = SleepData();
+      UserLogReportData logReportData = usersLogDataList[i];
+
+      List<String> time = logReportData.sleepTime!.split("T");
+      List<String> sleepBedTime = time[0].split(":");
+      List<String> sleepWakeUpTime = time[1].split(":");
+
+      int sleepBedTimeHrs = int.parse(sleepBedTime[0]);
+      int sleepBedTimeMin = int.parse(sleepBedTime[1]);
+      int sleepWakeUpTimeHrs = int.parse(sleepWakeUpTime[0]);
+      int sleepWakeUpTimeMin = int.parse(sleepWakeUpTime[1]);
+
+      if (sleepBedTimeHrs > sleepWakeUpTimeHrs) {
+        sleepWakeUpTimeHrs =
+            sleepBedTimeHrs + (23 - sleepBedTimeHrs) + sleepWakeUpTimeHrs;
+      }
+
+      sleepData.sleepBedTime =
+          double.parse("$sleepBedTimeHrs.$sleepBedTimeMin");
+      sleepData.wakeUpTime =
+          double.parse("$sleepWakeUpTimeHrs.$sleepWakeUpTimeMin");
+
+      printLogs("sleepBedTime ${sleepData.sleepBedTime}");
+      printLogs("wakeUpTime ${sleepData.wakeUpTime}");
+
+      sleepData.dateTime =
+          CalenderDateUtils.dateWithYear(logReportData.logDate!);
+
+      sleepListData.add(sleepData);
+    }
+
+    return sleepListData;
+  }
+
   /// Get min and max body temperature of current user
-  Future<Map<String, double>> getMinMaxBodyTemperature(
+  Future<Map<String, int>> getMinMaxBodyTemperature(
       {BodyTemperatureUnits? bodyTemperatureUnits =
           BodyTemperatureUnits.celsius}) async {
     final dbHelper = MenstrualCycleDbHelper.instance;
     Database? db = await dbHelper.database;
-    double minValue = 0;
-    double maxValue = 0;
+    int minValue = 0;
+    int maxValue = 0;
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
 
@@ -357,25 +464,27 @@ class MenstrualCycleWidget {
       double tempValue = double.parse(Encryption.instance.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]));
       double temp = 0.0;
-      if (tempUnit == bodyTemperatureUnits.toString()) {
-        temp = tempValue;
-      } else {
-        if (bodyTemperatureUnits == BodyTemperatureUnits.fahrenheit) {
-          temp = celsiusToFahrenheit(tempValue);
+      if (tempValue > 0) {
+        if (tempUnit == bodyTemperatureUnits.toString()) {
+          temp = tempValue;
         } else {
-          temp = fahrenheitToCelsius(tempValue);
+          if (bodyTemperatureUnits == BodyTemperatureUnits.fahrenheit) {
+            temp = celsiusToFahrenheit(tempValue);
+          } else {
+            temp = fahrenheitToCelsius(tempValue);
+          }
         }
       }
 
       if (minValue == 0) {
-        minValue = temp;
+        minValue = temp.toInt();
       }
       if (temp > 0) {
         if (minValue >= temp) {
-          minValue = temp;
+          minValue = temp.toInt();
         }
         if (maxValue <= temp) {
-          maxValue = temp;
+          maxValue = temp.toInt();
         }
       }
     });
@@ -404,7 +513,8 @@ class MenstrualCycleWidget {
     for (int i = 0; i < usersLogDataList.length; i++) {
       BodyTemperatureData bodyTemperatureData = BodyTemperatureData();
       UserLogReportData logReportData = usersLogDataList[i];
-      if (logReportData.bodyTemperature!.isNotEmpty) {
+      double bodyTemp = double.parse(logReportData.bodyTemperature!);
+      if (bodyTemp > 0) {
         double bodyTemperature = 0.0;
         if (logReportData.bodyTemperatureUnit ==
             bodyTemperatureUnits.toString()) {

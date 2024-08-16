@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
-import '../model/water_data.dart';
+import '../model/sleep_data.dart';
 import 'graph_util.dart';
 
-class MenstrualCycleWaterGraph extends StatefulWidget {
+class MenstrualSleepGraph extends StatefulWidget {
   final String loadingText;
-  final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
   final Function? onDownloadImagePath;
   final Function? onDownloadPdfPath;
@@ -18,19 +16,22 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
   final TextStyle yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
-  final Color graphColor;
+  final Color topGraphColor;
+  final Color centerGraphColor;
+  final Color bottomGraphColor;
 
-  const MenstrualCycleWaterGraph(
+  const MenstrualSleepGraph(
       {super.key,
-      this.waterUnits = WaterUnits.liters,
       this.isShowMoreOptions = false,
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
-      this.yAxisTitle = Strings.graphWaterUnitTitle,
+      this.yAxisTitle = Strings.graphBodyTempTitle,
       this.onDownloadImagePath,
-      this.xAxisTitle = Strings.graphWaterDrinkDate,
-      this.graphColor = Colors.blue,
+      this.topGraphColor = Colors.red,
+      this.centerGraphColor = Colors.orange,
+      this.bottomGraphColor = Colors.yellow,
+      this.xAxisTitle = Strings.graphBodyTempDate,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
@@ -38,13 +39,13 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
       this.onDownloadPdfPath});
 
   @override
-  State<MenstrualCycleWaterGraph> createState() => _MenstrualWaterGraphState();
+  State<MenstrualSleepGraph> createState() => _MenstrualSleepGraphState();
 }
 
-class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
-  ChartSeriesController<WaterData, String>? seriesController;
+class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
+  ChartSeriesController<SleepData, String>? seriesController;
 
-  List<WaterData> allDrinkWaterData = [];
+  List<SleepData> allSleepData = [];
   late GlobalKey<SfCartesianChartState> _chartKey;
   late bool isLoadMoreView, isNeedToUpdateView, isDataUpdated;
   num? oldAxisVisibleMin, oldAxisVisibleMax;
@@ -54,9 +55,9 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String waterUnitLbl = Strings.graphWaterUnitLiter;
+  String tempUnit = "C";
   TooltipBehavior? _tooltipBehavior;
-  String fileName = "Water_graph_";
+  String fileName = "Sleep_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
 
@@ -84,39 +85,17 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
 
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    Map<String, double> minMaxTemp =
-        await instance.getMinMaxDrinkWater(waterUnits: widget.waterUnits);
-    minValue = minMaxTemp['min_value']!;
-    maxValue = minMaxTemp['max_value']!;
-    printLogs("minValue $minValue");
-    if (minValue < 0) {
-      minValue = 0;
-    }
-    maxValue = maxValue + 2;
-    allDrinkWaterData = await instance.getDrinkWaterLog(
+    Map<String, int> minMaxTemp = await instance.getMinMaxSleepTimeLog();
+    minValue = minMaxTemp['min_temp']! + 0;
+    maxValue = minMaxTemp['max_temp']! + 1;
+
+    allSleepData = await instance.getSleepLog(
         startDate: DateTime.now().add(const Duration(days: -1000)),
         endDate: DateTime.now(),
-        waterUnits: widget.waterUnits,
         pageNumber: pageNumber,
         itemsPerPage: itemsPerPage);
-    if (allDrinkWaterData.length < 7) {
+    if (allSleepData.length < 7) {
       isLastRecord = true;
-    }
-
-    waterUnitLbl = "Liters";
-    WaterUnits waterUnits = widget.waterUnits!;
-    if (waterUnits == WaterUnits.liters) {
-      waterUnitLbl = "Liters";
-    } else if (waterUnits == WaterUnits.cups) {
-      waterUnitLbl = "Cups";
-    } else if (waterUnits == WaterUnits.flOz) {
-      waterUnitLbl = "flOz";
-    } else if (waterUnits == WaterUnits.imperialGallons) {
-      waterUnitLbl = "Imperial Gallons";
-    } else if (waterUnits == WaterUnits.usGallon) {
-      waterUnitLbl = "US Gallon";
-    } else if (waterUnits == WaterUnits.ml) {
-      waterUnitLbl = "ml";
     }
 
     isGetData = true;
@@ -125,9 +104,9 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
 
   @override
   Widget build(BuildContext context) {
-    if (allDrinkWaterData.isNotEmpty) {
+    if (allSleepData.isNotEmpty) {
       return Stack(children: [
-        _buildBodyTemperatureView(),
+        _buildSleepView(),
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
@@ -149,7 +128,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   }
 
   /// Get the body temperature graph view
-  SfCartesianChart _buildBodyTemperatureView() {
+  SfCartesianChart _buildSleepView() {
     return SfCartesianChart(
       key: _chartKey,
       zoomPanBehavior: _zoomPanBehavior,
@@ -183,15 +162,19 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
-          labelFormat: '{value}',
-          minimum: 1,
-          maximum: maxValue,
+          //labelFormat: getLabelFormat('{value}'),
+          axisLabelFormatter: (AxisLabelRenderDetails details) {
+            return ChartAxisLabel(
+                getLabelFormat(details.value.toString()), null);
+          },
+          minimum: 0,
+          maximum: 48,
           interval: 2,
           axisLine: const AxisLine(width: 0),
           labelStyle: widget.yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
-                  text: "${widget.yAxisTitle} ($waterUnitLbl)",
+                  text: widget.yAxisTitle,
                   textStyle: widget.yAxisTitleTextStyle,
                 )
               : const AxisTitle(
@@ -206,28 +189,40 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
     );
   }
 
+  String getLabelFormat(String value) {
+    printLogs("value $value");
+    double realValue = double.parse(value);
+    if (realValue > 24) {
+      int nextDay = realValue.toInt() - 24;
+      if (nextDay > 12) {
+        return "$nextDay PM";
+      }
+      return "$nextDay AM";
+    }
+    if (realValue > 12) {
+      return "${realValue.toInt()} PM";
+    }
+    return "${realValue.toInt()} AM";
+  }
+
   /// The method returns line series to chart.
-  List<CartesianSeries<WaterData, String>> _getGradientComparisonSeries() {
-    return <CartesianSeries<WaterData, String>>[
-      ColumnSeries<WaterData, String>(
-        dataSource: allDrinkWaterData,
-        onCreateShader: (ShaderDetails details) {
-          return ui.Gradient.linear(
-              details.rect.topCenter,
-              details.rect.bottomCenter,
-              <Color>[widget.graphColor, widget.graphColor, widget.graphColor],
-              <double>[0.3, 0.6, 0.9]);
-        },
+  List<RangeColumnSeries<SleepData, String>> _getGradientComparisonSeries() {
+    return <RangeColumnSeries<SleepData, String>>[
+      RangeColumnSeries<SleepData, String>(
+        dataSource: allSleepData,
         onRendererCreated:
-            (ChartSeriesController<WaterData, String>? controller) {
+            (ChartSeriesController<SleepData, String>? controller) {
           seriesController = controller;
         },
-        name: waterUnitLbl,
-        xValueMapper: (WaterData sales, _) => sales.dateTime,
-        yValueMapper: (WaterData sales, _) => sales.waterValue,
+        enableTooltip: false,
+        xValueMapper: (SleepData sales, _) => sales.dateTime,
+        lowValueMapper: (SleepData sales, _) => sales.sleepBedTime,
+        highValueMapper: (SleepData sales, _) => sales.wakeUpTime,
         animationDuration: 0,
-        dataLabelSettings:
-            const DataLabelSettings(isVisible: false, offset: Offset(0, -5)),
+        dataLabelSettings: const DataLabelSettings(
+          isVisible: false,
+          labelAlignment: ChartDataLabelAlignment.top,
+        ),
       ),
     ];
   }
@@ -272,19 +267,18 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
 
   void _updateData() async {
     final instance = MenstrualCycleWidget.instance!;
-    List<WaterData> bodyTemperatureData = await instance.getDrinkWaterLog(
+    List<SleepData> sleepData = await instance.getSleepLog(
         startDate: DateTime.now().add(const Duration(days: -1000)),
         endDate: DateTime.now(),
-        waterUnits: widget.waterUnits,
         pageNumber: pageNumber,
         itemsPerPage: itemsPerPage);
-    if (bodyTemperatureData.isEmpty) {
+    if (sleepData.isEmpty) {
       isLastRecord = true;
     }
-    allDrinkWaterData.addAll(bodyTemperatureData);
+    allSleepData.addAll(sleepData);
     isLoadMoreView = true;
     seriesController?.updateDataSource(
-        addedDataIndexes: getIndexes(bodyTemperatureData.length));
+        addedDataIndexes: getIndexes(sleepData.length));
   }
 
   Widget getProgressIndicator() {
@@ -294,7 +288,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   List<int> getIndexes(int length) {
     final List<int> indexes = <int>[];
     for (int i = length - 1; i >= 0; i--) {
-      indexes.add(allDrinkWaterData.length - 1 - i);
+      indexes.add(allSleepData.length - 1 - i);
     }
     return indexes;
   }

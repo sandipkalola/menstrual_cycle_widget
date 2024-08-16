@@ -18,6 +18,9 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
   final TextStyle yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
+  final Color topGraphColor;
+  final Color centerGraphColor;
+  final Color bottomGraphColor;
 
   const MenstrualBodyTemperatureGraph(
       {super.key,
@@ -28,6 +31,9 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
       this.isShowYAxisTitle = true,
       this.yAxisTitle = Strings.graphBodyTempTitle,
       this.onDownloadImagePath,
+      this.topGraphColor = Colors.red,
+      this.centerGraphColor = Colors.orange,
+      this.bottomGraphColor = Colors.yellow,
       this.xAxisTitle = Strings.graphBodyTempDate,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
@@ -84,10 +90,10 @@ class _MenstrualBodyTemperatureGraphState
 
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    Map<String, double> minMaxTemp = await instance.getMinMaxBodyTemperature(
+    Map<String, int> minMaxTemp = await instance.getMinMaxBodyTemperature(
         bodyTemperatureUnits: widget.bodyTemperatureUnits);
-    minValue = minMaxTemp['min_temp']! - 5;
-    maxValue = minMaxTemp['max_temp']! + 5;
+    minValue = minMaxTemp['min_temp']! - 2;
+    maxValue = minMaxTemp['max_temp']! + 1;
 
     if (minValue < 0) {
       minValue = 0;
@@ -174,7 +180,7 @@ class _MenstrualBodyTemperatureGraphState
           labelFormat: '{value}°$tempUnit',
           minimum: minValue,
           maximum: maxValue,
-          interval: 20,
+          interval: 1,
           axisLine: const AxisLine(width: 0),
           labelStyle: widget.yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
@@ -202,10 +208,15 @@ class _MenstrualBodyTemperatureGraphState
         dataSource: allBodyTemperatureData,
         onCreateShader: (ShaderDetails details) {
           return ui.Gradient.linear(
-              details.rect.topCenter,
-              details.rect.bottomCenter,
-              const <Color>[Colors.red, Colors.orange, Colors.yellow],
-              <double>[0.3, 0.6, 0.9]);
+              details.rect.topCenter, details.rect.bottomCenter, <Color>[
+            widget.topGraphColor,
+            widget.centerGraphColor,
+            widget.bottomGraphColor
+          ], <double>[
+            0.3,
+            0.6,
+            0.9
+          ]);
         },
         onRendererCreated:
             (ChartSeriesController<BodyTemperatureData, String>? controller) {

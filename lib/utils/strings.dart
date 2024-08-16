@@ -66,31 +66,37 @@ class Strings {
       "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
   static const String errorInvalidSymptomsLogDate =
       "Invalid symptoms log date. Date format is yyyy-MM-dd";
-
   static const String graphCycleStartDate = "Cycle start date";
   static const String loading = "Loading...";
   static const String graphCycleTrends = "Cycle trends";
   static const String graphCycleLengthDays = "Cycle length days";
   static const String graphCycleNormalDays = "Normal days";
-
   static const String graphCyclePeriodDay = "Period days";
   static const String graphCycleOtherDay = "Other cycle days";
-
   static const String optionsDownloadImage = "Download Image";
   static const String optionsDownloadPDF = "Download PDF";
   static const String optionsViewLandscape = "Landscape mode";
   static const String toolTip = "Show menu";
   static const String noDataFound = "No data found";
-
   static const String graphBodyTempDate = "Body temperature log date";
   static const String graphBodyTempTitle = "Temperature unit";
-
   static const String graphWaterDrinkDate = "Water drinking date";
   static const String graphWaterUnitTitle = "Water unit";
-
   static const String graphWaterUnitLiter = "Liters";
   static const String bodyTempC = "C";
   static const String weightKg = "kg";
   static const String bodyTempF = "F";
-
+  static const String errorInvalidSymptomsDate =
+      "Invalid symptoms log date. Date format is yyyy-MM-dd";
+  static const String lblDone = "Done";
+  static const String lblWeight = "Weight";
+  static const String lblWeightTitle = "Log your weight";
+  static const String lblBodyTemp = "Body Temperature";
+  static const String lblBodyTempTitle = "Log body temperature";
+  static const String lblSleep = "Sleep";
+  static const String lblSleepTitle = "Log your sleep time";
+  static const String lblMeditation = "Meditation";
+  static const String lblMeditationTitle = "Log your meditation time";
+  static const String lblWater = "Water";
+  static const String lblWaterTitle = "Log your drink water";
 }
