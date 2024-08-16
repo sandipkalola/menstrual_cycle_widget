@@ -375,7 +375,7 @@ class MenstrualCycleWidget {
         sleepWakeUpTimeHrs =
             sleepBedTimeHrs + (23 - sleepBedTimeHrs) + sleepWakeUpTimeHrs;
       }
-     // printLogs("sleepWakeUpTimeHrs $sleepWakeUpTimeHrs");
+      // printLogs("sleepWakeUpTimeHrs $sleepWakeUpTimeHrs");
 
       if (minValue >= sleepBedTimeHrs) {
         minValue = sleepBedTimeHrs;
@@ -383,7 +383,6 @@ class MenstrualCycleWidget {
       if (maxValue <= sleepWakeUpTimeHrs) {
         maxValue = sleepWakeUpTimeHrs;
       }
-
     });
 
     printLogs("min_temp $minValue");
@@ -432,8 +431,8 @@ class MenstrualCycleWidget {
       sleepData.wakeUpTime =
           double.parse("$sleepWakeUpTimeHrs.$sleepWakeUpTimeMin");
 
-      printLogs("sleepBedTime ${sleepData.sleepBedTime}");
-      printLogs("wakeUpTime ${sleepData.wakeUpTime}");
+      // printLogs("sleepBedTime ${sleepData.sleepBedTime}");
+      // printLogs("wakeUpTime ${sleepData.wakeUpTime}");
 
       sleepData.dateTime =
           CalenderDateUtils.dateWithYear(logReportData.logDate!);

@@ -99,4 +99,7 @@ class Strings {
   static const String lblMeditationTitle = "Log your meditation time";
   static const String lblWater = "Water";
   static const String lblWaterTitle = "Log your drink water";
+  static const String graphSleepTitle = "Time";
+  static const String graphSleepDate = "Sleep log date";
+
 }
