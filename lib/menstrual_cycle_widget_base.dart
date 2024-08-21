@@ -8,6 +8,7 @@ import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
 import 'ui/model/sleep_data.dart';
 import 'ui/model/water_data.dart';
+import 'ui/model/weight_data.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -238,6 +239,105 @@ class MenstrualCycleWidget {
     List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
         startDate: DateTime.now(), endDate: DateTime.now());
     return usersLogDataList;
+  }
+
+  /// Get min and max wight of current user
+  Future<Map<String, double>> getMinMaxWeightLog(
+      {WeightUnits? weightUnits = WeightUnits.kg}) async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    double minValue = 0;
+    double maxValue = 0;
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+
+    List.generate(queryResponse.length, (i) {
+      String weightUnit = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
+      double weightValue = double.parse(Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]));
+      double weight = 0.0;
+      if (weightValue > 0) {
+        if (weightUnit == weightUnits.toString()) {
+          weight = weightValue;
+        } else {
+          if (weightUnit == WeightUnits.kg.toString()) {
+            weight = convertLbToKg(weightValue);
+          } else if (weightUnit == WeightUnits.lb.toString()) {
+            weight = convertKgToLb(weightValue);
+          }
+        }
+      }
+      if (minValue == 0) {
+        minValue = weight;
+      }
+      if (weight > 0) {
+        if (minValue >= weight) {
+          minValue = weight;
+        }
+        if (maxValue <= weight) {
+          maxValue = weight;
+        }
+      }
+    });
+
+    return {
+      'min_value': minValue,
+      'max_value': maxValue,
+    };
+  }
+
+  /// get user's wight logs
+  Future<List<WeightData>> getWeightLog(
+      {required DateTime? startDate,
+        required DateTime? endDate,
+        WeightUnits? weightUnits = WeightUnits.kg,
+        int pageNumber = 1,
+        int itemsPerPage = 7}) async {
+    List<WeightData> weightDataListData = [];
+
+    List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
+        startDate: startDate,
+        endDate: endDate,
+        isRequiredPagination: true,
+        itemsPerPage: itemsPerPage,
+        pageNumber: pageNumber);
+    for (int i = 0; i < usersLogDataList.length; i++) {
+      WeightData weightData = WeightData();
+      UserLogReportData logReportData = usersLogDataList[i];
+      double weightValue = double.parse(logReportData.weight!);
+      if (logReportData.weightUnit!.isNotEmpty && weightValue > 0) {
+        printLogs("logReportData.waterValue ${logReportData.waterValue}");
+
+        double weightValue = double.parse(logReportData.weight!);
+
+        // printLogs("logReportData.waterUnit ${logReportData.waterUnit}");
+        double weight = 0.0;
+        if (logReportData.weightUnit == weightUnits.toString()) {
+          weight = weightValue;
+        } else {
+
+            if (logReportData.weightUnit == WeightUnits.kg.toString()) {
+              weight = convertLbToKg(weightValue);
+            } else if (logReportData.weightUnit == WeightUnits.lb.toString()) {
+              weight = convertKgToLb(weightValue);
+            }
+
+        }
+        //printLogs("drinkWater =====$drinkWater");
+        weightData.weightValue = weight;
+        weightData.dateTime =
+            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+        weightData.weightUnit = weightUnits.toString();
+
+        weightDataListData.add(weightData);
+      }
+    }
+    //  printLogs("waterDataListData ${waterDataListData.length}");
+    return weightDataListData;
   }
 
   /// Get min and max drink water of current user

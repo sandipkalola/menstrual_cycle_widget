@@ -40,3 +40,13 @@ double millilitersToUSCups(double milliliters) {
   return milliliters * 0.00422675;
 }
 
+double convertKgToLb(double kg) {
+  const double conversionFactor = 2.20462;
+  return kg * conversionFactor;
+}
+
+double convertLbToKg(double lb) {
+  const double conversionFactor = 0.453592;
+  return lb * conversionFactor;
+}
+

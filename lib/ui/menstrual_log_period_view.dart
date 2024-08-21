@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../menstrual_cycle_widget.dart';
+import 'model/display_symptoms_data.dart';
 import 'model/log_report.dart';
 
 // ignore: must_be_immutable
@@ -13,6 +14,7 @@ class MenstrualLogPeriodView extends StatefulWidget {
   bool? isRequiredBodyTemperatureView;
   bool? isRequiredWeightView;
   bool? isRequiredSleepView;
+  DisplaySymptomsData? displaySymptomsData;
   bool? isRequiredMeditationView;
 
   MenstrualLogPeriodView(
@@ -20,6 +22,7 @@ class MenstrualLogPeriodView extends StatefulWidget {
       this.symptomsLogDate,
       required this.onSuccess,
       required this.onError,
+      required this.displaySymptomsData,
       this.isRequiredWaterView = true,
       this.isRequiredBodyTemperatureView = true,
       this.isRequiredMeditationView = true,
@@ -57,24 +60,27 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   regenerateData() {
     for (int index = 0; index < defaultSymptomsData.length; index++) {
       Symptoms defaultData = defaultSymptomsData[index];
-      Symptoms symptoms = Symptoms(symptomsData: []);
-      symptoms.categoryId = defaultData.categoryId;
-      symptoms.categoryName = defaultData.categoryName;
-      symptoms.categoryColor = defaultData.categoryColor;
-      List<SymptomsData> listSymptomsData = [];
-      for (int indexJ = 0;
-          indexJ < defaultSymptomsData[index].symptomsData!.length;
-          indexJ++) {
-        SymptomsData deSymptomsData =
-            defaultSymptomsData[index].symptomsData![indexJ];
-        SymptomsData symptomsData = SymptomsData();
-        symptomsData.symptomName = deSymptomsData.symptomName;
-        symptomsData.symptomId = deSymptomsData.symptomId;
-        symptomsData.isSelected = false;
-        listSymptomsData.add(symptomsData);
+      bool isVisible = isVisibleSymptoms(defaultData.categoryName!);
+      if (isVisible) {
+        Symptoms symptoms = Symptoms(symptomsData: []);
+        symptoms.categoryId = defaultData.categoryId;
+        symptoms.categoryName = defaultData.categoryName;
+        symptoms.categoryColor = defaultData.categoryColor;
+        List<SymptomsData> listSymptomsData = [];
+        for (int indexJ = 0;
+            indexJ < defaultSymptomsData[index].symptomsData!.length;
+            indexJ++) {
+          SymptomsData deSymptomsData =
+              defaultSymptomsData[index].symptomsData![indexJ];
+          SymptomsData symptomsData = SymptomsData();
+          symptomsData.symptomName = deSymptomsData.symptomName;
+          symptomsData.symptomId = deSymptomsData.symptomId;
+          symptomsData.isSelected = false;
+          listSymptomsData.add(symptomsData);
+        }
+        symptoms.symptomsData!.addAll(listSymptomsData);
+        symptomsList.add(symptoms);
       }
-      symptoms.symptomsData!.addAll(listSymptomsData);
-      symptomsList.add(symptoms);
     }
   }
 
@@ -95,6 +101,50 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  bool isVisibleSymptoms(String symptomName) {
+    DisplaySymptomsData displaySymptomsData = widget.displaySymptomsData!;
+    if (symptomName == Strings.categoryFeelings) {
+      return displaySymptomsData.isRequiredFeelings;
+    } else if (symptomName == Strings.categoryMind) {
+      return displaySymptomsData.isRequiredMind;
+    } else if (symptomName == Strings.categorySexualLife) {
+      return displaySymptomsData.isRequiredSexualLife;
+    } else if (symptomName == Strings.categoryEnergy) {
+      return displaySymptomsData.isRequiredEnergy;
+    } else if (symptomName == Strings.categoryPeriod) {
+      return displaySymptomsData.isRequiredPeriod;
+    } else if (symptomName == Strings.categorySymptoms) {
+      return displaySymptomsData.isRequiredSymptoms;
+    } else if (symptomName == Strings.categoryPain) {
+      return displaySymptomsData.isRequiredPain;
+    } else if (symptomName == Strings.categoryVaginalDischarge) {
+      return displaySymptomsData.isRequiredVaginalDischarge;
+    } else if (symptomName == Strings.categoryDigestion) {
+      return displaySymptomsData.isRequiredDigestion;
+    } else if (symptomName == Strings.categoryActivity) {
+      return displaySymptomsData.isRequiredActivity;
+    } else if (symptomName == Strings.categoryCravings) {
+      return displaySymptomsData.isRequiredCravings;
+    } else if (symptomName == Strings.categoryTests) {
+      return displaySymptomsData.isRequiredTests;
+    } else if (symptomName == Strings.categoryAilments) {
+      return displaySymptomsData.isRequiredAilments;
+    } else if (symptomName == Strings.categoryAppointments) {
+      return displaySymptomsData.isRequiredAppointments;
+    } else if (symptomName == Strings.categoryBirthControlPill) {
+      return displaySymptomsData.isRequiredBirthControlPill;
+    } else if (symptomName == Strings.categoryIUD) {
+      return displaySymptomsData.isRequiredIUD;
+    } else if (symptomName == Strings.categorySupplements) {
+      return displaySymptomsData.isRequiredSupplements;
+    } else if (symptomName == Strings.categoryUrine) {
+      return displaySymptomsData.isRequiredUrine;
+    } else if (symptomName == Strings.categoryOther) {
+      return displaySymptomsData.isRequiredOther;
+    }
+    return false;
   }
 
   /// Save body temperature data
@@ -572,25 +622,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                           ),
                         ),
                       ),
-                      /*const SizedBox(
-                        width: 10,
-                      ),
-                      ClipOval(
-                        child: Material(
-                          color: const Color(0xFFD6D6D6), // Button color
-                          child: InkWell(
-                            splashColor: Colors.black26, // Splash color
-                            onTap: () {
-                              onAddClick.call();
-                            },
-                            child: SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: addIcon,
-                            ),
-                          ),
-                        ),
-                      )*/
                     ],
                   ),
                 ],
@@ -598,17 +629,17 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
+              const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Bedtime",
-                    style: const TextStyle(fontSize: 15, color: Colors.black),
+                    style: TextStyle(fontSize: 15, color: Colors.black),
                   ),
                   SizedBox(),
                   Text(
                     "Wake-up time",
-                    style: const TextStyle(fontSize: 15, color: Colors.black),
+                    style: TextStyle(fontSize: 15, color: Colors.black),
                   )
                 ],
               ),

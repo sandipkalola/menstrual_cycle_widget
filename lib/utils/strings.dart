@@ -101,5 +101,26 @@ class Strings {
   static const String lblWaterTitle = "Log your drink water";
   static const String graphSleepTitle = "Time";
   static const String graphSleepDate = "Sleep log date";
+  static const String graphWeightUnitTitle = "Weight unit";
+  static const String graphWeightLogDate = "Weight log date";
 
+  static const String categoryFeelings = "Feelings";
+  static const String categoryMind = "Mind";
+  static const String categorySexualLife = "Sexual Life";
+  static const String categoryEnergy = "Energy";
+  static const String categoryPeriod = "Period";
+  static const String categorySymptoms = "Symptoms";
+  static const String categoryPain = "Pain";
+  static const String categoryVaginalDischarge = "Vaginal discharge";
+  static const String categoryDigestion = "Digestion";
+  static const String categoryActivity = "Activity";
+  static const String categoryCravings = "Cravings";
+  static const String categoryTests = "Tests";
+  static const String categoryAilments = "Ailments";
+  static const String categoryAppointments = "Appointments";
+  static const String categoryBirthControlPill = "Birth control pill";
+  static const String categoryIUD = "IUD";
+  static const String categorySupplements = "Supplements";
+  static const String categoryUrine = "Urine";
+  static const String categoryOther = "Other";
 }

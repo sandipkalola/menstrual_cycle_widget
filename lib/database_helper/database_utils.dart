@@ -6,7 +6,7 @@ import '../menstrual_cycle_widget.dart';
 List<Symptoms> defaultSymptomsData = [
   Symptoms(
     categoryId: 1,
-    categoryName: "Feelings",
+    categoryName: Strings.categoryFeelings,
     categoryColor: "FFA500",
     symptomsData: [
       SymptomsData(symptomName: "Sensitive"),
@@ -26,7 +26,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 2,
-    categoryName: "Mind",
+    categoryName: Strings.categoryMind,
     categoryColor: "8B0000",
     symptomsData: [
       SymptomsData(symptomName: "Calm"),
@@ -44,7 +44,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 3,
-    categoryName: "Sexual Life",
+    categoryName: Strings.categorySexualLife,
     categoryColor: "A52A2A",
     symptomsData: [
       SymptomsData(symptomName: "No sex"),
@@ -63,7 +63,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 4,
-    categoryName: "Energy",
+    categoryName: Strings.categoryEnergy,
     categoryColor: "0000FF",
     symptomsData: [
       SymptomsData(symptomName: "Exhausted"),
@@ -75,7 +75,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 5,
-    categoryName: "Period",
+    categoryName: Strings.categoryPeriod,
     categoryColor: "FF0000",
     symptomsData: [
       SymptomsData(symptomName: "Light"),
@@ -87,7 +87,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 6,
-    categoryName: "Symptoms",
+    categoryName: Strings.categorySymptoms,
     categoryColor: "808080",
     symptomsData: [
       SymptomsData(symptomName: "Everything well"),
@@ -102,7 +102,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 7,
-    categoryName: "Pain",
+    categoryName: Strings.categoryPain,
     categoryColor: "800080",
     symptomsData: [
       SymptomsData(symptomName: "Pain free"),
@@ -119,7 +119,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 8,
-    categoryName: "Vaginal Discharge",
+    categoryName: Strings.categoryVaginalDischarge,
     categoryColor: "0000FF",
     isVisibleCategory: 0,
     symptomsData: [
@@ -135,7 +135,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 9,
-    categoryName: "Digestion",
+    categoryName: Strings.categoryDigestion,
     categoryColor: "FF0000",
     symptomsData: [
       SymptomsData(symptomName: "OK"),
@@ -148,7 +148,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 10,
-    categoryName: "Activity",
+    categoryName: Strings.categoryActivity,
     categoryColor: "8B0000",
     symptomsData: [
       SymptomsData(symptomName: "Yoga"),
@@ -166,7 +166,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 11,
-    categoryName: "Cravings",
+    categoryName: Strings.categoryCravings,
     categoryColor: "A52A2A",
     symptomsData: [
       SymptomsData(symptomName: "Sweet"),
@@ -178,7 +178,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 12,
-    categoryName: "Tests",
+    categoryName: Strings.categoryTests,
     categoryColor: "0000FF",
     symptomsData: [
       SymptomsData(symptomName: "Don't take test"),
@@ -188,7 +188,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 13,
-    categoryName: "Ailments",
+    categoryName: Strings.categoryAilments,
     categoryColor: "FFA500",
     symptomsData: [
       SymptomsData(symptomName: "Cold or flu"),
@@ -200,7 +200,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 14,
-    categoryName: "Appointments",
+    categoryName: Strings.categoryAppointments,
     categoryColor: "800080",
     symptomsData: [
       SymptomsData(symptomName: "GYN"),
@@ -212,7 +212,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 15,
-    categoryName: "Birth control pill",
+    categoryName: Strings.categoryBirthControlPill,
     categoryColor: "0000FF",
     symptomsData: [
       SymptomsData(symptomName: "Taken"),
@@ -224,7 +224,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 16,
-    categoryName: "IUD",
+    categoryName: Strings.categoryIUD,
     categoryColor: "FF0000",
     symptomsData: [
       SymptomsData(symptomName: "Thread checked"),
@@ -234,7 +234,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 17,
-    categoryName: "Supplements",
+    categoryName: Strings.categorySupplements,
     categoryColor: "8B0000",
     symptomsData: [
       SymptomsData(symptomName: "Multivitamin"),
@@ -248,7 +248,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 18,
-    categoryName: "Urine",
+    categoryName: Strings.categoryUrine,
     categoryColor: "0000FF",
     symptomsData: [
       SymptomsData(symptomName: "Frequent urination"),
@@ -258,7 +258,7 @@ List<Symptoms> defaultSymptomsData = [
   ),
   Symptoms(
     categoryId: 19,
-    categoryName: "Other",
+    categoryName: Strings.categoryOther,
     categoryColor: "c336a7",
     symptomsData: [
       SymptomsData(symptomName: "Travel"),
