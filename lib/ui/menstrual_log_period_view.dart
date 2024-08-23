@@ -793,7 +793,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xfff2f2f2),
+      backgroundColor: const Color(0xfff2f2f2),
       body: Padding(
         padding: const EdgeInsets.only(top: 40),
         child: SingleChildScrollView(

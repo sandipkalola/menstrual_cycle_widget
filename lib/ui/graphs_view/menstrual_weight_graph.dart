@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/weight_data.dart';
@@ -19,6 +18,7 @@ class MenstrualWeightGraph extends StatefulWidget {
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
   final Color graphColor;
+  final Color tooltipBackgroundColor;
 
   const MenstrualWeightGraph(
       {super.key,
@@ -31,6 +31,7 @@ class MenstrualWeightGraph extends StatefulWidget {
       this.onDownloadImagePath,
       this.xAxisTitle = Strings.graphWeightLogDate,
       this.graphColor = Colors.blue,
+      this.tooltipBackgroundColor = Colors.black,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
@@ -73,7 +74,15 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
     isNeedToUpdateView = false;
     isDataUpdated = true;
     globalKey = GlobalKey<State>();
-    _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: false);
+    _tooltipBehavior = TooltipBehavior(
+        enable: true,
+        color: widget.tooltipBackgroundColor,
+        canShowMarker: false,
+        builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+            int seriesIndex) {
+          return tooltipView(
+              "${allWeightData[pointIndex].weightValue} $weightUnitLbl");
+        });
     _zoomPanBehavior = ZoomPanBehavior(
       enablePanning: true,
       enablePinching: true,
@@ -92,8 +101,8 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
     if (minValue < 0) {
       minValue = 0;
     }
-    maxValue = maxValue - 5;
-    maxValue = maxValue + 5;
+    minValue = minValue - 3;
+    maxValue = maxValue + 3;
     allWeightData = await instance.getWeightLog(
         startDate: DateTime.now().add(const Duration(days: -1000)),
         endDate: DateTime.now(),
@@ -204,13 +213,7 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
     return <CartesianSeries<WeightData, String>>[
       ColumnSeries<WeightData, String>(
         dataSource: allWeightData,
-        onCreateShader: (ShaderDetails details) {
-          return ui.Gradient.linear(
-              details.rect.topCenter,
-              details.rect.bottomCenter,
-              <Color>[widget.graphColor, widget.graphColor, widget.graphColor],
-              <double>[0.3, 0.6, 0.9]);
-        },
+        color: widget.graphColor,
         onRendererCreated:
             (ChartSeriesController<WeightData, String>? controller) {
           seriesController = controller;

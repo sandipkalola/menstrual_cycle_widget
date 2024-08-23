@@ -116,3 +116,14 @@ Widget getMenuWidget(
     ),
   );
 }
+
+/// To display tooltip on graph view
+Widget tooltipView(String title) {
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text(
+      title,
+      style: const TextStyle(color: Colors.white, fontSize: 10),
+    ),
+  );
+}

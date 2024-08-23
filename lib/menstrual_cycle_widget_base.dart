@@ -327,7 +327,7 @@ class MenstrualCycleWidget {
             }
 
         }
-        //printLogs("drinkWater =====$drinkWater");
+        //printLogs("weight =====$weight");
         weightData.weightValue = weight;
         weightData.dateTime =
             CalenderDateUtils.dateWithYear(logReportData.logDate!);
@@ -531,13 +531,15 @@ class MenstrualCycleWidget {
       sleepData.wakeUpTime =
           double.parse("$sleepWakeUpTimeHrs.$sleepWakeUpTimeMin");
 
-      // printLogs("sleepBedTime ${sleepData.sleepBedTime}");
-      // printLogs("wakeUpTime ${sleepData.wakeUpTime}");
+       /*printLogs("sleepBedTime ${sleepData.sleepBedTime}");
+       printLogs("wakeUpTime ${sleepData.wakeUpTime}");*/
 
       sleepData.dateTime =
           CalenderDateUtils.dateWithYear(logReportData.logDate!);
 
-      sleepListData.add(sleepData);
+      if(sleepData.sleepBedTime! > 0){
+        sleepListData.add(sleepData);
+      }
     }
 
     return sleepListData;

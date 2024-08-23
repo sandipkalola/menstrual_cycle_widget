@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/water_data.dart';
@@ -18,6 +17,7 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
   final TextStyle yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
+  final Color tooltipBackgroundColor;
   final Color graphColor;
 
   const MenstrualCycleWaterGraph(
@@ -27,6 +27,7 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
+      this.tooltipBackgroundColor = Colors.black,
       this.yAxisTitle = Strings.graphWaterUnitTitle,
       this.onDownloadImagePath,
       this.xAxisTitle = Strings.graphWaterDrinkDate,
@@ -73,7 +74,15 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
     isNeedToUpdateView = false;
     isDataUpdated = true;
     globalKey = GlobalKey<State>();
-    _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: false);
+    _tooltipBehavior = TooltipBehavior(
+        enable: true,
+        canShowMarker: false,
+        color: widget.tooltipBackgroundColor,
+        builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+            int seriesIndex) {
+          return tooltipView(
+              "${allDrinkWaterData[pointIndex].waterValue} $waterUnitLbl");
+        });
     _zoomPanBehavior = ZoomPanBehavior(
       enablePanning: true,
       enablePinching: true,
@@ -211,13 +220,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
     return <CartesianSeries<WaterData, String>>[
       ColumnSeries<WaterData, String>(
         dataSource: allDrinkWaterData,
-        onCreateShader: (ShaderDetails details) {
-          return ui.Gradient.linear(
-              details.rect.topCenter,
-              details.rect.bottomCenter,
-              <Color>[widget.graphColor, widget.graphColor, widget.graphColor],
-              <double>[0.3, 0.6, 0.9]);
-        },
+        color: widget.graphColor,
         onRendererCreated:
             (ChartSeriesController<WaterData, String>? controller) {
           seriesController = controller;

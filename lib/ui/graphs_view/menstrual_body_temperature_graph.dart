@@ -20,6 +20,8 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
   final bool isShowYAxisTitle;
   final Color topGraphColor;
   final Color centerGraphColor;
+  final Color tooltipBackgroundColor;
+
   final Color bottomGraphColor;
 
   const MenstrualBodyTemperatureGraph(
@@ -29,6 +31,7 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
+      this.tooltipBackgroundColor = Colors.black,
       this.yAxisTitle = Strings.graphBodyTempTitle,
       this.onDownloadImagePath,
       this.topGraphColor = Colors.red,
@@ -79,7 +82,15 @@ class _MenstrualBodyTemperatureGraphState
     isNeedToUpdateView = false;
     isDataUpdated = true;
     globalKey = GlobalKey<State>();
-    _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: false);
+    _tooltipBehavior = TooltipBehavior(
+        enable: true,
+        color: widget.tooltipBackgroundColor,
+        canShowMarker: false,
+        builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
+            int seriesIndex) {
+          return tooltipView(
+              "${allBodyTemperatureData[pointIndex].bodyTemperature} °$tempUnit");
+        });
     _zoomPanBehavior = ZoomPanBehavior(
       enablePanning: true,
       enablePinching: true,

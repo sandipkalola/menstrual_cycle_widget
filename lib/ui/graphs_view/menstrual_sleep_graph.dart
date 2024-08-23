@@ -18,6 +18,8 @@ class MenstrualSleepGraph extends StatefulWidget {
   final bool isShowYAxisTitle;
   final bool isShowYAxisGridLine;
   final bool isShowXAxisGridLine;
+  final Color graphColor;
+  final Color tooltipBackgroundColor;
 
   const MenstrualSleepGraph(
       {super.key,
@@ -25,10 +27,12 @@ class MenstrualSleepGraph extends StatefulWidget {
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
+      this.tooltipBackgroundColor = Colors.black,
       this.isShowYAxisGridLine = false,
       this.isShowXAxisGridLine = false,
       this.yAxisTitle = Strings.graphSleepTitle,
       this.onDownloadImagePath,
+      this.graphColor = Colors.blue,
       this.xAxisTitle = Strings.graphSleepDate,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
@@ -73,16 +77,12 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
     globalKey = GlobalKey<State>();
     _tooltipBehavior = TooltipBehavior(
         enable: true,
+        color: widget.tooltipBackgroundColor,
         //canShowMarker: false,
         builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
             int seriesIndex) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "${getLabelFormatForToolTip(allSleepData[pointIndex].sleepBedTime.toString())} - ${getLabelFormatForToolTip(allSleepData[pointIndex].wakeUpTime.toString())}",
-              style: const TextStyle(color: Colors.white, fontSize: 10),
-            ),
-          );
+          return tooltipView(
+              "${getLabelFormatForToolTip(allSleepData[pointIndex].sleepBedTime.toString())} - ${getLabelFormatForToolTip(allSleepData[pointIndex].wakeUpTime.toString())}");
         });
     _zoomPanBehavior = ZoomPanBehavior(
       enablePanning: true,
@@ -226,7 +226,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
   }
 
   String getLabelFormat(String value) {
-    printLogs("value $value");
+    //printLogs("value $value");
     double realValue = double.parse(value);
     if (realValue > 24) {
       int nextDay = realValue.toInt() - 23;
@@ -250,6 +250,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
             (ChartSeriesController<SleepData, String>? controller) {
           seriesController = controller;
         },
+        color: widget.graphColor,
         enableTooltip: true,
         xValueMapper: (SleepData sales, _) => sales.dateTime,
         lowValueMapper: (SleepData sales, _) => sales.sleepBedTime,
