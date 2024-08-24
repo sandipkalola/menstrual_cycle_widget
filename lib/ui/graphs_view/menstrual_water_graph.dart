@@ -97,7 +97,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
         await instance.getMinMaxDrinkWater(waterUnits: widget.waterUnits);
     minValue = minMaxTemp['min_value']!;
     maxValue = minMaxTemp['max_value']!;
-    printLogs("minValue $minValue");
+    //printLogs("minValue $minValue");
     if (minValue < 0) {
       minValue = 0;
     }
@@ -112,20 +112,20 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       isLastRecord = true;
     }
 
-    waterUnitLbl = "Liters";
+    waterUnitLbl = Strings.graphWaterUnitLiter;
     WaterUnits waterUnits = widget.waterUnits!;
     if (waterUnits == WaterUnits.liters) {
-      waterUnitLbl = "Liters";
+      waterUnitLbl = Strings.graphWaterUnitLiter;
     } else if (waterUnits == WaterUnits.cups) {
-      waterUnitLbl = "Cups";
+      waterUnitLbl = Strings.graphWaterUnitCup;
     } else if (waterUnits == WaterUnits.flOz) {
-      waterUnitLbl = "flOz";
+      waterUnitLbl = Strings.graphWaterUnitFlOz;
     } else if (waterUnits == WaterUnits.imperialGallons) {
-      waterUnitLbl = "Imperial Gallons";
+      waterUnitLbl = Strings.graphWaterUnitImperialGallons;
     } else if (waterUnits == WaterUnits.usGallon) {
-      waterUnitLbl = "US Gallon";
+      waterUnitLbl = Strings.graphWaterUnitUSGallon;
     } else if (waterUnits == WaterUnits.ml) {
-      waterUnitLbl = "ml";
+      waterUnitLbl = Strings.graphWaterUnitMl;
     }
 
     isGetData = true;

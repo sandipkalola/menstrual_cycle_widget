@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
-import '../model/body_temperature_data.dart';
+import '../model/meditation_data.dart';
 import 'graph_util.dart';
 
-class MenstrualBodyTemperatureGraph extends StatefulWidget {
+class MenstrualCycleMeditationGraph extends StatefulWidget {
   final String loadingText;
-  final BodyTemperatureUnits? bodyTemperatureUnits;
+  final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
   final Function? onDownloadImagePath;
   final Function? onDownloadPdfPath;
@@ -18,26 +17,21 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
   final TextStyle yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
-  final Color topGraphColor;
-  final Color centerGraphColor;
   final Color tooltipBackgroundColor;
+  final Color graphColor;
 
-  final Color bottomGraphColor;
-
-  const MenstrualBodyTemperatureGraph(
+  const MenstrualCycleMeditationGraph(
       {super.key,
-      this.bodyTemperatureUnits = BodyTemperatureUnits.celsius,
+      this.waterUnits = WaterUnits.liters,
       this.isShowMoreOptions = false,
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
       this.tooltipBackgroundColor = Colors.black,
-      this.yAxisTitle = Strings.graphBodyTempTitle,
+      this.yAxisTitle = Strings.graphMeditationTitle,
       this.onDownloadImagePath,
-      this.topGraphColor = Colors.red,
-      this.centerGraphColor = Colors.orange,
-      this.bottomGraphColor = Colors.yellow,
-      this.xAxisTitle = Strings.graphBodyTempDate,
+      this.xAxisTitle = Strings.graphMeditationDate,
+      this.graphColor = Colors.blue,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
@@ -45,15 +39,15 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
       this.onDownloadPdfPath});
 
   @override
-  State<MenstrualBodyTemperatureGraph> createState() =>
-      _MenstrualBodyTemperatureGraphState();
+  State<MenstrualCycleMeditationGraph> createState() =>
+      _MenstrualCycleMeditationGraphState();
 }
 
-class _MenstrualBodyTemperatureGraphState
-    extends State<MenstrualBodyTemperatureGraph> {
-  ChartSeriesController<BodyTemperatureData, String>? seriesController;
+class _MenstrualCycleMeditationGraphState
+    extends State<MenstrualCycleMeditationGraph> {
+  ChartSeriesController<MeditationData, String>? seriesController;
 
-  List<BodyTemperatureData> allBodyTemperatureData = [];
+  List<MeditationData> allMeditationData = [];
   late GlobalKey<SfCartesianChartState> _chartKey;
   late bool isLoadMoreView, isNeedToUpdateView, isDataUpdated;
   num? oldAxisVisibleMin, oldAxisVisibleMax;
@@ -63,9 +57,9 @@ class _MenstrualBodyTemperatureGraphState
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String tempUnit = "C";
+  String minUnitLbl = Strings.graphMeditationMin;
   TooltipBehavior? _tooltipBehavior;
-  String fileName = "Body_temperature_graph_";
+  String fileName = "Meditation_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
 
@@ -84,12 +78,12 @@ class _MenstrualBodyTemperatureGraphState
     globalKey = GlobalKey<State>();
     _tooltipBehavior = TooltipBehavior(
         enable: true,
-        color: widget.tooltipBackgroundColor,
         canShowMarker: false,
+        color: widget.tooltipBackgroundColor,
         builder: (dynamic data, dynamic point, dynamic series, int pointIndex,
             int seriesIndex) {
-          return tooltipView(
-              "${allBodyTemperatureData[pointIndex].bodyTemperature} °$tempUnit");
+          return tooltipView(convertMinutesToHours(
+              allMeditationData[pointIndex].meditationMin!));
         });
     _zoomPanBehavior = ZoomPanBehavior(
       enablePanning: true,
@@ -101,36 +95,25 @@ class _MenstrualBodyTemperatureGraphState
 
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    Map<String, int> minMaxTemp = await instance.getMinMaxBodyTemperature(
-        bodyTemperatureUnits: widget.bodyTemperatureUnits);
-    minValue = minMaxTemp['min_temp']! - 2;
-    maxValue = minMaxTemp['max_temp']! + 1;
-
-    if (minValue < 0) {
-      minValue = 0;
-    }
-
-    allBodyTemperatureData = await instance.getTemperatureLog(
+    Map<String, double> minMaxTime = await instance.getMinMaxMeditationTime();
+    minValue = minMaxTime['min_value']!;
+    maxValue = minMaxTime['max_value']!;
+    maxValue = maxValue + 20;
+    allMeditationData = await instance.getMeditationLog(
         startDate: DateTime.now().add(const Duration(days: -1000)),
         endDate: DateTime.now(),
-        bodyTemperatureUnits: widget.bodyTemperatureUnits,
         pageNumber: pageNumber,
         itemsPerPage: itemsPerPage);
-    if (allBodyTemperatureData.length < 7) {
+    if (allMeditationData.length < 7) {
       isLastRecord = true;
     }
-
-    tempUnit = (widget.bodyTemperatureUnits.toString() ==
-            BodyTemperatureUnits.celsius.toString())
-        ? "C"
-        : "F";
     isGetData = true;
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    if (allBodyTemperatureData.isNotEmpty) {
+    if (allMeditationData.isNotEmpty) {
       return Stack(children: [
         _buildBodyTemperatureView(),
         (widget.isShowMoreOptions)
@@ -188,15 +171,15 @@ class _MenstrualBodyTemperatureGraphState
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
-          labelFormat: '{value} °$tempUnit',
-          minimum: minValue,
+          labelFormat: '{value} ${Strings.graphMeditationMinTitle}',
+          minimum: 1,
           maximum: maxValue,
-          interval: 1,
+          interval: 60,
           axisLine: const AxisLine(width: 0),
           labelStyle: widget.yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
-                  text: widget.yAxisTitle,
+                  text: "${widget.yAxisTitle} ($minUnitLbl)",
                   textStyle: widget.yAxisTitleTextStyle,
                 )
               : const AxisTitle(
@@ -212,30 +195,18 @@ class _MenstrualBodyTemperatureGraphState
   }
 
   /// The method returns line series to chart.
-  List<CartesianSeries<BodyTemperatureData, String>>
-      _getGradientComparisonSeries() {
-    return <CartesianSeries<BodyTemperatureData, String>>[
-      ColumnSeries<BodyTemperatureData, String>(
-        dataSource: allBodyTemperatureData,
-        onCreateShader: (ShaderDetails details) {
-          return ui.Gradient.linear(
-              details.rect.topCenter, details.rect.bottomCenter, <Color>[
-            widget.topGraphColor,
-            widget.centerGraphColor,
-            widget.bottomGraphColor
-          ], <double>[
-            0.3,
-            0.6,
-            0.9
-          ]);
-        },
+  List<CartesianSeries<MeditationData, String>> _getGradientComparisonSeries() {
+    return <CartesianSeries<MeditationData, String>>[
+      ColumnSeries<MeditationData, String>(
+        dataSource: allMeditationData,
+        color: widget.graphColor,
         onRendererCreated:
-            (ChartSeriesController<BodyTemperatureData, String>? controller) {
+            (ChartSeriesController<MeditationData, String>? controller) {
           seriesController = controller;
         },
-        name: Strings.lblBodyTemp,
-        xValueMapper: (BodyTemperatureData sales, _) => sales.dateTime,
-        yValueMapper: (BodyTemperatureData sales, _) => sales.bodyTemperature,
+        name: minUnitLbl,
+        xValueMapper: (MeditationData sales, _) => sales.dateTime,
+        yValueMapper: (MeditationData sales, _) => sales.meditationMin,
         animationDuration: 0,
         dataLabelSettings:
             const DataLabelSettings(isVisible: false, offset: Offset(0, -5)),
@@ -283,20 +254,18 @@ class _MenstrualBodyTemperatureGraphState
 
   void _updateData() async {
     final instance = MenstrualCycleWidget.instance!;
-    List<BodyTemperatureData> bodyTemperatureData =
-        await instance.getTemperatureLog(
-            startDate: DateTime.now().add(const Duration(days: -1000)),
-            endDate: DateTime.now(),
-            bodyTemperatureUnits: widget.bodyTemperatureUnits,
-            pageNumber: pageNumber,
-            itemsPerPage: itemsPerPage);
-    if (bodyTemperatureData.isEmpty) {
+    List<MeditationData> meditationDataLog = await instance.getMeditationLog(
+        startDate: DateTime.now().add(const Duration(days: -1000)),
+        endDate: DateTime.now(),
+        pageNumber: pageNumber,
+        itemsPerPage: itemsPerPage);
+    if (meditationDataLog.isEmpty) {
       isLastRecord = true;
     }
-    allBodyTemperatureData.addAll(bodyTemperatureData);
+    allMeditationData.addAll(meditationDataLog);
     isLoadMoreView = true;
     seriesController?.updateDataSource(
-        addedDataIndexes: getIndexes(bodyTemperatureData.length));
+        addedDataIndexes: getIndexes(meditationDataLog.length));
   }
 
   Widget getProgressIndicator() {
@@ -306,7 +275,7 @@ class _MenstrualBodyTemperatureGraphState
   List<int> getIndexes(int length) {
     final List<int> indexes = <int>[];
     for (int i = length - 1; i >= 0; i--) {
-      indexes.add(allBodyTemperatureData.length - 1 - i);
+      indexes.add(allMeditationData.length - 1 - i);
     }
     return indexes;
   }

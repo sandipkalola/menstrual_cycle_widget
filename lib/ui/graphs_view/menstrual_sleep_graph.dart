@@ -210,19 +210,19 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
     String min = (int.parse(timeFormat[1]) > 9)
         ? "${int.parse(timeFormat[1])}"
         : "0${int.parse(timeFormat[1])}";
-    printLogs("value $value");
+    // printLogs("value $value");
     double realValue = double.parse(timeFormat[0]);
     if (realValue > 24) {
       int nextDay = realValue.toInt() - 23;
       if (nextDay > 12) {
-        return "$nextDay:$min PM";
+        return "$nextDay:$min ${Strings.lblSleepPm}";
       }
-      return "$nextDay:$min AM";
+      return "$nextDay:$min ${Strings.lblSleepAm}";
     }
     if (realValue > 12) {
-      return "${realValue.toInt()}:$min PM";
+      return "${realValue.toInt()}:$min ${Strings.lblSleepPm}";
     }
-    return "${realValue.toInt()}:$min AM";
+    return "${realValue.toInt()}:$min ${Strings.lblSleepAm}";
   }
 
   String getLabelFormat(String value) {
@@ -231,14 +231,14 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
     if (realValue > 24) {
       int nextDay = realValue.toInt() - 23;
       if (nextDay > 12) {
-        return "$nextDay PM";
+        return "$nextDay ${Strings.lblSleepPm}";
       }
-      return "$nextDay AM";
+      return "$nextDay ${Strings.lblSleepAm}";
     }
     if (realValue > 12) {
-      return "${realValue.toInt()} PM";
+      return "${realValue.toInt()} ${Strings.lblSleepPm}";
     }
-    return "${realValue.toInt()} AM";
+    return "${realValue.toInt()} ${Strings.lblSleepAm}";
   }
 
   /// The method returns line series to chart.

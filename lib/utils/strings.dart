@@ -66,6 +66,11 @@ class Strings {
       "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
   static const String errorInvalidSymptomsLogDate =
       "Invalid symptoms log date. Date format is yyyy-MM-dd";
+  static const String graphCycleTitle = "Cycle History";
+  static const String graphCycleDaysPeriod = "days period";
+  static const String graphCycleDaysCycle = "days cycle";
+  static const String graphCycleNowTitle = "Now";
+  static const String graphCycleViewAllTitle = "View All";
   static const String graphCycleStartDate = "Cycle start date";
   static const String loading = "Loading...";
   static const String graphCycleTrends = "Cycle trends";
@@ -94,6 +99,8 @@ class Strings {
   static const String lblBodyTemp = "Body Temperature";
   static const String lblBodyTempTitle = "Log body temperature";
   static const String lblSleep = "Sleep";
+  static const String lblSleepAm = "AM";
+  static const String lblSleepPm = "PM";
   static const String lblSleepTitle = "Log your sleep time";
   static const String lblMeditation = "Meditation";
   static const String lblMeditationTitle = "Log your meditation time";
@@ -123,4 +130,19 @@ class Strings {
   static const String categorySupplements = "Supplements";
   static const String categoryUrine = "Urine";
   static const String categoryOther = "Other";
+  static const String graphMeditationTitle = "Meditation time";
+  static const String graphMeditationDate = "Meditation date";
+  static const String graphMeditationMin = "in minutes";
+  static const String graphMeditationMinTitle = "min";
+  static const String graphWaterUnitCup = "Cups";
+  static const String graphWaterUnitFlOz = "flOz";
+  static const String graphWaterUnitImperialGallons = "Imperial Gallons";
+  static const String graphWaterUnitUSGallon = "US Gallon";
+  static const String graphWaterUnitMl = "ml";
+  static const String graphWeightKg = "kg";
+  static const String graphWeighLb = "lb";
+  static const String logPeriodBedtime = "Bedtime";
+  static const String logPeriodWakeUpTime = "Wake-up time";
+  static const String logPeriodWakeUpTimeLog = "Log your wake-up time";
+  static const String logPeriodBedTimeLog = " Log your bedtime";
 }

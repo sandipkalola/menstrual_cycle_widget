@@ -11,7 +11,7 @@ class MenstrualAllCycleHistoryGraph extends StatefulWidget {
 
   const MenstrualAllCycleHistoryGraph({
     super.key,
-    this.headerTitle = "Cycle History",
+    this.headerTitle = Strings.graphCycleTitle,
     this.loadingText = Strings.loading,
     this.appBarBackgroundColor = Colors.blueAccent,
     this.headerTitleTextStyle = const TextStyle(
@@ -86,7 +86,7 @@ class _MenstrualAllCycleHistoryGraphState
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       )
                     : Text(
-                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - Now",
+                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${Strings.graphCycleNowTitle}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                 Padding(
@@ -116,7 +116,7 @@ class _MenstrualAllCycleHistoryGraphState
                   ),
                 ),
                 Text(
-                  "${allPeriodRange[index].periodDuration!} days period , ${allPeriodRange[index].cycleDuration!} days cycle",
+                  "${allPeriodRange[index].periodDuration!} ${Strings.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleDuration!} ${Strings.graphCycleDaysCycle}",
                   style:
                       const TextStyle(color: Color(0xA6212121), fontSize: 10),
                 ),

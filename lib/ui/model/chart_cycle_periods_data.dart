@@ -1,5 +1,9 @@
 class ChartCyclePeriodsData {
-  ChartCyclePeriodsData({this.dateTime, this.cycleLength, this.periodsLength});
+  ChartCyclePeriodsData({
+    this.dateTime,
+    this.cycleLength,
+    this.periodsLength,
+  });
 
   String? dateTime;
   int? cycleLength;

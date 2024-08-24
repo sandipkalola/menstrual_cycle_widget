@@ -9,3 +9,4 @@ export 'graphs_view/menstrual_body_temperature_graph.dart';
 export 'graphs_view/menstrual_water_graph.dart';
 export 'graphs_view/menstrual_sleep_graph.dart';
 export 'graphs_view/menstrual_weight_graph.dart';
+export 'graphs_view/menstrual_meditation_graph.dart';

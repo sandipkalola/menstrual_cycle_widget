@@ -633,12 +633,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Bedtime",
+                    Strings.logPeriodBedtime,
                     style: TextStyle(fontSize: 15, color: Colors.black),
                   ),
                   SizedBox(),
                   Text(
-                    "Wake-up time",
+                    Strings.logPeriodWakeUpTime,
                     style: TextStyle(fontSize: 15, color: Colors.black),
                   )
                 ],
@@ -982,7 +982,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               type: "",
                               onClick: saveSleepWackUpLog,
                               childView: _buildSleepPicker(isWakeUpTime: true),
-                              title: "Log your wake-up time");
+                              title: Strings.logPeriodWakeUpTimeLog);
                         },
                         onStartTimeClick: () {
                           _showBottomSheetView(
@@ -990,7 +990,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               type: "",
                               onClick: saveSleepLog,
                               childView: _buildSleepPicker(),
-                              title: " Log your bedtime");
+                              title: Strings.logPeriodBedTimeLog);
                         },
                         onRemoveClick: () {},
                         removeIcon: const Icon(

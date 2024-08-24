@@ -6,6 +6,7 @@ import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
+import 'ui/model/meditation_data.dart';
 import 'ui/model/sleep_data.dart';
 import 'ui/model/water_data.dart';
 import 'ui/model/weight_data.dart';
@@ -293,10 +294,10 @@ class MenstrualCycleWidget {
   /// get user's wight logs
   Future<List<WeightData>> getWeightLog(
       {required DateTime? startDate,
-        required DateTime? endDate,
-        WeightUnits? weightUnits = WeightUnits.kg,
-        int pageNumber = 1,
-        int itemsPerPage = 7}) async {
+      required DateTime? endDate,
+      WeightUnits? weightUnits = WeightUnits.kg,
+      int pageNumber = 1,
+      int itemsPerPage = 7}) async {
     List<WeightData> weightDataListData = [];
 
     List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
@@ -319,13 +320,11 @@ class MenstrualCycleWidget {
         if (logReportData.weightUnit == weightUnits.toString()) {
           weight = weightValue;
         } else {
-
-            if (logReportData.weightUnit == WeightUnits.kg.toString()) {
-              weight = convertLbToKg(weightValue);
-            } else if (logReportData.weightUnit == WeightUnits.lb.toString()) {
-              weight = convertKgToLb(weightValue);
-            }
-
+          if (logReportData.weightUnit == WeightUnits.kg.toString()) {
+            weight = convertLbToKg(weightValue);
+          } else if (logReportData.weightUnit == WeightUnits.lb.toString()) {
+            weight = convertKgToLb(weightValue);
+          }
         }
         //printLogs("weight =====$weight");
         weightData.weightValue = weight;
@@ -338,6 +337,71 @@ class MenstrualCycleWidget {
     }
     //  printLogs("waterDataListData ${waterDataListData.length}");
     return weightDataListData;
+  }
+
+  /// Get meditation time current user
+  Future<Map<String, double>> getMinMaxMeditationTime() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    double minValue = 0;
+    double maxValue = 0;
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+
+    List.generate(queryResponse.length, (i) {
+      double meditationTime = double.parse(Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]));
+      if (meditationTime > 0) {
+        if (minValue == 0) {
+          minValue = meditationTime;
+        }
+        if (meditationTime > 0) {
+          if (minValue >= meditationTime) {
+            minValue = meditationTime;
+          }
+          if (maxValue <= meditationTime) {
+            maxValue = meditationTime;
+          }
+        }
+      }
+    });
+
+    return {
+      'min_value': minValue,
+      'max_value': maxValue,
+    };
+  }
+
+  /// get user's meditation logs
+  Future<List<MeditationData>> getMeditationLog(
+      {required DateTime? startDate,
+      required DateTime? endDate,
+      int pageNumber = 1,
+      int itemsPerPage = 7}) async {
+    List<MeditationData> meditationDataListData = [];
+
+    List<UserLogReportData> usersLogDataList = await getSymptomsLogReport(
+        startDate: startDate,
+        endDate: endDate,
+        isRequiredPagination: true,
+        itemsPerPage: itemsPerPage,
+        pageNumber: pageNumber);
+    for (int i = 0; i < usersLogDataList.length; i++) {
+      MeditationData meditationData = MeditationData();
+      UserLogReportData logReportData = usersLogDataList[i];
+      int meditationValue = int.parse(logReportData.meditationTime!);
+      if (meditationValue > 0) {
+        meditationData.dateTime =
+            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+        meditationData.meditationMin = meditationValue;
+        meditationDataListData.add(meditationData);
+      }
+    }
+    //  printLogs("waterDataListData ${waterDataListData.length}");
+    return meditationDataListData;
   }
 
   /// Get min and max drink water of current user
@@ -531,13 +595,13 @@ class MenstrualCycleWidget {
       sleepData.wakeUpTime =
           double.parse("$sleepWakeUpTimeHrs.$sleepWakeUpTimeMin");
 
-       /*printLogs("sleepBedTime ${sleepData.sleepBedTime}");
+      /*printLogs("sleepBedTime ${sleepData.sleepBedTime}");
        printLogs("wakeUpTime ${sleepData.wakeUpTime}");*/
 
       sleepData.dateTime =
           CalenderDateUtils.dateWithYear(logReportData.logDate!);
 
-      if(sleepData.sleepBedTime! > 0){
+      if (sleepData.sleepBedTime! > 0) {
         sleepListData.add(sleepData);
       }
     }

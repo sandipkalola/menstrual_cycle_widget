@@ -1,5 +1,9 @@
 class SleepData {
-  SleepData({this.dateTime, this.sleepBedTime, this.wakeUpTime});
+  SleepData({
+    this.dateTime,
+    this.sleepBedTime,
+    this.wakeUpTime,
+  });
 
   String? dateTime;
   double? sleepBedTime;

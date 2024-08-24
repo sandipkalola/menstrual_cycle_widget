@@ -113,12 +113,12 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
       isLastRecord = true;
     }
 
-    weightUnitLbl = "kg";
+    weightUnitLbl = Strings.graphWeightKg;
     WeightUnits weightUnits = widget.weightUnits!;
     if (weightUnits == WeightUnits.kg) {
-      weightUnitLbl = "kg";
+      weightUnitLbl = Strings.graphWeightKg;
     } else if (weightUnits == WeightUnits.lb) {
-      weightUnitLbl = "lb";
+      weightUnitLbl = Strings.graphWeighLb;
     }
 
     isGetData = true;
