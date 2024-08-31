@@ -35,3 +35,9 @@ enum WeightUnits {
   kg,
   lb,
 }
+
+enum Languages {
+  english,
+  hindi,
+  arabic
+}

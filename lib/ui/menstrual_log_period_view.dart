@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
 import 'model/display_symptoms_data.dart';
 import 'model/log_report.dart';
@@ -15,7 +16,9 @@ class MenstrualLogPeriodView extends StatefulWidget {
   bool? isRequiredWeightView;
   bool? isRequiredSleepView;
   DisplaySymptomsData? displaySymptomsData;
+  bool? isShowCustomSymptomsOnly;
   bool? isRequiredMeditationView;
+  List<SymptomsCategory>? customSymptomsList;
 
   MenstrualLogPeriodView(
       {super.key,
@@ -26,6 +29,8 @@ class MenstrualLogPeriodView extends StatefulWidget {
       this.isRequiredWaterView = true,
       this.isRequiredBodyTemperatureView = true,
       this.isRequiredMeditationView = true,
+      this.isShowCustomSymptomsOnly = false,
+      this.customSymptomsList,
       this.isRequiredSleepView = true,
       this.isRequiredWeightView = true});
 
@@ -34,7 +39,7 @@ class MenstrualLogPeriodView extends StatefulWidget {
 }
 
 class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
-  List<Symptoms> symptomsList = [];
+  List<SymptomsCategory> symptomsList = [];
   final dbHelper = MenstrualCycleDbHelper.instance;
   final mInstance = MenstrualCycleWidget.instance!;
 
@@ -59,10 +64,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   /// Regenerate list for symptoms data
   regenerateData() {
     for (int index = 0; index < defaultSymptomsData.length; index++) {
-      Symptoms defaultData = defaultSymptomsData[index];
+      SymptomsCategory defaultData = defaultSymptomsData[index];
       bool isVisible = isVisibleSymptoms(defaultData.categoryName!);
       if (isVisible) {
-        Symptoms symptoms = Symptoms(symptomsData: []);
+        SymptomsCategory symptoms = SymptomsCategory(symptomsData: []);
         symptoms.categoryId = defaultData.categoryId;
         symptoms.categoryName = defaultData.categoryName;
         symptoms.categoryColor = defaultData.categoryColor;
@@ -97,7 +102,13 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     }
 
     currentDate = currentDateFormat.format(DateTime.now());
-    regenerateData();
+    if (widget.isShowCustomSymptomsOnly! == false) {
+      regenerateData();
+    }
+    if (widget.customSymptomsList != null &&
+        widget.customSymptomsList!.isNotEmpty) {
+      symptomsList.addAll(widget.customSymptomsList!);
+    }
     setState(() {
       isLoading = false;
     });
@@ -825,89 +836,82 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     ),
                   ],
                 ),
-                (isLoading)
-                    ? const SizedBox(
-                        height: 150,
-                        child: Center(child: CircularProgressIndicator()),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(8),
-                        shrinkWrap: true,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: symptomsList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return Card(
-                            color: Colors.white,
-                            elevation: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "${symptomsList[index].categoryName}",
-                                    style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Wrap(
-                                      children: symptomsList[index]
-                                          .symptomsData!
-                                          .map((chip) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(right: 3),
-                                      child: Stack(
-                                        alignment: Alignment.bottomRight,
-                                        children: [
-                                          FilterChip(
-                                            shape: const RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(50),
-                                              ),
-                                            ),
-                                            key: ValueKey(chip),
-                                            side: chip.isSelected
-                                                ? BorderSide(
-                                                    color: Color(
-                                                      int.parse(
-                                                          "0xff${symptomsList[index].categoryColor}"),
-                                                    ),
-                                                  )
-                                                : BorderSide.none,
-                                            label: Text("${chip.symptomName}"),
-                                            padding: const EdgeInsets.all(1),
-                                            backgroundColor: chip.isSelected
-                                                ? Colors.white
-                                                : Color(
-                                                    int.parse(
-                                                        "0x0D${symptomsList[index].categoryColor}"),
-                                                  ),
-                                            onSelected: (bool value) {
-                                              setState(() {
-                                                chip.isSelected =
-                                                    !chip.isSelected;
-                                              });
-                                            },
-                                          ),
-                                          (chip.isSelected)
-                                              ? Icon(Icons.check_circle_rounded,
-                                                  color: Color(
-                                                    int.parse(
-                                                        "0xff${symptomsList[index].categoryColor}"),
-                                                  ),
-                                                  size: 16)
-                                              : const SizedBox(),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList()),
-                                ],
-                              ),
+                ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: symptomsList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Card(
+                      color: Colors.white,
+                      elevation: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${symptomsList[index].categoryName}",
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                          );
-                        },
+                            Wrap(
+                                children: symptomsList[index]
+                                    .symptomsData!
+                                    .map((chip) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 3),
+                                child: Stack(
+                                  alignment: Alignment.bottomRight,
+                                  children: [
+                                    FilterChip(
+                                      shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(50),
+                                        ),
+                                      ),
+                                      key: ValueKey(chip),
+                                      side: chip.isSelected
+                                          ? BorderSide(
+                                              color: Color(
+                                                int.parse(
+                                                    "0xff${symptomsList[index].categoryColor}"),
+                                              ),
+                                            )
+                                          : BorderSide.none,
+                                      label: Text("${chip.symptomName}"),
+                                      padding: const EdgeInsets.all(1),
+                                      backgroundColor: chip.isSelected
+                                          ? Colors.white
+                                          : Color(
+                                              int.parse(
+                                                  "0x0D${symptomsList[index].categoryColor}"),
+                                            ),
+                                      onSelected: (bool value) {
+                                        setState(() {
+                                          chip.isSelected = !chip.isSelected;
+                                        });
+                                      },
+                                    ),
+                                    (chip.isSelected)
+                                        ? Icon(Icons.check_circle_rounded,
+                                            color: Color(
+                                              int.parse(
+                                                  "0xff${symptomsList[index].categoryColor}"),
+                                            ),
+                                            size: 16)
+                                        : const SizedBox(),
+                                  ],
+                                ),
+                              );
+                            }).toList()),
+                          ],
+                        ),
                       ),
+                    );
+                  },
+                ),
                 (widget.isRequiredWeightView!)
                     ? logView(
                         title: Strings.lblWeight,
@@ -1068,10 +1072,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                       ),
                     ),
                     margin: const EdgeInsets.all(10),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        Strings.saveLogs,
-                        style: TextStyle(
+                        BaseLanguage.saveLogs,
+                        style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ),

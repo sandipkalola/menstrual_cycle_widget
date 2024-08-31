@@ -36,6 +36,9 @@ class MenstrualCycleWidget {
   // customer id for storing date
   String _customerId = "0"; // Default is Zero
 
+  // Current language
+  static Languages currentLanguage = Languages.english;
+
   static MenstrualCycleWidget? instance;
 
   // Return previous period day into string
@@ -54,8 +57,10 @@ class MenstrualCycleWidget {
   MenstrualCycleWidget._();
 
   /// Initialize MenstrualCycleWidget
-  static MenstrualCycleWidget init(
-      {required String? secretKey, required String? ivKey}) {
+  static MenstrualCycleWidget init({
+    required String? secretKey,
+    required String? ivKey,
+  }) {
     assert(secretKey!.isNotEmpty, Strings.secretKeyLabel);
     assert(ivKey!.isNotEmpty, Strings.ivKeyLabel);
     MenstrualCycleWidget.instance ??= MenstrualCycleWidget._();
@@ -64,10 +69,12 @@ class MenstrualCycleWidget {
     return MenstrualCycleWidget.instance!;
   }
 
-  void initialize({required String secretKey, required String ivKey}) {
+  void initialize({
+    required String secretKey,
+    required String ivKey,
+  }) {
     _aesSecretKey = secretKey;
     _aesIvKey = ivKey;
-
     // get current user details
     MenstrualCycleDbHelper.instance.setCurrentUserDetail();
   }
@@ -78,13 +85,15 @@ class MenstrualCycleWidget {
       required int? periodDuration,
       String? customerId = "0",
       DateTime? lastPeriodDate,
-      bool isClearData = false}) async {
+      bool isClearData = false,
+      Languages defaultLanguage = Languages.english}) async {
     assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
     assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
     // printLogs("userId $userId");
     if (customerId!.isNotEmpty) {
       _customerId = customerId;
     }
+    currentLanguage = defaultLanguage;
     _cycleLength = cycleLength!;
     _periodDuration = periodDuration!;
     final dbHelper = MenstrualCycleDbHelper.instance;

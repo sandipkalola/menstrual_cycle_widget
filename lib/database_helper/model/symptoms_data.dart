@@ -1,11 +1,11 @@
-class Symptoms {
+class SymptomsCategory {
   int? categoryId;
   int? isVisibleCategory;
   String? categoryName;
   String? categoryColor;
   List<SymptomsData>? symptomsData;
 
-  Symptoms({
+  SymptomsCategory({
     this.categoryId = 0,
     this.categoryName,
     this.symptomsData,
@@ -13,7 +13,7 @@ class Symptoms {
     this.isVisibleCategory = 1,
   });
 
-  Symptoms.fromJson(Map<String, dynamic> json) {
+  SymptomsCategory.fromJson(Map<String, dynamic> json) {
     categoryId = json['categoryId'];
     isVisibleCategory = json['isVisibleCategory'];
     categoryName = json['categoryName'];

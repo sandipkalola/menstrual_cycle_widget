@@ -1,0 +1,1 @@
+const String enSaveLogs = "Apply";
