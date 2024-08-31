@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -153,11 +152,6 @@ class MenstrualCycleWidget {
 
   /// ----------------------- Custom Functions -----------------------///
 
-  String next(int min, int max) {
-    final random = Random();
-    return "${min + random.nextInt(max - min)}";
-  }
-
   /// insert user's period data on userId and log date
   saveSymptomsLogs({
     required List<SymptomsData>? userSymptomsData,
@@ -242,6 +236,28 @@ class MenstrualCycleWidget {
         onError.call();
       }
     }
+  }
+
+  /// Return SymptomsData based on log date
+  Future<List<SymptomsData>> getSymptomsData(String logDate) async {
+    final mInstance = MenstrualCycleWidget.instance!;
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    String customerId = mInstance.getCustomerId();
+    List<SymptomsData> symptomsDataList = [];
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnLogDate}='$logDate' AND ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+    List.generate(queryResponse.length, (i) {
+      String userDecryptData = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
+
+      //printLogs("userDecryptData $userDecryptData");
+      List<dynamic> jsonData = json.decode(userDecryptData.trim());
+      symptomsDataList.addAll(
+          jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList());
+    });
+    return symptomsDataList;
   }
 
   /// get Today's symptoms logs

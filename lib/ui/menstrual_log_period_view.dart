@@ -40,6 +40,8 @@ class MenstrualLogPeriodView extends StatefulWidget {
 
 class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   List<SymptomsCategory> symptomsList = [];
+  List<SymptomsData> existingSymptomsList = [];
+
   final dbHelper = MenstrualCycleDbHelper.instance;
   final mInstance = MenstrualCycleWidget.instance!;
 
@@ -80,7 +82,18 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           SymptomsData symptomsData = SymptomsData();
           symptomsData.symptomName = deSymptomsData.symptomName;
           symptomsData.symptomId = deSymptomsData.symptomId;
-          symptomsData.isSelected = false;
+          bool isSelected = false;
+          // Check if found into existing list {
+          for (int sListIndex = 0;
+              sListIndex < existingSymptomsList.length;
+              sListIndex++) {
+            if (existingSymptomsList[sListIndex].symptomId ==
+                deSymptomsData.symptomId) {
+              isSelected = true;
+              break;
+            }
+          }
+          symptomsData.isSelected = isSelected;
           listSymptomsData.add(symptomsData);
         }
         symptoms.symptomsData!.addAll(listSymptomsData);
@@ -100,7 +113,8 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         throw Strings.errorInvalidSymptomsDate;
       }
     }
-
+    existingSymptomsList = await mInstance.getSymptomsData(logDate);
+    //printLogs("existingSymptomsList ${existingSymptomsList.length}");
     currentDate = currentDateFormat.format(DateTime.now());
     if (widget.isShowCustomSymptomsOnly! == false) {
       regenerateData();
