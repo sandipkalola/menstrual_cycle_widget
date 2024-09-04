@@ -2,7 +2,7 @@ import 'package:intl/intl.dart';
 
 import '../menstrual_cycle_widget.dart';
 
-// Last Id is:
+// Last Id is: 21129
 /// Default symptoms data
 List<SymptomsCategory> defaultSymptomsData = [
   SymptomsCategory(
@@ -152,17 +152,17 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryActivity,
     categoryColor: "8B0000",
     symptomsData: [
-      SymptomsData(symptomName: "Yoga", symptomId: 21034),
-      SymptomsData(symptomName: "Running", symptomId: 21034),
-      SymptomsData(symptomName: "Gym", symptomId: 21034),
-      SymptomsData(symptomName: "Swimming", symptomId: 21034),
-      SymptomsData(symptomName: "Cycling", symptomId: 21034),
-      SymptomsData(symptomName: "Walking", symptomId: 21034),
-      SymptomsData(symptomName: "Pilates", symptomId: 21034),
-      SymptomsData(symptomName: "Strength training", symptomId: 21034),
-      SymptomsData(symptomName: "Stretching", symptomId: 21034),
-      SymptomsData(symptomName: "Rest day", symptomId: 21034),
-      SymptomsData(symptomName: "Meditation", symptomId: 21034),
+      SymptomsData(symptomName: "Yoga", symptomId: 21079),
+      SymptomsData(symptomName: "Running", symptomId: 21080),
+      SymptomsData(symptomName: "Gym", symptomId: 21081),
+      SymptomsData(symptomName: "Swimming", symptomId: 21082),
+      SymptomsData(symptomName: "Cycling", symptomId: 21083),
+      SymptomsData(symptomName: "Walking", symptomId: 21084),
+      SymptomsData(symptomName: "Pilates", symptomId: 21085),
+      SymptomsData(symptomName: "Strength training", symptomId: 21086),
+      SymptomsData(symptomName: "Stretching", symptomId: 21087),
+      SymptomsData(symptomName: "Rest day", symptomId: 21088),
+      SymptomsData(symptomName: "Meditation", symptomId: 21089),
     ],
   ),
   SymptomsCategory(
@@ -170,11 +170,11 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryCravings,
     categoryColor: "A52A2A",
     symptomsData: [
-      SymptomsData(symptomName: "Sweet", symptomId: 21034),
-      SymptomsData(symptomName: "Salty", symptomId: 21034),
-      SymptomsData(symptomName: "Greasy", symptomId: 21034),
-      SymptomsData(symptomName: "Spicy", symptomId: 21034),
-      SymptomsData(symptomName: "Carbs", symptomId: 21034),
+      SymptomsData(symptomName: "Sweet", symptomId: 21090),
+      SymptomsData(symptomName: "Salty", symptomId: 21091),
+      SymptomsData(symptomName: "Greasy", symptomId: 21092),
+      SymptomsData(symptomName: "Spicy", symptomId: 21093),
+      SymptomsData(symptomName: "Carbs", symptomId: 21094),
     ],
   ),
   SymptomsCategory(
@@ -182,9 +182,9 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryTests,
     categoryColor: "0000FF",
     symptomsData: [
-      SymptomsData(symptomName: "Don't take test", symptomId: 21034),
-      SymptomsData(symptomName: "Negative", symptomId: 21034),
-      SymptomsData(symptomName: "Positive", symptomId: 21034),
+      SymptomsData(symptomName: "Don't take test", symptomId: 21095),
+      SymptomsData(symptomName: "Negative", symptomId: 21096),
+      SymptomsData(symptomName: "Positive", symptomId: 21097),
     ],
   ),
   SymptomsCategory(
@@ -192,11 +192,11 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryAilments,
     categoryColor: "FFA500",
     symptomsData: [
-      SymptomsData(symptomName: "Cold or flu", symptomId: 21034),
-      SymptomsData(symptomName: "Allergy", symptomId: 21034),
-      SymptomsData(symptomName: "Fever", symptomId: 21034),
-      SymptomsData(symptomName: "UTI", symptomId: 21034),
-      SymptomsData(symptomName: "STI", symptomId: 21034),
+      SymptomsData(symptomName: "Cold or flu", symptomId: 21098),
+      SymptomsData(symptomName: "Allergy", symptomId: 21099),
+      SymptomsData(symptomName: "Fever", symptomId: 21100),
+      SymptomsData(symptomName: "UTI", symptomId: 21101),
+      SymptomsData(symptomName: "STI", symptomId: 21102),
     ],
   ),
   SymptomsCategory(
@@ -204,11 +204,11 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryAppointments,
     categoryColor: "800080",
     symptomsData: [
-      SymptomsData(symptomName: "GYN", symptomId: 21034),
-      SymptomsData(symptomName: "PAP smear", symptomId: 21034),
-      SymptomsData(symptomName: "STI check-up", symptomId: 21034),
-      SymptomsData(symptomName: "General check-up", symptomId: 21034),
-      SymptomsData(symptomName: "Vaccination", symptomId: 21034),
+      SymptomsData(symptomName: "GYN", symptomId: 21103),
+      SymptomsData(symptomName: "PAP smear", symptomId: 21104),
+      SymptomsData(symptomName: "STI check-up", symptomId: 21105),
+      SymptomsData(symptomName: "General check-up", symptomId: 21106),
+      SymptomsData(symptomName: "Vaccination", symptomId: 21107),
     ],
   ),
   SymptomsCategory(
@@ -216,11 +216,11 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryBirthControlPill,
     categoryColor: "0000FF",
     symptomsData: [
-      SymptomsData(symptomName: "Taken", symptomId: 21034),
-      SymptomsData(symptomName: "Missed", symptomId: 21034),
-      SymptomsData(symptomName: "Late", symptomId: 21034),
-      SymptomsData(symptomName: "Double dose", symptomId: 21034),
-      SymptomsData(symptomName: "Vaccination", symptomId: 21034),
+      SymptomsData(symptomName: "Taken", symptomId: 21108),
+      SymptomsData(symptomName: "Missed", symptomId: 21109),
+      SymptomsData(symptomName: "Late", symptomId: 21110),
+      SymptomsData(symptomName: "Double dose", symptomId: 21111),
+      SymptomsData(symptomName: "Vaccination", symptomId: 21112),
     ],
   ),
   SymptomsCategory(
@@ -228,9 +228,9 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryIUD,
     categoryColor: "FF0000",
     symptomsData: [
-      SymptomsData(symptomName: "Thread checked", symptomId: 21034),
-      SymptomsData(symptomName: "Inserted", symptomId: 21034),
-      SymptomsData(symptomName: "Removed", symptomId: 21034),
+      SymptomsData(symptomName: "Thread checked", symptomId: 21113),
+      SymptomsData(symptomName: "Inserted", symptomId: 21114),
+      SymptomsData(symptomName: "Removed", symptomId: 21115),
     ],
   ),
   SymptomsCategory(
@@ -238,13 +238,13 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categorySupplements,
     categoryColor: "8B0000",
     symptomsData: [
-      SymptomsData(symptomName: "Multivitamin", symptomId: 21034),
-      SymptomsData(symptomName: "Magnesium", symptomId: 21034),
-      SymptomsData(symptomName: "Iron", symptomId: 21034),
-      SymptomsData(symptomName: "Vitamin D", symptomId: 21034),
-      SymptomsData(symptomName: "Calcium", symptomId: 21034),
-      SymptomsData(symptomName: "Folic acid", symptomId: 21034),
-      SymptomsData(symptomName: "Prenatal vitamins", symptomId: 21034),
+      SymptomsData(symptomName: "Multivitamin", symptomId: 21116),
+      SymptomsData(symptomName: "Magnesium", symptomId: 21117),
+      SymptomsData(symptomName: "Iron", symptomId: 21118),
+      SymptomsData(symptomName: "Vitamin D", symptomId: 21119),
+      SymptomsData(symptomName: "Calcium", symptomId: 21120),
+      SymptomsData(symptomName: "Folic acid", symptomId: 21121),
+      SymptomsData(symptomName: "Prenatal vitamins", symptomId: 21122),
     ],
   ),
   SymptomsCategory(
@@ -252,9 +252,9 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryUrine,
     categoryColor: "0000FF",
     symptomsData: [
-      SymptomsData(symptomName: "Frequent urination", symptomId: 21034),
-      SymptomsData(symptomName: "Burning sensation", symptomId: 21034),
-      SymptomsData(symptomName: "Leaks or dribbles", symptomId: 21034),
+      SymptomsData(symptomName: "Frequent urination", symptomId: 21123),
+      SymptomsData(symptomName: "Burning sensation", symptomId: 21124),
+      SymptomsData(symptomName: "Leaks or dribbles", symptomId: 21125),
     ],
   ),
   SymptomsCategory(
@@ -262,10 +262,10 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryOther,
     categoryColor: "c336a7",
     symptomsData: [
-      SymptomsData(symptomName: "Travel", symptomId: 21034),
-      SymptomsData(symptomName: "Stress", symptomId: 21034),
-      SymptomsData(symptomName: "Alcohol", symptomId: 21034),
-      SymptomsData(symptomName: "Journaling", symptomId: 21034),
+      SymptomsData(symptomName: "Travel", symptomId: 21126),
+      SymptomsData(symptomName: "Stress", symptomId: 21127),
+      SymptomsData(symptomName: "Alcohol", symptomId: 21128),
+      SymptomsData(symptomName: "Journaling", symptomId: 21129),
     ],
   ),
 ];
