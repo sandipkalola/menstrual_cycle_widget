@@ -8,8 +8,8 @@ import 'graph_util.dart';
 class MenstrualSleepGraph extends StatefulWidget {
   final String loadingText;
   final bool isShowMoreOptions;
-  final Function? onDownloadImagePath;
-  final Function? onDownloadPdfPath;
+  final Function? onImageDownloadCallback;
+  final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
   final TextStyle xAxisTitleTextStyle;
@@ -31,14 +31,14 @@ class MenstrualSleepGraph extends StatefulWidget {
       this.isShowYAxisGridLine = false,
       this.isShowXAxisGridLine = false,
       this.yAxisTitle = Strings.graphSleepTitle,
-      this.onDownloadImagePath,
+      this.onImageDownloadCallback,
       this.graphColor = Colors.blue,
       this.xAxisTitle = Strings.graphSleepDate,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
-      this.onDownloadPdfPath});
+      this.onPdfDownloadCallback});
 
   @override
   State<MenstrualSleepGraph> createState() => _MenstrualSleepGraphState();
@@ -119,9 +119,9 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
-                onDownloadPdfPath: widget.onDownloadPdfPath,
+                onPdfDownloadCallback: widget.onPdfDownloadCallback,
                 globalKey: _chartKey,
-                onDownloadImagePath: widget.onDownloadImagePath)
+                onImageDownloadCallback: widget.onImageDownloadCallback)
             : const SizedBox(),
       ]);
     } else {

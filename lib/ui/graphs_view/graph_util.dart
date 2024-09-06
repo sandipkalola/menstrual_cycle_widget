@@ -73,8 +73,8 @@ Future<void> renderImage(
 
 /// Return option menu widget for graph view
 Widget getMenuWidget(
-    {Function? onDownloadImagePath,
-    Function? onDownloadPdfPath,
+    {Function? onImageDownloadCallback,
+    Function? onPdfDownloadCallback,
     String? fileName,
     GlobalKey<SfCartesianChartState>? globalKey}) {
   return Align(
@@ -100,13 +100,13 @@ Widget getMenuWidget(
           onPressed: () async {
             if (index == 0) {
               renderImage(
-                  onDownloadImagePath: onDownloadImagePath,
+                  onDownloadImagePath: onImageDownloadCallback,
                   globalKey: globalKey,
                   fileName: fileName);
             } else if (index == 1) {
               renderPdf(
                   globalKey: globalKey,
-                  onDownloadPdfPath: onDownloadPdfPath,
+                  onDownloadPdfPath: onPdfDownloadCallback,
                   fileName: fileName);
             }
           },

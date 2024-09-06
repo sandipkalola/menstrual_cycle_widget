@@ -9,8 +9,8 @@ class MenstrualWeightGraph extends StatefulWidget {
   final String loadingText;
   final WeightUnits? weightUnits;
   final bool isShowMoreOptions;
-  final Function? onDownloadImagePath;
-  final Function? onDownloadPdfPath;
+  final Function? onImageDownloadCallback;
+  final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
   final TextStyle xAxisTitleTextStyle;
@@ -28,7 +28,7 @@ class MenstrualWeightGraph extends StatefulWidget {
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
       this.yAxisTitle = Strings.graphWeightUnitTitle,
-      this.onDownloadImagePath,
+      this.onImageDownloadCallback,
       this.xAxisTitle = Strings.graphWeightLogDate,
       this.graphColor = Colors.blue,
       this.tooltipBackgroundColor = Colors.black,
@@ -36,7 +36,7 @@ class MenstrualWeightGraph extends StatefulWidget {
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
-      this.onDownloadPdfPath});
+      this.onPdfDownloadCallback});
 
   @override
   State<MenstrualWeightGraph> createState() => _MenstrualWeightGraphState();
@@ -133,9 +133,9 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
-                onDownloadPdfPath: widget.onDownloadPdfPath,
+                onPdfDownloadCallback: widget.onPdfDownloadCallback,
                 globalKey: _chartKey,
-                onDownloadImagePath: widget.onDownloadImagePath)
+                onImageDownloadCallback: widget.onImageDownloadCallback)
             : const SizedBox(),
       ]);
     } else {

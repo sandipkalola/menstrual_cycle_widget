@@ -22,8 +22,8 @@ class MenstrualCyclePeriodsGraph extends StatefulWidget {
   final String periodDaysTitle;
   final Color otherCycleDaysColor;
   final String otherCycleDaysTitle;
-  final Function? onDownloadImagePath;
-  final Function? onDownloadPdfPath;
+  final Function? onImageDownloadCallback;
+  final Function? onPdfDownloadCallback;
 
   const MenstrualCyclePeriodsGraph(
       {super.key,
@@ -45,8 +45,8 @@ class MenstrualCyclePeriodsGraph extends StatefulWidget {
       this.otherCycleDaysColor = defaultLutealPhaseColor,
       this.isShowMoreOptions = false,
       this.otherCycleDaysTitle = Strings.graphCycleOtherDay,
-      this.onDownloadImagePath,
-      this.onDownloadPdfPath});
+      this.onImageDownloadCallback,
+      this.onPdfDownloadCallback});
 
   @override
   State<MenstrualCyclePeriodsGraph> createState() =>
@@ -144,9 +144,9 @@ class _MenstrualCyclePeriodsGraphState
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
-                onDownloadPdfPath: widget.onDownloadPdfPath,
+                onPdfDownloadCallback: widget.onPdfDownloadCallback,
                 globalKey: _chartKey,
-                onDownloadImagePath: widget.onDownloadImagePath)
+                onImageDownloadCallback: widget.onImageDownloadCallback)
             : const SizedBox(),
       ]);
     } else {

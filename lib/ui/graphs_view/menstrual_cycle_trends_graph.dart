@@ -23,8 +23,8 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
   final String yAxisTitle;
   final bool isShowYAxisTitle;
   final Color themeColor;
-  final Function? onDownloadImagePath;
-  final Function? onDownloadPdfPath;
+  final Function? onImageDownloadCallback;
+  final Function? onPdfDownloadCallback;
 
   const MenstrualCycleTrendsGraph(
       {super.key,
@@ -48,8 +48,8 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
       this.yAxisTitle = Strings.graphCycleLengthDays,
       this.normalRangeHintTitle = Strings.graphCycleNormalDays,
       this.themeColor = Colors.black,
-      this.onDownloadImagePath,
-      this.onDownloadPdfPath});
+      this.onImageDownloadCallback,
+      this.onPdfDownloadCallback});
 
   @override
   State<MenstrualCycleTrendsGraph> createState() =>
@@ -170,9 +170,9 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
-                onDownloadPdfPath: widget.onDownloadPdfPath,
+                onPdfDownloadCallback: widget.onPdfDownloadCallback,
                 globalKey: _chartKey,
-                onDownloadImagePath: widget.onDownloadImagePath)
+                onImageDownloadCallback: widget.onImageDownloadCallback)
             : const SizedBox(),
       ]);
     } else {

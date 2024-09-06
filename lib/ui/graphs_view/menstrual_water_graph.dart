@@ -9,8 +9,8 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
   final String loadingText;
   final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
-  final Function? onDownloadImagePath;
-  final Function? onDownloadPdfPath;
+  final Function? onImageDownloadCallback;
+  final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
   final TextStyle xAxisTitleTextStyle;
@@ -29,14 +29,14 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
       this.isShowYAxisTitle = true,
       this.tooltipBackgroundColor = Colors.black,
       this.yAxisTitle = Strings.graphWaterUnitTitle,
-      this.onDownloadImagePath,
+      this.onImageDownloadCallback,
       this.xAxisTitle = Strings.graphWaterDrinkDate,
       this.graphColor = Colors.blue,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
-      this.onDownloadPdfPath});
+      this.onPdfDownloadCallback});
 
   @override
   State<MenstrualCycleWaterGraph> createState() => _MenstrualWaterGraphState();
@@ -140,9 +140,9 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
-                onDownloadPdfPath: widget.onDownloadPdfPath,
+                onPdfDownloadCallback: widget.onPdfDownloadCallback,
                 globalKey: _chartKey,
-                onDownloadImagePath: widget.onDownloadImagePath)
+                onImageDownloadCallback: widget.onImageDownloadCallback)
             : const SizedBox(),
       ]);
     } else {
@@ -193,9 +193,9 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       ),
       primaryYAxis: NumericAxis(
           labelFormat: '{value}',
-          minimum: 1,
+          minimum: 0,
           maximum: maxValue,
-          interval: 2,
+          interval: 1,
           axisLine: const AxisLine(width: 0),
           labelStyle: widget.yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)

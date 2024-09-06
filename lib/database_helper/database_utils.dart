@@ -49,7 +49,7 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryColor: "A52A2A",
     symptomsData: [
       SymptomsData(symptomName: "No sex", symptomId: 21025),
-      SymptomsData(symptomName: "Protected sex",  symptomId: 21026),
+      SymptomsData(symptomName: "Protected sex", symptomId: 21026),
       SymptomsData(symptomName: "Unprotected sex", symptomId: 21027),
       SymptomsData(symptomName: "Oral sex", symptomId: 21028),
       SymptomsData(symptomName: "Anal sex", symptomId: 21029),

@@ -9,8 +9,8 @@ class MenstrualCycleMeditationGraph extends StatefulWidget {
   final String loadingText;
   final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
-  final Function? onDownloadImagePath;
-  final Function? onDownloadPdfPath;
+  final Function? onImageDownloadCallback;
+  final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
   final TextStyle xAxisTitleTextStyle;
@@ -29,14 +29,14 @@ class MenstrualCycleMeditationGraph extends StatefulWidget {
       this.isShowYAxisTitle = true,
       this.tooltipBackgroundColor = Colors.black,
       this.yAxisTitle = Strings.graphMeditationTitle,
-      this.onDownloadImagePath,
+      this.onImageDownloadCallback,
       this.xAxisTitle = Strings.graphMeditationDate,
       this.graphColor = Colors.blue,
       this.xAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
-      this.onDownloadPdfPath});
+      this.onPdfDownloadCallback});
 
   @override
   State<MenstrualCycleMeditationGraph> createState() =>
@@ -119,9 +119,9 @@ class _MenstrualCycleMeditationGraphState
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
-                onDownloadPdfPath: widget.onDownloadPdfPath,
+                onPdfDownloadCallback: widget.onPdfDownloadCallback,
                 globalKey: _chartKey,
-                onDownloadImagePath: widget.onDownloadImagePath)
+                onImageDownloadCallback: widget.onImageDownloadCallback)
             : const SizedBox(),
       ]);
     } else {
