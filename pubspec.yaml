@@ -20,8 +20,8 @@ dependencies:
   intl: ^0.19.0
   encrypt: ^5.0.3
   crypto: ^3.0.3
-  syncfusion_flutter_charts: ^26.2.5+1
-  syncfusion_flutter_pdf: ^26.2.5
+  syncfusion_flutter_charts: ^26.2.12
+  syncfusion_flutter_pdf: ^26.2.12
 
 dev_dependencies:
   flutter_test:
