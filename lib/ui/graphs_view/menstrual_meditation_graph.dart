@@ -5,7 +5,7 @@ import '../calender_view/common_view.dart';
 import '../model/meditation_data.dart';
 import 'graph_util.dart';
 
-class MenstrualCycleMeditationGraph extends StatefulWidget {
+class MenstrualMeditationGraph extends StatefulWidget {
   final String loadingText;
   final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
@@ -20,7 +20,7 @@ class MenstrualCycleMeditationGraph extends StatefulWidget {
   final Color tooltipBackgroundColor;
   final Color graphColor;
 
-  const MenstrualCycleMeditationGraph(
+  const MenstrualMeditationGraph(
       {super.key,
       this.waterUnits = WaterUnits.liters,
       this.isShowMoreOptions = false,
@@ -39,12 +39,12 @@ class MenstrualCycleMeditationGraph extends StatefulWidget {
       this.onPdfDownloadCallback});
 
   @override
-  State<MenstrualCycleMeditationGraph> createState() =>
-      _MenstrualCycleMeditationGraphState();
+  State<MenstrualMeditationGraph> createState() =>
+      _MenstrualMeditationGraphState();
 }
 
-class _MenstrualCycleMeditationGraphState
-    extends State<MenstrualCycleMeditationGraph> {
+class _MenstrualMeditationGraphState
+    extends State<MenstrualMeditationGraph> {
   ChartSeriesController<MeditationData, String>? seriesController;
 
   List<MeditationData> allMeditationData = [];
