@@ -5,6 +5,7 @@ import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
 import 'model/display_symptoms_data.dart';
 import 'model/log_report.dart';
+import 'model/user_symptoms_logs.dart';
 
 // ignore: must_be_immutable
 class MenstrualLogPeriodView extends StatefulWidget {
@@ -113,8 +114,67 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         throw Strings.errorInvalidSymptomsDate;
       }
     }
-    existingSymptomsList = await mInstance.getSymptomsData(logDate);
-    //printLogs("existingSymptomsList ${existingSymptomsList.length}");
+
+    // Set existing data - start
+    UserSymptomsLogs userSymptomsLogs =
+        await mInstance.getSymptomsData(logDate);
+    existingSymptomsList = userSymptomsLogs.symptomData!;
+
+    if (userSymptomsLogs.waterValue != null) {
+      logReportList[4].mainValue = int.parse(userSymptomsLogs.waterValue!);
+      logReportList[4].finalValue = userSymptomsLogs.waterValue!;
+      logReportList[4].mainIndex = int.parse(userSymptomsLogs.waterValue!);
+    }
+
+    if (userSymptomsLogs.meditationTime != null) {
+      int totalMinutes = int.parse(userSymptomsLogs.meditationTime!);
+      int hours = totalMinutes ~/ 60; // Integer division to get hours
+      int minutes = totalMinutes % 60; // Modulus to get remaining minutes
+      logReportList[3].mainValue = hours;
+      logReportList[3].mainIndex = hours;
+      logReportList[3].subValue = minutes;
+      logReportList[3].subIndex = minutes;
+      logReportList[3].totalMin = totalMinutes;
+      logReportList[3].finalValue = "$hours h : $minutes m";
+    }
+
+    if (userSymptomsLogs.sleepTime != null) {
+      List<String> startEndTime = userSymptomsLogs.sleepTime!.split("T");
+      logReportList[2].mainValue = int.parse(startEndTime[0].split(":")[0]);
+      logReportList[2].mainIndex = int.parse(startEndTime[0].split(":")[0]);
+      logReportList[2].subValue = int.parse(startEndTime[0].split(":")[1]);
+      logReportList[2].subIndex = int.parse(startEndTime[0].split(":")[1]);
+      logReportList[2].finalValue =
+          "${logReportList[2].mainValue} h : ${logReportList[2].subValue} m";
+
+      logReportList[5].mainValue = int.parse(startEndTime[1].split(":")[0]);
+      logReportList[5].mainIndex = int.parse(startEndTime[1].split(":")[0]);
+      logReportList[5].subValue = int.parse(startEndTime[1].split(":")[1]);
+      logReportList[5].subIndex = int.parse(startEndTime[1].split(":")[1]);
+      logReportList[5].finalValue =
+          "${logReportList[5].mainValue} h : ${logReportList[5].subValue} m";
+    }
+
+    if (userSymptomsLogs.bodyTemperature != null) {
+      List<String> temp = userSymptomsLogs.bodyTemperature!.split(".");
+      logReportList[1].mainValue = int.parse(temp[0]);
+      logReportList[1].mainIndex = int.parse(temp[0]) - 35;
+      logReportList[1].subValue = int.parse(temp[1]);
+      logReportList[1].subIndex = int.parse(temp[1]) - 1;
+      logReportList[1].finalValue = userSymptomsLogs.bodyTemperature!;
+    }
+
+    if (userSymptomsLogs.weight != null) {
+      List<String> weight = userSymptomsLogs.weight!.split(".");
+      logReportList[0].mainValue = int.parse(weight[0]);
+      logReportList[0].mainIndex = int.parse(weight[0]) - 20;
+      logReportList[0].subValue = int.parse(weight[1]);
+      double aa = int.parse(weight[1]) / 100;
+      logReportList[0].subIndex = aa.round();
+      logReportList[0].finalValue = userSymptomsLogs.weight!;
+    }
+
+    // Set existing data - end
     currentDate = currentDateFormat.format(DateTime.now());
     if (widget.isShowCustomSymptomsOnly! == false) {
       regenerateData();
@@ -209,11 +269,8 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   }
 
   /// save sleep data
-  saveSleepLog({bool isWakeUpTime = false}) {
+  saveSleepLog() {
     int index = 2;
-    if (isWakeUpTime) {
-      index = 5;
-    }
     String hour = "00";
     String min = "00";
     if (logReportList[index].mainValue! > 9) {
@@ -268,8 +325,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       logReportList[0].finalValue =
           "${logReportList[0].mainValue}.${logReportList[0].subValue}00";
     } else {
-      logReportList[0].finalValue = "${logReportList[0].mainValue}";
+      logReportList[0].finalValue = "${logReportList[0].mainValue}.00";
     }
+
+    /* logReportList[0].finalValue =
+    "${logReportList[0].mainValue}.${logReportList[0].subValue}00";*/
     setState(() {});
   }
 

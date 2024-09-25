@@ -7,6 +7,7 @@ import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
 import 'ui/model/meditation_data.dart';
 import 'ui/model/sleep_data.dart';
+import 'ui/model/user_symptoms_logs.dart';
 import 'ui/model/water_data.dart';
 import 'ui/model/weight_data.dart';
 
@@ -238,8 +239,9 @@ class MenstrualCycleWidget {
     }
   }
 
-  /// Return SymptomsData based on log date
-  Future<List<SymptomsData>> getSymptomsData(String logDate) async {
+  /// Return UserSymptomsLogs based on log date
+  Future<UserSymptomsLogs> getSymptomsData(String logDate) async {
+    UserSymptomsLogs userSymptomsLogs = UserSymptomsLogs(symptomData: []);
     final mInstance = MenstrualCycleWidget.instance!;
     final dbHelper = MenstrualCycleDbHelper.instance;
     Database? db = await dbHelper.database;
@@ -252,12 +254,46 @@ class MenstrualCycleWidget {
       String userDecryptData = Encryption.instance.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
 
-      //printLogs("userDecryptData $userDecryptData");
       List<dynamic> jsonData = json.decode(userDecryptData.trim());
       symptomsDataList.addAll(
           jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList());
+
+      userSymptomsLogs.meditationTime = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]);
+
+      userSymptomsLogs.bodyTemperature = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]);
+      userSymptomsLogs.waterValue = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]);
+      userSymptomsLogs.weight = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]);
+      userSymptomsLogs.weightUnit = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
+      userSymptomsLogs.sleepTime = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
+      userSymptomsLogs.waterUnit = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
+      userSymptomsLogs.bodyTemperatureUnit = Encryption.instance.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
+      userSymptomsLogs.notes = Encryption.instance
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
+      printLogs(
+          "userSymptomsLogs.meditationTime ${userSymptomsLogs.meditationTime}");
+      printLogs(
+          "userSymptomsLogs.bodyTemperature ${userSymptomsLogs.bodyTemperature}");
+      printLogs("userSymptomsLogs.waterValue ${userSymptomsLogs.waterValue}");
+      printLogs("userSymptomsLogs.weight ${userSymptomsLogs.weight}");
+      printLogs("userSymptomsLogs.weightUnit ${userSymptomsLogs.weightUnit}");
+      printLogs("userSymptomsLogs.sleepTime ${userSymptomsLogs.sleepTime}");
+      printLogs("userSymptomsLogs.waterUnit ${userSymptomsLogs.waterUnit}");
+      printLogs(
+          "userSymptomsLogs.bodyTemperatureUnit ${userSymptomsLogs.bodyTemperatureUnit}");
     });
-    return symptomsDataList;
+
+    userSymptomsLogs.logDate = logDate;
+
+    userSymptomsLogs.symptomData!.addAll(symptomsDataList);
+    return userSymptomsLogs;
   }
 
   /// get Today's symptoms logs

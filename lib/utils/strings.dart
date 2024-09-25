@@ -74,7 +74,7 @@ class Strings {
   static const String graphCycleStartDate = "Cycle start date";
   static const String loading = "Loading...";
   static const String graphCycleTrends = "Cycle trends";
-  static const String graphCycleLengthDays = "Cycle length days";
+  static const String graphCycleLengthDays = "Cycle length (in days)";
   static const String graphCycleNormalDays = "Normal days";
   static const String graphCyclePeriodDay = "Period days";
   static const String graphCycleOtherDay = "Other cycle days";

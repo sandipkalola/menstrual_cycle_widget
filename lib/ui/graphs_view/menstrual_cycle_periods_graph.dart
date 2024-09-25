@@ -7,9 +7,6 @@ import '../model/chart_cycle_periods_data.dart';
 import 'graph_util.dart';
 
 class MenstrualCyclePeriodsGraph extends StatefulWidget {
-  final bool isShowHeader;
-  final String headerTitle;
-  final TextStyle headerTitleTextStyle;
   final String loadingText;
   final String xAxisTitle;
   final bool isShowXAxisTitle;
@@ -27,13 +24,9 @@ class MenstrualCyclePeriodsGraph extends StatefulWidget {
 
   const MenstrualCyclePeriodsGraph(
       {super.key,
-      this.isShowHeader = true,
-      this.headerTitle = Strings.graphCycleTrends,
       this.loadingText = Strings.loading,
       this.xAxisTitle = Strings.graphCycleStartDate,
       this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.headerTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
       this.yAxisTitleTextStyle =
           const TextStyle(color: Colors.black, fontSize: 10),
@@ -179,9 +172,6 @@ class _MenstrualCyclePeriodsGraphState
         }
       },
       plotAreaBorderWidth: 0,
-      legend: Legend(
-          isVisible: widget.isShowHeader,
-          textStyle: widget.headerTitleTextStyle),
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
         labelRotation: -70,
