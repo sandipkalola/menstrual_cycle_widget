@@ -171,7 +171,7 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
-        labelRotation: -70,
+        //labelRotation: -70,
         labelStyle: widget.xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(

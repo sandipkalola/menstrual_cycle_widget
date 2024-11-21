@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import '../menstrual_cycle_widget.dart';
 
 /// Print logs to console
-printLogs(String message) {
+printMenstrualCycleLogs(String message) {
   String currentDate = currentDateFormat.format(DateTime.now());
   if (kDebugMode) {
     print("${Strings.printLogLabel} ($currentDate): $message");

@@ -93,11 +93,13 @@ class _MenstrualCyclePeriodsGraphState
   }
 
   init() async {
+    allPeriodRange.clear();
     final instance = MenstrualCycleWidget.instance!;
-    allPeriodRange = await instance.getAllPeriodsDetails();
-    for (int i = 0; i < allPeriodRange.length; i++) {
-      int cycleDuration = allPeriodRange[i].cycleDuration!;
-      if (cycleDuration > 0) {
+    List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
+    for (int i = 0; i < periodRange.length; i++) {
+      int cycleDuration = periodRange[i].cycleDuration!;
+      if (cycleDuration > 0 && cycleDuration < 50) {
+        allPeriodRange.add(periodRange[i]);
         if (maxValue <= cycleDuration) {
           maxValue = cycleDuration;
         }
@@ -118,7 +120,7 @@ class _MenstrualCyclePeriodsGraphState
       int cycleDuration = allPeriodRange[i].cycleDuration!;
       DateTime startDate = DateTime.parse(allPeriodRange[i].periodStartDate!);
       periodCycleChartData.add(ChartCyclePeriodsData(
-          dateTime: CalenderDateUtils.dateWithYear(startDate),
+          dateTime: CalenderDateUtils.graphDateFormat(startDate),
           cycleLength: cycleDuration,
           periodsLength: allPeriodRange[i].periodDuration));
       lastDataLength = lastDataLength + 1;
@@ -174,7 +176,7 @@ class _MenstrualCyclePeriodsGraphState
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
-        labelRotation: -70,
+        //labelRotation: -70,
         labelStyle: widget.xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(

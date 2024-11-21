@@ -132,12 +132,12 @@ class MenstrualCycleDbHelper {
       /// remove old logs
       await db.rawDelete(
           "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'");
-      printLogs("Delete Data");
+      printMenstrualCycleLogs("Delete Data");
     }
 
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
-    printLogs("Insert Data");
+    printMenstrualCycleLogs("Insert Data");
     return id;
   }
 
@@ -167,7 +167,7 @@ class MenstrualCycleDbHelper {
         await db!.rawQuery("Select * from $tableCurrentUserDetails");
 
     if (queryResponse.isNotEmpty) {
-      printLogs(
+      printMenstrualCycleLogs(
           "queryResponse[i][columnCustomerId] ${queryResponse[0][columnCustomerId]}");
       List.generate(queryResponse.length, (i) {
         MenstrualCycleWidget.instance!.setCurrentUserData(
@@ -240,8 +240,8 @@ class MenstrualCycleDbHelper {
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
     String lastPeriodsDate = "";
-    printLogs("customerId : $customerId");
-    printLogs(
+    printMenstrualCycleLogs("customerId : $customerId");
+    printMenstrualCycleLogs(
         "customerId decrypt : ${Encryption.instance.decrypt(customerId)}");
     Database? db = await instance.database;
 
@@ -256,7 +256,7 @@ class MenstrualCycleDbHelper {
     });
 
     selectedPeriodsDate.sort((a, b) => b.compareTo(a));
-    printLogs("selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
+    printMenstrualCycleLogs("selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
 
     int oneDaysCount = 0; // Only If user selected only one cycle of periods
     if (selectedPeriodsDate.isNotEmpty) {

@@ -210,7 +210,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
       if (lastPeriodDate.isNotEmpty) {
         DateTime lastPeriod = DateTime.parse(lastPeriodDate);
         int inDays = DateTime.now().difference(lastPeriod).inDays;
-        printLogs("inDays: $inDays");
+        printMenstrualCycleLogs("inDays: $inDays");
         if (inDays > _totalCycleDays) {
           _selectedDay = 0;
         } else {
@@ -318,18 +318,18 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     if (lastPeriodDate.isNotEmpty) {
       int totalDiffCurrentLastPeriod =
           DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays;
-      printLogs("totalDiffCurrentLastPeriod : $totalDiffCurrentLastPeriod");
+      printMenstrualCycleLogs("totalDiffCurrentLastPeriod : $totalDiffCurrentLastPeriod");
       int totalDuration =
           _instance.getPeriodDuration() + _instance.getCycleLength();
-      printLogs("totalDuration : $totalDuration");
-      printLogs("selected day : $_selectedDay");
+      printMenstrualCycleLogs("totalDuration : $totalDuration");
+      printMenstrualCycleLogs("selected day : $_selectedDay");
       int totalDayBeforeOvulationStart =
           getFollicularDayCounts() + _instance.getPeriodDuration();
       int totalDayBeforeOvulationEnd =
           totalDayBeforeOvulationStart + defaultOvulationDay;
       int conceiveDays =
           totalDayBeforeOvulationStart - totalDiffCurrentLastPeriod;
-      printLogs("beforeOvulationDayCount : $totalDayBeforeOvulationStart");
+      printMenstrualCycleLogs("beforeOvulationDayCount : $totalDayBeforeOvulationStart");
 
       // Check if last period date is more then current cycle length + period duration.
       // Then show only total late period day
@@ -345,7 +345,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
           totalDiffCurrentLastPeriod <= totalDuration) {
         _message = Strings.timeForPregnancyTestLabel;
         int dayTestCount = totalDuration - totalDiffCurrentLastPeriod - 1;
-        printLogs("dayTestCount : $dayTestCount");
+        printMenstrualCycleLogs("dayTestCount : $dayTestCount");
         if (dayTestCount == 0) {
           _title = Strings.timeForPregnancyTestTitleLabel3;
         } else {
@@ -392,7 +392,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         int ovulationDay = _instance.getPeriodDuration() +
             getFollicularDayCounts() +
             defaultOvulationDay ~/ 2;
-        printLogs("ovulationDay $ovulationDay");
+        printMenstrualCycleLogs("ovulationDay $ovulationDay");
 
         if (ovulationDay == totalDiffCurrentLastPeriod) {
           _message = Strings.ovulationDayMsg1;
@@ -451,7 +451,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     int ovulationDay = _instance.getCycleLength() - 14;
     follicularDay =
         ovulationDay - _instance.getPeriodDuration() - defaultOvulationDay ~/ 2;
-    printLogs("follicularDay: $follicularDay");
+    printMenstrualCycleLogs("follicularDay: $follicularDay");
     return follicularDay - 1;
   }
 

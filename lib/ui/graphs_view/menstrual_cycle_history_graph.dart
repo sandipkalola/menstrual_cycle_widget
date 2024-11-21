@@ -39,7 +39,13 @@ class _MenstrualCycleHistoryGraphState
 
   init() async {
     final instance = MenstrualCycleWidget.instance!;
-    allPeriodRange = await instance.getAllPeriodsDetails();
+    List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
+    for (int i = 0; i < periodRange.length; i++) {
+      int cycleDuration = periodRange[i].cycleDuration!;
+      if (cycleDuration > 0 && cycleDuration < 50) {
+        allPeriodRange.add(periodRange[i]);
+      }
+    }
     // TODO Add Condition to not allow widget.viewCycleHistoryLength is less then zero
     isGetData = true;
     setState(() {});

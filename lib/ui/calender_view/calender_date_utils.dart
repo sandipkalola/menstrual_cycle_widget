@@ -8,6 +8,7 @@ class CalenderDateUtils {
   static final DateFormat _dayMonth = DateFormat('dd MMMM');
   static final DateFormat _firstDayFormat = DateFormat('MMM dd');
   static final DateFormat _dateWithYearFormat = DateFormat('dd-MM-yyyy');
+  static final DateFormat _graphDateFormat = DateFormat('dd MMM');
   static final DateFormat _fullDayFormat = DateFormat('EEE MMM dd, yyyy');
   static final DateFormat _fullDayName = DateFormat('EEEE');
   static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
@@ -17,6 +18,8 @@ class CalenderDateUtils {
   static String fullDateTime(DateTime d) => _fullDate.format(d);
 
   static String formatYear(DateTime d) => _yearFormat.format(d);
+
+  static String graphDateFormat(DateTime d) => _graphDateFormat.format(d);
 
   static String dateWithYear(DateTime d) => _dateWithYearFormat.format(d);
 

@@ -152,6 +152,9 @@ class _CalendarCellState extends State<CalendarCell> {
         Expanded(
           child: Checkbox(
               value: isChecked,
+              fillColor: isChecked
+                  ? WidgetStateProperty.all(defaultMenstruationColor)
+                  : WidgetStateProperty.all(Colors.white),
               activeColor: isChecked ? defaultMenstruationColor : Colors.black,
               onChanged: (value) {
                 widget.multipleDateSelectionCallBack.call(value);

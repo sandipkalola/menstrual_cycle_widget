@@ -277,16 +277,16 @@ class MenstrualCycleWidget {
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
       userSymptomsLogs.notes = Encryption.instance
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
-      printLogs(
+      printMenstrualCycleLogs(
           "userSymptomsLogs.meditationTime ${userSymptomsLogs.meditationTime}");
-      printLogs(
+      printMenstrualCycleLogs(
           "userSymptomsLogs.bodyTemperature ${userSymptomsLogs.bodyTemperature}");
-      printLogs("userSymptomsLogs.waterValue ${userSymptomsLogs.waterValue}");
-      printLogs("userSymptomsLogs.weight ${userSymptomsLogs.weight}");
-      printLogs("userSymptomsLogs.weightUnit ${userSymptomsLogs.weightUnit}");
-      printLogs("userSymptomsLogs.sleepTime ${userSymptomsLogs.sleepTime}");
-      printLogs("userSymptomsLogs.waterUnit ${userSymptomsLogs.waterUnit}");
-      printLogs(
+      printMenstrualCycleLogs("userSymptomsLogs.waterValue ${userSymptomsLogs.waterValue}");
+      printMenstrualCycleLogs("userSymptomsLogs.weight ${userSymptomsLogs.weight}");
+      printMenstrualCycleLogs("userSymptomsLogs.weightUnit ${userSymptomsLogs.weightUnit}");
+      printMenstrualCycleLogs("userSymptomsLogs.sleepTime ${userSymptomsLogs.sleepTime}");
+      printMenstrualCycleLogs("userSymptomsLogs.waterUnit ${userSymptomsLogs.waterUnit}");
+      printMenstrualCycleLogs(
           "userSymptomsLogs.bodyTemperatureUnit ${userSymptomsLogs.bodyTemperatureUnit}");
     });
 
@@ -372,7 +372,7 @@ class MenstrualCycleWidget {
       UserLogReportData logReportData = usersLogDataList[i];
       double weightValue = double.parse(logReportData.weight!);
       if (logReportData.weightUnit!.isNotEmpty && weightValue > 0) {
-        printLogs("logReportData.waterValue ${logReportData.waterValue}");
+        printMenstrualCycleLogs("logReportData.waterValue ${logReportData.waterValue}");
 
         double weightValue = double.parse(logReportData.weight!);
 
@@ -390,7 +390,7 @@ class MenstrualCycleWidget {
         //printLogs("weight =====$weight");
         weightData.weightValue = weight;
         weightData.dateTime =
-            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+            CalenderDateUtils.graphDateFormat(logReportData.logDate!);
         weightData.weightUnit = weightUnits.toString();
 
         weightDataListData.add(weightData);
@@ -456,7 +456,7 @@ class MenstrualCycleWidget {
       int meditationValue = int.parse(logReportData.meditationTime!);
       if (meditationValue > 0) {
         meditationData.dateTime =
-            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+            CalenderDateUtils.graphDateFormat(logReportData.logDate!);
         meditationData.meditationMin = meditationValue;
         meditationDataListData.add(meditationData);
       }
@@ -540,7 +540,7 @@ class MenstrualCycleWidget {
       UserLogReportData logReportData = usersLogDataList[i];
       int waterValue = int.parse(logReportData.waterValue!);
       if (logReportData.waterUnit!.isNotEmpty && waterValue > 0) {
-        printLogs("logReportData.waterValue ${logReportData.waterValue}");
+        printMenstrualCycleLogs("logReportData.waterValue ${logReportData.waterValue}");
 
         double drinkWaterValue = double.parse(logReportData.waterValue!);
 
@@ -564,7 +564,7 @@ class MenstrualCycleWidget {
         //printLogs("drinkWater =====$drinkWater");
         waterData.waterValue = drinkWater;
         waterData.dateTime =
-            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+            CalenderDateUtils.graphDateFormat(logReportData.logDate!);
         waterData.waterUnit = waterUnits.toString();
 
         waterDataListData.add(waterData);
@@ -610,8 +610,8 @@ class MenstrualCycleWidget {
       }
     });
 
-    printLogs("min_temp $minValue");
-    printLogs("max_temp $maxValue");
+    printMenstrualCycleLogs("min_temp $minValue");
+    printMenstrualCycleLogs("max_temp $maxValue");
 
     return {
       'min_temp': minValue,
@@ -660,7 +660,7 @@ class MenstrualCycleWidget {
        printLogs("wakeUpTime ${sleepData.wakeUpTime}");*/
 
       sleepData.dateTime =
-          CalenderDateUtils.dateWithYear(logReportData.logDate!);
+          CalenderDateUtils.graphDateFormat(logReportData.logDate!);
 
       if (sleepData.sleepBedTime! > 0) {
         sleepListData.add(sleepData);
@@ -756,14 +756,14 @@ class MenstrualCycleWidget {
         }
         bodyTemperatureData.bodyTemperature = bodyTemperature;
         bodyTemperatureData.dateTime =
-            CalenderDateUtils.dateWithYear(logReportData.logDate!);
+            CalenderDateUtils.graphDateFormat(logReportData.logDate!);
         bodyTemperatureData.bodyTemperatureUnit =
             bodyTemperatureUnits.toString();
 
         bodyTemperatureListData.add(bodyTemperatureData);
       }
     }
-    printLogs("bodyTemperatureListData ${bodyTemperatureListData.length}");
+    printMenstrualCycleLogs("bodyTemperatureListData ${bodyTemperatureListData.length}");
     return bodyTemperatureListData;
   }
 
