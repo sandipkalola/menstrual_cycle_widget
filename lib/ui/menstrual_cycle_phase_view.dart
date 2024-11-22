@@ -318,7 +318,8 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     if (lastPeriodDate.isNotEmpty) {
       int totalDiffCurrentLastPeriod =
           DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays;
-      printMenstrualCycleLogs("totalDiffCurrentLastPeriod : $totalDiffCurrentLastPeriod");
+      printMenstrualCycleLogs(
+          "totalDiffCurrentLastPeriod : $totalDiffCurrentLastPeriod");
       int totalDuration =
           _instance.getPeriodDuration() + _instance.getCycleLength();
       printMenstrualCycleLogs("totalDuration : $totalDuration");
@@ -329,7 +330,8 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
           totalDayBeforeOvulationStart + defaultOvulationDay;
       int conceiveDays =
           totalDayBeforeOvulationStart - totalDiffCurrentLastPeriod;
-      printMenstrualCycleLogs("beforeOvulationDayCount : $totalDayBeforeOvulationStart");
+      printMenstrualCycleLogs(
+          "beforeOvulationDayCount : $totalDayBeforeOvulationStart");
 
       // Check if last period date is more then current cycle length + period duration.
       // Then show only total late period day

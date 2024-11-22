@@ -16,15 +16,7 @@ enum CalendarFormat { month, twoWeeks, week }
 
 enum SwipeDetectionMoment { onEnd, onUpdate }
 
-
-enum WaterUnits {
-  ml,
-  liters,
-  flOz,
-  usGallon,
-  imperialGallons,
-  cups
-}
+enum WaterUnits { ml, liters, flOz, usGallon, imperialGallons, cups }
 
 enum BodyTemperatureUnits {
   celsius,
@@ -36,8 +28,4 @@ enum WeightUnits {
   lb,
 }
 
-enum Languages {
-  english,
-  hindi,
-  arabic
-}
+enum Languages { english, hindi, arabic }

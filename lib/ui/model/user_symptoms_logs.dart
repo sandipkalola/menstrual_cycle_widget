@@ -13,17 +13,18 @@ class UserSymptomsLogs {
   String? logDate;
   List<SymptomsData>? symptomData = <SymptomsData>[];
 
-  UserSymptomsLogs({this.meditationTime,
-    this.sleepTime,
-    this.waterValue,
-    this.bodyTemperatureUnit,
-    this.waterUnit,
-    this.weightUnit,
-    this.notes,
-    this.weight,
-    this.bodyTemperature,
-    this.logDate,
-    this.symptomData});
+  UserSymptomsLogs(
+      {this.meditationTime,
+      this.sleepTime,
+      this.waterValue,
+      this.bodyTemperatureUnit,
+      this.waterUnit,
+      this.weightUnit,
+      this.notes,
+      this.weight,
+      this.bodyTemperature,
+      this.logDate,
+      this.symptomData});
 
   UserSymptomsLogs.fromJson(Map<String, dynamic> json) {
     meditationTime = json['meditationTime'];

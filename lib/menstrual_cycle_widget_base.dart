@@ -281,11 +281,16 @@ class MenstrualCycleWidget {
           "userSymptomsLogs.meditationTime ${userSymptomsLogs.meditationTime}");
       printMenstrualCycleLogs(
           "userSymptomsLogs.bodyTemperature ${userSymptomsLogs.bodyTemperature}");
-      printMenstrualCycleLogs("userSymptomsLogs.waterValue ${userSymptomsLogs.waterValue}");
-      printMenstrualCycleLogs("userSymptomsLogs.weight ${userSymptomsLogs.weight}");
-      printMenstrualCycleLogs("userSymptomsLogs.weightUnit ${userSymptomsLogs.weightUnit}");
-      printMenstrualCycleLogs("userSymptomsLogs.sleepTime ${userSymptomsLogs.sleepTime}");
-      printMenstrualCycleLogs("userSymptomsLogs.waterUnit ${userSymptomsLogs.waterUnit}");
+      printMenstrualCycleLogs(
+          "userSymptomsLogs.waterValue ${userSymptomsLogs.waterValue}");
+      printMenstrualCycleLogs(
+          "userSymptomsLogs.weight ${userSymptomsLogs.weight}");
+      printMenstrualCycleLogs(
+          "userSymptomsLogs.weightUnit ${userSymptomsLogs.weightUnit}");
+      printMenstrualCycleLogs(
+          "userSymptomsLogs.sleepTime ${userSymptomsLogs.sleepTime}");
+      printMenstrualCycleLogs(
+          "userSymptomsLogs.waterUnit ${userSymptomsLogs.waterUnit}");
       printMenstrualCycleLogs(
           "userSymptomsLogs.bodyTemperatureUnit ${userSymptomsLogs.bodyTemperatureUnit}");
     });
@@ -372,7 +377,8 @@ class MenstrualCycleWidget {
       UserLogReportData logReportData = usersLogDataList[i];
       double weightValue = double.parse(logReportData.weight!);
       if (logReportData.weightUnit!.isNotEmpty && weightValue > 0) {
-        printMenstrualCycleLogs("logReportData.waterValue ${logReportData.waterValue}");
+        printMenstrualCycleLogs(
+            "logReportData.waterValue ${logReportData.waterValue}");
 
         double weightValue = double.parse(logReportData.weight!);
 
@@ -540,7 +546,8 @@ class MenstrualCycleWidget {
       UserLogReportData logReportData = usersLogDataList[i];
       int waterValue = int.parse(logReportData.waterValue!);
       if (logReportData.waterUnit!.isNotEmpty && waterValue > 0) {
-        printMenstrualCycleLogs("logReportData.waterValue ${logReportData.waterValue}");
+        printMenstrualCycleLogs(
+            "logReportData.waterValue ${logReportData.waterValue}");
 
         double drinkWaterValue = double.parse(logReportData.waterValue!);
 
@@ -763,7 +770,8 @@ class MenstrualCycleWidget {
         bodyTemperatureListData.add(bodyTemperatureData);
       }
     }
-    printMenstrualCycleLogs("bodyTemperatureListData ${bodyTemperatureListData.length}");
+    printMenstrualCycleLogs(
+        "bodyTemperatureListData ${bodyTemperatureListData.length}");
     return bodyTemperatureListData;
   }
 

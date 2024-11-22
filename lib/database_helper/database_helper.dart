@@ -256,7 +256,8 @@ class MenstrualCycleDbHelper {
     });
 
     selectedPeriodsDate.sort((a, b) => b.compareTo(a));
-    printMenstrualCycleLogs("selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
+    printMenstrualCycleLogs(
+        "selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
 
     int oneDaysCount = 0; // Only If user selected only one cycle of periods
     if (selectedPeriodsDate.isNotEmpty) {

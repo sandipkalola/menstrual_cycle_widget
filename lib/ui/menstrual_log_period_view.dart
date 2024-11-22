@@ -183,8 +183,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         widget.customSymptomsList!.isNotEmpty) {
       symptomsList.addAll(widget.customSymptomsList!);
       printMenstrualCycleLogs("Not null");
-    }
-    else{
+    } else {
       printMenstrualCycleLogs(" null");
     }
     setState(() {

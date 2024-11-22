@@ -161,7 +161,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
         //Hide the axis line of x-axis
         //  axisLine: AxisLine(width: 0),
         rangePadding: ChartRangePadding.normal,
-       // labelRotation: -70,
+        // labelRotation: -70,
         labelStyle: widget.xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(

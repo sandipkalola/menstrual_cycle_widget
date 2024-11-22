@@ -131,7 +131,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       }
     }
     updateData();
-   /* minValue = minValue - 5;
+    /* minValue = minValue - 5;
     maxValue = maxValue + 5;*/
     minValue = 10;
     maxValue = 45;
@@ -151,13 +151,13 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       int cycleDuration =
           allPeriodDates[i].cycleDuration! + allPeriodDates[i].periodDuration!;
       printMenstrualCycleLogs("cycleDuration : $cycleDuration");
-      if(cycleDuration < 50){
-      DateTime startDate = DateTime.parse(allPeriodDates[i].periodStartDate!);
-      periodCycleChartData.add(
-        ChartCycleData(
-            dateTime: CalenderDateUtils.graphDateFormat(startDate),
-            cycleLength: cycleDuration),
-      );
+      if (cycleDuration < 50) {
+        DateTime startDate = DateTime.parse(allPeriodDates[i].periodStartDate!);
+        periodCycleChartData.add(
+          ChartCycleData(
+              dateTime: CalenderDateUtils.graphDateFormat(startDate),
+              cycleLength: cycleDuration),
+        );
       }
       lastDataLength = lastDataLength + 1;
     }
@@ -216,7 +216,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
           textStyle: widget.headerTitleTextStyle),
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
-       // labelRotation: -70,
+        // labelRotation: -70,
         rangePadding: ChartRangePadding.normal,
         labelStyle: widget.xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)

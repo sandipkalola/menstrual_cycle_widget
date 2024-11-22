@@ -7,7 +7,6 @@ import 'graph_util.dart';
 
 class MenstrualMeditationGraph extends StatefulWidget {
   final String loadingText;
-  final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
   final Function? onImageDownloadCallback;
   final Function? onPdfDownloadCallback;
@@ -22,7 +21,6 @@ class MenstrualMeditationGraph extends StatefulWidget {
 
   const MenstrualMeditationGraph(
       {super.key,
-      this.waterUnits = WaterUnits.liters,
       this.isShowMoreOptions = false,
       this.loadingText = Strings.loading,
       this.isShowXAxisTitle = true,
