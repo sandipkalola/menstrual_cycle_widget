@@ -1,3 +1,7 @@
+## [2.0.1] - 23 Nov 2024
+* Added Graph
+* Minor bug fixed
+
 ## [1.1.0] - 13 July 2024
 * Added new params 'isAutoSetData' into MenstrualCyclePhaseView
 * Added new table for store current user details

@@ -41,8 +41,7 @@ class MenstrualMeditationGraph extends StatefulWidget {
       _MenstrualMeditationGraphState();
 }
 
-class _MenstrualMeditationGraphState
-    extends State<MenstrualMeditationGraph> {
+class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
   ChartSeriesController<MeditationData, String>? seriesController;
 
   List<MeditationData> allMeditationData = [];

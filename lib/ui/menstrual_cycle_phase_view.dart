@@ -1,5 +1,3 @@
-library menstrual_cycle_widget;
-
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
