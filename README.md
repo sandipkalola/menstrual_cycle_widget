@@ -1,5 +1,5 @@
 # menstrual_cycle_widget
-
+[![pub package](https://img.shields.io/pub/v/url_launcher.svg)](https://pub.dev/packages/menstrual_cycle_widget)
 ### Overview
 
 **Menstrual Cycle Widget** is a comprehensive and customizable widget designed to help users to show their menstrual cycles seamlessly. It is built with Flutter, allowing easy integration into any Flutter application. This widget provides an intuitive interface, essential features, and insightful visualizations to support users in understanding their menstrual days.
@@ -20,16 +20,26 @@
 - Display predicted ovulation and fertile windows.
 - Option to add periods log.
 
-##### 3) Customization:
+##### 3) Graph View:
+- Body temperature graph
+- Cycle trends graph
+- Period cycle graph
+- Cycle history graph
+- Water graph
+- Sleep graph
+- Weight graph
+- Meditation graph
+
+##### 4) Customization:
 - Theme color options to match the app’s style.
 - Multiple customization options based on your requirements
 - Options to configure cycle length, period duration, user id and other preferences.
 
-##### 4) Privacy & Security:
+##### 5) Privacy & Security:
 - Secure data storage with local encryption.
 
 ## Documentation
-Checkout [Documentation](https://sks-organization-5.gitbook.io/menstrual-cycle-widget) for full details of this widgets.
+Check out the  [Documentation](https://sks-organization-5.gitbook.io/menstrual-cycle-widget) for complete details about this widget.
 
 ## Supported Platforms
 - [x] iOS

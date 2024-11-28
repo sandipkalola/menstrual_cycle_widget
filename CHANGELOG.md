@@ -1,4 +1,4 @@
-## [2.0.1] - 23 Nov 2024
+## [2.0.2] - 23 Nov 2024
 * Added Graph
 * Minor bug fixed
 
