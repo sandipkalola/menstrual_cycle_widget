@@ -225,228 +225,227 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
           Navigator.pop(context, isChangedData);
         }
       },
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (widget.isFromCalender)
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context, isChangedData);
-                  },
-                  iconSize: 25.0,
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 5.0, horizontal: 10.0),
-                  icon: Icon(
-                    Icons.close,
-                    color: widget.themeColor,
-                  ),
-                ),
-              if (!widget.hideInfoView)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: getInformationView(
-                      widget.selectedColor!, widget.themeColor),
-                ),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: monthWidgets.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      bool monthStarted = false;
-                      return Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            monthTitle[index],
-                            style: TextStyle(
-                                color: widget.themeColor,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          GridView.count(
-                            childAspectRatio: 1.5,
-                            primary: false,
-                            shrinkWrap: true,
-                            crossAxisCount: 7,
-                            padding: const EdgeInsets.only(bottom: 0.0),
-                            children: titleCalendarBuilder(),
-                          ),
-                          GridView.count(
-                            childAspectRatio: 1.5,
-                            primary: false,
-                            shrinkWrap: true,
-                            crossAxisCount: 7,
-                            padding: const EdgeInsets.only(bottom: 0.0),
-                            children: List.generate(monthWidgets[index].length,
-                                (childIndex) {
-                              DateTime day = CalenderDateUtils.getDay(
-                                  monthWidgets[index][childIndex]);
-
-                              if (CalenderDateUtils.isFirstDayOfMonth(day)) {
-                                monthStarted = true;
-                              }
-                              return CalendarCell(
-                                themeColor: widget.themeColor,
-                                selectedColor: widget.selectedColor,
-                                todayColor: widget.todayColor,
-                                isEditMode: isEditMode,
-                                multipleDateSelectionCallBack: (value) {
-                                  dateSelectionCallBack(
-                                      monthWidgets[index][childIndex], value);
-                                },
-                                onDateSelected: () =>
-                                    _launchDateSelectionCallback(
-                                        monthWidgets[index][childIndex]),
-                                currentDay: monthWidgets[index][childIndex],
-                                isBlankDay: (monthStarted) ? false : true,
-                                previousPeriodDate:
-                                    _instance.getPreviousPeriodDay(),
-                                pastAllPeriodsDays: pastAllPeriodsDays,
-                                futurePeriodDays: futurePeriodDays,
-                                futureOvulationDays: futureOvulationDays,
-                                cycleLength: widget.cycleLength,
-                                periodDuration: widget.periodLength,
-                                dateStyles: TextStyle(
-                                    color: widget.themeColor,
-                                    fontWeight: FontWeight.normal),
-                                isSelected: false,
-                              );
-                            }),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (widget.isFromCalender)
+              IconButton(
+                onPressed: () {
+                  Navigator.pop(context, isChangedData);
+                },
+                iconSize: 25.0,
+                padding: const EdgeInsets.symmetric(
+                    vertical: 5.0, horizontal: 10.0),
+                icon: Icon(
+                  Icons.close,
+                  color: widget.themeColor,
                 ),
               ),
-              if (isEditMode)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Column(
-                    children: [
-                      Divider(
-                        color: widget.themeColor,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              saveSelectedPeriodDate();
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              margin: const EdgeInsets.only(left: 5),
-                              decoration: BoxDecoration(
-                                color: widget.themeColor,
-                                shape: BoxShape.rectangle,
-                                border: Border.all(
-                                    width: 1.0, color: widget.themeColor),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              height: 40,
-                              width: 150,
-                              child: const Center(
-                                child: Text(
-                                  Strings.saveLabel,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (isEditMode) {
-                                  generateMonthData(true);
-                                  isEditMode = false;
-                                } else {
-                                  isEditMode = true;
-                                }
-                              });
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 150,
-                              padding: const EdgeInsets.all(8),
-                              margin: const EdgeInsets.only(right: 5),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1.0, color: widget.themeColor),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  Strings.cancelLabel,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: widget.themeColor),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      )
-                    ],
-                  ),
-                ),
-              if (!isEditMode)
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (isEditMode) {
-                          isEditMode = false;
-                        } else {
-                          generateMonthData(false);
-                          isEditMode = true;
-                        }
-                      });
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: widget.themeColor,
-                          shape: BoxShape.rectangle,
-                          border:
-                              Border.all(width: 1.0, color: widget.themeColor),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
+            if (!widget.hideInfoView)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: getInformationView(
+                    widget.selectedColor!, widget.themeColor),
+              ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: ListView.builder(
+                  padding: const EdgeInsets.all(8),
+                  shrinkWrap: true,
+                  physics: const ClampingScrollPhysics(),
+                  itemCount: monthWidgets.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    bool monthStarted = false;
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
                         ),
-                        child: const Text(
-                          Strings.editPeriodDateLabel,
+                        Text(
+                          monthTitle[index],
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
+                              color: widget.themeColor,
+                              fontWeight: FontWeight.bold),
                         ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        GridView.count(
+                          childAspectRatio: 1.5,
+                          primary: false,
+                          shrinkWrap: true,
+                          crossAxisCount: 7,
+                          padding: const EdgeInsets.only(bottom: 0.0),
+                          children: titleCalendarBuilder(),
+                        ),
+                        GridView.count(
+                          childAspectRatio: 1.5,
+                          primary: false,
+                          shrinkWrap: true,
+                          crossAxisCount: 7,
+                          padding: const EdgeInsets.only(bottom: 0.0),
+                          children: List.generate(monthWidgets[index].length,
+                              (childIndex) {
+                            DateTime day = CalenderDateUtils.getDay(
+                                monthWidgets[index][childIndex]);
+
+                            if (CalenderDateUtils.isFirstDayOfMonth(day)) {
+                              monthStarted = true;
+                            }
+                            return CalendarCell(
+                              themeColor: widget.themeColor,
+                              selectedColor: widget.selectedColor,
+                              todayColor: widget.todayColor,
+                              isEditMode: isEditMode,
+                              multipleDateSelectionCallBack: (value) {
+                                dateSelectionCallBack(
+                                    monthWidgets[index][childIndex], value);
+                              },
+                              onDateSelected: () =>
+                                  _launchDateSelectionCallback(
+                                      monthWidgets[index][childIndex]),
+                              currentDay: monthWidgets[index][childIndex],
+                              isBlankDay: (monthStarted) ? false : true,
+                              previousPeriodDate:
+                                  _instance.getPreviousPeriodDay(),
+                              pastAllPeriodsDays: pastAllPeriodsDays,
+                              futurePeriodDays: futurePeriodDays,
+                              futureOvulationDays: futureOvulationDays,
+                              cycleLength: widget.cycleLength,
+                              periodDuration: widget.periodLength,
+                              dateStyles: TextStyle(
+                                  color: widget.themeColor,
+                                  fontWeight: FontWeight.normal),
+                              isSelected: false,
+                            );
+                          }),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+            if (isEditMode)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  children: [
+                    Divider(
+                      color: widget.themeColor,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            saveSelectedPeriodDate();
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.only(left: 5),
+                            decoration: BoxDecoration(
+                              color: widget.themeColor,
+                              shape: BoxShape.rectangle,
+                              border: Border.all(
+                                  width: 1.0, color: widget.themeColor),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            height: 40,
+                            width: 150,
+                            child: const Center(
+                              child: Text(
+                                Strings.saveLabel,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              if (isEditMode) {
+                                generateMonthData(true);
+                                isEditMode = false;
+                              } else {
+                                isEditMode = true;
+                              }
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 150,
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.only(right: 5),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 1.0, color: widget.themeColor),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            child: Center(
+                              child: Text(
+                                Strings.cancelLabel,
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: widget.themeColor),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    )
+                  ],
+                ),
+              ),
+            if (!isEditMode)
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (isEditMode) {
+                        isEditMode = false;
+                      } else {
+                        generateMonthData(false);
+                        isEditMode = true;
+                      }
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: widget.themeColor,
+                        shape: BoxShape.rectangle,
+                        border:
+                            Border.all(width: 1.0, color: widget.themeColor),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        Strings.editPeriodDateLabel,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.white),
                       ),
                     ),
                   ),
-                )
-            ],
-          ),
+                ),
+              )
+          ],
         ),
       ),
     );
