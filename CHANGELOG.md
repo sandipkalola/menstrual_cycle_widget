@@ -1,3 +1,7 @@
+## [2.1.0] - 29 Nov 2024
+* Fixed minor bugs
+* Added functionality to update previous symptom log reports
+
 ## [2.0.2] - 23 Nov 2024
 * Added Graph
 * Minor bug fixed

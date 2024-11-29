@@ -132,12 +132,12 @@ class MenstrualCycleDbHelper {
       /// remove old logs
       await db.rawDelete(
           "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'");
-      printMenstrualCycleLogs("Delete Data");
+      ////printMenstrualCycleLogs("Delete Data");
     }
 
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
-    printMenstrualCycleLogs("Insert Data");
+    //printMenstrualCycleLogs("Insert Data");
     return id;
   }
 
@@ -167,8 +167,8 @@ class MenstrualCycleDbHelper {
         await db!.rawQuery("Select * from $tableCurrentUserDetails");
 
     if (queryResponse.isNotEmpty) {
-      printMenstrualCycleLogs(
-          "queryResponse[i][columnCustomerId] ${queryResponse[0][columnCustomerId]}");
+      //printMenstrualCycleLogs(
+      //    "queryResponse[i][columnCustomerId] ${queryResponse[0][columnCustomerId]}");
       List.generate(queryResponse.length, (i) {
         MenstrualCycleWidget.instance!.setCurrentUserData(
             queryResponse[i][columnCustomerId],
@@ -240,9 +240,9 @@ class MenstrualCycleDbHelper {
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
     String lastPeriodsDate = "";
-    printMenstrualCycleLogs("customerId : $customerId");
-    printMenstrualCycleLogs(
-        "customerId decrypt : ${Encryption.instance.decrypt(customerId)}");
+    //printMenstrualCycleLogs("customerId : $customerId");
+    //printMenstrualCycleLogs(
+    //    "customerId decrypt : ${Encryption.instance.decrypt(customerId)}");
     Database? db = await instance.database;
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
@@ -256,8 +256,8 @@ class MenstrualCycleDbHelper {
     });
 
     selectedPeriodsDate.sort((a, b) => b.compareTo(a));
-    printMenstrualCycleLogs(
-        "selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
+    //printMenstrualCycleLogs(
+    //    "selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
 
     int oneDaysCount = 0; // Only If user selected only one cycle of periods
     if (selectedPeriodsDate.isNotEmpty) {

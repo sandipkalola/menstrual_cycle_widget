@@ -150,7 +150,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
     for (int i = start; i < end; i++) {
       int cycleDuration =
           allPeriodDates[i].cycleDuration! + allPeriodDates[i].periodDuration!;
-      printMenstrualCycleLogs("cycleDuration : $cycleDuration");
+      //  printMenstrualCycleLogs("cycleDuration : $cycleDuration");
       if (cycleDuration < 50) {
         DateTime startDate = DateTime.parse(allPeriodDates[i].periodStartDate!);
         periodCycleChartData.add(

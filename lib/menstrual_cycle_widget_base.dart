@@ -255,6 +255,7 @@ class MenstrualCycleWidget {
           queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
 
       List<dynamic> jsonData = json.decode(userDecryptData.trim());
+      //printMenstrualCycleLogs("jsonData ${jsonData}");
       symptomsDataList.addAll(
           jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList());
 
@@ -277,22 +278,6 @@ class MenstrualCycleWidget {
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
       userSymptomsLogs.notes = Encryption.instance
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.meditationTime ${userSymptomsLogs.meditationTime}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.bodyTemperature ${userSymptomsLogs.bodyTemperature}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.waterValue ${userSymptomsLogs.waterValue}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.weight ${userSymptomsLogs.weight}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.weightUnit ${userSymptomsLogs.weightUnit}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.sleepTime ${userSymptomsLogs.sleepTime}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.waterUnit ${userSymptomsLogs.waterUnit}");
-      printMenstrualCycleLogs(
-          "userSymptomsLogs.bodyTemperatureUnit ${userSymptomsLogs.bodyTemperatureUnit}");
     });
 
     userSymptomsLogs.logDate = logDate;
@@ -377,8 +362,8 @@ class MenstrualCycleWidget {
       UserLogReportData logReportData = usersLogDataList[i];
       double weightValue = double.parse(logReportData.weight!);
       if (logReportData.weightUnit!.isNotEmpty && weightValue > 0) {
-        printMenstrualCycleLogs(
-            "logReportData.waterValue ${logReportData.waterValue}");
+        //printMenstrualCycleLogs(
+        //    "logReportData.waterValue ${logReportData.waterValue}");
 
         double weightValue = double.parse(logReportData.weight!);
 
@@ -546,8 +531,8 @@ class MenstrualCycleWidget {
       UserLogReportData logReportData = usersLogDataList[i];
       int waterValue = int.parse(logReportData.waterValue!);
       if (logReportData.waterUnit!.isNotEmpty && waterValue > 0) {
-        printMenstrualCycleLogs(
-            "logReportData.waterValue ${logReportData.waterValue}");
+        //printMenstrualCycleLogs(
+        //    "logReportData.waterValue ${logReportData.waterValue}");
 
         double drinkWaterValue = double.parse(logReportData.waterValue!);
 
@@ -617,8 +602,8 @@ class MenstrualCycleWidget {
       }
     });
 
-    printMenstrualCycleLogs("min_temp $minValue");
-    printMenstrualCycleLogs("max_temp $maxValue");
+    //printMenstrualCycleLogs("min_temp $minValue");
+    //printMenstrualCycleLogs("max_temp $maxValue");
 
     return {
       'min_temp': minValue,
@@ -770,8 +755,8 @@ class MenstrualCycleWidget {
         bodyTemperatureListData.add(bodyTemperatureData);
       }
     }
-    printMenstrualCycleLogs(
-        "bodyTemperatureListData ${bodyTemperatureListData.length}");
+    //printMenstrualCycleLogs(
+    //    "bodyTemperatureListData ${bodyTemperatureListData.length}");
     return bodyTemperatureListData;
   }
 
