@@ -61,11 +61,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   @override
   void initState() {
     super.initState();
-    init();
+    init(widget.symptomsLogDate);
   }
 
   /// Regenerate list for symptoms data
-  regenerateData() {
+  /*regenerateData() {
     for (int index = 0; index < defaultSymptomsData.length; index++) {
       SymptomsCategory defaultData = defaultSymptomsData[index];
       bool isVisible = isVisibleSymptoms(defaultData.categoryName!);
@@ -76,10 +76,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         symptoms.categoryColor = defaultData.categoryColor;
         List<SymptomsData> listSymptomsData = [];
         for (int indexJ = 0;
-            indexJ < defaultSymptomsData[index].symptomsData!.length;
+            indexJ < defaultData.symptomsData!.length;
             indexJ++) {
-          SymptomsData deSymptomsData =
-              defaultSymptomsData[index].symptomsData![indexJ];
+          SymptomsData deSymptomsData = defaultData.symptomsData![indexJ];
           SymptomsData symptomsData = SymptomsData();
           symptomsData.symptomName = deSymptomsData.symptomName;
           symptomsData.symptomId = deSymptomsData.symptomId;
@@ -101,15 +100,102 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         symptomsList.add(symptoms);
       }
     }
+
+    if (widget.customSymptomsList != null &&
+        widget.customSymptomsList!.isNotEmpty) {
+      for (int index = 0; index < widget.customSymptomsList!.length; index++) {
+        SymptomsCategory defaultData = widget.customSymptomsList![index];
+        if (defaultData.isVisibleCategory == 1) {
+          SymptomsCategory symptoms = SymptomsCategory(symptomsData: []);
+          symptoms.categoryId = defaultData.categoryId;
+          symptoms.categoryName = defaultData.categoryName;
+          symptoms.categoryColor = defaultData.categoryColor;
+          List<SymptomsData> listSymptomsData = [];
+          for (int indexJ = 0;
+              indexJ < defaultData.symptomsData!.length;
+              indexJ++) {
+            SymptomsData deSymptomsData = defaultData.symptomsData![indexJ];
+            SymptomsData symptomsData = SymptomsData();
+            symptomsData.symptomName = deSymptomsData.symptomName;
+            symptomsData.symptomId = deSymptomsData.symptomId;
+            bool isSelected = false;
+            // Check if found into existing list {
+            for (int sListIndex = 0;
+                sListIndex < existingSymptomsList.length;
+                sListIndex++) {
+              if (existingSymptomsList[sListIndex].symptomId ==
+                  deSymptomsData.symptomId) {
+                isSelected = true;
+                break;
+              }
+            }
+            symptomsData.isSelected = isSelected;
+            listSymptomsData.add(symptomsData);
+          }
+          symptoms.symptomsData!.addAll(listSymptomsData);
+          symptomsList.add(symptoms);
+        }
+      }//printMenstrualCycleLogs("Not null");
+    } else {
+      //printMenstrualCycleLogs("null");
+    }
+  }*/
+
+  void processSymptomsCategory(
+      List<SymptomsCategory> sourceList, bool checkVisibility) {
+    for (SymptomsCategory defaultData in sourceList) {
+      if (checkVisibility && !isVisibleSymptoms(defaultData.categoryName!)) {
+        continue;
+      }
+      if (!checkVisibility && defaultData.isVisibleCategory != 1) {
+        continue;
+      }
+
+      SymptomsCategory symptoms = SymptomsCategory(symptomsData: []);
+      symptoms.categoryId = defaultData.categoryId;
+      symptoms.categoryName = defaultData.categoryName;
+      symptoms.categoryColor = defaultData.categoryColor;
+
+      List<SymptomsData> listSymptomsData =
+          defaultData.symptomsData!.map((deSymptomsData) {
+        bool isSelected = existingSymptomsList
+            .any((existing) => existing.symptomId == deSymptomsData.symptomId);
+        return SymptomsData(
+          symptomName: deSymptomsData.symptomName,
+          symptomId: deSymptomsData.symptomId,
+          isSelected: isSelected,
+        );
+      }).toList();
+
+      symptoms.symptomsData!.addAll(listSymptomsData);
+      symptomsList.add(symptoms);
+    }
   }
 
-  init() async {
-    if (widget.symptomsLogDate == null) {
+  void regenerateData() {
+    // Process default symptoms data
+    processSymptomsCategory(defaultSymptomsData, true);
+
+    // Process custom symptoms list
+    if (widget.customSymptomsList != null &&
+        widget.customSymptomsList!.isNotEmpty) {
+      processSymptomsCategory(widget.customSymptomsList!, false);
+    }
+  }
+
+  init(DateTime? date) async {
+    setState(() {
+      isLoading = true;
+    });
+    //printMenstrualCycleLogs("init");
+    if (date == null) {
+      //printMenstrualCycleLogs("Date NUll");
       var now = DateTime.now();
       logDate = defaultDateFormat.format(now);
     } else {
+      //printMenstrualCycleLogs("Date Not NUll");
       try {
-        logDate = defaultDateFormat.format(widget.symptomsLogDate!);
+        logDate = defaultDateFormat.format(date);
       } catch (e) {
         throw Strings.errorInvalidSymptomsDate;
       }
@@ -118,7 +204,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     // Set existing data - start
     UserSymptomsLogs userSymptomsLogs =
         await mInstance.getSymptomsData(logDate);
-    existingSymptomsList = userSymptomsLogs.symptomData!;
+    existingSymptomsList.clear();
+    symptomsList.clear();
+    existingSymptomsList.addAll(userSymptomsLogs.symptomData!);
 
     if (userSymptomsLogs.waterValue != null) {
       logReportList[4].mainValue = int.parse(userSymptomsLogs.waterValue!);
@@ -157,10 +245,16 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
 
     if (userSymptomsLogs.bodyTemperature != null) {
       List<String> temp = userSymptomsLogs.bodyTemperature!.split(".");
+      //printMenstrualCycleLogs("temp log ${temp.toString()}");
       logReportList[1].mainValue = int.parse(temp[0]);
       logReportList[1].mainIndex = int.parse(temp[0]) - 35;
-      logReportList[1].subValue = int.parse(temp[1]);
-      logReportList[1].subIndex = int.parse(temp[1]) - 1;
+      if (temp.length > 1) {
+        logReportList[1].subValue = int.parse(temp[1]);
+        logReportList[1].subIndex = int.parse(temp[1]) - 1;
+      } else {
+        logReportList[1].subValue = 0;
+        logReportList[1].subIndex = 0;
+      }
       logReportList[1].finalValue = userSymptomsLogs.bodyTemperature!;
     }
 
@@ -168,24 +262,31 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       List<String> weight = userSymptomsLogs.weight!.split(".");
       logReportList[0].mainValue = int.parse(weight[0]);
       logReportList[0].mainIndex = int.parse(weight[0]) - 20;
-      logReportList[0].subValue = int.parse(weight[1]);
-      double aa = int.parse(weight[1]) / 100;
-      logReportList[0].subIndex = aa.round();
+      if (weight.length > 1) {
+        double aa = int.parse(weight[1]) / 100;
+        logReportList[0].subIndex = aa.round();
+        logReportList[0].subValue = int.parse(weight[1]);
+      } else {
+        logReportList[0].subIndex = 0;
+        logReportList[0].subValue = 0;
+      }
+
       logReportList[0].finalValue = userSymptomsLogs.weight!;
     }
 
     // Set existing data - end
     currentDate = currentDateFormat.format(DateTime.now());
-    if (widget.isShowCustomSymptomsOnly! == false) {
-      regenerateData();
-    }
-    if (widget.customSymptomsList != null &&
+    //if (widget.isShowCustomSymptomsOnly! == false) {
+
+    // }
+    /*if (widget.customSymptomsList != null &&
         widget.customSymptomsList!.isNotEmpty) {
       symptomsList.addAll(widget.customSymptomsList!);
-      printMenstrualCycleLogs("Not null");
+      //printMenstrualCycleLogs("Not null");
     } else {
-      printMenstrualCycleLogs(" null");
-    }
+      //printMenstrualCycleLogs("null");
+    }*/
+    regenerateData();
     setState(() {
       isLoading = false;
     });
@@ -246,7 +347,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             "${logReportList[1].mainValue}.0${logReportList[1].subValue}";
       }
     } else {
-      logReportList[1].finalValue = "${logReportList[1].mainValue}";
+      logReportList[1].finalValue = "${logReportList[1].mainValue}.0";
     }
     setState(() {});
   }
@@ -352,7 +453,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     instance.saveSymptomsLogs(
         userSymptomsData: userLogData,
         onError: widget.onError,
-        symptomsLogDate: widget.symptomsLogDate,
+        symptomsLogDate: DateTime.parse(logDate),
         onSuccess: widget.onSuccess,
         waterValue: (logReportList[4].finalValue!.isNotEmpty)
             ? logReportList[4].finalValue.toString()
@@ -884,283 +985,352 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       backgroundColor: const Color(0xfff2f2f2),
       body: Padding(
         padding: const EdgeInsets.only(top: 40),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(top: 10, left: 8, right: 8, bottom: 20),
-            child: Column(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.black,
+                  size: 30,
+                ),
+              ),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const SizedBox(),
-                    Text(
-                      logDate,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                    GestureDetector(
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.black,
-                        size: 30,
-                      ),
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-                ListView.builder(
-                  padding: const EdgeInsets.all(8),
-                  shrinkWrap: true,
-                  physics: const ClampingScrollPhysics(),
-                  itemCount: symptomsList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Card(
-                      color: Colors.white,
-                      elevation: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "${symptomsList[index].categoryName}",
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            Wrap(
-                                children: symptomsList[index]
-                                    .symptomsData!
-                                    .map((chip) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 3),
-                                child: Stack(
-                                  alignment: Alignment.bottomRight,
-                                  children: [
-                                    FilterChip(
-                                      shape: const RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(50),
-                                        ),
-                                      ),
-                                      key: ValueKey(chip),
-                                      side: chip.isSelected
-                                          ? BorderSide(
-                                              color: Color(
-                                                int.parse(
-                                                    "0xff${symptomsList[index].categoryColor}"),
-                                              ),
-                                            )
-                                          : BorderSide.none,
-                                      label: Text("${chip.symptomName}"),
-                                      padding: const EdgeInsets.all(1),
-                                      backgroundColor: chip.isSelected
-                                          ? Colors.white
-                                          : Color(
-                                              int.parse(
-                                                  "0x0D${symptomsList[index].categoryColor}"),
-                                            ),
-                                      onSelected: (bool value) {
-                                        setState(() {
-                                          chip.isSelected = !chip.isSelected;
-                                        });
-                                      },
-                                    ),
-                                    (chip.isSelected)
-                                        ? Icon(Icons.check_circle_rounded,
-                                            color: Color(
-                                              int.parse(
-                                                  "0xff${symptomsList[index].categoryColor}"),
-                                            ),
-                                            size: 16)
-                                        : const SizedBox(),
-                                  ],
-                                ),
-                              );
-                            }).toList()),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                (widget.isRequiredWeightView!)
-                    ? logView(
-                        title: Strings.lblWeight,
-                        addIcon: const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
-                        hintText: (logReportList[0].finalValue!.isNotEmpty)
-                            ? logReportList[0].finalValue!
-                            : "000",
-                        image: weightImage,
-                        onAddClick: () {
-                          _showBottomSheetView(
-                              context: context,
-                              type: Strings.weightKg,
-                              onClick: saveWeightLog,
-                              childView: _buildWeightPicker(),
-                              title: Strings.lblWeightTitle);
-                        },
-                        onRemoveClick: () {},
-                        removeIcon: const Icon(
-                          Icons.delete,
-                          size: 20,
-                        ),
-                        typeString: "/ ${Strings.weightKg}")
-                    : const SizedBox(),
-                (widget.isRequiredBodyTemperatureView!)
-                    ? logView(
-                        title: Strings.lblBodyTemp,
-                        addIcon: const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
-                        hintText: (logReportList[1].finalValue!.isNotEmpty)
-                            ? logReportList[1].finalValue!
-                            : "000",
-                        image: temperatureImage,
-                        onAddClick: () {
-                          _showBottomSheetView(
-                              context: context,
-                              title: Strings.lblBodyTempTitle,
-                              childView: _buildTemperaturePicker(),
-                              onClick: saveBodyTempLog,
-                              type: "°${Strings.bodyTempC}");
-                        },
-                        onRemoveClick: () {},
-                        removeIcon: const Icon(
-                          Icons.delete,
-                          size: 20,
-                        ),
-                        typeString: "/ °${Strings.bodyTempC}")
-                    : const SizedBox(),
-                (widget.isRequiredSleepView!)
-                    ? sleepView(
-                        title: Strings.lblSleep,
-                        /* addIcon: const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),*/
-                        startTimeHintText:
-                            (logReportList[2].finalValue!.isNotEmpty)
-                                ? logReportList[2].finalValue!
-                                : "00 h : 00 m",
-                        endTimeHintText:
-                            (logReportList[5].finalValue!.isNotEmpty)
-                                ? logReportList[5].finalValue!
-                                : "00 h : 00 m",
-                        image: sleepImage,
-                        onEndTimeClick: () {
-                          _showBottomSheetView(
-                              context: context,
-                              type: "",
-                              onClick: saveSleepWackUpLog,
-                              childView: _buildSleepPicker(isWakeUpTime: true),
-                              title: Strings.logPeriodWakeUpTimeLog);
-                        },
-                        onStartTimeClick: () {
-                          _showBottomSheetView(
-                              context: context,
-                              type: "",
-                              onClick: saveSleepLog,
-                              childView: _buildSleepPicker(),
-                              title: Strings.logPeriodBedTimeLog);
-                        },
-                        onRemoveClick: () {},
-                        removeIcon: const Icon(
-                          Icons.delete,
-                          size: 20,
-                        ),
-                        typeString: "")
-                    : const SizedBox(),
-                (widget.isRequiredMeditationView!)
-                    ? logView(
-                        title: Strings.lblMeditation,
-                        addIcon: const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
-                        hintText: (logReportList[3].finalValue!.isNotEmpty)
-                            ? logReportList[3].finalValue!
-                            : "00 h : 00 m",
-                        image: yogaImage,
-                        onAddClick: () {
-                          _showBottomSheetView(
-                              context: context,
-                              type: "",
-                              onClick: saveMeditationLog,
-                              childView: _buildMeditationPicker(),
-                              title: Strings.lblMeditationTitle);
-                        },
-                        onRemoveClick: () {},
-                        removeIcon: const Icon(
-                          Icons.delete,
-                          size: 20,
-                        ),
-                        typeString: "")
-                    : const SizedBox(),
-                (widget.isRequiredWaterView!)
-                    ? logView(
-                        title: Strings.lblWater,
-                        addIcon: const Icon(
-                          Icons.edit,
-                          size: 20,
-                        ),
-                        hintText: (logReportList[4].finalValue!.isNotEmpty)
-                            ? logReportList[4].finalValue!
-                            : "00",
-                        image: drinkWaterImage,
-                        onAddClick: () {
-                          _showBottomSheetView(
-                              context: context,
-                              title: Strings.lblWaterTitle,
-                              childView: _buildWaterPicker(),
-                              onClick: saveWaterLog,
-                              type: Strings.graphWaterUnitLiter);
-                        },
-                        onRemoveClick: () {},
-                        removeIcon: const Icon(
-                          Icons.delete,
-                          size: 20,
-                        ),
-                        typeString: "/ ${Strings.graphWaterUnitLiter}")
-                    : const SizedBox(),
                 GestureDetector(
-                  onTap: () {
-                    saveTodayLogs();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.green,
-                      ),
-                      color: Colors.green,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    child: Center(
-                      child: Text(
-                        BaseLanguage.saveLogs,
-                        style: const TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Icon(
+                      Icons.arrow_back_ios_new,
+                      color: Colors.black,
+                      size: 20,
                     ),
                   ),
+                  onTap: () {
+                    DateTime newDateTime = DateTime.parse(logDate);
+                    DateTime previousDate =
+                        newDateTime.subtract(Duration(days: 1));
+                    logDate = defaultDateFormat.format(previousDate);
+                    init(previousDate);
+                  },
+                ),
+                Text(
+                  logDate,
+                  style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                ),
+                GestureDetector(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.black,
+                      size: 20,
+                    ),
+                  ),
+                  onTap: () {
+                    DateTime newDateTime = DateTime.now();
+                    DateTime currentDate = DateTime.parse(logDate);
+                    DateTime nextDate = currentDate.add(Duration(days: 1));
+                    if (!nextDate.isAfter(newDateTime)) {
+                      logDate = defaultDateFormat.format(nextDate);
+                      init(nextDate);
+                    }
+                  },
                 )
               ],
             ),
-          ),
+            SizedBox(
+              height: 10,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      top: 10, left: 8, right: 8, bottom: 20),
+                  child: Column(
+                    children: [
+                      (isLoading)
+                          ? CircularProgressIndicator()
+                          : ListView.builder(
+                              padding: const EdgeInsets.all(8),
+                              shrinkWrap: true,
+                              physics: const ClampingScrollPhysics(),
+                              itemCount: symptomsList.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Card(
+                                  color: Colors.white,
+                                  elevation: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${symptomsList[index].categoryName}",
+                                          style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Wrap(
+                                            children: symptomsList[index]
+                                                .symptomsData!
+                                                .map((chip) {
+                                          return Padding(
+                                            padding:
+                                                const EdgeInsets.only(right: 3),
+                                            child: Stack(
+                                              alignment: Alignment.bottomRight,
+                                              children: [
+                                                FilterChip(
+                                                  shape:
+                                                      const RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(50),
+                                                    ),
+                                                  ),
+                                                  key: ValueKey(chip),
+                                                  side: chip.isSelected
+                                                      ? BorderSide(
+                                                          color: Color(
+                                                            int.parse(
+                                                                "0xff${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
+                                                          ),
+                                                        )
+                                                      : BorderSide.none,
+                                                  label: Text(
+                                                      "${chip.symptomName}"),
+                                                  padding:
+                                                      const EdgeInsets.all(1),
+                                                  backgroundColor:
+                                                      chip.isSelected
+                                                          ? Colors.white
+                                                          : Color(
+                                                              int.parse(
+                                                                  "0x0D${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
+                                                            ),
+                                                  onSelected: (bool value) {
+                                                    setState(() {
+                                                      chip.isSelected =
+                                                          !chip.isSelected;
+                                                    });
+                                                  },
+                                                ),
+                                                (chip.isSelected)
+                                                    ? Icon(
+                                                        Icons
+                                                            .check_circle_rounded,
+                                                        color: Color(
+                                                          int.parse(
+                                                              "0xff${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
+                                                        ),
+                                                        size: 16)
+                                                    : const SizedBox(),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList()),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                      (widget.isRequiredWeightView!)
+                          ? logView(
+                              title: Strings.lblWeight,
+                              addIcon: const Icon(
+                                Icons.edit,
+                                size: 20,
+                              ),
+                              hintText:
+                                  (logReportList[0].finalValue!.isNotEmpty)
+                                      ? logReportList[0].finalValue!
+                                      : "000",
+                              image: weightImage,
+                              onAddClick: () {
+                                _showBottomSheetView(
+                                    context: context,
+                                    type: Strings.weightKg,
+                                    onClick: saveWeightLog,
+                                    childView: _buildWeightPicker(),
+                                    title: Strings.lblWeightTitle);
+                              },
+                              onRemoveClick: () {},
+                              removeIcon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                              ),
+                              typeString: "/ ${Strings.weightKg}")
+                          : const SizedBox(),
+                      (widget.isRequiredBodyTemperatureView!)
+                          ? logView(
+                              title: Strings.lblBodyTemp,
+                              addIcon: const Icon(
+                                Icons.edit,
+                                size: 20,
+                              ),
+                              hintText:
+                                  (logReportList[1].finalValue!.isNotEmpty)
+                                      ? logReportList[1].finalValue!
+                                      : "000",
+                              image: temperatureImage,
+                              onAddClick: () {
+                                _showBottomSheetView(
+                                    context: context,
+                                    title: Strings.lblBodyTempTitle,
+                                    childView: _buildTemperaturePicker(),
+                                    onClick: saveBodyTempLog,
+                                    type: "°${Strings.bodyTempC}");
+                              },
+                              onRemoveClick: () {},
+                              removeIcon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                              ),
+                              typeString: "/ °${Strings.bodyTempC}")
+                          : const SizedBox(),
+                      (widget.isRequiredSleepView!)
+                          ? sleepView(
+                              title: Strings.lblSleep,
+                              /* addIcon: const Icon(
+                                Icons.edit,
+                                size: 20,
+                              ),*/
+                              startTimeHintText:
+                                  (logReportList[2].finalValue!.isNotEmpty)
+                                      ? logReportList[2].finalValue!
+                                      : "00 h : 00 m",
+                              endTimeHintText:
+                                  (logReportList[5].finalValue!.isNotEmpty)
+                                      ? logReportList[5].finalValue!
+                                      : "00 h : 00 m",
+                              image: sleepImage,
+                              onEndTimeClick: () {
+                                _showBottomSheetView(
+                                    context: context,
+                                    type: "",
+                                    onClick: saveSleepWackUpLog,
+                                    childView:
+                                        _buildSleepPicker(isWakeUpTime: true),
+                                    title: Strings.logPeriodWakeUpTimeLog);
+                              },
+                              onStartTimeClick: () {
+                                _showBottomSheetView(
+                                    context: context,
+                                    type: "",
+                                    onClick: saveSleepLog,
+                                    childView: _buildSleepPicker(),
+                                    title: Strings.logPeriodBedTimeLog);
+                              },
+                              onRemoveClick: () {},
+                              removeIcon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                              ),
+                              typeString: "")
+                          : const SizedBox(),
+                      (widget.isRequiredMeditationView!)
+                          ? logView(
+                              title: Strings.lblMeditation,
+                              addIcon: const Icon(
+                                Icons.edit,
+                                size: 20,
+                              ),
+                              hintText:
+                                  (logReportList[3].finalValue!.isNotEmpty)
+                                      ? logReportList[3].finalValue!
+                                      : "00 h : 00 m",
+                              image: yogaImage,
+                              onAddClick: () {
+                                _showBottomSheetView(
+                                    context: context,
+                                    type: "",
+                                    onClick: saveMeditationLog,
+                                    childView: _buildMeditationPicker(),
+                                    title: Strings.lblMeditationTitle);
+                              },
+                              onRemoveClick: () {},
+                              removeIcon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                              ),
+                              typeString: "")
+                          : const SizedBox(),
+                      (widget.isRequiredWaterView!)
+                          ? logView(
+                              title: Strings.lblWater,
+                              addIcon: const Icon(
+                                Icons.edit,
+                                size: 20,
+                              ),
+                              hintText:
+                                  (logReportList[4].finalValue!.isNotEmpty)
+                                      ? logReportList[4].finalValue!
+                                      : "00",
+                              image: drinkWaterImage,
+                              onAddClick: () {
+                                _showBottomSheetView(
+                                    context: context,
+                                    title: Strings.lblWaterTitle,
+                                    childView: _buildWaterPicker(),
+                                    onClick: saveWaterLog,
+                                    type: Strings.graphWaterUnitLiter);
+                              },
+                              onRemoveClick: () {},
+                              removeIcon: const Icon(
+                                Icons.delete,
+                                size: 20,
+                              ),
+                              typeString: "/ ${Strings.graphWaterUnitLiter}")
+                          : const SizedBox(),
+                      GestureDetector(
+                        onTap: () {
+                          saveTodayLogs();
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.green,
+                            ),
+                            color: Colors.green,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          margin: const EdgeInsets.all(10),
+                          child: Center(
+                            child: Text(
+                              BaseLanguage.saveLogs,
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
