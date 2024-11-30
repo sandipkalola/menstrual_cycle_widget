@@ -225,9 +225,10 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
           Navigator.pop(context, isChangedData);
         }
       },
-      child: SafeArea(
-        child: Scaffold(
-          body: Column(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -291,7 +292,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                 (childIndex) {
                               DateTime day = CalenderDateUtils.getDay(
                                   monthWidgets[index][childIndex]);
-
+          
                               if (CalenderDateUtils.isFirstDayOfMonth(day)) {
                                 monthStarted = true;
                               }
