@@ -12,6 +12,7 @@ class MenstrualLogPeriodView extends StatefulWidget {
   DateTime? symptomsLogDate;
   Function? onSuccess;
   Function? onError;
+  Color themeColor;
   bool? isRequiredWaterView;
   bool? isRequiredBodyTemperatureView;
   bool? isRequiredWeightView;
@@ -27,6 +28,7 @@ class MenstrualLogPeriodView extends StatefulWidget {
       required this.onSuccess,
       required this.onError,
       required this.displaySymptomsData,
+      this.themeColor = Colors.black,
       this.isRequiredWaterView = true,
       this.isRequiredBodyTemperatureView = true,
       this.isRequiredMeditationView = true,
@@ -56,6 +58,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   ];
   String currentDate = "";
   String logDate = "";
+  String cycleDay = "";
   bool isLoading = true;
 
   @override
@@ -63,83 +66,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     super.initState();
     init(widget.symptomsLogDate);
   }
-
-  /// Regenerate list for symptoms data
-  /*regenerateData() {
-    for (int index = 0; index < defaultSymptomsData.length; index++) {
-      SymptomsCategory defaultData = defaultSymptomsData[index];
-      bool isVisible = isVisibleSymptoms(defaultData.categoryName!);
-      if (isVisible) {
-        SymptomsCategory symptoms = SymptomsCategory(symptomsData: []);
-        symptoms.categoryId = defaultData.categoryId;
-        symptoms.categoryName = defaultData.categoryName;
-        symptoms.categoryColor = defaultData.categoryColor;
-        List<SymptomsData> listSymptomsData = [];
-        for (int indexJ = 0;
-            indexJ < defaultData.symptomsData!.length;
-            indexJ++) {
-          SymptomsData deSymptomsData = defaultData.symptomsData![indexJ];
-          SymptomsData symptomsData = SymptomsData();
-          symptomsData.symptomName = deSymptomsData.symptomName;
-          symptomsData.symptomId = deSymptomsData.symptomId;
-          bool isSelected = false;
-          // Check if found into existing list {
-          for (int sListIndex = 0;
-              sListIndex < existingSymptomsList.length;
-              sListIndex++) {
-            if (existingSymptomsList[sListIndex].symptomId ==
-                deSymptomsData.symptomId) {
-              isSelected = true;
-              break;
-            }
-          }
-          symptomsData.isSelected = isSelected;
-          listSymptomsData.add(symptomsData);
-        }
-        symptoms.symptomsData!.addAll(listSymptomsData);
-        symptomsList.add(symptoms);
-      }
-    }
-
-    if (widget.customSymptomsList != null &&
-        widget.customSymptomsList!.isNotEmpty) {
-      for (int index = 0; index < widget.customSymptomsList!.length; index++) {
-        SymptomsCategory defaultData = widget.customSymptomsList![index];
-        if (defaultData.isVisibleCategory == 1) {
-          SymptomsCategory symptoms = SymptomsCategory(symptomsData: []);
-          symptoms.categoryId = defaultData.categoryId;
-          symptoms.categoryName = defaultData.categoryName;
-          symptoms.categoryColor = defaultData.categoryColor;
-          List<SymptomsData> listSymptomsData = [];
-          for (int indexJ = 0;
-              indexJ < defaultData.symptomsData!.length;
-              indexJ++) {
-            SymptomsData deSymptomsData = defaultData.symptomsData![indexJ];
-            SymptomsData symptomsData = SymptomsData();
-            symptomsData.symptomName = deSymptomsData.symptomName;
-            symptomsData.symptomId = deSymptomsData.symptomId;
-            bool isSelected = false;
-            // Check if found into existing list {
-            for (int sListIndex = 0;
-                sListIndex < existingSymptomsList.length;
-                sListIndex++) {
-              if (existingSymptomsList[sListIndex].symptomId ==
-                  deSymptomsData.symptomId) {
-                isSelected = true;
-                break;
-              }
-            }
-            symptomsData.isSelected = isSelected;
-            listSymptomsData.add(symptomsData);
-          }
-          symptoms.symptomsData!.addAll(listSymptomsData);
-          symptomsList.add(symptoms);
-        }
-      }//printMenstrualCycleLogs("Not null");
-    } else {
-      //printMenstrualCycleLogs("null");
-    }
-  }*/
 
   void processSymptomsCategory(
       List<SymptomsCategory> sourceList, bool checkVisibility) {
@@ -173,9 +99,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   }
 
   void regenerateData() {
-    // Process default symptoms data
-    processSymptomsCategory(defaultSymptomsData, true);
-
+    if (widget.isShowCustomSymptomsOnly! == false) {
+      // Process default symptoms data
+      processSymptomsCategory(defaultSymptomsData, true);
+    }
     // Process custom symptoms list
     if (widget.customSymptomsList != null &&
         widget.customSymptomsList!.isNotEmpty) {
@@ -201,6 +128,14 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       }
     }
 
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      final difference = DateTime.parse(logDate)
+          .difference(DateTime.parse(lastPeriodDate))
+          .inDays;
+      cycleDay = "Cycle Day $difference";
+    }
     // Set existing data - start
     UserSymptomsLogs userSymptomsLogs =
         await mInstance.getSymptomsData(logDate);
@@ -979,6 +914,19 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     );
   }
 
+  getTitle() {
+    final now = DateTime.now();
+    final difference = now.difference(DateTime.parse(logDate)).inDays;
+
+    if (difference == 0) {
+      return 'Today';
+    } else if (difference == 1) {
+      return 'Yesterday';
+    } else {
+      return CalenderDateUtils.graphDateFormat(DateTime.parse(logDate));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1006,8 +954,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
                     child: const Icon(
                       Icons.arrow_back_ios_new,
                       color: Colors.black,
@@ -1022,16 +971,25 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     init(previousDate);
                   },
                 ),
-                Text(
-                  logDate,
-                  style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
+                Column(
+                  children: [
+                    Text(
+                      getTitle(),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18),
+                    ),
+                    Text(
+                      cycleDay,
+                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
                 ),
                 GestureDetector(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: SizedBox(
+                    width: 40,
+                    height: 40,
                     child: const Icon(
                       Icons.arrow_forward_ios,
                       color: Colors.black,
@@ -1051,17 +1009,37 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
               ],
             ),
             SizedBox(
-              height: 10,
+              height: 8,
+            ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.verified_user,
+                    color: Colors.green,
+                    size: 18,
+                  ),
+                  Text(
+                    " Your data is protected",
+                    style: TextStyle(fontSize: 10),
+                  )
+                ]),
+            SizedBox(
+              height: 2,
             ),
             Expanded(
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                      top: 10, left: 8, right: 8, bottom: 20),
+                      top: 0, left: 8, right: 8, bottom: 20),
                   child: Column(
                     children: [
                       (isLoading)
-                          ? CircularProgressIndicator()
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(),
+                            )
                           : ListView.builder(
                               padding: const EdgeInsets.all(8),
                               shrinkWrap: true,
@@ -1298,42 +1276,37 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               ),
                               typeString: "/ ${Strings.graphWaterUnitLiter}")
                           : const SizedBox(),
-                      GestureDetector(
-                        onTap: () {
-                          saveTodayLogs();
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(10),
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Colors.green,
-                            ),
-                            color: Colors.green,
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          margin: const EdgeInsets.all(10),
-                          child: Center(
-                            child: Text(
-                              BaseLanguage.saveLogs,
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
               ),
             ),
-
-
-
-
+            GestureDetector(
+              onTap: () {
+                saveTodayLogs();
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: widget.themeColor,
+                  ),
+                  color: widget.themeColor,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                ),
+                margin: const EdgeInsets.all(10),
+                child: Center(
+                  child: Text(
+                    BaseLanguage.saveLogs,
+                    style: const TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),

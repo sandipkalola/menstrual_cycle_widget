@@ -292,7 +292,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                 (childIndex) {
                               DateTime day = CalenderDateUtils.getDay(
                                   monthWidgets[index][childIndex]);
-          
+
                               if (CalenderDateUtils.isFirstDayOfMonth(day)) {
                                 monthStarted = true;
                               }
