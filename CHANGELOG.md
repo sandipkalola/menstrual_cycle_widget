@@ -1,6 +1,7 @@
-## [2.1.1] - 4 Dec 2024
+## [2.1.2] - 4 Dec 2024
 * Added new params 'themeColor' into MenstrualLogPeriodView
 * Ui enhancement of MenstrualLogPeriodView
+* Fixed minor bugs
 
 ## [2.1.0] - 29 Nov 2024
 * Fixed minor bugs

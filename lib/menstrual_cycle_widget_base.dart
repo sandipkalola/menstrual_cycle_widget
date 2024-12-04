@@ -240,7 +240,18 @@ class MenstrualCycleWidget {
   }
 
   /// Return UserSymptomsLogs based on log date
-  Future<UserSymptomsLogs> getSymptomsData(String logDate) async {
+  Future<UserSymptomsLogs> getSymptomsData(DateTime? symptomsLogDate) async {
+    String logDate = "";
+    if (symptomsLogDate != null) {
+      try {
+        logDate = defaultDateFormat.format(symptomsLogDate);
+      } catch (e) {
+        throw Strings.errorInvalidSymptomsLogDate;
+      }
+    } else {
+      throw Strings.errorInvalidSymptomsLogDate;
+    }
+
     UserSymptomsLogs userSymptomsLogs = UserSymptomsLogs(symptomData: []);
     final mInstance = MenstrualCycleWidget.instance!;
     final dbHelper = MenstrualCycleDbHelper.instance;
@@ -284,6 +295,20 @@ class MenstrualCycleWidget {
 
     userSymptomsLogs.symptomData!.addAll(symptomsDataList);
     return userSymptomsLogs;
+  }
+
+  /// get Today's symptoms ids
+  Future<List<int>> getSymptomsId(DateTime? symptomsLogDate) async {
+    if (symptomsLogDate == null) {
+      throw Strings.errorInvalidSymptomsLogDate;
+    }
+
+    List<int> symptomsIds = [];
+    UserSymptomsLogs userSymptomsLogs = await getSymptomsData(symptomsLogDate);
+    for (int i = 0; i < userSymptomsLogs.symptomData!.length; i++) {
+      symptomsIds.add(userSymptomsLogs.symptomData![i].symptomId!);
+    }
+    return symptomsIds;
   }
 
   /// get Today's symptoms logs

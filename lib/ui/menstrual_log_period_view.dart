@@ -137,8 +137,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       cycleDay = "Cycle Day $difference";
     }
     // Set existing data - start
-    UserSymptomsLogs userSymptomsLogs =
-        await mInstance.getSymptomsData(logDate);
+    UserSymptomsLogs userSymptomsLogs = await mInstance.getSymptomsData(date);
     existingSymptomsList.clear();
     symptomsList.clear();
     existingSymptomsList.addAll(userSymptomsLogs.symptomData!);
