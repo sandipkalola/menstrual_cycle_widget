@@ -39,7 +39,7 @@ class _MenstrualAllCycleHistoryGraphState
     final instance = MenstrualCycleWidget.instance!;
     List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
     for (int i = 0; i < periodRange.length; i++) {
-      int cycleDuration = periodRange[i].cycleDuration!;
+      int cycleDuration = periodRange[i].cycleLength!;
       if (cycleDuration > 0 && cycleDuration < 50) {
         allPeriodRange.add(periodRange[i]);
       }
@@ -103,7 +103,7 @@ class _MenstrualAllCycleHistoryGraphState
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
                         physics: const ClampingScrollPhysics(),
-                        itemCount: allPeriodRange[index].cycleDuration,
+                        itemCount: allPeriodRange[index].cycleLength,
                         itemBuilder: (BuildContext context, int inx) {
                           return Padding(
                             padding: const EdgeInsets.only(left: 2),
@@ -122,7 +122,7 @@ class _MenstrualAllCycleHistoryGraphState
                   ),
                 ),
                 Text(
-                  "${allPeriodRange[index].periodDuration!} ${Strings.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleDuration!} ${Strings.graphCycleDaysCycle}",
+                  "${allPeriodRange[index].periodDuration!} ${Strings.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${Strings.graphCycleDaysCycle}",
                   style:
                       const TextStyle(color: Color(0xA6212121), fontSize: 10),
                 ),

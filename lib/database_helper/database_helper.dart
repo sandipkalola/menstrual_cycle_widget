@@ -8,7 +8,7 @@ import '../menstrual_cycle_widget.dart';
 
 class MenstrualCycleDbHelper {
   static const _databaseName = "MenstrualCycleAppDatabase.db";
-  static const _databaseVersion = 2;
+  static const _databaseVersion = 3;
 
   /// Common Columns
   static const String columnID = "id";
@@ -41,6 +41,7 @@ class MenstrualCycleDbHelper {
   static const String columnIsCustomLog = "isCustomLog";
   static const String columnBodyTemperature = "bodyTemperature";
   static const String columnLogDate = "logDate";
+  static const String columnCycleDay = "cycleDay";
 
   static const String createTableDailyUserSymptomsLogsData =
       "CREATE TABLE $tableDailyUserSymptomsLogsData ("
@@ -57,6 +58,7 @@ class MenstrualCycleDbHelper {
       "$columnWeight TEXT, "
       "$columnBodyTemperature TEXT, "
       "$columnLogDate TEXT, "
+      "$columnCycleDay INTEGER, "
       "$columnIsCustomLog TEXT DEFAULT '0', "
       "$columnCreatedDateTime TEXT)";
 
@@ -111,8 +113,20 @@ class MenstrualCycleDbHelper {
 
   /// this function is called when database version is upgrade
   Future _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    if (newVersion == 2) {
-      await db.execute(createTableCurrentUserDetails);
+    // printMenstrualCycleLogs("oldVersion $oldVersion newVersion $newVersion");
+    try {
+      // Migration from version 1 to 2
+      if (oldVersion < 2) {
+        await db.execute(createTableCurrentUserDetails);
+      }
+
+      // Migration from version 2 to 3
+      if (oldVersion < 3) {
+        await db.execute(
+            'ALTER TABLE $tableDailyUserSymptomsLogsData ADD COLUMN $columnCycleDay INTEGER');
+      }
+    } catch (e) {
+      //printMenstrualCycleLogs("Find Error");
     }
   }
 
@@ -236,13 +250,61 @@ class MenstrualCycleDbHelper {
   }
 
   /// Return last periods start date
+  Future<String> getLastPeriodDateFromInputDate(String logDate) async {
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+    String lastPeriodsDate = "";
+    Database? db = await instance.database;
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId' ORDER BY $columnPeriodEncryptDate DESC");
+
+    List<DateTime> selectedPeriodsDate = [];
+    List<DateTime> periodStartDateList = [];
+
+    List.generate(queryResponse.length, (i) {
+      selectedPeriodsDate.add(DateTime.parse(Encryption.instance
+          .decrypt(queryResponse[i][columnPeriodEncryptDate])));
+    });
+
+    selectedPeriodsDate.sort((a, b) => a.compareTo(b));
+
+    if (selectedPeriodsDate.isNotEmpty) {
+      for (int index = 1; index < selectedPeriodsDate.length; index++) {
+        if (index == 1) {
+          periodStartDateList.add(selectedPeriodsDate[index - 1]);
+        }
+        int inDays = selectedPeriodsDate[index]
+            .difference(selectedPeriodsDate[index - 1])
+            .inDays;
+        if (inDays > 2) {
+          periodStartDateList.add(selectedPeriodsDate[index]);
+        }
+      }
+    }
+
+    //printMenstrualCycleLogs("Log Date $logDate");
+    if (periodStartDateList.isNotEmpty) {
+      for (int index = 0; index < periodStartDateList.length; index++) {
+        if (DateTime.parse(logDate) == periodStartDateList[index]) {
+          lastPeriodsDate =
+              CalenderDateUtils.dateDayFormat(periodStartDateList[index]);
+        } else if (DateTime.parse(logDate)
+            .isAfter(periodStartDateList[index])) {
+          lastPeriodsDate =
+              CalenderDateUtils.dateDayFormat(periodStartDateList[index]);
+        }
+      }
+    }
+    //printMenstrualCycleLogs("Last Period Date $lastPeriodsDate");
+    return lastPeriodsDate;
+  }
+
+  /// Return last periods start date
   Future<String> getLastPeriodDate() async {
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
     String lastPeriodsDate = "";
-    //printMenstrualCycleLogs("customerId : $customerId");
-    //printMenstrualCycleLogs(
-    //    "customerId decrypt : ${Encryption.instance.decrypt(customerId)}");
     Database? db = await instance.database;
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
@@ -256,13 +318,11 @@ class MenstrualCycleDbHelper {
     });
 
     selectedPeriodsDate.sort((a, b) => b.compareTo(a));
-    //printMenstrualCycleLogs(
-    //    "selectedPeriodsDate New Data : ${selectedPeriodsDate.length}");
 
     int oneDaysCount = 0; // Only If user selected only one cycle of periods
     if (selectedPeriodsDate.isNotEmpty) {
       if (selectedPeriodsDate.length == 1) {
-        mInstance.lastPeriodLength = 1;
+        //mInstance.lastPeriodLength = 1;
         oneDaysCount = 1;
         //printLogs("Count length ==1: ${selectedPeriodsDate.length}");
         lastPeriodsDate =
@@ -276,7 +336,7 @@ class MenstrualCycleDbHelper {
               .inDays;
           if (inDays > 2) {
             //printLogs("Count inDays >2: $oneDaysCount");
-            mInstance.lastPeriodLength = oneDaysCount + 1;
+            // mInstance.lastPeriodLength = oneDaysCount + 1;
             lastPeriodsDate =
                 CalenderDateUtils.dateDayFormat(selectedPeriodsDate[index - 1]);
             break;
@@ -289,17 +349,11 @@ class MenstrualCycleDbHelper {
       // Only If user selected only one cycle of periods
       if (lastPeriodsDate.isEmpty &&
           oneDaysCount == selectedPeriodsDate.length - 1) {
-        mInstance.lastPeriodLength = oneDaysCount + 1;
-
-        //printLogs("Count --- isEmpty: $oneDaysCount");
         lastPeriodsDate = CalenderDateUtils.dateDayFormat(
             selectedPeriodsDate[selectedPeriodsDate.length - 1]);
       }
     }
-    if (oneDaysCount == 0) {
-      mInstance.lastPeriodLength = 0;
-    }
-    //printLogs("lastPeriodsDate ------ : $lastPeriodsDate");
+
     return lastPeriodsDate;
   }
 

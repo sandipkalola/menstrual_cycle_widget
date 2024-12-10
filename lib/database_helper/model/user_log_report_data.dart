@@ -3,6 +3,7 @@ import 'symptoms_data.dart';
 
 class UserLogReportData {
   int? id;
+  int? cycleDay;
   String? customerId;
   List<SymptomsData>? symptomsData;
   DateTime? logDate;
@@ -22,6 +23,7 @@ class UserLogReportData {
       this.customerId,
       this.symptomsData,
       this.logDate,
+      this.cycleDay,
       this.createdAt,
       this.bodyTemperature,
       this.meditationTime,
@@ -38,6 +40,7 @@ class UserLogReportData {
     customerId = json['customerId'];
     symptomsData = json['symptomData'];
     logDate = json['logDate'];
+    cycleDay = json['cycleDay'];
     createdAt = json['createdAt'];
     bodyTemperature = json['bodyTemperature'];
     meditationTime = json['meditationTime'];
@@ -56,6 +59,7 @@ class UserLogReportData {
     data['customerId'] = customerId;
     data['symptomData'] = symptomsData;
     data['logDate'] = logDate;
+    data['cycleDay'] = cycleDay;
     data['createdAt'] = createdAt;
     data['bodyTemperature'] = bodyTemperature;
     data['meditationTime'] = meditationTime;

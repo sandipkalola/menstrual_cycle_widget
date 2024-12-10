@@ -204,7 +204,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     if (widget.isAutoSetData) {
       _totalCycleDays = _instance.getCycleLength();
       _menstruationDayCount = _instance.getPeriodDuration();
-      _follicularDayCount = getFollicularDayCounts();
+      _follicularDayCount = _instance.getFollicularDayCounts();
       if (lastPeriodDate.isNotEmpty) {
         DateTime lastPeriod = DateTime.parse(lastPeriodDate);
         int inDays = DateTime.now().difference(lastPeriod).inDays;
@@ -323,7 +323,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
       //printMenstrualCycleLogs("totalDuration : $totalDuration");
       //printMenstrualCycleLogs("selected day : $_selectedDay");
       int totalDayBeforeOvulationStart =
-          getFollicularDayCounts() + _instance.getPeriodDuration();
+          _instance.getFollicularDayCounts() + _instance.getPeriodDuration();
       int totalDayBeforeOvulationEnd =
           totalDayBeforeOvulationStart + defaultOvulationDay;
       int conceiveDays =
@@ -390,7 +390,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         int dayOvulationDayCount =
             totalDayBeforeOvulationEnd - totalDiffCurrentLastPeriod - 1;
         int ovulationDay = _instance.getPeriodDuration() +
-            getFollicularDayCounts() +
+            _instance.getFollicularDayCounts() +
             defaultOvulationDay ~/ 2;
         //printMenstrualCycleLogs("ovulationDay $ovulationDay");
 
@@ -443,16 +443,6 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
       _title = CalenderDateUtils.formatDayMonth(todayDateTime);
       _message2 = CalenderDateUtils.formatYear(todayDateTime);
     }
-  }
-
-  /// Get follicular day count
-  int getFollicularDayCounts() {
-    int follicularDay = defaultFollicularDay;
-    int ovulationDay = _instance.getCycleLength() - 14;
-    follicularDay =
-        ovulationDay - _instance.getPeriodDuration() - defaultOvulationDay ~/ 2;
-    //printMenstrualCycleLogs("follicularDay: $follicularDay");
-    return follicularDay - 1;
   }
 
   @override

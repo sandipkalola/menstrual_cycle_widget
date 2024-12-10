@@ -38,6 +38,7 @@
 ##### 5) Privacy & Security:
 - Secure data storage with local encryption.
 
+
 ## Documentation
 Check out the  [Documentation](https://sks-organization-5.gitbook.io/menstrual-cycle-widget) for complete details about this widget.
 

@@ -1,3 +1,6 @@
+## [2.3.1] - 10 Dec 2024
+* Added Custom function
+
 ## [2.1.2] - 4 Dec 2024
 * Added new params 'themeColor' into MenstrualLogPeriodView
 * Ui enhancement of MenstrualLogPeriodView

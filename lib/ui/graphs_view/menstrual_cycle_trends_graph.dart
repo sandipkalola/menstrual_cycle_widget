@@ -117,7 +117,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
 
     for (int i = 0; i < allPeriodDates.length; i++) {
       int cycleDuration =
-          allPeriodDates[i].cycleDuration! + allPeriodDates[i].periodDuration!;
+          allPeriodDates[i].cycleLength! + allPeriodDates[i].periodDuration!;
       if (minValue == 0) {
         minValue = cycleDuration;
       }
@@ -149,7 +149,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
     lastDataLength = 0;
     for (int i = start; i < end; i++) {
       int cycleDuration =
-          allPeriodDates[i].cycleDuration! + allPeriodDates[i].periodDuration!;
+          allPeriodDates[i].cycleLength! + allPeriodDates[i].periodDuration!;
       //  printMenstrualCycleLogs("cycleDuration : $cycleDuration");
       if (cycleDuration < 50) {
         DateTime startDate = DateTime.parse(allPeriodDates[i].periodStartDate!);

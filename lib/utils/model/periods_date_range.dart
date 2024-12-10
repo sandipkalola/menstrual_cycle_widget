@@ -6,7 +6,7 @@ class PeriodsDateRange {
   String? periodEndDate;
   List<String>? allPeriodDates = [];
   int? periodDuration;
-  int? cycleDuration;
+  int? cycleLength;
 
   PeriodsDateRange(
       {this.id,
@@ -15,8 +15,8 @@ class PeriodsDateRange {
       this.cycleEndDate,
       this.cycleStartDate,
       this.allPeriodDates,
-      this.cycleDuration = 0,
-      this.periodDuration});
+      this.cycleLength = 0,
+      this.periodDuration = 0});
 
   PeriodsDateRange.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -24,7 +24,7 @@ class PeriodsDateRange {
     cycleEndDate = json['cycle_end_date'];
     cycleStartDate = json['cycle_start_date'];
     periodEndDate = json['period_end_date'];
-    cycleDuration = json['cycle_duration'];
+    cycleLength = json['cycle_length'];
     allPeriodDates = (json['all_period_dates'] != null)
         ? json['all_period_dates'].cast<String>()
         : [];
@@ -40,7 +40,7 @@ class PeriodsDateRange {
     data['cycle_end_date'] = cycleEndDate;
     data['cycle_start_date'] = cycleStartDate;
     data['period_duration'] = periodDuration;
-    data['cycle_duration'] = cycleDuration;
+    data['cycle_length'] = cycleLength;
 
     return data;
   }

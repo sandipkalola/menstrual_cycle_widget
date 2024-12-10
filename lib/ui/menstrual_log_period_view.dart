@@ -59,6 +59,8 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   String currentDate = "";
   String logDate = "";
   String cycleDay = "";
+  int intCycleDay = 0;
+
   bool isLoading = true;
 
   @override
@@ -131,10 +133,21 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     final dbHelper = MenstrualCycleDbHelper.instance;
     String lastPeriodDate = await dbHelper.getLastPeriodDate();
     if (lastPeriodDate.isNotEmpty) {
-      final difference = DateTime.parse(logDate)
-          .difference(DateTime.parse(lastPeriodDate))
-          .inDays;
-      cycleDay = "Cycle Day $difference";
+      String lastPeriodDay =
+          await dbHelper.getLastPeriodDateFromInputDate(logDate);
+      if (lastPeriodDay.isNotEmpty) {
+        final difference = DateTime.parse(logDate)
+            .difference(DateTime.parse(lastPeriodDay))
+            .inDays;
+        cycleDay = "Cycle Day ${difference + 1}";
+        intCycleDay = difference + 1;
+        if (difference < 0) {
+          intCycleDay = 0;
+        }
+      } else {
+        cycleDay = "";
+        intCycleDay = 0;
+      }
     }
     // Set existing data - start
     UserSymptomsLogs userSymptomsLogs = await mInstance.getSymptomsData(date);
@@ -210,16 +223,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
 
     // Set existing data - end
     currentDate = currentDateFormat.format(DateTime.now());
-    //if (widget.isShowCustomSymptomsOnly! == false) {
 
-    // }
-    /*if (widget.customSymptomsList != null &&
-        widget.customSymptomsList!.isNotEmpty) {
-      symptomsList.addAll(widget.customSymptomsList!);
-      //printMenstrualCycleLogs("Not null");
-    } else {
-      //printMenstrualCycleLogs("null");
-    }*/
     regenerateData();
     setState(() {
       isLoading = false;
@@ -365,9 +369,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     } else {
       logReportList[0].finalValue = "${logReportList[0].mainValue}.00";
     }
-
-    /* logReportList[0].finalValue =
-    "${logReportList[0].mainValue}.${logReportList[0].subValue}00";*/
     setState(() {});
   }
 
@@ -378,7 +379,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       for (int j = 0; j < symptomsList[index].symptomsData!.length; j++) {
         SymptomsData symptomsData = symptomsList[index].symptomsData![j];
         if (symptomsData.isSelected) {
-          //printLogs("Selected  Name: ${symptomsData.symptomName}");
           userLogData.add(symptomsData);
         }
       }
@@ -387,6 +387,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     instance.saveSymptomsLogs(
         userSymptomsData: userLogData,
         onError: widget.onError,
+        cycleDay: intCycleDay,
         symptomsLogDate: DateTime.parse(logDate),
         onSuccess: widget.onSuccess,
         waterValue: (logReportList[4].finalValue!.isNotEmpty)

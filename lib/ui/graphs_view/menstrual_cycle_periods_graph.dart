@@ -97,7 +97,7 @@ class _MenstrualCyclePeriodsGraphState
     final instance = MenstrualCycleWidget.instance!;
     List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
     for (int i = 0; i < periodRange.length; i++) {
-      int cycleDuration = periodRange[i].cycleDuration!;
+      int cycleDuration = periodRange[i].cycleLength!;
       if (cycleDuration > 0 && cycleDuration < 50) {
         allPeriodRange.add(periodRange[i]);
         if (maxValue <= cycleDuration) {
@@ -117,7 +117,7 @@ class _MenstrualCyclePeriodsGraphState
     if (end > allPeriodRange.length) end = allPeriodRange.length;
     lastDataLength = 0;
     for (int i = start; i < end; i++) {
-      int cycleDuration = allPeriodRange[i].cycleDuration!;
+      int cycleDuration = allPeriodRange[i].cycleLength!;
       DateTime startDate = DateTime.parse(allPeriodRange[i].periodStartDate!);
       periodCycleChartData.add(ChartCyclePeriodsData(
           dateTime: CalenderDateUtils.graphDateFormat(startDate),

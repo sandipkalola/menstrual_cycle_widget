@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
 import 'ui/model/meditation_data.dart';
 import 'ui/model/sleep_data.dart';
+import 'ui/model/symptoms_count.dart';
 import 'ui/model/user_symptoms_logs.dart';
 import 'ui/model/water_data.dart';
 import 'ui/model/weight_data.dart';
@@ -27,9 +30,6 @@ class MenstrualCycleWidget {
   // last period date
   String _lastPeriodDate = "";
 
-  // last period length
-  int lastPeriodLength = 0;
-
   // all past periods date
   List<String> pastAllPeriodDays = [];
 
@@ -43,8 +43,6 @@ class MenstrualCycleWidget {
 
   // Return previous period day into string
   String getPreviousPeriodDay() => _lastPeriodDate;
-
-  int getPreviousCycleLength() => lastPeriodLength;
 
   String getSecretKey() => _aesSecretKey;
 
@@ -69,6 +67,7 @@ class MenstrualCycleWidget {
     return MenstrualCycleWidget.instance!;
   }
 
+  /// Initialize MenstrualCycleWidget
   void initialize({
     required String secretKey,
     required String ivKey,
@@ -162,6 +161,7 @@ class MenstrualCycleWidget {
     String meditationTime = "0",
     TimeOfDay? sleepWakeUpTime,
     TimeOfDay? sleepBedTime,
+    int cycleDay = 0,
     String waterValue = "0",
     WaterUnits waterUnit = WaterUnits.liters,
     String customNotes = "",
@@ -220,6 +220,7 @@ class MenstrualCycleWidget {
       MenstrualCycleDbHelper.columnBodyTemperature:
           Encryption.instance.encrypt(bodyTemperature),
       MenstrualCycleDbHelper.columnLogDate: logDate,
+      MenstrualCycleDbHelper.columnCycleDay: cycleDay,
       MenstrualCycleDbHelper.columnCreatedDateTime: currentDate,
       MenstrualCycleDbHelper.columnIsCustomLog: (isCustomLogs) ? "1" : "0"
     };
@@ -780,8 +781,6 @@ class MenstrualCycleWidget {
         bodyTemperatureListData.add(bodyTemperatureData);
       }
     }
-    //printMenstrualCycleLogs(
-    //    "bodyTemperatureListData ${bodyTemperatureListData.length}");
     return bodyTemperatureListData;
   }
 
@@ -799,8 +798,7 @@ class MenstrualCycleWidget {
     List<UserLogReportData> usersLogDataList = [];
     final dbHelper = MenstrualCycleDbHelper.instance;
     int offset = (pageNumber - 1) * itemsPerPage;
-    final mInstance = MenstrualCycleWidget.instance!;
-    String customerId = mInstance.getCustomerId();
+    String customerId = getCustomerId();
     Database? db = await dbHelper.database;
     final List<Map<String, dynamic>> queryResponse;
     if (isRequiredPagination) {
@@ -840,6 +838,8 @@ class MenstrualCycleWidget {
           queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]);
       userLogsData.logDate = DateTime.parse(
           queryResponse[i][MenstrualCycleDbHelper.columnLogDate]);
+      userLogsData.cycleDay =
+          queryResponse[i][MenstrualCycleDbHelper.columnCycleDay];
       userLogsData.createdAt =
           queryResponse[i][MenstrualCycleDbHelper.columnCreatedDateTime];
       usersLogDataList.add(userLogsData);
@@ -870,6 +870,16 @@ class MenstrualCycleWidget {
     return returnDateTime;
   }
 
+  /// get encrypt text
+  Future<String> encryptText(String normalText) async {
+    return Encryption.instance.encrypt(normalText);
+  }
+
+  /// get encrypt text
+  Future<String> decryptText(String encryptedText) async {
+    return Encryption.instance.decrypt(encryptedText);
+  }
+
   /// get average period duration. Default is 0
   Future<int> getAvgPeriodDuration() async {
     List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
@@ -885,14 +895,42 @@ class MenstrualCycleWidget {
     return avgPeriodDuration;
   }
 
+  /// get average cycle length. Default is 0
+  Future<int> getAvgCycleLength() async {
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    int avgCycleLength = 0;
+    if (allPeriodRange.isNotEmpty) {
+      int totalCycleLength = 0;
+      for (int i = 0; i < allPeriodRange.length; i++) {
+        totalCycleLength = totalCycleLength + allPeriodRange[i].cycleLength!;
+      }
+      avgCycleLength = totalCycleLength ~/ allPeriodRange.length;
+    }
+    return avgCycleLength;
+  }
+
   /// get last period duration. Default is 0
   Future<int> getPreviousPeriodDuration() async {
     List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
     int lastPeriodDuration = 0;
     if (allPeriodRange.isNotEmpty) {
-      lastPeriodDuration = allPeriodRange[0].allPeriodDates!.length;
+      if (allPeriodRange.length > 1) {
+        lastPeriodDuration = allPeriodRange[1].allPeriodDates!.length;
+      }
     }
     return lastPeriodDuration;
+  }
+
+  /// get last cycle length. Default is 0
+  Future<int> getPreviousCycleLength() async {
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    int lastCycleLength = 0;
+    if (allPeriodRange.isNotEmpty) {
+      if (allPeriodRange.length > 1) {
+        lastCycleLength = allPeriodRange[1].cycleLength!;
+      }
+    }
+    return lastCycleLength;
   }
 
   /// get last period date. Default is object of PeriodsDateRange
@@ -937,15 +975,10 @@ class MenstrualCycleWidget {
             DateTime previousDate = periodDateRange[i - 1];
             DateTime currentDate = periodDateRange[i];
             int inDays = currentDate.difference(previousDate).inDays - 1;
-            /* printLogs("inDays: $inDays");
-            printLogs(
-                "previousDate: ${CalenderDateUtils.dateDayFormat(previousDate)}");
-            printLogs(
-                "currentDate: ${CalenderDateUtils.dateDayFormat(currentDate)}");*/
             if (inDays > 1) {
               periodDates = [];
               periodDuration = 1;
-              periodsDateRange.cycleDuration = inDays;
+              periodsDateRange.cycleLength = inDays;
               periodsDateRange.cycleEndDate = CalenderDateUtils.dateDayFormat(
                   currentDate.add(const Duration(days: -1)));
               listPeriodsDateRange.add(periodsDateRange);
@@ -957,7 +990,7 @@ class MenstrualCycleWidget {
                   CalenderDateUtils.dateDayFormat(currentDate);
               periodsDateRange.cycleStartDate =
                   CalenderDateUtils.dateDayFormat(currentDate);
-              periodsDateRange.cycleDuration = inDays;
+              periodsDateRange.cycleLength = inDays;
               periodDates
                   .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
             } else {
@@ -970,7 +1003,7 @@ class MenstrualCycleWidget {
             }
           }
         }
-        periodsDateRange.cycleDuration = DateTime.now()
+        periodsDateRange.cycleLength = DateTime.now()
             .difference(DateTime.parse(periodsDateRange.cycleStartDate!))
             .inDays;
         listPeriodsDateRange.add(periodsDateRange);
@@ -985,7 +1018,7 @@ class MenstrualCycleWidget {
         periodsDateRange.periodEndDate =
             CalenderDateUtils.dateDayFormat(periodDateRange[0]);
         periodsDateRange.periodDuration = periodDuration;
-        periodsDateRange.cycleDuration = 1;
+        periodsDateRange.cycleLength = 1;
         periodsDateRange.allPeriodDates!
             .add(CalenderDateUtils.dateDayFormat(periodDateRange[0]));
         listPeriodsDateRange.add(periodsDateRange);
@@ -993,6 +1026,357 @@ class MenstrualCycleWidget {
     }
     listPeriodsDateRange = listPeriodsDateRange.reversed.toList();
     return listPeriodsDateRange;
+  }
+
+  /// get Current day of cycle
+  Future<int> getCurrentCycleDay() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    int currentDayCycle = 0;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      currentDayCycle =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
+    }
+    return currentDayCycle;
+  }
+
+  /// check if period started
+  Future<bool> isPeriodStarted() async {
+    bool periodStart = false;
+    DateTime lastPeriodDate = await getPreviousPeriodDate();
+    DateTime expEndPeriodDate =
+        lastPeriodDate.add(Duration(days: getPeriodDuration()));
+    DateTime today = DateTime.now();
+
+    if (today.isAfter(lastPeriodDate) && today.isBefore(expEndPeriodDate)) {
+      periodStart = true;
+    } else if (today.isAtSameMomentAs(lastPeriodDate) ||
+        today.isAtSameMomentAs(expEndPeriodDate)) {
+      periodStart = true;
+    }
+
+    return periodStart;
+  }
+
+  /// Get follicular day count
+  int getFollicularDayCounts() {
+    int follicularDay = defaultFollicularDay;
+    int ovulationDay = getCycleLength() - 14;
+    follicularDay =
+        (ovulationDay - getPeriodDuration() - defaultOvulationDay ~/ 2).toInt();
+    //printMenstrualCycleLogs("follicularDay: $follicularDay");
+    return follicularDay - 1;
+  }
+
+  /// check if today is ovulation day
+  Future<bool> isOvulationDay() async {
+    bool ovulationDay = false;
+    DateTime lastPeriodDate = await getPreviousPeriodDate();
+    int totalDiffCurrentLastPeriod =
+        DateTime.now().difference(lastPeriodDate).inDays;
+    int getOvulationDay = getPeriodDuration() +
+        getFollicularDayCounts() +
+        defaultOvulationDay ~/ 2;
+    if (getOvulationDay == totalDiffCurrentLastPeriod) {
+      ovulationDay = true;
+    }
+    return ovulationDay;
+  }
+
+  /// get current period day
+  Future<int> getCurrentPeriodDay() async {
+    int currentPeriodDay = 0;
+    DateTime lastPeriodDate = await getPreviousPeriodDate();
+    DateTime expEndPeriodDate =
+        lastPeriodDate.add(Duration(days: getPeriodDuration()));
+    DateTime today = DateTime.now();
+
+    if (today.isAfter(lastPeriodDate) && today.isBefore(expEndPeriodDate)) {
+      currentPeriodDay = DateTime.now().difference(lastPeriodDate).inDays + 1;
+    } else if (today.isAtSameMomentAs(lastPeriodDate) ||
+        today.isAtSameMomentAs(expEndPeriodDate)) {
+      currentPeriodDay = (DateTime.now().difference(lastPeriodDate).inDays) + 1;
+    }
+
+    return currentPeriodDay;
+  }
+
+  /// Calculate cycle regularity score
+  Future<double> getCycleRegularityScore() async {
+    List<int> cycleLengths = [];
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+
+    if (allPeriodRange.length > 1) {
+      for (int i = 1; i < allPeriodRange.length; i++) {
+        // printMenstrualCycleLogs("Len: ${allPeriodRange[i].cycleLength!}");
+        cycleLengths.add(allPeriodRange[i].cycleLength!);
+      }
+    }
+
+    if (cycleLengths.isNotEmpty) {
+      //Calculate Average Cycle Length (ACL)
+      double avgCycleLength = _average(cycleLengths);
+      //  Calculate Standard Deviation (SD)
+      double standardDeviation = _stdDev(cycleLengths, avgCycleLength);
+      //  Calculate Cycle Regularity Score (CRS)
+      double crs = 100 - ((standardDeviation / avgCycleLength) * 100);
+      // Ensure CRS is in the range of 0 to 100
+      return crs.clamp(0, 100);
+    }
+    return 0.0;
+  }
+
+  /// Calculate cycle regularity score status
+  Future<String> getCycleRegularityScoreStatus() async {
+    double cycleCRS = await getCycleRegularityScore();
+    String cycleCRSStatus = "";
+    if (cycleCRS > 89) {
+      cycleCRSStatus = "Regular";
+    } else if (cycleCRS > 74) {
+      cycleCRSStatus = "Normal";
+    } else if (cycleCRS > 0) {
+      cycleCRSStatus = "Irregular";
+    }
+    return cycleCRSStatus;
+  }
+
+  /// Calculate period regularity score
+  Future<double> getPeriodRegularityScore() async {
+    List<int> periodLengths = [];
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+
+    if (allPeriodRange.length > 1) {
+      for (int i = 1; i < allPeriodRange.length; i++) {
+        //printMenstrualCycleLogs("Len: ${allPeriodRange[i].periodDuration!}");
+        periodLengths.add(allPeriodRange[i].periodDuration!);
+      }
+    }
+
+    if (periodLengths.isNotEmpty) {
+      //Calculate Average period duration (APL)
+      double avgPeriodLength = _average(periodLengths);
+      //  Calculate Standard Deviation (SD)
+      double standardDeviation = _stdDev(periodLengths, avgPeriodLength);
+      //  Calculate Cycle Regularity Score (CRS)
+      double crs = 100 - ((standardDeviation / avgPeriodLength) * 100);
+      // Ensure CRS is in the range of 0 to 100
+      return crs.clamp(0, 100);
+    }
+    return 0.0;
+  }
+
+  /// Calculate period regularity score status
+  Future<String> getPeriodRegularityScoreStatus() async {
+    double periodPRS = await getPeriodRegularityScore();
+    String periodCRSStatus = "";
+    if (periodPRS > 89) {
+      periodCRSStatus = "Regular";
+    } else if (periodPRS > 74) {
+      periodCRSStatus = "Normal";
+    } else if (periodPRS > 0) {
+      periodCRSStatus = "Irregular";
+    }
+    return periodCRSStatus;
+  }
+
+  double _average(List<int> data) {
+    return data.reduce((a, b) => a + b) / data.length;
+  }
+
+  double _stdDev(List<int> data, double mean) {
+    double variance =
+        data.map((x) => pow(x - mean, 2)).reduce((a, b) => a + b) / data.length;
+    return sqrt(variance);
+  }
+
+  /// get Next Predicted Period Date
+  Future<String> getNextPredictedPeriodDate() async {
+    if (_lastPeriodDate.isNotEmpty) {
+      int cycleLength = getCycleLength();
+      DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
+          .parse(getPreviousPeriodDay())
+          .add(Duration(days: cycleLength));
+
+      return CalenderDateUtils.dateDayFormat(nextPeriodDate);
+    }
+    return "";
+  }
+
+  /// to check today is period day
+  Future<bool> isPeriodStartFromToday() async {
+    String nextPeriodDate = await getNextPredictedPeriodDate();
+    if (nextPeriodDate.isNotEmpty) {
+      DateTime today = DateTime.now();
+      String formattedToday = DateFormat('yyyy-MM-dd').format(today);
+      String formattedInput =
+          DateFormat('yyyy-MM-dd').format(DateTime.parse(nextPeriodDate));
+      if (formattedInput == formattedToday) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /// to check tomorrow is period day
+  Future<bool> isPeriodStartFromTomorrow() async {
+    String nextPeriodDate = await getNextPredictedPeriodDate();
+    if (nextPeriodDate.isNotEmpty) {
+      DateTime tomorrowDate = DateTime.now().add(Duration(days: 1));
+      String formattedTomorrow = DateFormat('yyyy-MM-dd').format(tomorrowDate);
+      String formattedInput =
+          DateFormat('yyyy-MM-dd').format(DateTime.parse(nextPeriodDate));
+      if (formattedInput == formattedTomorrow) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  /// get Next Predicted Period Date
+  Future<String> getNextOvulationDate() async {
+    if (_lastPeriodDate.isNotEmpty) {
+      int cycleLength = getCycleLength();
+      DateTime nextPeriodDate =
+          DateFormat("yyyy-MM-dd").parse(getPreviousPeriodDay());
+
+      DateTime ovulationDate = nextPeriodDate
+          .add(Duration(days: cycleLength))
+          .add(const Duration(days: -14));
+
+      if (DateTime.now().isAfter(ovulationDate)) {
+        DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
+            .parse(getPreviousPeriodDay())
+            .add(Duration(days: cycleLength));
+        DateTime ovulationDate = nextPeriodDate
+            .add(Duration(days: cycleLength))
+            .add(const Duration(days: -14));
+
+        return CalenderDateUtils.dateDayFormat(ovulationDate);
+      } else {
+        return CalenderDateUtils.dateDayFormat(ovulationDate);
+      }
+    }
+    return "";
+  }
+
+  /// Get symptoms patter for today or tomorrow
+  Future<List<SymptomsCount>> getSymptomsPattern(
+      {bool isForTomorrow = false}) async {
+    int currentCycleDay = 0;
+    List<SymptomsCount> symptomAnalysisData = [];
+    // Find current cycle day
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+
+    if (lastPeriodDate.isNotEmpty) {
+      final difference =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays;
+      currentCycleDay = difference + 1;
+      // Check past cycle length
+      // if not same as current then calculate current cycle day based on past cycle
+      int pastCycleLength = await getPreviousCycleLength();
+
+      if (pastCycleLength > 0) {
+        if (pastCycleLength != getCycleLength()) {
+          currentCycleDay =
+              ((currentCycleDay / getCycleLength()) * pastCycleLength).round();
+        }
+      }
+
+      if (isForTomorrow) {
+        currentCycleDay = currentCycleDay + 1;
+      }
+    }
+    if (currentCycleDay > 0) {
+      final dbHelper = MenstrualCycleDbHelper.instance;
+      String customerId = getCustomerId();
+      Database? db = await dbHelper.database;
+      final List<Map<String, dynamic>> queryResponse;
+      queryResponse = await db!.rawQuery(
+          "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnCycleDay}=$currentCycleDay AND ${MenstrualCycleDbHelper.columnLogDate} < '$lastPeriodDate'");
+
+      List<SymptomsData> pastSymptomsData = [];
+
+      List.generate(queryResponse.length, (i) {
+        String symptomsData = Encryption.instance.decrypt(
+            queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
+        List<dynamic> jsonData = json.decode(symptomsData.trim());
+        pastSymptomsData.addAll(
+            jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList());
+      });
+
+      for (var symptomsData in pastSymptomsData) {
+        String symptomName = symptomsData.symptomName!;
+        bool containsSymptom = symptomAnalysisData.any((symptom) =>
+            symptom.name!.toLowerCase() == symptomName.toLowerCase());
+        if (containsSymptom) {
+          int index = symptomAnalysisData.indexWhere((symptom) =>
+              symptom.name!.toLowerCase() == symptomName.toLowerCase());
+          SymptomsCount oldSymptomsData = symptomAnalysisData[index];
+          oldSymptomsData.occurrences = oldSymptomsData.occurrences! + 1;
+          symptomAnalysisData.removeAt(index);
+          symptomAnalysisData.add(oldSymptomsData);
+        } else {
+          symptomAnalysisData
+              .add(SymptomsCount(name: symptomName, occurrences: 1));
+        }
+      }
+    }
+    return symptomAnalysisData;
+  }
+
+  /// get matrix summary data btn two date
+  Future<Map<String, dynamic>> getMenstrualCycleSummary(
+      {DateTime? summaryStartDate,
+      DateTime? summaryEndDate,
+      bool fetchAllData = false}) async {
+    int currentDayCycle = await getCurrentCycleDay();
+    int avgPeriodDuration = await getAvgPeriodDuration();
+    int avgCycleLength = await getAvgCycleLength();
+    bool isPeriodStart = await isPeriodStarted();
+    int periodDay = await getCurrentPeriodDay();
+    bool ovulationDay = await isOvulationDay();
+    int prevPeriodDuration = await getPreviousPeriodDuration();
+    int prevCycleLength = await getPreviousCycleLength();
+    double cycleCRS = await getCycleRegularityScore();
+    String cycleCRSStatus = await getCycleRegularityScoreStatus();
+    double periodPRS = await getPeriodRegularityScore();
+    String periodPRSStatus = await getPeriodRegularityScoreStatus();
+    String nextPeriodDay = await getNextPredictedPeriodDate();
+    String nextOvulationDate = await getNextOvulationDate();
+    bool periodStartFromToday = await isPeriodStartFromToday();
+    bool periodStartFromTomorrow = await isPeriodStartFromTomorrow();
+    List<SymptomsCount> todaySymptomsData = await getSymptomsPattern();
+
+    Map<String, dynamic> summaryData = {
+      "key_matrix": {
+        "current_day_cycle": currentDayCycle,
+        "avg_cycle_length": avgCycleLength,
+        "avg_period_duration": avgPeriodDuration,
+        "is_period_start": isPeriodStart,
+        "period_day": periodDay,
+        "is_ovulation_day": ovulationDay,
+        "prev_cycle_length": prevCycleLength,
+        "prev_period_duration": prevPeriodDuration,
+        "cycle_regularity_score_status": cycleCRSStatus,
+        "cycle_regularity_score": cycleCRS,
+        "period_regularity_score_status": periodPRSStatus,
+        "period_regularity_score": periodPRS,
+      },
+      "prediction_matrix": {
+        "next_period_day": nextPeriodDay,
+        "ovulation_day": nextOvulationDate,
+        "is_period_start_from_today": periodStartFromToday,
+        "is_period_start_from_tomorrow": periodStartFromTomorrow
+      },
+      "predicted_symptoms_pattern_today":
+          jsonEncode(todaySymptomsData.map((e) => e.toJson()).toList())
+    };
+    return summaryData;
   }
 
 /* DateTime getCustomOvulationDate({DateTime? lastPeriodDate, int cycleLength = 28}) {

@@ -36,11 +36,11 @@ initFutureOvulationDay() async {
   final instance = MenstrualCycleWidget.instance!;
   List<String> futureOvulationDays = [];
   int generateMonth = 12; // get from configuration
-  int cycleLength = instance.getCycleLength() - 1;
+  int cycleLength = instance.getCycleLength();
   if (instance.getPreviousPeriodDay().isNotEmpty) {
     DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
         .parse(instance.getPreviousPeriodDay())
-        .add(Duration(days: cycleLength - 1));
+        .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
     for (int index = 0; index < generateMonth; index++) {
       // Ovulation day
