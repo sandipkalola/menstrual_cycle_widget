@@ -201,6 +201,14 @@ class MenstrualCycleDbHelper {
     return deleted;
   }
 
+  /// Delete all symptoms data
+  Future<int> clearSymptomsLog(String customerId) async {
+    Database? db = await instance.database;
+    int deleted = await db!.rawDelete(
+        "DELETE FROM $tableDailyUserSymptomsLogsData WHERE $columnCustomerId='$customerId'");
+    return deleted;
+  }
+
   /// insert user's period data on userId and log date
   Future<int> insertPeriodLog(List<DateTime> selectedPeriodsDate) async {
     //printLogs("selectedPeriodsDate ${selectedPeriodsDate.toString()}");
@@ -218,7 +226,7 @@ class MenstrualCycleDbHelper {
       ///insert a new periods log
       await db!.insert(tableUserPeriodsLogsData, data);
     }
-    //printLogs("Insert Period Data");
+    printMenstrualCycleLogs("Insert Period Data");
     return 0;
   }
 

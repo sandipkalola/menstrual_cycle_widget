@@ -1,3 +1,7 @@
+## [2.3.2] - 12 Dec 2024
+* Custom function to add dummy data for testing purposes.
+* Custom function to verify if the graph contains data 
+
 ## [2.3.1] - 10 Dec 2024
 * Added Custom function
 

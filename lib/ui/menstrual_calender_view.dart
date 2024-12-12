@@ -80,6 +80,7 @@ class _MenstrualCycleCalenderViewState
     selectedColor = (widget.daySelectedColor != null)
         ? widget.daySelectedColor
         : Colors.grey;
+    _instance.calculateLastPeriodDate();
     pastAllPeriodsDays = _instance.pastAllPeriodDays;
     futurePeriodDays = await initFuturePeriodDay();
     futureOvulationDays = await initFutureOvulationDay();

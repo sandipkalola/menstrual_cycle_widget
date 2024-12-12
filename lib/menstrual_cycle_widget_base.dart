@@ -143,6 +143,7 @@ class MenstrualCycleWidget {
     } else {
       pastAllPeriodDays.clear();
     }
+    //printMenstrualCycleLogs("Last Period Date ${pastAllPeriodDays.toString()}");
     return pastAllPeriodDays;
   }
 
@@ -173,7 +174,7 @@ class MenstrualCycleWidget {
   }) async {
     String currentDate = "";
     String logDate = "";
-    String sleepTime = "";
+    String sleepTime = "0";
     customNotes = "N/A";
 
     if (symptomsLogDate == null) {
@@ -1374,9 +1375,179 @@ class MenstrualCycleWidget {
         "is_period_start_from_tomorrow": periodStartFromTomorrow
       },
       "predicted_symptoms_pattern_today":
-          jsonEncode(todaySymptomsData.map((e) => e.toJson()).toList())
+          jsonEncode(todaySymptomsData.map((e) => e.toJson()).toList()),
+      "predicted_symptoms_pattern_tomorrow": [
+        {"Name": "Happy", "occurrences": 2},
+        {"Name": "Happy", "occurrences": 2},
+        {"Name": "Happy", "occurrences": 2}
+      ],
+      "predicted_symptoms_pattern_during_periods": [
+        {
+          "day": 1,
+          "symptoms": [
+            {"Name": "Happy", "occurrences": 2},
+            {"Name": "Happy", "occurrences": 2}
+          ]
+        },
+        {
+          "day": 2,
+          "symptoms": [
+            {"Name": "Happy", "occurrences": 2},
+            {"Name": "Happy", "occurrences": 2}
+          ]
+        }
+      ]
     };
     return summaryData;
+  }
+
+  Future<void> addDummyData(
+      {int numberOfDay = 28,
+      Function? onSuccess,
+      Function? onError,
+      List<SymptomsData>? symptomsData}) async {
+    if (numberOfDay < 1) {
+      throw "Required valid day";
+    }
+
+    // clear data
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String encryptedUserid = getCustomerId();
+    // Clear period data
+    await dbHelper.clearPeriodLog(encryptedUserid);
+    // Clear symptoms data
+    await dbHelper.clearSymptomsLog(encryptedUserid);
+
+    final random = Random();
+    int randomPeriodLength = 4 + random.nextInt(1);
+    int randomCycleLength = 25 + random.nextInt(5);
+    //printMenstrualCycleLogs("-------- Start Process --------");
+    try {
+      // Start period data
+
+      for (int i = numberOfDay; i > 0; i--) {
+        DateTime periodStartDate = DateTime.now().add(Duration(days: -i));
+        /* printMenstrualCycleLogs(
+            "-------- Period Day (${CalenderDateUtils.dateDayFormat(periodStartDate)}) --------");
+        printMenstrualCycleLogs(
+            "-------- randomCycleLength $randomCycleLength --------");*/
+        List<DateTime> selectedPeriodsDate = [];
+        selectedPeriodsDate.add(periodStartDate);
+        for (int index = 1; index <= randomPeriodLength; index++) {
+          DateTime nextPeriodDate = periodStartDate.add(Duration(days: index));
+          /* printMenstrualCycleLogs(
+              "-------- Next Period Day (${CalenderDateUtils.dateDayFormat(nextPeriodDate)}) --------");*/
+          selectedPeriodsDate.add(nextPeriodDate);
+        }
+
+        await dbHelper.insertPeriodLog(selectedPeriodsDate);
+        // Start Symptoms data
+        for (int cycleIndex = 0; cycleIndex < randomCycleLength; cycleIndex++) {
+          await saveSymptomsLogs(
+            userSymptomsData: getRandomSymptomsData(symptomsData),
+            onError: () {},
+            cycleDay: cycleIndex + 1,
+            symptomsLogDate: periodStartDate.add(Duration(days: cycleIndex)),
+            onSuccess: (id) {
+              /* printMenstrualCycleLogs(
+                  "-------- Added Cycle Day $cycleIndex (${CalenderDateUtils.dateDayFormat(periodStartDate.add(Duration(days: cycleIndex)))}) --------");*/
+            },
+          );
+        }
+
+        i = i - randomCycleLength + 1; // length of cycle
+        randomPeriodLength = 4 + random.nextInt(2);
+        randomCycleLength = 25 + random.nextInt(5);
+      }
+    } catch (e) {
+      onError!.call();
+    }
+
+    onSuccess!.call();
+    //printMenstrualCycleLogs("-------- End Process --------");
+  }
+
+  List<SymptomsData> getRandomSymptomsData(List<SymptomsData>? symptomsData) {
+    List<SymptomsData> generatedData = [];
+    List<SymptomsData> randomData = [];
+
+    if (symptomsData != null) {
+      generatedData.addAll(symptomsData);
+    } else {
+      for (int i = 0; i < defaultSymptomsData.length; i++) {
+        generatedData.addAll(defaultSymptomsData[i].symptomsData!);
+      }
+    }
+
+    randomData.addAll(getRandomItems(generatedData, 20));
+
+    return randomData;
+  }
+
+  List<SymptomsData> getRandomItems(List<SymptomsData> list, int count) {
+    final random = Random();
+    final Set<int> selectedIndexes = {};
+
+    while (selectedIndexes.length < count) {
+      selectedIndexes.add(random.nextInt(list.length));
+    }
+
+    return selectedIndexes.map((index) => list[index]).toList();
+  }
+
+  /// Check if have period graph data
+  Future<bool> hasPeriodGraphData() async {
+    return (await getAllPeriodsDetails()).isNotEmpty;
+  }
+
+  /// Check if have cycle history graph data
+  Future<bool> hasCycleHistoryGraphData() async {
+    return (await getAllPeriodsDetails()).isNotEmpty;
+  }
+
+  /// Check if have cycle trends graph data
+  Future<bool> hasCycleTrendsGraphData() async {
+    return (await getAllPeriodsDetails()).isNotEmpty;
+  }
+
+  /// Check if have body temperature graph data
+  Future<bool> hasBodyTemperatureGraphData() async {
+    return (await getTemperatureLog(
+            startDate: DateTime.now().add(const Duration(days: -1000)),
+            endDate: DateTime.now()))
+        .isNotEmpty;
+  }
+
+  /// Check if have meditation graph data
+  Future<bool> hasMeditationGraphData() async {
+    return (await getMeditationLog(
+            startDate: DateTime.now().add(const Duration(days: -1000)),
+            endDate: DateTime.now()))
+        .isNotEmpty;
+  }
+
+  /// Check if have sleep graph data
+  Future<bool> hasSleepGraphData() async {
+    return (await getSleepLog(
+            startDate: DateTime.now().add(const Duration(days: -1000)),
+            endDate: DateTime.now()))
+        .isNotEmpty;
+  }
+
+  /// Check if have water graph data
+  Future<bool> hasWaterGraphData() async {
+    return (await getDrinkWaterLog(
+            startDate: DateTime.now().add(const Duration(days: -1000)),
+            endDate: DateTime.now()))
+        .isNotEmpty;
+  }
+
+  /// Check if have weight graph data
+  Future<bool> hasWeightGraphData() async {
+    return (await getWeightLog(
+            startDate: DateTime.now().add(const Duration(days: -1000)),
+            endDate: DateTime.now()))
+        .isNotEmpty;
   }
 
 /* DateTime getCustomOvulationDate({DateTime? lastPeriodDate, int cycleLength = 28}) {

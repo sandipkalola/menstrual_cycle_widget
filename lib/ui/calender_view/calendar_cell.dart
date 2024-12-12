@@ -72,11 +72,12 @@ class _CalendarCellState extends State<CalendarCell> {
         ),
       );
     } else {
+      bool isPeriodDay = checkIsPeriodDay();
       bool isOvulationDay = checkIsOvulationDay();
       bool isFutureOvulationDay = checkIsFutureOvulationDay();
-      bool isPeriodDayAfterCurrentDate = checkIsPeriodDayAfterCurrentDate();
+      bool isPeriodDayAfterCurrentDate =
+          checkIsPeriodDayAfterCurrentDate(isPeriodDay);
       bool isPastPeriodDay = checkIsPastPeriodDay();
-      bool isPeriodDay = checkIsPeriodDay();
       bool isFutureDateOfPeriod = checkIsFuturePeriodDay();
 
       return (widget.isBlankDay)
@@ -246,7 +247,8 @@ class _CalendarCellState extends State<CalendarCell> {
 
   /// Return true if current day is past period day else return false
   bool checkIsPastPeriodDay() {
-    bool isPeriodDay = false;
+    /*bool isPeriodDay = false;
+    printMenstrualCycleLogs("Start---");
     if (widget.previousPeriodDate!.isNotEmpty) {
       String currentDate = defaultDateFormat.format(widget.currentDay!);
       List<String> periodDays = widget.pastAllPeriodsDays!;
@@ -257,7 +259,15 @@ class _CalendarCellState extends State<CalendarCell> {
         }
       }
     }
-    return isPeriodDay;
+    printMenstrualCycleLogs("End---");
+    return isPeriodDay;*/
+
+    if (widget.previousPeriodDate?.isEmpty ?? true) {
+      return false;
+    }
+
+    String currentDate = defaultDateFormat.format(widget.currentDay!);
+    return widget.pastAllPeriodsDays?.contains(currentDate) ?? false;
   }
 
   /// Return true if current day is period day else return false
@@ -310,10 +320,10 @@ class _CalendarCellState extends State<CalendarCell> {
   }
 
   /// Return true if period day after current date else return false
-  bool checkIsPeriodDayAfterCurrentDate() {
+  bool checkIsPeriodDayAfterCurrentDate(bool isPeriodDay) {
     bool isPeriodDayAfterCurrentDate = false;
     if (widget.previousPeriodDate!.isNotEmpty) {
-      if (checkIsPeriodDay()) {
+      if (isPeriodDay) {
         bool isAfter = widget.currentDay!.isAfter(DateTime.now());
         if (widget.currentDay!.compareTo(DateTime.now()) == 0 || isAfter) {
           isPeriodDayAfterCurrentDate = true;

@@ -59,6 +59,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   }
 
   init() async {
+    _instance.calculateLastPeriodDate();
     pastAllPeriodsDays = _instance.pastAllPeriodDays;
     futurePeriodDays = await initFuturePeriodDay();
     futureOvulationDays = await initFutureOvulationDay();
