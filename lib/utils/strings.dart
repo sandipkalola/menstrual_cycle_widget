@@ -115,7 +115,7 @@ class Strings {
   static const String categoryMind = "Mind";
   static const String categorySexualLife = "Sexual Life";
   static const String categoryEnergy = "Energy";
-  static const String categoryPeriod = "Period";
+  static const String categoryPeriod = "Menstrual flow";
   static const String categorySymptoms = "Symptoms";
   static const String categoryPain = "Pain";
   static const String categoryVaginalDischarge = "Vaginal discharge";

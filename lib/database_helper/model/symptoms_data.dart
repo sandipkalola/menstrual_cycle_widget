@@ -43,17 +43,21 @@ class SymptomsData {
   int? symptomId;
   String? symptomName;
   bool isSelected = false;
+  List<int>? phaseIds = [];
 
   SymptomsData({
     this.symptomName,
     this.symptomId = 0,
     this.isSelected = false,
+    this.phaseIds,
   });
 
   SymptomsData.fromJson(Map<String, dynamic> json) {
     symptomName = json['symptomName'];
     isSelected = json['isSelected'];
     symptomId = json['symptomId'];
+    phaseIds = json['phaseIds'];
+    phaseIds = json['phaseIds'].cast<int>();
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +65,7 @@ class SymptomsData {
     data['symptomName'] = symptomName;
     data['symptomId'] = symptomId;
     data['isSelected'] = isSelected;
+    data['phaseIds'] = phaseIds;
 
     return data;
   }

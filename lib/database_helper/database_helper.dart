@@ -226,7 +226,7 @@ class MenstrualCycleDbHelper {
       ///insert a new periods log
       await db!.insert(tableUserPeriodsLogsData, data);
     }
-    printMenstrualCycleLogs("Insert Period Data");
+    //printMenstrualCycleLogs("Insert Period Data");
     return 0;
   }
 

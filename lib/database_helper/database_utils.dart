@@ -2,9 +2,21 @@ import 'package:intl/intl.dart';
 
 import '../menstrual_cycle_widget.dart';
 
-// Last Id is: 21129
+// Last Id is: 21131
 /// Default symptoms data
 List<SymptomsCategory> defaultSymptomsData = [
+  SymptomsCategory(
+    categoryId: 5,
+    categoryName: Strings.categoryPeriod,
+    categoryColor: "FF0000",
+    symptomsData: [
+      SymptomsData(symptomName: "Light", symptomId: 210342),
+      SymptomsData(symptomName: "Medium", symptomId: 21043),
+      SymptomsData(symptomName: "Heavy", symptomId: 21044, phaseIds: [1]),
+      SymptomsData(symptomName: "Super heavy", symptomId: 21045),
+      SymptomsData(symptomName: "Don't know", symptomId: 21046),
+    ],
+  ),
   SymptomsCategory(
     categoryId: 1,
     categoryName: Strings.categoryFeelings,
@@ -12,17 +24,20 @@ List<SymptomsCategory> defaultSymptomsData = [
     symptomsData: [
       SymptomsData(symptomName: "Sensitive", symptomId: 21001),
       SymptomsData(symptomName: "Not in control", symptomId: 21002),
-      SymptomsData(symptomName: "Happy", symptomId: 21003),
-      SymptomsData(symptomName: "Frisky", symptomId: 21004),
-      SymptomsData(symptomName: "Mood swings", symptomId: 21005),
-      SymptomsData(symptomName: "Irritated", symptomId: 21006),
-      SymptomsData(symptomName: "Sad", symptomId: 21007),
-      SymptomsData(symptomName: "Tension", symptomId: 21008),
+      SymptomsData(symptomName: "Happy", symptomId: 21003, phaseIds: [2]),
+      SymptomsData(symptomName: "Frisky", symptomId: 21004, phaseIds: [3]),
+      SymptomsData(
+          symptomName: "Mood swings", symptomId: 21005, phaseIds: [1, 4]),
+      SymptomsData(
+          symptomName: "Irritated", symptomId: 21006, phaseIds: [1, 4]),
+      SymptomsData(symptomName: "Sad", symptomId: 21007, phaseIds: [1]),
+      SymptomsData(symptomName: "Tension", symptomId: 21008, phaseIds: [4]),
       SymptomsData(symptomName: "Angry", symptomId: 21009),
+      SymptomsData(symptomName: "Confident", symptomId: 21131, phaseIds: [3]),
       SymptomsData(symptomName: "Insecure", symptomId: 21010),
       SymptomsData(symptomName: "Grateful", symptomId: 21011),
-      SymptomsData(symptomName: "Anxiety", symptomId: 21012),
-      SymptomsData(symptomName: "Excited", symptomId: 21013),
+      SymptomsData(symptomName: "Anxiety", symptomId: 21012, phaseIds: [4]),
+      SymptomsData(symptomName: "Excited", symptomId: 21013, phaseIds: [2]),
     ],
   ),
   SymptomsCategory(
@@ -30,16 +45,16 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryMind,
     categoryColor: "8B0000",
     symptomsData: [
-      SymptomsData(symptomName: "Calm", symptomId: 21014),
+      SymptomsData(symptomName: "Calm", symptomId: 21014, phaseIds: [2]),
       SymptomsData(symptomName: "Distracted", symptomId: 21015),
-      SymptomsData(symptomName: "Focused", symptomId: 21016),
+      SymptomsData(symptomName: "Focused", symptomId: 21016, phaseIds: [2]),
       SymptomsData(symptomName: "Depressed", symptomId: 21017),
       SymptomsData(symptomName: "Confused", symptomId: 21018),
       SymptomsData(symptomName: "Stressed", symptomId: 21019),
-      SymptomsData(symptomName: "Motivated", symptomId: 21020),
-      SymptomsData(symptomName: "Unmotivated", symptomId: 21021),
-      SymptomsData(symptomName: "Creative", symptomId: 21022),
-      SymptomsData(symptomName: "Productive", symptomId: 21023),
+      SymptomsData(symptomName: "Motivated", symptomId: 21020, phaseIds: [2]),
+      SymptomsData(symptomName: "Unmotivated", symptomId: 21021, phaseIds: [4]),
+      SymptomsData(symptomName: "Creative", symptomId: 21022, phaseIds: [2]),
+      SymptomsData(symptomName: "Productive", symptomId: 21023, phaseIds: [2]),
       SymptomsData(symptomName: "Unproductive", symptomId: 21024),
     ],
   ),
@@ -49,8 +64,10 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryColor: "A52A2A",
     symptomsData: [
       SymptomsData(symptomName: "No sex", symptomId: 21025),
-      SymptomsData(symptomName: "Protected sex", symptomId: 21026),
-      SymptomsData(symptomName: "Unprotected sex", symptomId: 21027),
+      SymptomsData(
+          symptomName: "Protected sex", symptomId: 21026, phaseIds: [3]),
+      SymptomsData(
+          symptomName: "Unprotected sex", symptomId: 21027, phaseIds: [3]),
       SymptomsData(symptomName: "Oral sex", symptomId: 21028),
       SymptomsData(symptomName: "Anal sex", symptomId: 21029),
       SymptomsData(symptomName: "Masturbation", symptomId: 21030),
@@ -67,23 +84,12 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryEnergy,
     categoryColor: "0000FF",
     symptomsData: [
-      SymptomsData(symptomName: "Exhausted", symptomId: 21037),
-      SymptomsData(symptomName: "Tried", symptomId: 21038),
+      SymptomsData(symptomName: "Exhausted", symptomId: 21037, phaseIds: [1]),
+      SymptomsData(symptomName: "Tired", symptomId: 21038, phaseIds: [1]),
       SymptomsData(symptomName: "OK", symptomId: 21039),
-      SymptomsData(symptomName: "Energetic", symptomId: 21040),
-      SymptomsData(symptomName: "Fully energized", symptomId: 21041),
-    ],
-  ),
-  SymptomsCategory(
-    categoryId: 5,
-    categoryName: Strings.categoryPeriod,
-    categoryColor: "FF0000",
-    symptomsData: [
-      SymptomsData(symptomName: "Light", symptomId: 210342),
-      SymptomsData(symptomName: "Medium", symptomId: 21043),
-      SymptomsData(symptomName: "Heavy", symptomId: 21044),
-      SymptomsData(symptomName: "Super heavy", symptomId: 21045),
-      SymptomsData(symptomName: "Don't know", symptomId: 21046),
+      SymptomsData(symptomName: "Energetic", symptomId: 21040, phaseIds: [2]),
+      SymptomsData(
+          symptomName: "Fully energized", symptomId: 21041, phaseIds: [2, 3]),
     ],
   ),
   SymptomsCategory(
@@ -92,13 +98,14 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryColor: "808080",
     symptomsData: [
       SymptomsData(symptomName: "Everything well", symptomId: 21047),
-      SymptomsData(symptomName: "Cramps", symptomId: 21048),
-      SymptomsData(symptomName: "Tender breasts", symptomId: 21049),
+      SymptomsData(symptomName: "Cramps", symptomId: 21048, phaseIds: [1]),
+      SymptomsData(
+          symptomName: "Tender breasts", symptomId: 21049, phaseIds: [1, 4]),
       SymptomsData(symptomName: "Headache", symptomId: 21050),
       SymptomsData(symptomName: "Acne", symptomId: 21051),
-      SymptomsData(symptomName: "Backache", symptomId: 21052),
+      SymptomsData(symptomName: "Backache", symptomId: 21052, phaseIds: [1, 4]),
       SymptomsData(symptomName: "Abdominal pain", symptomId: 21053),
-      SymptomsData(symptomName: "Fatigue", symptomId: 21054),
+      SymptomsData(symptomName: "Fatigue", symptomId: 21054, phaseIds: [4]),
     ],
   ),
   SymptomsCategory(
@@ -110,8 +117,8 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Period cramps", symptomId: 21056),
       SymptomsData(symptomName: "Ovulation", symptomId: 21057),
       SymptomsData(symptomName: "Breast tenderness", symptomId: 21058),
-      SymptomsData(symptomName: "Headache", symptomId: 21059),
-      SymptomsData(symptomName: "Migraine", symptomId: 21060),
+      SymptomsData(symptomName: "Headache", symptomId: 21059, phaseIds: [1]),
+      SymptomsData(symptomName: "Migraine", symptomId: 21060, phaseIds: [4]),
       SymptomsData(symptomName: "Migraine with aura", symptomId: 21061),
       SymptomsData(symptomName: "Lower back", symptomId: 21062),
       SymptomsData(symptomName: "Leg", symptomId: 21063),
@@ -125,6 +132,8 @@ List<SymptomsCategory> defaultSymptomsData = [
     isVisibleCategory: 0,
     symptomsData: [
       SymptomsData(symptomName: "No discharge", symptomId: 21065),
+      SymptomsData(
+          symptomName: "Light discharge", symptomId: 21130, phaseIds: [2]),
       SymptomsData(symptomName: "Creamy", symptomId: 21066),
       SymptomsData(symptomName: "Watery", symptomId: 21067),
       SymptomsData(symptomName: "Unusual", symptomId: 21068),
@@ -140,10 +149,10 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryColor: "FF0000",
     symptomsData: [
       SymptomsData(symptomName: "OK", symptomId: 21073),
-      SymptomsData(symptomName: "Gassy", symptomId: 21074),
-      SymptomsData(symptomName: "Bloating", symptomId: 21075),
-      SymptomsData(symptomName: "Heartburn", symptomId: 21076),
-      SymptomsData(symptomName: "Nauseous", symptomId: 21077),
+      SymptomsData(symptomName: "Gassy", symptomId: 21074, phaseIds: [1, 4]),
+      SymptomsData(symptomName: "Bloating", symptomId: 21075, phaseIds: [1, 4]),
+      SymptomsData(symptomName: "Heartburn", symptomId: 21076, phaseIds: [4]),
+      SymptomsData(symptomName: "Nauseous", symptomId: 21077, phaseIds: [1]),
       SymptomsData(symptomName: "Vomiting", symptomId: 21078),
     ],
   ),
@@ -152,14 +161,15 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryActivity,
     categoryColor: "8B0000",
     symptomsData: [
-      SymptomsData(symptomName: "Yoga", symptomId: 21079),
-      SymptomsData(symptomName: "Running", symptomId: 21080),
-      SymptomsData(symptomName: "Gym", symptomId: 21081),
-      SymptomsData(symptomName: "Swimming", symptomId: 21082),
+      SymptomsData(symptomName: "Yoga", symptomId: 21079, phaseIds: [2]),
+      SymptomsData(symptomName: "Running", symptomId: 21080, phaseIds: [3]),
+      SymptomsData(symptomName: "Gym", symptomId: 21081, phaseIds: [3]),
+      SymptomsData(symptomName: "Swimming", symptomId: 21082, phaseIds: [3]),
       SymptomsData(symptomName: "Cycling", symptomId: 21083),
-      SymptomsData(symptomName: "Walking", symptomId: 21084),
+      SymptomsData(symptomName: "Walking", symptomId: 21084, phaseIds: [2]),
       SymptomsData(symptomName: "Pilates", symptomId: 21085),
-      SymptomsData(symptomName: "Strength training", symptomId: 21086),
+      SymptomsData(
+          symptomName: "Strength training", symptomId: 21086, phaseIds: [2]),
       SymptomsData(symptomName: "Stretching", symptomId: 21087),
       SymptomsData(symptomName: "Rest day", symptomId: 21088),
       SymptomsData(symptomName: "Meditation", symptomId: 21089),
@@ -170,8 +180,8 @@ List<SymptomsCategory> defaultSymptomsData = [
     categoryName: Strings.categoryCravings,
     categoryColor: "A52A2A",
     symptomsData: [
-      SymptomsData(symptomName: "Sweet", symptomId: 21090),
-      SymptomsData(symptomName: "Salty", symptomId: 21091),
+      SymptomsData(symptomName: "Sweet", symptomId: 21090, phaseIds: [4]),
+      SymptomsData(symptomName: "Salty", symptomId: 21091, phaseIds: [4]),
       SymptomsData(symptomName: "Greasy", symptomId: 21092),
       SymptomsData(symptomName: "Spicy", symptomId: 21093),
       SymptomsData(symptomName: "Carbs", symptomId: 21094),

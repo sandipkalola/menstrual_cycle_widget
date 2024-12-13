@@ -1,4 +1,4 @@
-## [2.3.2] - 12 Dec 2024
+## [2.3.4] - 12 Dec 2024
 * Custom function to add dummy data for testing purposes.
 * Custom function to verify if the graph contains data 
 

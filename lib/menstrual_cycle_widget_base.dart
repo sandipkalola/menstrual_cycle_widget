@@ -1327,6 +1327,15 @@ class MenstrualCycleWidget {
         }
       }
     }
+    List<SymptomsCount> newSymptomAnalysisData =
+        []; // only those data which come more then 2  times
+    for (var symptomsData in symptomAnalysisData) {
+      if (symptomsData.occurrences! > 2) {
+        newSymptomAnalysisData.add(symptomsData);
+      }
+    }
+    symptomAnalysisData.clear();
+    symptomAnalysisData.addAll(newSymptomAnalysisData);
     return symptomAnalysisData;
   }
 
@@ -1356,6 +1365,7 @@ class MenstrualCycleWidget {
     Map<String, dynamic> summaryData = {
       "key_matrix": {
         "current_day_cycle": currentDayCycle,
+        "current_phase": "", // TODO
         "avg_cycle_length": avgCycleLength,
         "avg_period_duration": avgPeriodDuration,
         "is_period_start": isPeriodStart,
@@ -1375,28 +1385,9 @@ class MenstrualCycleWidget {
         "is_period_start_from_tomorrow": periodStartFromTomorrow
       },
       "predicted_symptoms_pattern_today":
-          jsonEncode(todaySymptomsData.map((e) => e.toJson()).toList()),
-      "predicted_symptoms_pattern_tomorrow": [
-        {"Name": "Happy", "occurrences": 2},
-        {"Name": "Happy", "occurrences": 2},
-        {"Name": "Happy", "occurrences": 2}
-      ],
-      "predicted_symptoms_pattern_during_periods": [
-        {
-          "day": 1,
-          "symptoms": [
-            {"Name": "Happy", "occurrences": 2},
-            {"Name": "Happy", "occurrences": 2}
-          ]
-        },
-        {
-          "day": 2,
-          "symptoms": [
-            {"Name": "Happy", "occurrences": 2},
-            {"Name": "Happy", "occurrences": 2}
-          ]
-        }
-      ]
+          todaySymptomsData.map((e) => e.toJson()).toList()
+      /*"predicted_symptoms_pattern_today":
+          jsonEncode(todaySymptomsData.map((e) => e.toJson()).toList())*/
     };
     return summaryData;
   }
@@ -1446,12 +1437,17 @@ class MenstrualCycleWidget {
           await saveSymptomsLogs(
             userSymptomsData: getRandomSymptomsData(symptomsData),
             onError: () {},
+            waterValue: "${random.nextInt(20)}",
+            weight: "${20 + random.nextInt(60)}.0",
+            bodyTemperature: "${35 + random.nextInt(40)}.${random.nextInt(99)}",
+            meditationTime: "${random.nextInt(120)}",
+            sleepBedTime: TimeOfDay(
+                minute: 0 + random.nextInt(55), hour: 19 + random.nextInt(3)),
+            sleepWakeUpTime: TimeOfDay(
+                minute: 0 + random.nextInt(55), hour: 4 + random.nextInt(3)),
             cycleDay: cycleIndex + 1,
             symptomsLogDate: periodStartDate.add(Duration(days: cycleIndex)),
-            onSuccess: (id) {
-              /* printMenstrualCycleLogs(
-                  "-------- Added Cycle Day $cycleIndex (${CalenderDateUtils.dateDayFormat(periodStartDate.add(Duration(days: cycleIndex)))}) --------");*/
-            },
+            onSuccess: (id) {},
           );
         }
 

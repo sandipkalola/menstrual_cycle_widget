@@ -56,6 +56,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     LogReport(type: "water"),
     LogReport(type: "sleepWakeUpTime", mainValue: 0, subValue: 0),
   ];
+
   String currentDate = "";
   String logDate = "";
   String cycleDay = "";
@@ -72,6 +73,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   void processSymptomsCategory(
       List<SymptomsCategory> sourceList, bool checkVisibility) {
     for (SymptomsCategory defaultData in sourceList) {
+      // TODO change this Strings.categoryPeriod when implement language functionality
+      if (intCycleDay > mInstance.getPeriodDuration() &&
+          defaultData.categoryName.toString() == Strings.categoryPeriod) {
+        continue;
+      }
       if (checkVisibility && !isVisibleSymptoms(defaultData.categoryName!)) {
         continue;
       }
@@ -225,6 +231,40 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     currentDate = currentDateFormat.format(DateTime.now());
 
     regenerateData();
+
+    final now = DateTime.now();
+    int phaseId;
+
+    if (intCycleDay > 0 && intCycleDay < 6) {
+      phaseId = 1;
+    } else if (intCycleDay < 13) {
+      phaseId = 2;
+    } else if (intCycleDay < 16) {
+      phaseId = 3;
+    } else if (intCycleDay < 30) {
+      phaseId = 4;
+    } else {
+      phaseId = 5;
+    }
+
+    if (DateTime.parse(logDate) == DateTime(now.year, now.month, now.day)) {
+      List<SymptomsData> listSymptomsData = defaultSymptomsData
+          .expand((category) => category.symptomsData ?? <SymptomsData>[])
+          .where((symptomsData) =>
+              symptomsData.phaseIds?.contains(phaseId) ?? false)
+          .toList();
+
+      if (listSymptomsData.isNotEmpty) {
+        symptomsList.insert(
+          0,
+          SymptomsCategory(
+            categoryId: 99999,
+            categoryName: "What are you feeling today?",
+            symptomsData: listSymptomsData,
+          ),
+        );
+      }
+    }
     setState(() {
       isLoading = false;
     });
@@ -383,8 +423,8 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         }
       }
     }
-    final instance = MenstrualCycleWidget.instance!;
-    instance.saveSymptomsLogs(
+
+    mInstance.saveSymptomsLogs(
         userSymptomsData: userLogData,
         onError: widget.onError,
         cycleDay: intCycleDay,
@@ -917,7 +957,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   getTitle() {
     final now = DateTime.now();
     final difference = now.difference(DateTime.parse(logDate)).inDays;
-
     if (difference == 0) {
       return 'Today';
     } else if (difference == 1) {
@@ -1148,7 +1187,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     childView: _buildWeightPicker(),
                                     title: Strings.lblWeightTitle);
                               },
-                              onRemoveClick: () {},
+                              onRemoveClick: () {
+                                setState(() {
+                                  logReportList[0].finalValue = "";
+                                });
+                              },
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
@@ -1175,7 +1218,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     onClick: saveBodyTempLog,
                                     type: "°${Strings.bodyTempC}");
                               },
-                              onRemoveClick: () {},
+                              onRemoveClick: () {
+                                setState(() {
+                                  logReportList[1].finalValue = "";
+                                });
+                              },
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
@@ -1185,10 +1232,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                       (widget.isRequiredSleepView!)
                           ? sleepView(
                               title: Strings.lblSleep,
-                              /* addIcon: const Icon(
-                                Icons.edit,
-                                size: 20,
-                              ),*/
                               startTimeHintText:
                                   (logReportList[2].finalValue!.isNotEmpty)
                                       ? logReportList[2].finalValue!
@@ -1215,7 +1258,16 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     childView: _buildSleepPicker(),
                                     title: Strings.logPeriodBedTimeLog);
                               },
-                              onRemoveClick: () {},
+                              onRemoveClick: () {
+                                setState(() {
+                                  logReportList[2].finalValue = "";
+                                  logReportList[2].mainValue = 0;
+                                  logReportList[2].subValue = 0;
+                                  logReportList[5].finalValue = "";
+                                  logReportList[5].mainValue = 0;
+                                  logReportList[5].subValue = 0;
+                                });
+                              },
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
@@ -1242,7 +1294,12 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     childView: _buildMeditationPicker(),
                                     title: Strings.lblMeditationTitle);
                               },
-                              onRemoveClick: () {},
+                              onRemoveClick: () {
+                                setState(() {
+                                  logReportList[3].finalValue = "";
+                                  logReportList[3].totalMin = 0;
+                                });
+                              },
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
@@ -1269,7 +1326,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     onClick: saveWaterLog,
                                     type: Strings.graphWaterUnitLiter);
                               },
-                              onRemoveClick: () {},
+                              onRemoveClick: () {
+                                setState(() {
+                                  logReportList[4].finalValue = "";
+                                });
+                              },
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,

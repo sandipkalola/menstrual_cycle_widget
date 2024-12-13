@@ -1,8 +1,30 @@
 name: menstrual_cycle_widget
 description: "The 'Menstrual Cycle Widget' Widget is a comprehensive and customizable widget designed to help users to show their menstrual cycles seamlessly."
-version: 2.3.2
+version: 2.3.4
 repository: https://github.com/sandipkalola/menstrual_cycle_widget
 issue_tracker: https://github.com/sandipkalola/menstrual_cycle_widget/issues
+screenshots:
+  - description: 'Menstrual Cycle View'
+    path: example/screenshots/menstrual_cycle_view_type3.png
+  - description: 'Log Periods'
+    path: example/screenshots/month_view.jpg
+  - description: 'Menstrual Cycle View'
+    path: example/screenshots/circle_both.jpg
+  - description: 'Cycle History'
+    path: example/screenshots/cycle_history.jpg
+  - description: 'Cycle Trends'
+    path: example/screenshots/cycle_trends.jpg
+  - description: 'Meditation Graph'
+    path: example/screenshots/meditation_graph.jpg
+  - description: 'Period Graph'
+    path: example/screenshots/period_graph.jpg
+  - description: 'Sleep Graph'
+    path: example/screenshots/sleep_graph.jpg
+  - description: 'Weekly Calender View'
+    path: example/screenshots/week.jpg
+  - description: 'Log Symptoms'
+    path: example/screenshots/log_symptoms2.jpg
+
 funding:
   - https://github.com/sponsors/sandipkalola
 
