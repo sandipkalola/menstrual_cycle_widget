@@ -13,7 +13,7 @@
 ##### 1) Cycle Tracking:
 - Record the start and end dates of menstrual periods.
 - Track cycle length and predict future periods and ovulation days.
-- Log symptoms other notes. (Upcoming release)
+- Log your daily symptoms and other notes.
 
 ##### 2) Calendar View:
 - Monthly view with highlighted period days.

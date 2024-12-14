@@ -1361,11 +1361,12 @@ class MenstrualCycleWidget {
     bool periodStartFromToday = await isPeriodStartFromToday();
     bool periodStartFromTomorrow = await isPeriodStartFromTomorrow();
     List<SymptomsCount> todaySymptomsData = await getSymptomsPattern();
+    String currentPhase = "";
 
     Map<String, dynamic> summaryData = {
       "key_matrix": {
         "current_day_cycle": currentDayCycle,
-        "current_phase": "", // TODO
+        "current_phase": currentPhase,
         "avg_cycle_length": avgCycleLength,
         "avg_period_duration": avgPeriodDuration,
         "is_period_start": isPeriodStart,

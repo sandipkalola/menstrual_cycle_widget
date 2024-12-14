@@ -167,8 +167,12 @@ class MenstrualCyclePainter extends CustomPainter {
   @override
   Future<void> paint(Canvas canvas, Size size) async {
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    /* double centerX = size.width / 2;
-    double centerY = size.height / 2;*/
+
+    double selectedDayTextX = 0.0;
+    double selectedDayTextY = 0.0;
+    TextPainter selectedDayTextPainter = TextPainter();
+    String selectedDayLabel = "";
+
     final radius = min(size.width / 2, size.height / 2) -
         20; // 20 is Manage circle outerline
     final center = Offset(size.width / 2, size.height / 2);
@@ -376,18 +380,6 @@ class MenstrualCyclePainter extends CustomPainter {
       final endAngle = (2 * pi / totalCycleDays) * day - pi / 2;
       final middleAngle = (startAngle + endAngle) / 2;
 
-      // For / Arrow btn days
-      /*Paint paint = Paint()
-        ..color = Colors.black
-        ..strokeWidth = 2;
-      final newRadius = min(size.width / 2, size.height / 2) ;
-      double angle = (2 * pi / totalCycleDays) * day;
-      double startX = centerX + newRadius * cos(angle);
-      double startY = centerY + newRadius * sin(angle);
-      double endX = centerX + (newRadius - arcStrokeWidth) * cos(angle); // Shorter end inside
-      double endY = centerY + (newRadius - arcStrokeWidth) * sin(angle); // Shorter end inside
-      canvas.drawLine(Offset(startX, startY), Offset(endX, endY), paint);*/
-
       /// Calculate Day position
       final textX = center.dx + radius * cos(middleAngle);
       final textY = center.dy + radius * sin(middleAngle);
@@ -441,6 +433,10 @@ class MenstrualCyclePainter extends CustomPainter {
 
       /// highlight current days
       if (day == selectedDay) {
+        selectedDayTextX = textX;
+        selectedDayTextY = textY;
+        selectedDayLabel = day.toString();
+
         /// draw outer boarder for selected day
         final Paint borderPaint = Paint()
           ..color = circleBorderColor
@@ -481,6 +477,68 @@ class MenstrualCyclePainter extends CustomPainter {
       final textOffset = Offset(
           textX - textPainter.width / 2, textY - textPainter.height / topPos);
       textPainter.paint(
+        canvas,
+        textOffset,
+      );
+      selectedDayTextPainter = textPainter;
+    }
+
+    /// Re-draw selected day
+    if (selectedDayTextY > 0) {
+      double topPos = 2;
+      if (isShowDayTitle) {
+        topPos = 2.5;
+      }
+
+      /// draw outer boarder for selected day
+      final Paint borderPaint = Paint()
+        ..color = getSelectedBorderColor(selectedDay)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2;
+      canvas.drawCircle(Offset(selectedDayTextX, selectedDayTextY),
+          selectedDayCircleSize, borderPaint);
+
+      /// set background color of selected day
+      final Paint highlightCirclePaint = Paint()
+        ..color = selectedDayBackgroundColor
+        ..style = PaintingStyle.fill
+        ..strokeWidth = 2;
+      canvas.drawCircle(Offset(selectedDayTextX, selectedDayTextY),
+          selectedDayCircleSize - 1, highlightCirclePaint);
+
+      TextSpan dayLabel = TextSpan(
+        text: dayTitle,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: dayTitleFontSize,
+          fontWeight: FontWeight.normal,
+        ),
+      );
+      selectedDayTextPainter.text = dayLabel;
+      selectedDayTextPainter.layout();
+
+      final labelOffset = Offset(
+          selectedDayTextX - selectedDayTextPainter.width / 2,
+          selectedDayTextY - selectedDayTextPainter.height / 3.5 - 10);
+
+      if (isShowDayTitle) {
+        selectedDayTextPainter.paint(canvas, labelOffset);
+      }
+
+      TextSpan dayText = TextSpan(
+        text: selectedDayLabel,
+        style: TextStyle(
+          color: Colors.black,
+          fontSize: selectedDayFontSize,
+          fontWeight: dayFontWeight,
+        ),
+      );
+      selectedDayTextPainter.text = dayText;
+      selectedDayTextPainter.layout();
+      final textOffset = Offset(
+          selectedDayTextX - selectedDayTextPainter.width / 2,
+          selectedDayTextY - selectedDayTextPainter.height / topPos);
+      selectedDayTextPainter.paint(
         canvas,
         textOffset,
       );
