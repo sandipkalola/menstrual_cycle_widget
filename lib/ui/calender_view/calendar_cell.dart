@@ -62,24 +62,110 @@ class _CalendarCellState extends State<CalendarCell> {
     super.initState();
   }
 
-  Widget renderDateOrDayOfWeek(BuildContext context) {
-    if (widget.isDayOfWeek) {
-      return Container(
-        alignment: Alignment.center,
-        child: Text(
-          widget.dayOfWeek!,
-          style: widget.dayOfWeekStyle,
+  Widget _renderDayOfWeek() {
+    return Container(
+      alignment: Alignment.center,
+      child: Text(
+        widget.dayOfWeek!,
+        style: widget.dayOfWeekStyle,
+      ),
+    );
+  }
+
+  Widget _renderDateView() {
+    final bool isPeriodDay = checkIsPeriodDay();
+    final bool isOvulationDay = checkIsOvulationDay();
+    final bool isFutureOvulationDay = checkIsFutureOvulationDay();
+    final bool isPeriodDayAfterCurrentDate =
+        checkIsPeriodDayAfterCurrentDate(isPeriodDay);
+    final bool isPastPeriodDay = checkIsPastPeriodDay();
+    final bool isFutureDateOfPeriod = checkIsFuturePeriodDay();
+
+    if (widget.isEditMode) {
+      return InkWell(
+        onTap: widget.onDateSelected,
+        child: editModeView(
+          isPeriodDay: isPeriodDay,
+          isPastPeriodDay: isPastPeriodDay,
         ),
       );
     } else {
-      bool isPeriodDay = checkIsPeriodDay();
+      return InkWell(
+        onTap: widget.onDateSelected,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 5, top: 5),
+          child: _renderDecoratedDay(
+            isPeriodDay: isPeriodDay,
+            isPeriodDayAfterCurrentDate: isPeriodDayAfterCurrentDate,
+            isFutureOvulationDay: isFutureOvulationDay,
+            isOvulationDay: isOvulationDay,
+            isFutureDateOfPeriod: isFutureDateOfPeriod,
+            isPastPeriodDay: isPastPeriodDay,
+          ),
+        ),
+      );
+    }
+  }
+
+  Widget _renderDecoratedDay({
+    required bool isPeriodDay,
+    required bool isPeriodDayAfterCurrentDate,
+    required bool isFutureOvulationDay,
+    required bool isOvulationDay,
+    required bool isFutureDateOfPeriod,
+    required bool isPastPeriodDay,
+  }) {
+    final bool isToday = CalenderDateUtils.isSameDay(
+      widget.currentDay!,
+      DateTime.now(),
+    );
+
+    final bool shouldUseDottedBorder = isPeriodDayAfterCurrentDate ||
+        isFutureOvulationDay ||
+        isOvulationDay ||
+        isFutureDateOfPeriod;
+
+    if (shouldUseDottedBorder) {
+      return DottedBorder(
+        color: (isPeriodDayAfterCurrentDate || isFutureDateOfPeriod)
+            ? defaultMenstruationColor
+            : defaultOvulationColor,
+        borderType: BorderType.circle,
+        strokeWidth: 1,
+        child: Center(
+          child: renderDayView(
+            isOvulationDay: false,
+            isPeriodDay: false,
+            isFutureOvulationDay: isFutureOvulationDay,
+            isToday: isToday,
+            isAfterPeriodDay: true,
+          ),
+        ),
+      );
+    } else {
+      return renderDayView(
+        isOvulationDay: isOvulationDay,
+        isPeriodDay: isPeriodDay,
+        isPastPeriodDay: isPastPeriodDay,
+        isToday: isToday,
+      );
+    }
+  }
+
+  Widget renderDateOrDayOfWeek(BuildContext context) {
+    if (widget.isDayOfWeek) {
+      return _renderDayOfWeek();
+    } else {
+      return widget.isBlankDay ? const Text("") : _renderDateView();
+
+      /* bool isPeriodDay = checkIsPeriodDay();
       bool isOvulationDay = checkIsOvulationDay();
       bool isFutureOvulationDay = checkIsFutureOvulationDay();
       bool isPeriodDayAfterCurrentDate =
           checkIsPeriodDayAfterCurrentDate(isPeriodDay);
       bool isPastPeriodDay = checkIsPastPeriodDay();
       bool isFutureDateOfPeriod = checkIsFuturePeriodDay();
-
+      // printMenstrualCycleLogs("isPeriodDay=$isPeriodDay --- isPastPeriodDay=$isPastPeriodDay ----- ${widget.currentDay!}  ---- ischecke=$isChecked");
       return (widget.isBlankDay)
           ? const Text("")
           : InkWell(
@@ -124,7 +210,7 @@ class _CalendarCellState extends State<CalendarCell> {
                               ),
                             ),
                     ),
-            );
+            );*/
     }
   }
 
@@ -133,6 +219,69 @@ class _CalendarCellState extends State<CalendarCell> {
     bool isPeriodDay = false,
     bool isPastPeriodDay = false,
   }) {
+    // Update the isChecked state based on conditions
+    _updateCheckState(isPeriodDay, isPastPeriodDay);
+
+    return Column(
+      children: [
+        _buildDayText(),
+        _buildCheckbox(),
+      ],
+    );
+  }
+
+// Helper to update isChecked state
+  void _updateCheckState(bool isPeriodDay, bool isPastPeriodDay) {
+    if (!isChanged) {
+      isChecked = false;
+    }
+    if ((isPeriodDay || isPastPeriodDay) && !isChanged) {
+      isChecked = true;
+      widget.multipleDateSelectionCallBack.call(true);
+    }
+  }
+
+// Helper to build the day text
+  Widget _buildDayText() {
+    return Center(
+      child: Text(
+        '${widget.currentDay!.day}', // Display the day of the month
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+          color: Colors.black,
+        ),
+      ),
+    );
+  }
+
+// Helper to build the checkbox
+  Widget _buildCheckbox() {
+    return Expanded(
+      child: Checkbox(
+        value: isChecked,
+        fillColor: isChecked
+            ? WidgetStateProperty.all(defaultMenstruationColor)
+            : WidgetStateProperty.all(Colors.white),
+        activeColor: isChecked ? defaultMenstruationColor : Colors.black,
+        onChanged: (value) {
+          widget.multipleDateSelectionCallBack.call(value);
+          isChanged = true;
+          setState(() {
+            isChecked = value!;
+          });
+        },
+      ),
+    );
+  }
+
+  /*Widget editModeView({
+    bool isPeriodDay = false,
+    bool isPastPeriodDay = false,
+  }) {
+    if (!isChanged) {
+      isChecked = false;
+    }
     if ((isPeriodDay || isPastPeriodDay) && !isChanged) {
       isChecked = true;
       widget.multipleDateSelectionCallBack.call(true);
@@ -167,10 +316,102 @@ class _CalendarCellState extends State<CalendarCell> {
         ),
       ],
     );
-  }
+  }*/
 
   /// Display current day view
-  Widget renderDayView(
+  Widget renderDayView({
+    bool isOvulationDay = false,
+    bool isPeriodDay = false,
+    bool isPastPeriodDay = false,
+    bool isToday = false,
+    bool isFutureOvulationDay = false,
+    bool isAfterPeriodDay = false,
+  }) {
+    // Determine the background color
+    Color selectedColor = _determineSelectedColor(
+      isToday: isToday,
+      isOvulationDay: isOvulationDay,
+      isPeriodDay: isPeriodDay,
+      isPastPeriodDay: isPastPeriodDay,
+      isFutureOvulationDay: isFutureOvulationDay,
+      isAfterPeriodDay: isAfterPeriodDay,
+    );
+
+    // Determine the text style
+    TextStyle? textStyle = _determineTextStyle(
+      isPeriodDay: isPeriodDay,
+      isToday: isToday,
+      isOvulationDay: isOvulationDay,
+      isPastPeriodDay: isPastPeriodDay,
+      isFutureOvulationDay: isFutureOvulationDay,
+    );
+
+    return Container(
+      height: isAfterPeriodDay ? 25 : 30,
+      width: isAfterPeriodDay ? 25 : 30,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: selectedColor,
+      ),
+      child: Center(
+        child: Text(
+          '${widget.currentDay!.day}', // Display the day of the month
+          style: textStyle,
+        ),
+      ),
+    );
+  }
+
+// Helper to determine the selected color based on conditions
+  Color _determineSelectedColor({
+    required bool isToday,
+    required bool isOvulationDay,
+    required bool isPeriodDay,
+    required bool isPastPeriodDay,
+    required bool isFutureOvulationDay,
+    required bool isAfterPeriodDay,
+  }) {
+    if (isToday) {
+      return widget.themeColor;
+    } else if (widget.isSelected) {
+      return widget.selectedColor ?? Colors.transparent;
+    } else if (isOvulationDay) {
+      return defaultOvulationColor;
+    } else if (isPastPeriodDay || isPeriodDay) {
+      return defaultMenstruationColor;
+    } else if (CalenderDateUtils.isSameDay(
+        widget.currentDay!, DateTime.now())) {
+      return widget.todayColor ?? Colors.transparent;
+    } else if (isAfterPeriodDay || isFutureOvulationDay) {
+      return Colors.white;
+    }
+    return Colors.transparent;
+  }
+
+// Helper to determine the text style based on conditions
+  TextStyle? _determineTextStyle({
+    required bool isPeriodDay,
+    required bool isToday,
+    required bool isOvulationDay,
+    required bool isPastPeriodDay,
+    required bool isFutureOvulationDay,
+  }) {
+    if (isPeriodDay || isToday || isOvulationDay || isPastPeriodDay) {
+      return isFutureOvulationDay
+          ? widget.dateStyles
+          : TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.normal,
+              color:
+                  (isPeriodDay || isToday || isOvulationDay || isPastPeriodDay)
+                      ? Colors.white
+                      : Colors.black,
+            );
+    }
+    return widget.dateStyles;
+  }
+
+  /*Widget renderDayView(
       {bool isOvulationDay = false,
       bool isPeriodDay = false,
       bool isPastPeriodDay = false,
@@ -225,7 +466,7 @@ class _CalendarCellState extends State<CalendarCell> {
         ),
       ),
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {

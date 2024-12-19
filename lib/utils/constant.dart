@@ -12,6 +12,9 @@ const defaultFollicularDay = 6;
 /// Default ovulation duration of menstrual cycle
 const defaultOvulationDay = 5;
 
+/// set how many future month consider for calender
+const futureMonthCount = 12;
+
 /// Default option of graph view
 const List<String> choices = <String>[
   Strings.optionsDownloadImage,

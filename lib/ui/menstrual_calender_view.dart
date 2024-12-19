@@ -113,6 +113,91 @@ class _MenstrualCycleCalenderViewState
 
   List<Widget> calendarBuilder() {
     List<Widget> dayWidgets = [];
+
+    // Add weekday headers
+    _addWeekdayHeaders(dayWidgets);
+
+    // Generate calendar days
+    _addCalendarDays(dayWidgets);
+
+    return dayWidgets;
+  }
+
+// Helper method to add weekday headers
+  void _addWeekdayHeaders(List<Widget> dayWidgets) {
+    for (var day in weekTitles) {
+      dayWidgets.add(
+        CalendarCell(
+          themeColor: widget.themeColor!,
+          selectedColor: selectedColor,
+          todayColor: defaultMenstruationColor,
+          isDayOfWeek: true,
+          dayOfWeek: day,
+          multipleDateSelectionCallBack: () {},
+          dayOfWeekStyle: TextStyle(
+            color: widget.themeColor,
+            fontWeight: FontWeight.w800,
+            fontSize: 11,
+          ),
+        ),
+      );
+    }
+  }
+
+// Helper method to add calendar days
+  void _addCalendarDays(List<Widget> dayWidgets) {
+    List<DateTime>? calendarDays =
+        isExpanded ? selectedMonthsDays : selectedWeekDays;
+
+    bool monthStarted = false;
+    bool monthEnded = false;
+
+    for (var day in calendarDays!) {
+      day = CalenderDateUtils.getDay(day);
+
+      // Normalize time to the start of the day
+      day = _normalizeDay(day);
+
+      // Update month boundary flags
+      if (monthStarted && day.day == 1) {
+        monthEnded = true;
+      }
+      if (CalenderDateUtils.isFirstDayOfMonth(day)) {
+        monthStarted = true;
+      }
+
+      dayWidgets.add(
+        CalendarCell(
+          themeColor: widget.themeColor!,
+          selectedColor: selectedColor,
+          todayColor: defaultMenstruationColor,
+          onDateSelected: () => handleSelectedDateCallback(day),
+          currentDay: day,
+          multipleDateSelectionCallBack: () {},
+          previousPeriodDate: _instance.getPreviousPeriodDay(),
+          pastAllPeriodsDays: pastAllPeriodsDays,
+          futurePeriodDays: futurePeriodDays,
+          futureOvulationDays: futureOvulationDays,
+          cycleLength: _instance.getCycleLength(),
+          periodDuration: _instance.getPeriodDuration(),
+          dateStyles: configureDateStyle(monthStarted, monthEnded),
+          isSelected: CalenderDateUtils.isSameDay(_selectedDate, day),
+        ),
+      );
+    }
+  }
+
+// Helper to normalize day to the start of the day
+  DateTime _normalizeDay(DateTime day) {
+    if (day.hour > 0) {
+      day = day.toLocal();
+      day = day.subtract(Duration(hours: day.hour));
+    }
+    return day;
+  }
+
+  /*List<Widget> calendarBuilder() {
+    List<Widget> dayWidgets = [];
     List<DateTime>? calendarDays =
         isExpanded ? selectedMonthsDays : selectedWeekDays;
 
@@ -171,7 +256,7 @@ class _MenstrualCycleCalenderViewState
       );
     }
     return dayWidgets;
-  }
+  }*/
 
   TextStyle configureDateStyle(monthStarted, monthEnded) {
     TextStyle? dateStyles;

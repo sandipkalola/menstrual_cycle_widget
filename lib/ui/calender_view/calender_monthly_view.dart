@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:menstrual_cycle_widget/ui/calender_view/scroll_to_index.dart';
 import '../../menstrual_cycle_widget.dart';
 import 'calender_view.dart';
 
@@ -50,9 +50,21 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   List<String>? pastAllPeriodsDays = [];
   final _instance = MenstrualCycleWidget.instance!;
 
+  int pastMonthCount = 3;
+  int nextMonthCount = 3;
+  int nextMonthIncrementCount = 3;
+  int pastMonthDecrementCount = 3;
+
+  late AutoScrollController controller;
+  bool isInitialScroll = true;
+
   @override
   void initState() {
     super.initState();
+    controller = AutoScrollController(
+        viewportBoundaryGetter: () =>
+            Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
+        axis: Axis.vertical);
     init();
     _selectedDate = widget.initialDate ?? DateTime.now();
     generateMonthData(true);
@@ -63,8 +75,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     pastAllPeriodsDays = _instance.pastAllPeriodDays;
     futurePeriodDays = await initFuturePeriodDay();
     futureOvulationDays = await initFutureOvulationDay();
-    //printLogs(("data.... ${pastAllPeriodsDays.toString()}");
-    setState(() {});
+    /*setState(() {});*/
   }
 
   DateTime getDateTimeFromMonthsAgo(int monthsAgo) {
@@ -88,19 +99,29 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     monthWidgets.clear();
     monthTitle.clear();
     // Past month data
-    for (int index = 5; index > 0; index--) {
+    for (int index = pastMonthCount; index > 0; index--) {
       DateTime currantMonth = getDateTimeFromMonthsAgo(index);
+      monthTitle.add(CalenderDateUtils.monthYear.format(currantMonth));
       monthWidgets
           .add(monthCalendarBuilder(currantMonth, isConsiderFutureDate));
     }
+    monthTitle.add(CalenderDateUtils.monthYear.format(_selectedDate));
     monthWidgets.add(monthCalendarBuilder(_selectedDate, isConsiderFutureDate));
     // Next month data
     if (isConsiderFutureDate) {
       DateTime nextMonth = CalenderDateUtils.nextMonth(_selectedDate);
-      for (int index = 0; index < 5; index++) {
+      for (int index = 0; index < nextMonthCount; index++) {
+        monthTitle.add(CalenderDateUtils.monthYear.format(nextMonth));
         monthWidgets.add(monthCalendarBuilder(nextMonth, isConsiderFutureDate));
         nextMonth = CalenderDateUtils.nextMonth(nextMonth);
       }
+    }
+
+    //setState(() {});
+    if (isInitialScroll) {
+      await controller.scrollToIndex(3,
+          preferPosition: AutoScrollPosition.begin);
+      isInitialScroll = false;
     }
   }
 
@@ -151,8 +172,6 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   monthCalendarBuilder(selectedDate, isConsiderFutureDate) {
     List<DateTime> dayWidgets = [];
     List<DateTime>? calendarDays = _daysInMonth(selectedDate);
-
-    monthTitle.add(CalenderDateUtils.monthYear.format(selectedDate));
     for (var day in calendarDays) {
       day = CalenderDateUtils.getDay(day);
       if (day.hour > 0) {
@@ -179,7 +198,6 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   }
 
   void dateSelectionCallBack(DateTime day, bool isChecked) {
-    //printLogs(("dateSelectionCallBack-------");
     int index = selectedPeriodsDate.indexOf(day);
     if (index > -1) {
       if (!isChecked) {
@@ -199,8 +217,29 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     final dbHelper = MenstrualCycleDbHelper.instance;
     final instance = MenstrualCycleWidget.instance!;
     String encryptedUserid = instance.getCustomerId();
+
+    selectedPeriodsDate.sort((a, b) => a.compareTo(b));
+    if (selectedPeriodsDate.isNotEmpty) {
+      DateTime lastPeriodDate = selectedPeriodsDate[0].add(Duration(days: -1));
+      /* printMenstrualCycleLogs(
+          "Date : ${CalenderDateUtils.dateWithYear(lastPeriodDate)}");*/
+      await dbHelper.clearPeriodLogAfterSpecificDate(
+          encryptedUserid, CalenderDateUtils.dateDayFormat(lastPeriodDate));
+      await dbHelper.insertPeriodLog(selectedPeriodsDate);
+    } else {
+      await dbHelper.clearPeriodLog(encryptedUserid);
+    }
+    /*for (int i = 0; i < selectedPeriodsDate.length; i++) {
+      printMenstrualCycleLogs(
+          "Date : ${CalenderDateUtils.dateWithYear(selectedPeriodsDate[i])}");
+    }*/
+    /*final dbHelper = MenstrualCycleDbHelper.instance;
+    final instance = MenstrualCycleWidget.instance!;
+    String encryptedUserid = instance.getCustomerId();
+    // TODO Clear only visible date data when we click on save button.
     await dbHelper.clearPeriodLog(encryptedUserid);
     await dbHelper.insertPeriodLog(selectedPeriodsDate);
+    */
     isChangedData = true;
     widget.onDataChanged!.call(isChangedData);
     isEditMode = false;
@@ -252,84 +291,146 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                   child: getInformationView(
                       widget.selectedColor!, widget.themeColor),
                 ),
+              GridView.count(
+                childAspectRatio: 1.5,
+                primary: false,
+                shrinkWrap: true,
+                crossAxisCount: 7,
+                padding: const EdgeInsets.only(bottom: 0.0),
+                children: titleCalendarBuilder(),
+              ),
               Expanded(
-                child: SingleChildScrollView(
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(8),
-                    shrinkWrap: true,
-                    physics: const ClampingScrollPhysics(),
-                    itemCount: monthWidgets.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      bool monthStarted = false;
-                      return Column(
-                        children: [
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            monthTitle[index],
-                            style: TextStyle(
-                                color: widget.themeColor,
-                                fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          GridView.count(
-                            childAspectRatio: 1.5,
-                            primary: false,
-                            shrinkWrap: true,
-                            crossAxisCount: 7,
-                            padding: const EdgeInsets.only(bottom: 0.0),
-                            children: titleCalendarBuilder(),
-                          ),
-                          GridView.count(
-                            childAspectRatio: 1.5,
-                            primary: false,
-                            shrinkWrap: true,
-                            crossAxisCount: 7,
-                            padding: const EdgeInsets.only(bottom: 0.0),
-                            children: List.generate(monthWidgets[index].length,
-                                (childIndex) {
-                              DateTime day = CalenderDateUtils.getDay(
-                                  monthWidgets[index][childIndex]);
+                child: NotificationListener<ScrollNotification>(
+                    onNotification: (ScrollNotification notification) {
+                      if (notification is ScrollUpdateNotification ||
+                          notification is ScrollEndNotification) {
+                        /* printMenstrualCycleLogs(
+                            "pixels ${notification.metrics.pixels}");
+                        printMenstrualCycleLogs(
+                            "minScrollExtent ${notification.metrics.minScrollExtent}");
+                        printMenstrualCycleLogs(
+                            "minScrollExtent ${notification.metrics.maxScrollExtent}");*/
 
-                              if (CalenderDateUtils.isFirstDayOfMonth(day)) {
-                                monthStarted = true;
-                              }
-                              return CalendarCell(
-                                themeColor: widget.themeColor,
-                                selectedColor: widget.selectedColor,
-                                todayColor: widget.todayColor,
-                                isEditMode: isEditMode,
-                                multipleDateSelectionCallBack: (value) {
-                                  dateSelectionCallBack(
-                                      monthWidgets[index][childIndex], value);
-                                },
-                                onDateSelected: () =>
-                                    _launchDateSelectionCallback(
-                                        monthWidgets[index][childIndex]),
-                                currentDay: monthWidgets[index][childIndex],
-                                isBlankDay: (monthStarted) ? false : true,
-                                previousPeriodDate:
-                                    _instance.getPreviousPeriodDay(),
-                                pastAllPeriodsDays: pastAllPeriodsDays,
-                                futurePeriodDays: futurePeriodDays,
-                                futureOvulationDays: futureOvulationDays,
-                                cycleLength: widget.cycleLength,
-                                periodDuration: widget.periodLength,
-                                dateStyles: TextStyle(
-                                    color: widget.themeColor,
-                                    fontWeight: FontWeight.normal),
-                                isSelected: false,
-                              );
-                            }),
-                          ),
-                        ],
-                      );
+                        if (notification.metrics.pixels < 10) {
+                          printMenstrualCycleLogs('Reached top');
+                          //
+                          pastMonthCount = pastMonthCount + 1;
+                          DateTime currantMonth =
+                              getDateTimeFromMonthsAgo(pastMonthCount);
+                          monthTitle.insert(0,
+                              CalenderDateUtils.monthYear.format(currantMonth));
+                          monthWidgets.insert(
+                              0, monthCalendarBuilder(currantMonth, false));
+
+                          setState(() {});
+                        } else if (notification.metrics.pixels + 100 >
+                                notification.metrics.maxScrollExtent &&
+                            !isEditMode) {
+                          printMenstrualCycleLogs('Reached bottom');
+                          if (nextMonthCount <= futureMonthCount) {
+                            DateTime nextMonth = DateTime.now();
+                            for (int index = 0;
+                                index <= nextMonthCount;
+                                index++) {
+                              nextMonth =
+                                  CalenderDateUtils.nextMonth(nextMonth);
+                            }
+                            for (int index = nextMonthCount;
+                                index <
+                                    nextMonthCount + nextMonthIncrementCount;
+                                index++) {
+                              monthTitle.add(CalenderDateUtils.monthYear
+                                  .format(nextMonth));
+                              monthWidgets
+                                  .add(monthCalendarBuilder(nextMonth, true));
+                              nextMonth =
+                                  CalenderDateUtils.nextMonth(nextMonth);
+                            }
+                            nextMonthCount =
+                                nextMonthCount + nextMonthIncrementCount;
+
+                            setState(() {});
+                          }
+                        }
+                      }
+                      return true;
                     },
-                  ),
-                ),
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      controller: controller,
+                      padding: const EdgeInsets.all(8),
+                      shrinkWrap: true,
+                      physics: const ClampingScrollPhysics(),
+                      itemCount: monthWidgets.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        bool monthStarted = false;
+                        return AutoScrollTag(
+                          key: ValueKey(index),
+                          controller: controller,
+                          index: index,
+                          child: Column(
+                            children: [
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                monthTitle[index],
+                                style: TextStyle(
+                                    color: widget.themeColor,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(
+                                height: 5,
+                              ),
+                              GridView.count(
+                                childAspectRatio: 1.5,
+                                primary: false,
+                                shrinkWrap: true,
+                                crossAxisCount: 7,
+                                padding: const EdgeInsets.only(bottom: 0.0),
+                                children: List.generate(
+                                    monthWidgets[index].length, (childIndex) {
+                                  DateTime day = CalenderDateUtils.getDay(
+                                      monthWidgets[index][childIndex]);
+
+                                  if (CalenderDateUtils.isFirstDayOfMonth(
+                                      day)) {
+                                    monthStarted = true;
+                                  }
+                                  return CalendarCell(
+                                    themeColor: widget.themeColor,
+                                    selectedColor: widget.selectedColor,
+                                    todayColor: widget.todayColor,
+                                    isEditMode: isEditMode,
+                                    multipleDateSelectionCallBack: (value) {
+                                      dateSelectionCallBack(
+                                          monthWidgets[index][childIndex],
+                                          value);
+                                    },
+                                    onDateSelected: () =>
+                                        _launchDateSelectionCallback(
+                                            monthWidgets[index][childIndex]),
+                                    currentDay: monthWidgets[index][childIndex],
+                                    isBlankDay: (monthStarted) ? false : true,
+                                    previousPeriodDate:
+                                        _instance.getPreviousPeriodDay(),
+                                    pastAllPeriodsDays: pastAllPeriodsDays,
+                                    futurePeriodDays: futurePeriodDays,
+                                    futureOvulationDays: futureOvulationDays,
+                                    cycleLength: widget.cycleLength,
+                                    periodDuration: widget.periodLength,
+                                    dateStyles: TextStyle(
+                                        color: widget.themeColor,
+                                        fontWeight: FontWeight.normal),
+                                    isSelected: false,
+                                  );
+                                }),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    )),
               ),
               if (isEditMode)
                 Align(

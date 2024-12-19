@@ -1,3 +1,8 @@
+## [2.4.0] - 19 Dec 2024
+* Enhancements: Added pagination to the monthly calendar view for improved performance.
+* Enhancements: Changed the default color of the menstrual view for a better user experience.
+* Bug Fixes: Resolved minor bugs to enhance overall stability and performance.
+
 ## [2.3.4] - 12 Dec 2024
 * Custom function to add dummy data for testing purposes.
 * Custom function to verify if the graph contains data 

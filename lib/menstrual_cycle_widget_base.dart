@@ -1394,7 +1394,7 @@ class MenstrualCycleWidget {
   }
 
   Future<void> addDummyData(
-      {int numberOfDay = 28,
+      {int numberOfDay = 365,
       Function? onSuccess,
       Function? onError,
       List<SymptomsData>? symptomsData}) async {
@@ -1419,8 +1419,8 @@ class MenstrualCycleWidget {
 
       for (int i = numberOfDay; i > 0; i--) {
         DateTime periodStartDate = DateTime.now().add(Duration(days: -i));
-        /* printMenstrualCycleLogs(
-            "-------- Period Day (${CalenderDateUtils.dateDayFormat(periodStartDate)}) --------");
+        /*printMenstrualCycleLogs(
+            "-------- Period Day (${CalenderDateUtils.dateDayFormat(periodStartDate)}) -------- $i");
         printMenstrualCycleLogs(
             "-------- randomCycleLength $randomCycleLength --------");*/
         List<DateTime> selectedPeriodsDate = [];
@@ -1459,7 +1459,7 @@ class MenstrualCycleWidget {
     } catch (e) {
       onError!.call();
     }
-
+    calculateLastPeriodDate();
     onSuccess!.call();
     //printMenstrualCycleLogs("-------- End Process --------");
   }

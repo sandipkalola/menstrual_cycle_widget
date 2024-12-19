@@ -201,6 +201,33 @@ class MenstrualCycleDbHelper {
     return deleted;
   }
 
+  /// Delete past period data from specific date
+  Future<int> clearPeriodLogAfterSpecificDate(
+      String customerId, String lastLogDate) async {
+    Database? db = await instance.database;
+
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId'");
+
+    List<DateTime> selectedPeriodsDate = [];
+
+    List.generate(queryResponse.length, (i) {
+      selectedPeriodsDate.add(DateTime.parse(Encryption.instance
+          .decrypt(queryResponse[i][columnPeriodEncryptDate])));
+    });
+
+    selectedPeriodsDate.sort((a, b) => a.compareTo(b));
+    /* printMenstrualCycleLogs(
+        "Before Delete count ${selectedPeriodsDate.length}");*/
+    for (int index = 0; index < selectedPeriodsDate.length; index++) {
+      if (DateTime.parse(lastLogDate).isBefore(selectedPeriodsDate[index])) {
+        await db.rawDelete(
+            "DELETE FROM $tableUserPeriodsLogsData WHERE $columnCustomerId='$customerId' AND $columnPeriodEncryptDate='${Encryption.instance.encrypt(CalenderDateUtils.dateDayFormat(selectedPeriodsDate[index]))}'");
+      }
+    }
+    return 1;
+  }
+
   /// Delete all symptoms data
   Future<int> clearSymptomsLog(String customerId) async {
     Database? db = await instance.database;
@@ -211,7 +238,7 @@ class MenstrualCycleDbHelper {
 
   /// insert user's period data on userId and log date
   Future<int> insertPeriodLog(List<DateTime> selectedPeriodsDate) async {
-    //printLogs("selectedPeriodsDate ${selectedPeriodsDate.toString()}");
+    // printMenstrualCycleLogs("selectedPeriodsDate ${selectedPeriodsDate.toString()}");
     final mInstance = MenstrualCycleWidget.instance!;
     String customerId = mInstance.getCustomerId();
     Database? db = await instance.database;

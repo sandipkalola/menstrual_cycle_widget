@@ -9,7 +9,6 @@ initFuturePeriodDay() async {
   final instance = MenstrualCycleWidget.instance!;
 
   List<String> futurePeriodDays = [];
-  int generateMonth = 12; // TODO get from Configuration
   int cycleLength = instance.getCycleLength() - 1;
   int periodLength = instance.getPeriodDuration();
   if (instance.getPreviousPeriodDay().isNotEmpty) {
@@ -17,7 +16,7 @@ initFuturePeriodDay() async {
         .parse(instance.getPreviousPeriodDay())
         .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
-    for (int index = 0; index < generateMonth; index++) {
+    for (int index = 0; index < futureMonthCount; index++) {
       for (int i = 1; i <= periodLength; i++) {
         DateTime addDate = nextPeriodDate.add(Duration(days: i));
         // printLogs("Dates: ${defaultDateFormat.format(addDate)}");
@@ -35,14 +34,13 @@ initFuturePeriodDay() async {
 initFutureOvulationDay() async {
   final instance = MenstrualCycleWidget.instance!;
   List<String> futureOvulationDays = [];
-  int generateMonth = 12; // get from configuration
   int cycleLength = instance.getCycleLength();
   if (instance.getPreviousPeriodDay().isNotEmpty) {
     DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
         .parse(instance.getPreviousPeriodDay())
         .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
-    for (int index = 0; index < generateMonth; index++) {
+    for (int index = 0; index < futureMonthCount; index++) {
       // Ovulation day
       DateTime ovulationDate = nextPeriodDate
           .add(Duration(days: cycleLength))
