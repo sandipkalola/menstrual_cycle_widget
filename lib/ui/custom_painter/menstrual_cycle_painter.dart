@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:menstrual_cycle_widget/ui/text_style/custom_text_style.dart';
 
 import '../../menstrual_cycle_widget.dart';
 
@@ -278,10 +279,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan message1 = TextSpan(
         text: message,
         style: TextStyle(
-          color: messageTextColor,
-          fontSize: messageTextSize,
-          fontWeight: messageFontWeight,
-        ),
+            color: messageTextColor,
+            fontSize: messageTextSize,
+            fontWeight: messageFontWeight,
+            fontFamily: getFontFamily()),
       );
       messageTextPainter.text = message1;
       messageTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.60);
@@ -298,10 +299,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan titleText = TextSpan(
         text: title,
         style: TextStyle(
-          color: titleTextColor,
-          fontSize: titleTextSize,
-          fontWeight: titleFontWeight,
-        ),
+            color: titleTextColor,
+            fontSize: titleTextSize,
+            fontWeight: titleFontWeight,
+            fontFamily: getFontFamily()),
       );
       titleTextPainter.text = titleText;
       titleTextPainter.layout(minWidth: 0, maxWidth: size.width * 0.70);
@@ -318,10 +319,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan messageText2 = TextSpan(
         text: message2,
         style: TextStyle(
-          color: messageTextColor,
-          fontSize: messageTextSize,
-          fontWeight: messageFontWeight,
-        ),
+            color: messageTextColor,
+            fontSize: messageTextSize,
+            fontWeight: messageFontWeight,
+            fontFamily: getFontFamily()),
       );
       message2TextPainter.text = messageText2;
       message2TextPainter.layout(minWidth: 0, maxWidth: size.width * 0.60);
@@ -396,10 +397,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan dayLabel = TextSpan(
         text: dayTitle,
         style: TextStyle(
-          color: dayTextColor,
-          fontSize: dayTitleFontSize,
-          fontWeight: FontWeight.normal,
-        ),
+            color: dayTextColor,
+            fontSize: dayTitleFontSize,
+            fontWeight: FontWeight.normal,
+            fontFamily: getFontFamily()),
       );
       textPainter.text = dayLabel;
       textPainter.layout();
@@ -467,10 +468,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan dayText = TextSpan(
         text: day.toString(),
         style: TextStyle(
-          color: dayTextColor,
-          fontSize: (day == selectedDay) ? selectedDayFontSize : dayFontSize,
-          fontWeight: dayFontWeight,
-        ),
+            color: dayTextColor,
+            fontSize: (day == selectedDay) ? selectedDayFontSize : dayFontSize,
+            fontWeight: dayFontWeight,
+            fontFamily: getFontFamily()),
       );
       textPainter.text = dayText;
       textPainter.layout();
@@ -509,10 +510,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan dayLabel = TextSpan(
         text: dayTitle,
         style: TextStyle(
-          color: Colors.black,
-          fontSize: dayTitleFontSize,
-          fontWeight: FontWeight.normal,
-        ),
+            color: Colors.black,
+            fontSize: dayTitleFontSize,
+            fontWeight: FontWeight.normal,
+            fontFamily: getFontFamily()),
       );
       selectedDayTextPainter.text = dayLabel;
       selectedDayTextPainter.layout();
@@ -528,10 +529,10 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan dayText = TextSpan(
         text: selectedDayLabel,
         style: TextStyle(
-          color: Colors.black,
-          fontSize: selectedDayFontSize,
-          fontWeight: dayFontWeight,
-        ),
+            color: Colors.black,
+            fontSize: selectedDayFontSize,
+            fontWeight: dayFontWeight,
+            fontFamily: getFontFamily()),
       );
       selectedDayTextPainter.text = dayText;
       selectedDayTextPainter.layout();
@@ -583,9 +584,9 @@ class MenstrualCyclePainter extends CustomPainter {
         text: TextSpan(
           text: char,
           style: TextStyle(
-            color: color,
-            fontSize: outsidePhasesTextSize,
-          ),
+              color: color,
+              fontSize: outsidePhasesTextSize,
+              fontFamily: getFontFamily()),
         ),
         textAlign: TextAlign.center,
         textDirection: TextDirection.ltr,
@@ -726,10 +727,10 @@ class MenstrualCyclePainter extends CustomPainter {
     final labelText = TextSpan(
       text: label,
       style: TextStyle(
-        color: textColor,
-        fontSize: insidePhasesTextSize,
-        fontWeight: FontWeight.bold,
-      ),
+          color: textColor,
+          fontSize: insidePhasesTextSize,
+          fontWeight: FontWeight.bold,
+          fontFamily: getFontFamily()),
     );
 
     textPainter.text = labelText;

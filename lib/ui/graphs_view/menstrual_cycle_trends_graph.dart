@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/chart_cycle_data.dart';
+import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualCycleTrendsGraph extends StatefulWidget {
@@ -12,14 +13,14 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
   final bool isShowMoreOptions;
   final bool isShowNormalRangeHint;
   final String normalRangeHintTitle;
-  final TextStyle normalRangeHintTextStyle;
+  final TextStyle? normalRangeHintTextStyle;
   final String headerTitle;
-  final TextStyle headerTitleTextStyle;
+  final TextStyle? headerTitleTextStyle;
   final String loadingText;
   final String xAxisTitle;
   final bool isShowXAxisTitle;
-  final TextStyle xAxisTitleTextStyle;
-  final TextStyle yAxisTitleTextStyle;
+  final TextStyle? xAxisTitleTextStyle;
+  final TextStyle? yAxisTitleTextStyle;
   final String yAxisTitle;
   final bool isShowYAxisTitle;
   final Color themeColor;
@@ -35,14 +36,10 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
       this.isShowMoreOptions = false,
       this.xAxisTitle = Strings.graphCycleStartDate,
       this.isShowNormalRangeHint = true,
-      this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.normalRangeHintTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.headerTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.yAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
+      this.xAxisTitleTextStyle,
+      this.normalRangeHintTextStyle,
+      this.headerTitleTextStyle,
+      this.yAxisTitleTextStyle,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
       this.yAxisTitle = Strings.graphCycleLengthDays,
@@ -81,6 +78,11 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
 
   List<PeriodsDateRange> allPeriodDates = [];
 
+  late TextStyle _xAxisTitleTextStyle,
+      _normalRangeHintTextStyle,
+      _yAxisTitleTextStyle,
+      _headerTitleTextStyle;
+
   @override
   void initState() {
     _initializeVariables();
@@ -89,6 +91,11 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
   }
 
   void _initializeVariables() async {
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _normalRangeHintTextStyle = getTextStyle(widget.normalRangeHintTextStyle);
+    _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+
     _chartKey = GlobalKey();
     _labelPosition = ChartDataLabelAlignment.top;
     _chartAlignment = ChartAlignment.center;
@@ -212,17 +219,16 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       },
       enableAxisAnimation: true,
       legend: Legend(
-          isVisible: widget.isShowHeader,
-          textStyle: widget.headerTitleTextStyle),
+          isVisible: widget.isShowHeader, textStyle: _headerTitleTextStyle),
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
         // labelRotation: -70,
         rangePadding: ChartRangePadding.normal,
-        labelStyle: widget.xAxisTitleTextStyle,
+        labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
                 text: widget.xAxisTitle,
-                textStyle: widget.xAxisTitleTextStyle,
+                textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -236,11 +242,11 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
         axisLine: const AxisLine(width: 0),
         edgeLabelPlacement: EdgeLabelPlacement.shift,
         labelFormat: '{value}',
-        labelStyle: widget.yAxisTitleTextStyle,
+        labelStyle: _yAxisTitleTextStyle,
         title: (widget.isShowYAxisTitle)
             ? AxisTitle(
                 text: widget.yAxisTitle,
-                textStyle: widget.yAxisTitleTextStyle,
+                textStyle: _yAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -253,7 +259,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
                   end: 36,
                   color: Colors.grey.withOpacity(0.2),
                   text: widget.normalRangeHintTitle,
-                  textStyle: widget.normalRangeHintTextStyle,
+                  textStyle: _normalRangeHintTextStyle,
                 ),
               ]
             : [],

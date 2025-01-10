@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../menstrual_cycle_widget.dart';
+import '../text_style/custom_text_style.dart';
 
 /// TODO Add start and end date to get data for all graph
 class MenstrualAllCycleHistoryGraph extends StatefulWidget {
   final String headerTitle;
-  final TextStyle headerTitleTextStyle;
+  final TextStyle? headerTitleTextStyle;
   final String loadingText;
   final Color appBarBackgroundColor;
 
@@ -14,8 +15,7 @@ class MenstrualAllCycleHistoryGraph extends StatefulWidget {
     this.headerTitle = Strings.graphCycleTitle,
     this.loadingText = Strings.loading,
     this.appBarBackgroundColor = Colors.blueAccent,
-    this.headerTitleTextStyle = const TextStyle(
-        color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold),
+    this.headerTitleTextStyle,
   });
 
   @override
@@ -28,6 +28,7 @@ class _MenstrualAllCycleHistoryGraphState
   List<PeriodsDateRange> allPeriodRange = [];
 
   bool isGetData = false;
+  late TextStyle _headerTitleTextStyle;
 
   @override
   void initState() {
@@ -36,6 +37,8 @@ class _MenstrualAllCycleHistoryGraphState
   }
 
   init() async {
+    _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
+
     final instance = MenstrualCycleWidget.instance!;
     List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
     for (int i = 0; i < periodRange.length; i++) {
@@ -55,7 +58,7 @@ class _MenstrualAllCycleHistoryGraphState
         backgroundColor: widget.appBarBackgroundColor,
         title: Text(
           widget.headerTitle,
-          style: widget.headerTitleTextStyle,
+          style: _headerTitleTextStyle,
         ),
       ),
       body: (allPeriodRange.isNotEmpty)

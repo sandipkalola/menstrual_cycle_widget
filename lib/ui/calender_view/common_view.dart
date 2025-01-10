@@ -76,9 +76,12 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             color: defaultMenstruationColor,
           ),
         ),
-        const Text(
+        Text(
           Strings.periodLabel,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+          ),
         ),
         const SizedBox(
           width: 5,
@@ -100,9 +103,12 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             ),
           ),
         ),
-        const Text(
+        Text(
           Strings.predictOvulationDateLabel,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+          ),
         ),
         const SizedBox(
           width: 5,
@@ -124,9 +130,12 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             ),
           ),
         ),
-        const Text(
+        Text(
           Strings.predictPeriodDateLabel,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+          ),
         ),
         const SizedBox(
           width: 5,
@@ -140,9 +149,12 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             color: daySelectedColor,
           ),
         ),
-        const Text(
+        Text(
           Strings.selectedDateLabel,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+          ),
         ),
         const SizedBox(
           width: 5,
@@ -156,9 +168,12 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
             color: themeColor,
           ),
         ),
-        const Text(
+        Text(
           Strings.todayLabel,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+            fontSize: fontSize,
+            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+          ),
         ),
       ],
     ),

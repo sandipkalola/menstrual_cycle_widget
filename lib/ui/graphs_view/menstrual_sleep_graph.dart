@@ -3,6 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/sleep_data.dart';
+import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualSleepGraph extends StatefulWidget {
@@ -12,8 +13,8 @@ class MenstrualSleepGraph extends StatefulWidget {
   final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
-  final TextStyle xAxisTitleTextStyle;
-  final TextStyle yAxisTitleTextStyle;
+  final TextStyle? xAxisTitleTextStyle;
+  final TextStyle? yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
   final bool isShowYAxisGridLine;
@@ -34,10 +35,8 @@ class MenstrualSleepGraph extends StatefulWidget {
       this.onImageDownloadCallback,
       this.graphColor = Colors.blue,
       this.xAxisTitle = Strings.graphSleepDate,
-      this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.yAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
+      this.xAxisTitleTextStyle,
+      this.yAxisTitleTextStyle,
       this.onPdfDownloadCallback});
 
   @override
@@ -61,6 +60,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
   String fileName = "Sleep_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
+  late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
 
   @override
   void initState() {
@@ -70,6 +70,9 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
   }
 
   void _initializeVariables() async {
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+
     _chartKey = GlobalKey();
     isLoadMoreView = false;
     isNeedToUpdateView = false;
@@ -162,11 +165,11 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
         //  axisLine: AxisLine(width: 0),
         rangePadding: ChartRangePadding.normal,
         // labelRotation: -70,
-        labelStyle: widget.xAxisTitleTextStyle,
+        labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
                 text: widget.xAxisTitle,
-                textStyle: widget.xAxisTitleTextStyle,
+                textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -178,7 +181,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
           //labelFormat: getLabelFormat('{value}'),
           axisLabelFormatter: (AxisLabelRenderDetails details) {
             return ChartAxisLabel(
-                getLabelFormat(details.value.toString()), null);
+                getLabelFormat(details.value.toString()), _xAxisTitleTextStyle);
           },
           minimum: minValue,
           maximum: maxValue,
@@ -187,11 +190,11 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
           majorGridLines:
               MajorGridLines(width: (widget.isShowYAxisGridLine) ? 1 : 0),
           // axisLine: const AxisLine(width: 0),
-          labelStyle: widget.yAxisTitleTextStyle,
+          labelStyle: _yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
                   text: widget.yAxisTitle,
-                  textStyle: widget.yAxisTitleTextStyle,
+                  textStyle: _yAxisTitleTextStyle,
                 )
               : const AxisTitle(
                   text: "",

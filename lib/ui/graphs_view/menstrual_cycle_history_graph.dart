@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../../menstrual_cycle_widget.dart';
+import '../text_style/custom_text_style.dart';
 import 'menstrual_cycle_all_history_graph.dart';
 
 class MenstrualCycleHistoryGraph extends StatefulWidget {
   final String headerTitle;
-  final TextStyle headerTitleTextStyle;
+  final TextStyle? headerTitleTextStyle;
   final String loadingText;
   final int viewCycleHistoryLength;
   final Color appBarBackgroundColor;
@@ -16,8 +17,7 @@ class MenstrualCycleHistoryGraph extends StatefulWidget {
     this.loadingText = Strings.loading,
     this.appBarBackgroundColor = Colors.blueAccent,
     this.viewCycleHistoryLength = 3,
-    this.headerTitleTextStyle = const TextStyle(
-        color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold),
+    this.headerTitleTextStyle,
   });
 
   @override
@@ -30,6 +30,7 @@ class _MenstrualCycleHistoryGraphState
   List<PeriodsDateRange> allPeriodRange = [];
 
   bool isGetData = false;
+  late TextStyle _headerTitleTextStyle;
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _MenstrualCycleHistoryGraphState
   }
 
   init() async {
+    _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
     final instance = MenstrualCycleWidget.instance!;
     List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
     for (int i = 0; i < periodRange.length; i++) {
@@ -79,7 +81,7 @@ class _MenstrualCycleHistoryGraphState
             children: [
               Text(
                 widget.headerTitle,
-                style: widget.headerTitleTextStyle,
+                style: _headerTitleTextStyle,
               ),
               const SizedBox(),
               (allPeriodRange.length > widget.viewCycleHistoryLength)
@@ -89,7 +91,7 @@ class _MenstrualCycleHistoryGraphState
                           MaterialPageRoute(
                             builder: (context) => MenstrualAllCycleHistoryGraph(
                               headerTitle: widget.headerTitle,
-                              headerTitleTextStyle: widget.headerTitleTextStyle,
+                              headerTitleTextStyle: _headerTitleTextStyle,
                               loadingText: widget.loadingText,
                               appBarBackgroundColor:
                                   widget.appBarBackgroundColor,

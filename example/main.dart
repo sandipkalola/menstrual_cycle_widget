@@ -40,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.blueAccent,
         title: Text(
           widget.title,
-          style: const TextStyle(fontSize: 20),
+          style:  TextStyle(fontSize: 20, fontFamily: MenstrualCycleWidget.defaultFontFamily,),
         ),
       ),
       body: Column(

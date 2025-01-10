@@ -1,5 +1,5 @@
 import 'language_functions.dart';
 
 class BaseLanguage {
-  static String get saveLogs => getSaveLogs();
+  static String get saveLogs => getSaveLogsTitle();
 }

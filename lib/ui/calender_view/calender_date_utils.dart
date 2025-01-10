@@ -1,5 +1,7 @@
 import 'package:intl/intl.dart';
 
+import '../../utils/strings.dart';
+
 class CalenderDateUtils {
   CalenderDateUtils._();
 
@@ -41,13 +43,13 @@ class CalenderDateUtils {
   static var monthYear = DateFormat('MMM yyyy');
 
   static const List<String> weekTitles = [
-    'Sun',
-    'Mon',
-    'Tue',
-    'Wed',
-    'Thu',
-    'Fri',
-    'Sat'
+    Strings.weekTitlesSun,
+    Strings.weekTitlesMon,
+    Strings.weekTitlesTue,
+    Strings.weekTitlesWed,
+    Strings.weekTitlesThu,
+    Strings.weekTitlesFri,
+    Strings.weekTitlesSat,
   ];
 
   /// The list of days in a given month

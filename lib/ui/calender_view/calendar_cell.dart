@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:intl/intl.dart";
 
 import '../../menstrual_cycle_widget.dart';
+import '../text_style/custom_text_style.dart';
 import 'calender_view.dart';
 
 class CalendarCell extends StatefulWidget {
@@ -246,9 +247,10 @@ class _CalendarCellState extends State<CalendarCell> {
     return Center(
       child: Text(
         '${widget.currentDay!.day}', // Display the day of the month
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.normal,
+          fontFamily: getFontFamily(),
           color: Colors.black,
         ),
       ),
@@ -402,6 +404,7 @@ class _CalendarCellState extends State<CalendarCell> {
           : TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.normal,
+              fontFamily: getFontFamily(),
               color:
                   (isPeriodDay || isToday || isOvulationDay || isPastPeriodDay)
                       ? Colors.white

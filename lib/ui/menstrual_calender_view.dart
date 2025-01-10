@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 import '../menstrual_cycle_widget.dart';
 import 'calender_view/calender_view.dart';
+import 'text_style/custom_text_style.dart';
 
 class MenstrualCycleCalenderView extends StatefulWidget {
   final Color? daySelectedColor;
@@ -135,6 +136,7 @@ class _MenstrualCycleCalenderViewState
           dayOfWeek: day,
           multipleDateSelectionCallBack: () {},
           dayOfWeekStyle: TextStyle(
+            fontFamily: getFontFamily(),
             color: widget.themeColor,
             fontWeight: FontWeight.w800,
             fontSize: 11,
@@ -260,8 +262,11 @@ class _MenstrualCycleCalenderViewState
 
   TextStyle configureDateStyle(monthStarted, monthEnded) {
     TextStyle? dateStyles;
-    TextStyle normalTextStyle =
-        TextStyle(color: widget.themeColor, fontWeight: FontWeight.normal);
+    TextStyle normalTextStyle = TextStyle(
+      color: widget.themeColor,
+      fontWeight: FontWeight.normal,
+      fontFamily: getFontFamily(),
+    );
 
     if (isExpanded) {
       final TextStyle body1StyleDisabled =
@@ -330,7 +335,10 @@ class _MenstrualCycleCalenderViewState
                           child: Text(
                             widget.logPeriodText!,
                             style: TextStyle(
-                                color: widget.themeColor!, fontSize: 8),
+                              color: widget.themeColor!,
+                              fontSize: 8,
+                              fontFamily: getFontFamily(),
+                            ),
                           ),
                         ),
                       ),
@@ -338,7 +346,11 @@ class _MenstrualCycleCalenderViewState
               Text(
                 DateFormat("EEEE MMMM dd, yyyy", "en_US")
                     .format(selectedDateTime),
-                style: TextStyle(fontSize: 13, color: widget.themeColor!),
+                style: TextStyle(
+                  fontSize: 13,
+                  color: widget.themeColor!,
+                  fontFamily: getFontFamily(),
+                ),
               ),
               IconButton(
                 onPressed: toggleExpanded,
@@ -394,6 +406,7 @@ class _MenstrualCycleCalenderViewState
                           style: TextStyle(
                               color: widget.themeColor!,
                               fontSize: 10.0,
+                              fontFamily: getFontFamily(),
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -408,6 +421,7 @@ class _MenstrualCycleCalenderViewState
                   style: TextStyle(
                       color: widget.themeColor!,
                       fontSize: 15.0,
+                      fontFamily: getFontFamily(),
                       fontWeight: FontWeight.bold),
                 ),
               ),

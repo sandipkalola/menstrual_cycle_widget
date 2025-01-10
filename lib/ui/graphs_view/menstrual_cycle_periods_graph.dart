@@ -4,6 +4,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/chart_cycle_periods_data.dart';
+import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualCyclePeriodsGraph extends StatefulWidget {
@@ -11,8 +12,8 @@ class MenstrualCyclePeriodsGraph extends StatefulWidget {
   final String xAxisTitle;
   final bool isShowXAxisTitle;
   final bool isShowMoreOptions;
-  final TextStyle xAxisTitleTextStyle;
-  final TextStyle yAxisTitleTextStyle;
+  final TextStyle? xAxisTitleTextStyle;
+  final TextStyle? yAxisTitleTextStyle;
   final String yAxisTitle;
   final bool isShowYAxisTitle;
   final Color periodDaysColor;
@@ -26,10 +27,8 @@ class MenstrualCyclePeriodsGraph extends StatefulWidget {
       {super.key,
       this.loadingText = Strings.loading,
       this.xAxisTitle = Strings.graphCycleStartDate,
-      this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.yAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
+      this.xAxisTitleTextStyle,
+      this.yAxisTitleTextStyle,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
       this.yAxisTitle = Strings.graphCycleLengthDays,
@@ -64,6 +63,8 @@ class _MenstrualCyclePeriodsGraphState
   late GlobalKey<State> globalKey;
   late ZoomPanBehavior _zoomPanBehavior;
   bool isLastRecord = false;
+  late TextStyle _xAxisTitleTextStyle;
+  late TextStyle _yAxisTitleTextStyle;
 
   @override
   void initState() {
@@ -73,6 +74,9 @@ class _MenstrualCyclePeriodsGraphState
   }
 
   void _initializeVariables() async {
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+
     _chartKey = GlobalKey();
     _tooltipBehavior = TooltipBehavior(
       enable: true,
@@ -177,11 +181,11 @@ class _MenstrualCyclePeriodsGraphState
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
         //labelRotation: -70,
-        labelStyle: widget.xAxisTitleTextStyle,
+        labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
                 text: widget.xAxisTitle,
-                textStyle: widget.xAxisTitleTextStyle,
+                textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -194,11 +198,11 @@ class _MenstrualCyclePeriodsGraphState
         maximum: maxValue.toDouble(),
         minimum: 1,
         majorTickLines: const MajorTickLines(size: 0),
-        labelStyle: widget.yAxisTitleTextStyle,
+        labelStyle: _yAxisTitleTextStyle,
         title: (widget.isShowYAxisTitle)
             ? AxisTitle(
                 text: widget.yAxisTitle,
-                textStyle: widget.yAxisTitleTextStyle,
+                textStyle: _yAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",

@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:menstrual_cycle_widget/ui/text_style/custom_text_style.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:async';
@@ -110,7 +111,10 @@ Widget getMenuWidget(
                   fileName: fileName);
             }
           },
-          child: Text(choices[index]),
+          child: Text(
+            choices[index],
+            style: TextStyle(fontFamily: getFontFamily()),
+          ),
         ),
       ),
     ),

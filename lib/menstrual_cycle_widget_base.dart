@@ -30,6 +30,9 @@ class MenstrualCycleWidget {
   // last period date
   String _lastPeriodDate = "";
 
+  // font family
+  static String defaultFontFamily = "";
+
   // all past periods date
   List<String> pastAllPeriodDays = [];
 
@@ -85,12 +88,17 @@ class MenstrualCycleWidget {
       String? customerId = "0",
       DateTime? lastPeriodDate,
       bool isClearData = false,
+      String fontFamily = "",
       Languages defaultLanguage = Languages.english}) async {
     assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
     assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
     // printLogs("userId $userId");
     if (customerId!.isNotEmpty) {
       _customerId = customerId;
+    }
+
+    if (fontFamily.isNotEmpty) {
+      defaultFontFamily = fontFamily;
     }
     currentLanguage = defaultLanguage;
     _cycleLength = cycleLength!;
@@ -1132,11 +1140,11 @@ class MenstrualCycleWidget {
     double cycleCRS = await getCycleRegularityScore();
     String cycleCRSStatus = "";
     if (cycleCRS > 89) {
-      cycleCRSStatus = "Regular";
+      cycleCRSStatus = Strings.regularTitle;
     } else if (cycleCRS > 74) {
-      cycleCRSStatus = "Normal";
+      cycleCRSStatus = Strings.normalTitle;
     } else if (cycleCRS > 0) {
-      cycleCRSStatus = "Irregular";
+      cycleCRSStatus = Strings.irregularTitle;
     }
     return cycleCRSStatus;
   }
@@ -1171,11 +1179,11 @@ class MenstrualCycleWidget {
     double periodPRS = await getPeriodRegularityScore();
     String periodCRSStatus = "";
     if (periodPRS > 89) {
-      periodCRSStatus = "Regular";
+      periodCRSStatus = Strings.regularTitle;
     } else if (periodPRS > 74) {
-      periodCRSStatus = "Normal";
+      periodCRSStatus = Strings.normalTitle;
     } else if (periodPRS > 0) {
-      periodCRSStatus = "Irregular";
+      periodCRSStatus = Strings.irregularTitle;
     }
     return periodCRSStatus;
   }

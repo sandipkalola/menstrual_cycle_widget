@@ -6,6 +6,7 @@ import '../menstrual_cycle_widget.dart';
 import 'model/display_symptoms_data.dart';
 import 'model/log_report.dart';
 import 'model/user_symptoms_logs.dart';
+import 'text_style/custom_text_style.dart';
 
 // ignore: must_be_immutable
 class MenstrualLogPeriodView extends StatefulWidget {
@@ -145,7 +146,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         final difference = DateTime.parse(logDate)
             .difference(DateTime.parse(lastPeriodDay))
             .inDays;
-        cycleDay = "Cycle Day ${difference + 1}";
+        cycleDay = "${Strings.cycleDayTitle} ${difference + 1}";
         intCycleDay = difference + 1;
         if (difference < 0) {
           intCycleDay = 0;
@@ -259,7 +260,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           0,
           SymptomsCategory(
             categoryId: 99999,
-            categoryName: "What are you feeling today?",
+            categoryName: Strings.feelingTodayTitle,
             symptomsData: listSymptomsData,
           ),
         );
@@ -474,8 +475,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             children: [
               Text(
                 title,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: getFontFamily(),
+                ),
               ),
               const SizedBox(height: 10),
               Row(
@@ -484,8 +488,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                   childView,
                   Text(
                     type,
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
+                    style: textStyle24Bold(),
                   ),
                 ],
               ),
@@ -508,11 +511,14 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     ),
                   ),
                   margin: const EdgeInsets.all(10),
-                  child: const Center(
+                  child: Center(
                     child: Text(
                       Strings.lblDone,
                       style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                   ),
                 ),
@@ -556,9 +562,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             logReportList[1].mainIndex = index;
           },
         ),
-        const Text(
+        Text(
           '.',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textStyle24Bold(),
         ),
         _buildPicker(
           value: logReportList[1].subIndex!,
@@ -591,9 +597,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             logReportList[logIndex].mainIndex = index;
           },
         ),
-        const Text(
+        Text(
           'h',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textStyle24Bold(),
         ),
         _buildPicker(
           value: logReportList[logIndex].subIndex!,
@@ -604,9 +610,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             logReportList[logIndex].subIndex = index;
           },
         ),
-        const Text(
+        Text(
           'm',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textStyle24Bold(),
         ),
       ],
     );
@@ -626,9 +632,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             logReportList[3].mainIndex = index;
           },
         ),
-        const Text(
+        Text(
           'h',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textStyle24Bold(),
         ),
         _buildPicker(
           value: logReportList[3].subIndex!,
@@ -639,9 +645,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             logReportList[3].subIndex = index;
           },
         ),
-        const Text(
+        Text(
           'm',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textStyle24Bold(),
         ),
       ],
     );
@@ -661,9 +667,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             logReportList[0].mainIndex = index;
           },
         ),
-        const Text(
+        Text(
           '.',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          style: textStyle24Bold(),
         ),
         _buildPicker(
           value: logReportList[0].subIndex!,
@@ -702,19 +708,16 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
             child: (isForWeight)
                 ? Text(
                     (minValue + index).toString(),
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
+                    style: textStyle24Bold(),
                   )
                 : ((minValue + index) > 9)
                     ? Text(
                         (minValue + index).toString(),
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                        style: textStyle24Bold(),
                       )
                     : Text(
                         "0${(minValue + index)}",
-                        style: const TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
+                        style: textStyle24Bold(),
                       ),
           );
         }),
@@ -760,8 +763,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                       ),
                       Text(
                         title,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: getFontFamily(),
+                        ),
                       ),
                     ],
                   ),
@@ -793,17 +799,25 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
               const SizedBox(
                 height: 10,
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     Strings.logPeriodBedtime,
-                    style: TextStyle(fontSize: 15, color: Colors.black),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontFamily: getFontFamily(),
+                    ),
                   ),
                   SizedBox(),
                   Text(
                     Strings.logPeriodWakeUpTime,
-                    style: TextStyle(fontSize: 15, color: Colors.black),
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontFamily: getFontFamily(),
+                    ),
                   )
                 ],
               ),
@@ -816,7 +830,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     },
                     child: Text(
                       startTimeHintText,
-                      style: const TextStyle(fontSize: 20, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                   ),
                   const SizedBox(),
@@ -826,7 +844,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     },
                     child: Text(
                       endTimeHintText,
-                      style: const TextStyle(fontSize: 20, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.grey,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                   ),
                 ],
@@ -876,8 +898,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                       ),
                       Text(
                         title,
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: getFontFamily(),
+                        ),
                       ),
                     ],
                   ),
@@ -935,14 +960,22 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     },
                     child: Text(
                       hintText,
-                      style: const TextStyle(fontSize: 30, color: Colors.grey),
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.grey,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 10),
                     child: Text(
                       typeString,
-                      style: const TextStyle(fontSize: 10, color: Colors.black),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.black,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                   ),
                 ],
@@ -958,9 +991,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     final now = DateTime.now();
     final difference = now.difference(DateTime.parse(logDate)).inDays;
     if (difference == 0) {
-      return 'Today';
+      return Strings.todayTitle;
     } else if (difference == 1) {
-      return 'Yesterday';
+      return Strings.yesterdayTitle;
     } else {
       return CalenderDateUtils.graphDateFormat(DateTime.parse(logDate));
     }
@@ -1014,14 +1047,20 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                   children: [
                     Text(
                       getTitle(),
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                     Text(
                       cycleDay,
-                      style: const TextStyle(color: Colors.grey, fontSize: 12),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12,
+                        fontFamily: getFontFamily(),
+                      ),
                     ),
                   ],
                 ),
@@ -1060,8 +1099,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     size: 18,
                   ),
                   Text(
-                    " Your data is protected",
-                    style: TextStyle(fontSize: 10),
+                    " ${Strings.protectedData}",
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontFamily: getFontFamily(),
+                    ),
                   )
                 ]),
             SizedBox(
@@ -1098,9 +1140,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                       children: [
                                         Text(
                                           "${symptomsList[index].categoryName}",
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: getFontFamily(),
+                                          ),
                                         ),
                                         Wrap(
                                             children: symptomsList[index]
@@ -1130,7 +1174,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                                         )
                                                       : BorderSide.none,
                                                   label: Text(
-                                                      "${chip.symptomName}"),
+                                                    "${chip.symptomName}",
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            getFontFamily()),
+                                                  ),
                                                   padding:
                                                       const EdgeInsets.all(1),
                                                   backgroundColor:
@@ -1362,8 +1410,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                 child: Center(
                   child: Text(
                     BaseLanguage.saveLogs,
-                    style: const TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: getFontFamily(),
+                    ),
                   ),
                 ),
               ),

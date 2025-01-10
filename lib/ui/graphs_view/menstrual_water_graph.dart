@@ -3,6 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/water_data.dart';
+import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualCycleWaterGraph extends StatefulWidget {
@@ -13,8 +14,8 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
   final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
-  final TextStyle xAxisTitleTextStyle;
-  final TextStyle yAxisTitleTextStyle;
+  final TextStyle? xAxisTitleTextStyle;
+  final TextStyle? yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
   final Color tooltipBackgroundColor;
@@ -32,10 +33,8 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
       this.onImageDownloadCallback,
       this.xAxisTitle = Strings.graphWaterDrinkDate,
       this.graphColor = Colors.blue,
-      this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.yAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
+      this.xAxisTitleTextStyle,
+      this.yAxisTitleTextStyle,
       this.onPdfDownloadCallback});
 
   @override
@@ -60,6 +59,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   String fileName = "Water_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
+  late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
 
   @override
   void initState() {
@@ -69,6 +69,9 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   }
 
   void _initializeVariables() async {
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+
     _chartKey = GlobalKey();
     isLoadMoreView = false;
     isNeedToUpdateView = false;
@@ -179,11 +182,11 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         //labelRotation: -70,
-        labelStyle: widget.xAxisTitleTextStyle,
+        labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
                 text: widget.xAxisTitle,
-                textStyle: widget.xAxisTitleTextStyle,
+                textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -197,11 +200,11 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
           maximum: maxValue,
           interval: 1,
           axisLine: const AxisLine(width: 0),
-          labelStyle: widget.yAxisTitleTextStyle,
+          labelStyle: _yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
                   text: "${widget.yAxisTitle} ($waterUnitLbl)",
-                  textStyle: widget.yAxisTitleTextStyle,
+                  textStyle: _yAxisTitleTextStyle,
                 )
               : const AxisTitle(
                   text: "",

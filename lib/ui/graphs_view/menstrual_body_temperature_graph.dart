@@ -4,6 +4,7 @@ import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/body_temperature_data.dart';
+import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualBodyTemperatureGraph extends StatefulWidget {
@@ -14,8 +15,8 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
   final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
-  final TextStyle xAxisTitleTextStyle;
-  final TextStyle yAxisTitleTextStyle;
+  final TextStyle? xAxisTitleTextStyle;
+  final TextStyle? yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
   final Color topGraphColor;
@@ -38,10 +39,8 @@ class MenstrualBodyTemperatureGraph extends StatefulWidget {
       this.centerGraphColor = Colors.orange,
       this.bottomGraphColor = Colors.yellow,
       this.xAxisTitle = Strings.graphBodyTempDate,
-      this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.yAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
+      this.xAxisTitleTextStyle,
+      this.yAxisTitleTextStyle,
       this.onPdfDownloadCallback});
 
   @override
@@ -68,6 +67,8 @@ class _MenstrualBodyTemperatureGraphState
   String fileName = "Body_temperature_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
+  late TextStyle _xAxisTitleTextStyle;
+  late TextStyle _yAxisTitleTextStyle;
 
   @override
   void initState() {
@@ -77,6 +78,9 @@ class _MenstrualBodyTemperatureGraphState
   }
 
   void _initializeVariables() async {
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+
     _chartKey = GlobalKey();
     isLoadMoreView = false;
     isNeedToUpdateView = false;
@@ -175,11 +179,11 @@ class _MenstrualBodyTemperatureGraphState
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         // labelRotation: -70,
-        labelStyle: widget.xAxisTitleTextStyle,
+        labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
                 text: widget.xAxisTitle,
-                textStyle: widget.xAxisTitleTextStyle,
+                textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -193,11 +197,11 @@ class _MenstrualBodyTemperatureGraphState
           maximum: maxValue,
           interval: 1,
           axisLine: const AxisLine(width: 0),
-          labelStyle: widget.yAxisTitleTextStyle,
+          labelStyle: _yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
                   text: widget.yAxisTitle,
-                  textStyle: widget.yAxisTitleTextStyle,
+                  textStyle: _yAxisTitleTextStyle,
                 )
               : const AxisTitle(
                   text: "",

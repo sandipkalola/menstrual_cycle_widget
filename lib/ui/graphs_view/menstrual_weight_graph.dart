@@ -3,6 +3,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/weight_data.dart';
+import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualWeightGraph extends StatefulWidget {
@@ -13,8 +14,8 @@ class MenstrualWeightGraph extends StatefulWidget {
   final Function? onPdfDownloadCallback;
   final String xAxisTitle;
   final String yAxisTitle;
-  final TextStyle xAxisTitleTextStyle;
-  final TextStyle yAxisTitleTextStyle;
+  final TextStyle? xAxisTitleTextStyle;
+  final TextStyle? yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
   final bool isShowYAxisTitle;
   final Color graphColor;
@@ -32,10 +33,8 @@ class MenstrualWeightGraph extends StatefulWidget {
       this.xAxisTitle = Strings.graphWeightLogDate,
       this.graphColor = Colors.blue,
       this.tooltipBackgroundColor = Colors.black,
-      this.xAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
-      this.yAxisTitleTextStyle =
-          const TextStyle(color: Colors.black, fontSize: 10),
+      this.xAxisTitleTextStyle,
+      this.yAxisTitleTextStyle,
       this.onPdfDownloadCallback});
 
   @override
@@ -60,6 +59,7 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
   String fileName = "Weight_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
+  late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
 
   @override
   void initState() {
@@ -69,6 +69,8 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
   }
 
   void _initializeVariables() async {
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
     _chartKey = GlobalKey();
     isLoadMoreView = false;
     isNeedToUpdateView = false;
@@ -172,11 +174,11 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         //labelRotation: -70,
-        labelStyle: widget.xAxisTitleTextStyle,
+        labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
                 text: widget.xAxisTitle,
-                textStyle: widget.xAxisTitleTextStyle,
+                textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
                 text: "",
@@ -190,11 +192,11 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
           maximum: maxValue,
           interval: 2,
           axisLine: const AxisLine(width: 0),
-          labelStyle: widget.yAxisTitleTextStyle,
+          labelStyle: _yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
                   text: "${widget.yAxisTitle} ($weightUnitLbl)",
-                  textStyle: widget.yAxisTitleTextStyle,
+                  textStyle: _yAxisTitleTextStyle,
                 )
               : const AxisTitle(
                   text: "",

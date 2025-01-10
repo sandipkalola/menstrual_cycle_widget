@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:menstrual_cycle_widget/ui/calender_view/scroll_to_index.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../text_style/custom_text_style.dart';
 import 'calender_view.dart';
 
 class CalenderMonthlyView extends StatefulWidget {
@@ -161,6 +162,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
           dayOfWeekStyle: TextStyle(
               color: widget.themeColor,
               fontWeight: FontWeight.w800,
+              fontFamily: getFontFamily(),
               fontSize: 11),
           dayOfWeek: day,
         ),
@@ -221,25 +223,12 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     selectedPeriodsDate.sort((a, b) => a.compareTo(b));
     if (selectedPeriodsDate.isNotEmpty) {
       DateTime lastPeriodDate = selectedPeriodsDate[0].add(Duration(days: -1));
-      /* printMenstrualCycleLogs(
-          "Date : ${CalenderDateUtils.dateWithYear(lastPeriodDate)}");*/
       await dbHelper.clearPeriodLogAfterSpecificDate(
           encryptedUserid, CalenderDateUtils.dateDayFormat(lastPeriodDate));
       await dbHelper.insertPeriodLog(selectedPeriodsDate);
     } else {
       await dbHelper.clearPeriodLog(encryptedUserid);
     }
-    /*for (int i = 0; i < selectedPeriodsDate.length; i++) {
-      printMenstrualCycleLogs(
-          "Date : ${CalenderDateUtils.dateWithYear(selectedPeriodsDate[i])}");
-    }*/
-    /*final dbHelper = MenstrualCycleDbHelper.instance;
-    final instance = MenstrualCycleWidget.instance!;
-    String encryptedUserid = instance.getCustomerId();
-    // TODO Clear only visible date data when we click on save button.
-    await dbHelper.clearPeriodLog(encryptedUserid);
-    await dbHelper.insertPeriodLog(selectedPeriodsDate);
-    */
     isChangedData = true;
     widget.onDataChanged!.call(isChangedData);
     isEditMode = false;
@@ -312,7 +301,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                             "minScrollExtent ${notification.metrics.maxScrollExtent}");*/
 
                         if (notification.metrics.pixels < 10) {
-                          printMenstrualCycleLogs('Reached top');
+                          //printMenstrualCycleLogs('Reached top');
                           //
                           pastMonthCount = pastMonthCount + 1;
                           DateTime currantMonth =
@@ -326,7 +315,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                         } else if (notification.metrics.pixels + 100 >
                                 notification.metrics.maxScrollExtent &&
                             !isEditMode) {
-                          printMenstrualCycleLogs('Reached bottom');
+                          //printMenstrualCycleLogs('Reached bottom');
                           if (nextMonthCount <= futureMonthCount) {
                             DateTime nextMonth = DateTime.now();
                             for (int index = 0;
@@ -377,6 +366,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                 monthTitle[index],
                                 style: TextStyle(
                                     color: widget.themeColor,
+                                    fontFamily: getFontFamily(),
                                     fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(
@@ -420,6 +410,8 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                     cycleLength: widget.cycleLength,
                                     periodDuration: widget.periodLength,
                                     dateStyles: TextStyle(
+                                        fontFamily: MenstrualCycleWidget
+                                            .defaultFontFamily,
                                         color: widget.themeColor,
                                         fontWeight: FontWeight.normal),
                                     isSelected: false,
@@ -461,11 +453,13 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                               ),
                               height: 40,
                               width: 150,
-                              child: const Center(
+                              child: Center(
                                 child: Text(
                                   Strings.saveLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: MenstrualCycleWidget
+                                          .defaultFontFamily,
                                       color: Colors.white),
                                 ),
                               ),
@@ -499,6 +493,8 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                   Strings.cancelLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: MenstrualCycleWidget
+                                          .defaultFontFamily,
                                       color: widget.themeColor),
                                 ),
                               ),
@@ -539,10 +535,13 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                             Radius.circular(10),
                           ),
                         ),
-                        child: const Text(
+                        child: Text(
                           Strings.editPeriodDateLabel,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.white),
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontFamily: getFontFamily(),
+                          ),
                         ),
                       ),
                     ),
