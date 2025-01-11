@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../text_style/custom_text_style.dart';
 
 /// TODO Add start and end date to get data for all graph
 class MenstrualAllCycleHistoryGraph extends StatefulWidget {
-  final String headerTitle;
+  final String? headerTitle;
   final TextStyle? headerTitleTextStyle;
-  final String loadingText;
+  final String? loadingText;
   final Color appBarBackgroundColor;
 
   const MenstrualAllCycleHistoryGraph({
     super.key,
-    this.headerTitle = Strings.graphCycleTitle,
-    this.loadingText = Strings.loading,
+    this.headerTitle,
+    this.loadingText,
     this.appBarBackgroundColor = Colors.blueAccent,
     this.headerTitleTextStyle,
   });
@@ -29,6 +30,8 @@ class _MenstrualAllCycleHistoryGraphState
 
   bool isGetData = false;
   late TextStyle _headerTitleTextStyle;
+  String _headerTitle = BaseLanguage.graphCycleTitle;
+  String _loadingText = BaseLanguage.loading;
 
   @override
   void initState() {
@@ -38,7 +41,12 @@ class _MenstrualAllCycleHistoryGraphState
 
   init() async {
     _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
-
+    if (widget.headerTitle != null && widget.headerTitle!.isNotEmpty) {
+      _headerTitle = widget.headerTitle!;
+    }
+    if (widget.loadingText != null && widget.loadingText!.isNotEmpty) {
+      _loadingText = widget.loadingText!;
+    }
     final instance = MenstrualCycleWidget.instance!;
     List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
     for (int i = 0; i < periodRange.length; i++) {
@@ -57,7 +65,7 @@ class _MenstrualAllCycleHistoryGraphState
       appBar: AppBar(
         backgroundColor: widget.appBarBackgroundColor,
         title: Text(
-          widget.headerTitle,
+          _headerTitle,
           style: _headerTitleTextStyle,
         ),
       ),
@@ -67,8 +75,8 @@ class _MenstrualAllCycleHistoryGraphState
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: (isGetData)
-                    ? const Text(Strings.noDataFound)
-                    : Text(widget.loadingText),
+                    ? Text(BaseLanguage.noDataFound)
+                    : Text(_loadingText),
               ),
             ),
     );
@@ -95,7 +103,7 @@ class _MenstrualAllCycleHistoryGraphState
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       )
                     : Text(
-                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${Strings.graphCycleNowTitle}",
+                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${BaseLanguage.graphCycleNowTitle}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                 Padding(
@@ -125,7 +133,7 @@ class _MenstrualAllCycleHistoryGraphState
                   ),
                 ),
                 Text(
-                  "${allPeriodRange[index].periodDuration!} ${Strings.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${Strings.graphCycleDaysCycle}",
+                  "${allPeriodRange[index].periodDuration!} ${BaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${BaseLanguage.graphCycleDaysCycle}",
                   style:
                       const TextStyle(color: Color(0xA6212121), fontSize: 10),
                 ),

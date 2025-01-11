@@ -12,7 +12,7 @@ class MenstrualCyclePainter extends CustomPainter {
   int selectedDay;
 
   /// Menstruation Params variables
-  String menstruationName;
+  String? menstruationName;
   Color menstruationColor;
   Color menstruationDayTextColor;
   Color menstruationTextColor;
@@ -21,7 +21,7 @@ class MenstrualCyclePainter extends CustomPainter {
   PhaseTextBoundaries phaseTextBoundaries;
 
   /// Follicular Phase Params variables
-  String follicularPhaseName;
+  String? follicularPhaseName;
   Color follicularPhaseColor;
   Color follicularPhaseDayTextColor;
   Color follicularBackgroundColor;
@@ -29,7 +29,7 @@ class MenstrualCyclePainter extends CustomPainter {
   int follicularDayCount;
 
   /// ovulation Phase Params variables
-  String ovulationName;
+  String? ovulationName;
   Color ovulationColor;
   int ovulationDayCount;
   Color ovulationDayTextColor;
@@ -37,14 +37,14 @@ class MenstrualCyclePainter extends CustomPainter {
   Color ovulationTextColor;
 
   /// luteal Phase Params variables
-  String lutealPhaseName;
+  String? lutealPhaseName;
   Color lutealPhaseColor;
   Color lutealPhaseBackgroundColor;
   Color lutealPhaseTextColor;
   Color lutealPhaseDayTextColor;
 
   /// Day Params variables
-  String dayTitle;
+  String? dayTitle;
   double dayTitleFontSize;
   double dayFontSize;
   double selectedDayFontSize;
@@ -94,7 +94,7 @@ class MenstrualCyclePainter extends CustomPainter {
       {required this.totalCycleDays,
       this.selectedDay = 0,
       // Menstruation Params
-      this.menstruationName = Strings.menstruationLabel,
+      this.menstruationName,
       required this.menstruationDayCount,
       this.menstruationColor = defaultMenstruationColor,
       this.menstruationBackgroundColor = defaultMenstruationColorBg,
@@ -102,7 +102,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.menstruationTextColor = defaultMenstruationColor,
 
       // Follicular Phase Params
-      this.follicularPhaseName = Strings.follicularPhaseLabel,
+      this.follicularPhaseName,
       required this.follicularDayCount,
       this.follicularPhaseDayTextColor = defaultBlackColor,
       this.follicularPhaseColor = defaultFollicularColor,
@@ -110,7 +110,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.follicularTextColor = defaultFollicularColor,
 
       // ovulation Phase Params
-      this.ovulationName = Strings.ovulationLabel,
+      this.ovulationName,
       required this.ovulationDayCount,
       this.ovulationDayTextColor = defaultBlackColor,
       this.ovulationColor = defaultOvulationColor,
@@ -118,7 +118,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.ovulationTextColor = defaultOvulationColor,
 
       // luteal Phase Params
-      this.lutealPhaseName = Strings.lutealPhaseLabel,
+      this.lutealPhaseName,
       this.lutealPhaseColor = defaultLutealPhaseColor,
       this.lutealPhaseBackgroundColor = defaultLutealPhaseColorBg,
       this.lutealPhaseTextColor = defaultLutealPhaseColor,
@@ -131,7 +131,7 @@ class MenstrualCyclePainter extends CustomPainter {
       this.centralCircleSize = 25,
 
       // Day Params
-      this.dayTitle = Strings.dayLabel,
+      this.dayTitle,
       this.dayTitleFontSize = 5,
       this.dayFontSize = 12,
       this.selectedDayFontSize = 18,
@@ -167,6 +167,22 @@ class MenstrualCyclePainter extends CustomPainter {
 
   @override
   Future<void> paint(Canvas canvas, Size size) async {
+    /*if (menstruationName!.isEmpty) {
+      menstruationName = BaseLanguage.menstruationLabel;
+    }
+    if (lutealPhaseName!.isEmpty) {
+      lutealPhaseName = BaseLanguage.lutealPhaseLabel;
+    }
+    if (dayTitle!.isEmpty) {
+      dayTitle = BaseLanguage.dayLabel;
+    }
+    if (follicularPhaseName!.isEmpty) {
+      follicularPhaseName = BaseLanguage.follicularPhaseLabel;
+    }
+    if (ovulationName!.isEmpty) {
+      ovulationName = BaseLanguage.ovulationLabel;;
+    }*/
+
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
 
     double selectedDayTextX = 0.0;
@@ -191,7 +207,7 @@ class MenstrualCyclePainter extends CustomPainter {
         menstruationDayCountNew,
         menstruationColor,
         menstruationBackgroundColor,
-        menstruationName,
+        menstruationName!,
         menstruationTextColor);
     drawTopAndTextPhase(
         canvas,
@@ -202,7 +218,7 @@ class MenstrualCyclePainter extends CustomPainter {
         follicularDayCountNew,
         follicularPhaseColor,
         follicularBackgroundColor,
-        follicularPhaseName,
+        follicularPhaseName!,
         follicularTextColor);
     drawTopAndTextPhase(
         canvas,
@@ -213,7 +229,7 @@ class MenstrualCyclePainter extends CustomPainter {
         ovulationDayCountNew,
         ovulationColor,
         ovulationBackgroundColor,
-        ovulationName,
+        ovulationName!,
         ovulationTextColor);
     drawTopAndTextPhase(
         canvas,
@@ -224,24 +240,24 @@ class MenstrualCyclePainter extends CustomPainter {
         totalCycleDays,
         lutealPhaseColor,
         lutealPhaseBackgroundColor,
-        lutealPhaseName,
+        lutealPhaseName!,
         lutealPhaseTextColor);
 
     /// Show outside phase text
     if (phaseTextBoundaries != PhaseTextBoundaries.none) {
       if (phaseTextBoundaries == PhaseTextBoundaries.both ||
           phaseTextBoundaries == PhaseTextBoundaries.outside) {
-        drawOutSide(canvas, radius, size, menstruationName, 0,
+        drawOutSide(canvas, radius, size, menstruationName!, 0,
             menstruationDayCountNew, menstruationTextColor);
-        drawOutSide(canvas, radius, size, follicularPhaseName,
+        drawOutSide(canvas, radius, size, follicularPhaseName!,
             menstruationDayCount, follicularDayCountNew, follicularTextColor);
-        drawOutSide(canvas, radius, size, ovulationName, follicularDayCountNew,
+        drawOutSide(canvas, radius, size, ovulationName!, follicularDayCountNew,
             ovulationDayCountNew, ovulationTextColor);
         drawOutSide(
           canvas,
           radius,
           size,
-          lutealPhaseName,
+          lutealPhaseName!,
           ovulationDayCountNew,
           totalCycleDays,
           lutealPhaseTextColor,

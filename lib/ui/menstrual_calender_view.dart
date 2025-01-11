@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
 import 'calender_view/calender_view.dart';
 import 'text_style/custom_text_style.dart';
@@ -23,7 +24,7 @@ class MenstrualCycleCalenderView extends StatefulWidget {
       this.daySelectedColor,
       this.themeColor = Colors.black,
       this.backgroundColorCode = Colors.white,
-      this.logPeriodText = Strings.logPeriodLabel,
+      this.logPeriodText,
       this.hideLogPeriodButton = false,
       this.hideBottomBar = false,
       this.onDateSelected,
@@ -58,6 +59,7 @@ class _MenstrualCycleCalenderViewState
   List<String> weekTitles = CalenderDateUtils.weekTitles;
 
   Color? selectedColor = Colors.grey;
+  String _logPeriodText = BaseLanguage.logPeriodLabel;
 
   @override
   void initState() {
@@ -74,6 +76,10 @@ class _MenstrualCycleCalenderViewState
           var todayFormat = CalenderDateUtils.formatDay(selectedDateTime);
           today = todayFormat;
         }));
+
+    if (widget.logPeriodText!.isNotEmpty) {
+      _logPeriodText = widget.logPeriodText!;
+    }
     init();
   }
 
@@ -333,7 +339,7 @@ class _MenstrualCycleCalenderViewState
                                 const BorderRadius.all(Radius.circular(8)),
                           ),
                           child: Text(
-                            widget.logPeriodText!,
+                            _logPeriodText,
                             style: TextStyle(
                               color: widget.themeColor!,
                               fontSize: 8,

@@ -74,9 +74,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   void processSymptomsCategory(
       List<SymptomsCategory> sourceList, bool checkVisibility) {
     for (SymptomsCategory defaultData in sourceList) {
-      // TODO change this Strings.categoryPeriod when implement language functionality
+      // TODO change this BaseLanguage.categoryPeriod when implement language functionality
       if (intCycleDay > mInstance.getPeriodDuration() &&
-          defaultData.categoryName.toString() == Strings.categoryPeriod) {
+          defaultData.categoryName.toString() == BaseLanguage.categoryPeriod) {
         continue;
       }
       if (checkVisibility && !isVisibleSymptoms(defaultData.categoryName!)) {
@@ -133,7 +133,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       try {
         logDate = defaultDateFormat.format(date);
       } catch (e) {
-        throw Strings.errorInvalidSymptomsDate;
+        throw BaseLanguage.errorInvalidSymptomsDate;
       }
     }
 
@@ -146,7 +146,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         final difference = DateTime.parse(logDate)
             .difference(DateTime.parse(lastPeriodDay))
             .inDays;
-        cycleDay = "${Strings.cycleDayTitle} ${difference + 1}";
+        cycleDay = "${BaseLanguage.cycleDayTitle} ${difference + 1}";
         intCycleDay = difference + 1;
         if (difference < 0) {
           intCycleDay = 0;
@@ -260,7 +260,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           0,
           SymptomsCategory(
             categoryId: 99999,
-            categoryName: Strings.feelingTodayTitle,
+            categoryName: BaseLanguage.feelingTodayTitle,
             symptomsData: listSymptomsData,
           ),
         );
@@ -273,43 +273,43 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
 
   bool isVisibleSymptoms(String symptomName) {
     DisplaySymptomsData displaySymptomsData = widget.displaySymptomsData!;
-    if (symptomName == Strings.categoryFeelings) {
+    if (symptomName == BaseLanguage.categoryFeelings) {
       return displaySymptomsData.isRequiredFeelings;
-    } else if (symptomName == Strings.categoryMind) {
+    } else if (symptomName == BaseLanguage.categoryMind) {
       return displaySymptomsData.isRequiredMind;
-    } else if (symptomName == Strings.categorySexualLife) {
+    } else if (symptomName == BaseLanguage.categorySexualLife) {
       return displaySymptomsData.isRequiredSexualLife;
-    } else if (symptomName == Strings.categoryEnergy) {
+    } else if (symptomName == BaseLanguage.categoryEnergy) {
       return displaySymptomsData.isRequiredEnergy;
-    } else if (symptomName == Strings.categoryPeriod) {
+    } else if (symptomName == BaseLanguage.categoryPeriod) {
       return displaySymptomsData.isRequiredPeriod;
-    } else if (symptomName == Strings.categorySymptoms) {
+    } else if (symptomName == BaseLanguage.categorySymptoms) {
       return displaySymptomsData.isRequiredSymptoms;
-    } else if (symptomName == Strings.categoryPain) {
+    } else if (symptomName == BaseLanguage.categoryPain) {
       return displaySymptomsData.isRequiredPain;
-    } else if (symptomName == Strings.categoryVaginalDischarge) {
+    } else if (symptomName == BaseLanguage.categoryVaginalDischarge) {
       return displaySymptomsData.isRequiredVaginalDischarge;
-    } else if (symptomName == Strings.categoryDigestion) {
+    } else if (symptomName == BaseLanguage.categoryDigestion) {
       return displaySymptomsData.isRequiredDigestion;
-    } else if (symptomName == Strings.categoryActivity) {
+    } else if (symptomName == BaseLanguage.categoryActivity) {
       return displaySymptomsData.isRequiredActivity;
-    } else if (symptomName == Strings.categoryCravings) {
+    } else if (symptomName == BaseLanguage.categoryCravings) {
       return displaySymptomsData.isRequiredCravings;
-    } else if (symptomName == Strings.categoryTests) {
+    } else if (symptomName == BaseLanguage.categoryTests) {
       return displaySymptomsData.isRequiredTests;
-    } else if (symptomName == Strings.categoryAilments) {
+    } else if (symptomName == BaseLanguage.categoryAilments) {
       return displaySymptomsData.isRequiredAilments;
-    } else if (symptomName == Strings.categoryAppointments) {
+    } else if (symptomName == BaseLanguage.categoryAppointments) {
       return displaySymptomsData.isRequiredAppointments;
-    } else if (symptomName == Strings.categoryBirthControlPill) {
+    } else if (symptomName == BaseLanguage.categoryBirthControlPill) {
       return displaySymptomsData.isRequiredBirthControlPill;
-    } else if (symptomName == Strings.categoryIUD) {
+    } else if (symptomName == BaseLanguage.categoryIUD) {
       return displaySymptomsData.isRequiredIUD;
-    } else if (symptomName == Strings.categorySupplements) {
+    } else if (symptomName == BaseLanguage.categorySupplements) {
       return displaySymptomsData.isRequiredSupplements;
-    } else if (symptomName == Strings.categoryUrine) {
+    } else if (symptomName == BaseLanguage.categoryUrine) {
       return displaySymptomsData.isRequiredUrine;
-    } else if (symptomName == Strings.categoryOther) {
+    } else if (symptomName == BaseLanguage.categoryOther) {
       return displaySymptomsData.isRequiredOther;
     }
     return false;
@@ -513,7 +513,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                   margin: const EdgeInsets.all(10),
                   child: Center(
                     child: Text(
-                      Strings.lblDone,
+                      BaseLanguage.lblDone,
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -803,7 +803,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    Strings.logPeriodBedtime,
+                    BaseLanguage.logPeriodBedtime,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.black,
@@ -812,7 +812,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                   ),
                   SizedBox(),
                   Text(
-                    Strings.logPeriodWakeUpTime,
+                    BaseLanguage.logPeriodWakeUpTime,
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.black,
@@ -991,9 +991,9 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     final now = DateTime.now();
     final difference = now.difference(DateTime.parse(logDate)).inDays;
     if (difference == 0) {
-      return Strings.todayTitle;
+      return BaseLanguage.todayTitle;
     } else if (difference == 1) {
-      return Strings.yesterdayTitle;
+      return BaseLanguage.yesterdayTitle;
     } else {
       return CalenderDateUtils.graphDateFormat(DateTime.parse(logDate));
     }
@@ -1099,7 +1099,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     size: 18,
                   ),
                   Text(
-                    " ${Strings.protectedData}",
+                    " ${BaseLanguage.protectedData}",
                     style: TextStyle(
                       fontSize: 10,
                       fontFamily: getFontFamily(),
@@ -1217,7 +1217,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                             ),
                       (widget.isRequiredWeightView!)
                           ? logView(
-                              title: Strings.lblWeight,
+                              title: BaseLanguage.lblWeight,
                               addIcon: const Icon(
                                 Icons.edit,
                                 size: 20,
@@ -1230,10 +1230,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               onAddClick: () {
                                 _showBottomSheetView(
                                     context: context,
-                                    type: Strings.weightKg,
+                                    type: BaseLanguage.weightKg,
                                     onClick: saveWeightLog,
                                     childView: _buildWeightPicker(),
-                                    title: Strings.lblWeightTitle);
+                                    title: BaseLanguage.lblWeightTitle);
                               },
                               onRemoveClick: () {
                                 setState(() {
@@ -1244,11 +1244,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                 Icons.delete,
                                 size: 20,
                               ),
-                              typeString: "/ ${Strings.weightKg}")
+                              typeString: "/ ${BaseLanguage.weightKg}")
                           : const SizedBox(),
                       (widget.isRequiredBodyTemperatureView!)
                           ? logView(
-                              title: Strings.lblBodyTemp,
+                              title: BaseLanguage.lblBodyTemp,
                               addIcon: const Icon(
                                 Icons.edit,
                                 size: 20,
@@ -1261,10 +1261,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               onAddClick: () {
                                 _showBottomSheetView(
                                     context: context,
-                                    title: Strings.lblBodyTempTitle,
+                                    title: BaseLanguage.lblBodyTempTitle,
                                     childView: _buildTemperaturePicker(),
                                     onClick: saveBodyTempLog,
-                                    type: "°${Strings.bodyTempC}");
+                                    type: "°${BaseLanguage.bodyTempC}");
                               },
                               onRemoveClick: () {
                                 setState(() {
@@ -1275,11 +1275,11 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                 Icons.delete,
                                 size: 20,
                               ),
-                              typeString: "/ °${Strings.bodyTempC}")
+                              typeString: "/ °${BaseLanguage.bodyTempC}")
                           : const SizedBox(),
                       (widget.isRequiredSleepView!)
                           ? sleepView(
-                              title: Strings.lblSleep,
+                              title: BaseLanguage.lblSleep,
                               startTimeHintText:
                                   (logReportList[2].finalValue!.isNotEmpty)
                                       ? logReportList[2].finalValue!
@@ -1296,7 +1296,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     onClick: saveSleepWackUpLog,
                                     childView:
                                         _buildSleepPicker(isWakeUpTime: true),
-                                    title: Strings.logPeriodWakeUpTimeLog);
+                                    title: BaseLanguage.logPeriodWakeUpTimeLog);
                               },
                               onStartTimeClick: () {
                                 _showBottomSheetView(
@@ -1304,7 +1304,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     type: "",
                                     onClick: saveSleepLog,
                                     childView: _buildSleepPicker(),
-                                    title: Strings.logPeriodBedTimeLog);
+                                    title: BaseLanguage.logPeriodBedTimeLog);
                               },
                               onRemoveClick: () {
                                 setState(() {
@@ -1324,7 +1324,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                           : const SizedBox(),
                       (widget.isRequiredMeditationView!)
                           ? logView(
-                              title: Strings.lblMeditation,
+                              title: BaseLanguage.lblMeditation,
                               addIcon: const Icon(
                                 Icons.edit,
                                 size: 20,
@@ -1340,7 +1340,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                     type: "",
                                     onClick: saveMeditationLog,
                                     childView: _buildMeditationPicker(),
-                                    title: Strings.lblMeditationTitle);
+                                    title: BaseLanguage.lblMeditationTitle);
                               },
                               onRemoveClick: () {
                                 setState(() {
@@ -1356,7 +1356,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                           : const SizedBox(),
                       (widget.isRequiredWaterView!)
                           ? logView(
-                              title: Strings.lblWater,
+                              title: BaseLanguage.lblWater,
                               addIcon: const Icon(
                                 Icons.edit,
                                 size: 20,
@@ -1369,10 +1369,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               onAddClick: () {
                                 _showBottomSheetView(
                                     context: context,
-                                    title: Strings.lblWaterTitle,
+                                    title: BaseLanguage.lblWaterTitle,
                                     childView: _buildWaterPicker(),
                                     onClick: saveWaterLog,
-                                    type: Strings.graphWaterUnitLiter);
+                                    type: BaseLanguage.graphWaterUnitLiter);
                               },
                               onRemoveClick: () {
                                 setState(() {
@@ -1383,7 +1383,8 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                 Icons.delete,
                                 size: 20,
                               ),
-                              typeString: "/ ${Strings.graphWaterUnitLiter}")
+                              typeString:
+                                  "/ ${BaseLanguage.graphWaterUnitLiter}")
                           : const SizedBox(),
                     ],
                   ),

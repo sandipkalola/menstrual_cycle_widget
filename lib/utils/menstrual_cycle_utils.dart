@@ -1,12 +1,13 @@
 import 'package:flutter/foundation.dart';
 
+import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
 
 /// Print logs to console
 printMenstrualCycleLogs(String message) {
   String currentDate = currentDateFormat.format(DateTime.now());
   if (kDebugMode) {
-    print("${Strings.printLogLabel} ($currentDate): $message");
+    print("${BaseLanguage.printLogLabel} ($currentDate): $message");
   }
 }
 

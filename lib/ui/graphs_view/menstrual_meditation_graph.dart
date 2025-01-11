@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/meditation_data.dart';
@@ -7,12 +8,12 @@ import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualMeditationGraph extends StatefulWidget {
-  final String loadingText;
+  final String? loadingText;
   final bool isShowMoreOptions;
   final Function? onImageDownloadCallback;
   final Function? onPdfDownloadCallback;
-  final String xAxisTitle;
-  final String yAxisTitle;
+  final String? xAxisTitle;
+  final String? yAxisTitle;
   final TextStyle? xAxisTitleTextStyle;
   final TextStyle? yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
@@ -23,13 +24,13 @@ class MenstrualMeditationGraph extends StatefulWidget {
   const MenstrualMeditationGraph(
       {super.key,
       this.isShowMoreOptions = false,
-      this.loadingText = Strings.loading,
+      this.loadingText,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
       this.tooltipBackgroundColor = Colors.black,
-      this.yAxisTitle = Strings.graphMeditationTitle,
+      this.yAxisTitle,
       this.onImageDownloadCallback,
-      this.xAxisTitle = Strings.graphMeditationDate,
+      this.xAxisTitle,
       this.graphColor = Colors.blue,
       this.xAxisTitleTextStyle,
       this.yAxisTitleTextStyle,
@@ -53,13 +54,16 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String minUnitLbl = Strings.graphMeditationMin;
+  String minUnitLbl = BaseLanguage.graphMeditationMin;
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Meditation_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
 
   late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
+  String _loadingText = BaseLanguage.loading;
+  String _yAxisTitle = BaseLanguage.graphMeditationTitle;
+  String _xAxisTitle = BaseLanguage.graphMeditationDate;
 
   @override
   void initState() {
@@ -69,10 +73,8 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
   }
 
   void _initializeVariables() async {
-    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
-    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
-
     _chartKey = GlobalKey();
+
     isLoadMoreView = false;
     isNeedToUpdateView = false;
     isDataUpdated = true;
@@ -92,6 +94,17 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
       maximumZoomLevel: 0.3,
       zoomMode: ZoomMode.x,
     );
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+    if (widget.loadingText != null && widget.loadingText!.isNotEmpty) {
+      _loadingText = widget.loadingText!;
+    }
+    if (widget.yAxisTitle != null && widget.yAxisTitle!.isNotEmpty) {
+      _yAxisTitle = widget.yAxisTitle!;
+    }
+    if (widget.xAxisTitle != null && widget.xAxisTitle!.isNotEmpty) {
+      _xAxisTitle = widget.xAxisTitle!;
+    }
   }
 
   init() async {
@@ -129,9 +142,8 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (isGetData)
-              ? const Text(Strings.noDataFound)
-              : Text(widget.loadingText),
+          child:
+              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
         ),
       );
     }
@@ -162,7 +174,7 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
         labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
-                text: widget.xAxisTitle,
+                text: _xAxisTitle,
                 textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
@@ -172,7 +184,7 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
-          labelFormat: '{value} ${Strings.graphMeditationMinTitle}',
+          labelFormat: '{value} ${BaseLanguage.graphMeditationMinTitle}',
           minimum: 1,
           maximum: maxValue,
           interval: 60,
@@ -180,7 +192,7 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
           labelStyle: _yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
-                  text: "${widget.yAxisTitle} ($minUnitLbl)",
+                  text: "$_yAxisTitle ($minUnitLbl)",
                   textStyle: _yAxisTitleTextStyle,
                 )
               : const AxisTitle(

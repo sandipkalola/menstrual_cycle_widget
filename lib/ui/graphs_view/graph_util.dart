@@ -9,8 +9,8 @@ import 'dart:io';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:ui' as dart_ui;
 
+import '../../languages/base_language.dart';
 import '../../utils/constant.dart';
-import '../../utils/strings.dart';
 import '../calender_view/calender_date_utils.dart';
 
 /// Generate PDF file
@@ -92,7 +92,7 @@ Widget getMenuWidget(
             }
           },
           icon: const Icon(Icons.more_vert),
-          tooltip: Strings.toolTip,
+          tooltip: BaseLanguage.toolTip,
         );
       },
       menuChildren: List<MenuItemButton>.generate(

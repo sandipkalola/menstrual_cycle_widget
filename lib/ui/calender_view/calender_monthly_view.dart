@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:menstrual_cycle_widget/ui/calender_view/scroll_to_index.dart';
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../text_style/custom_text_style.dart';
 import 'calender_view.dart';
@@ -9,7 +10,6 @@ class CalenderMonthlyView extends StatefulWidget {
   final Color? selectedColor;
   final Color? todayColor;
   final DateTime? initialDate;
-  final List<String> weekTitles;
   final double? borderRadius;
   final Function? onDataChanged;
   final int cycleLength;
@@ -25,7 +25,6 @@ class CalenderMonthlyView extends StatefulWidget {
     this.selectedColor,
     this.todayColor,
     this.initialDate,
-    this.weekTitles = CalenderDateUtils.weekTitles,
     this.onDataChanged,
     this.borderRadius = 20,
     this.cycleLength = defaultCycleLength,
@@ -45,7 +44,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   bool isEditMode = false;
   List<DateTime> selectedPeriodsDate = [];
   bool isChangedData = false;
-
+  final List<String> weekTitles = CalenderDateUtils.weekTitles;
   List<String> futurePeriodDays = [];
   List<String> futureOvulationDays = [];
   List<String>? pastAllPeriodsDays = [];
@@ -153,7 +152,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
 
   titleCalendarBuilder() {
     List<Widget> dayWidgets = [];
-    for (var day in widget.weekTitles) {
+    for (var day in weekTitles) {
       dayWidgets.add(
         CalendarCell(
           themeColor: widget.themeColor,
@@ -455,7 +454,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                               width: 150,
                               child: Center(
                                 child: Text(
-                                  Strings.saveLabel,
+                                  BaseLanguage.saveLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: MenstrualCycleWidget
@@ -490,7 +489,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                               ),
                               child: Center(
                                 child: Text(
-                                  Strings.cancelLabel,
+                                  BaseLanguage.cancelLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: MenstrualCycleWidget
@@ -536,7 +535,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                           ),
                         ),
                         child: Text(
-                          Strings.editPeriodDateLabel,
+                          BaseLanguage.editPeriodDateLabel,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

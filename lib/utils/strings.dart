@@ -1,7 +1,7 @@
 class Strings {
   static const String pkgUrl =
       "https://pub.dev/packages/menstrual_cycle_widget";
-  static const String secretKeyLabel =
+  /* static const String secretKeyLabel =
       "Must required secretKey for data encryption";
   static const String ivKeyLabel = "Must required ivKey for data encryption";
   static const String totalCycleDaysLabel =
@@ -273,22 +273,22 @@ class Strings {
   static const String symptomsNameTravel = "Travel";
   static const String symptomsNameStress = "Stress";
   static const String symptomsNameAlcohol = "Alcohol";
-  static const String symptomsNameJournaling = "Journaling";
+  static const String symptomsNameJournaling = "Journaling";*/
 
-  static const String weekTitlesSun = "Sun";
+  /*static const String weekTitlesSun = "Sun";
   static const String weekTitlesMon = "Mon";
   static const String weekTitlesTue = "Tue";
   static const String weekTitlesWed = "Wed";
   static const String weekTitlesThu = "Thu";
   static const String weekTitlesFri = "Fri";
-  static const String weekTitlesSat = "Sat";
+  static const String weekTitlesSat = "Sat";*/
 
-  static const String cycleDayTitle = "Cycle Day";
+  /*static const String cycleDayTitle = "Cycle Day";
   static const String feelingTodayTitle = "What are you feeling today?";
   static const String todayTitle = "Today";
   static const String yesterdayTitle = "Yesterday";
   static const String protectedData = "Your data is protected";
   static const String regularTitle = "Regular";
-  static const String normalTitle = "Normal";
-  static const String irregularTitle = "Irregular";
+  static const String normalTitle = "Normal";*/
+//  static const String irregularTitle = "Irregular";
 }

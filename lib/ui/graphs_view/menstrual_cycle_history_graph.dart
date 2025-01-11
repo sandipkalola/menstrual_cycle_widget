@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../text_style/custom_text_style.dart';
 import 'menstrual_cycle_all_history_graph.dart';
 
 class MenstrualCycleHistoryGraph extends StatefulWidget {
-  final String headerTitle;
+  final String? headerTitle;
   final TextStyle? headerTitleTextStyle;
-  final String loadingText;
+  final String? loadingText;
   final int viewCycleHistoryLength;
   final Color appBarBackgroundColor;
 
   const MenstrualCycleHistoryGraph({
     super.key,
-    this.headerTitle = Strings.graphCycleTitle,
-    this.loadingText = Strings.loading,
+    this.headerTitle,
+    this.loadingText,
     this.appBarBackgroundColor = Colors.blueAccent,
     this.viewCycleHistoryLength = 3,
     this.headerTitleTextStyle,
@@ -31,6 +32,8 @@ class _MenstrualCycleHistoryGraphState
 
   bool isGetData = false;
   late TextStyle _headerTitleTextStyle;
+  String _headerTitle = BaseLanguage.graphCycleTitle;
+  String _loadingText = BaseLanguage.loading;
 
   @override
   void initState() {
@@ -40,6 +43,14 @@ class _MenstrualCycleHistoryGraphState
 
   init() async {
     _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
+
+    if (widget.headerTitle != null && widget.headerTitle!.isNotEmpty) {
+      _headerTitle = widget.headerTitle!;
+    }
+    if (widget.loadingText != null && widget.loadingText!.isNotEmpty) {
+      _loadingText = widget.loadingText!;
+    }
+
     final instance = MenstrualCycleWidget.instance!;
     List<PeriodsDateRange> periodRange = await instance.getAllPeriodsDetails();
     for (int i = 0; i < periodRange.length; i++) {
@@ -61,9 +72,8 @@ class _MenstrualCycleHistoryGraphState
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (isGetData)
-              ? const Text(Strings.noDataFound)
-              : Text(widget.loadingText),
+          child:
+              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
         ),
       );
     }
@@ -80,7 +90,7 @@ class _MenstrualCycleHistoryGraphState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                widget.headerTitle,
+                _headerTitle,
                 style: _headerTitleTextStyle,
               ),
               const SizedBox(),
@@ -99,8 +109,8 @@ class _MenstrualCycleHistoryGraphState
                           ),
                         );
                       },
-                      child: const Text(
-                        Strings.graphCycleViewAllTitle,
+                      child: Text(
+                        BaseLanguage.graphCycleViewAllTitle,
                         style: TextStyle(
                           fontWeight: FontWeight.normal,
                         ),
@@ -131,7 +141,7 @@ class _MenstrualCycleHistoryGraphState
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           )
                         : Text(
-                            "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${Strings.graphCycleNowTitle}",
+                            "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${BaseLanguage.graphCycleNowTitle}",
                             style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                     Padding(
@@ -162,7 +172,7 @@ class _MenstrualCycleHistoryGraphState
                       ),
                     ),
                     Text(
-                      "${allPeriodRange[index].periodDuration!} ${Strings.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${Strings.graphCycleDaysCycle}",
+                      "${allPeriodRange[index].periodDuration!} ${BaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${BaseLanguage.graphCycleDaysCycle}",
                       style: const TextStyle(
                           color: Color(0xA6212121), fontSize: 10),
                     ),

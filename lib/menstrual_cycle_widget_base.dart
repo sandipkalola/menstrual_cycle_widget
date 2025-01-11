@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sqflite/sqflite.dart';
 
+import 'languages/base_language.dart';
 import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
 import 'ui/model/meditation_data.dart';
@@ -62,8 +63,8 @@ class MenstrualCycleWidget {
     required String? secretKey,
     required String? ivKey,
   }) {
-    assert(secretKey!.isNotEmpty, Strings.secretKeyLabel);
-    assert(ivKey!.isNotEmpty, Strings.ivKeyLabel);
+    assert(secretKey!.isNotEmpty, BaseLanguage.secretKeyLabel);
+    assert(ivKey!.isNotEmpty, BaseLanguage.ivKeyLabel);
     MenstrualCycleWidget.instance ??= MenstrualCycleWidget._();
     MenstrualCycleWidget.instance!
         .initialize(secretKey: secretKey!, ivKey: ivKey!);
@@ -90,8 +91,8 @@ class MenstrualCycleWidget {
       bool isClearData = false,
       String fontFamily = "",
       Languages defaultLanguage = Languages.english}) async {
-    assert(_cycleLength > 0, Strings.totalCycleDaysLabel);
-    assert(_periodDuration > 0, Strings.totalPeriodDaysLabel);
+    assert(_cycleLength > 0, BaseLanguage.totalCycleDaysLabel);
+    assert(_periodDuration > 0, BaseLanguage.totalPeriodDaysLabel);
     // printLogs("userId $userId");
     if (customerId!.isNotEmpty) {
       _customerId = customerId;
@@ -192,7 +193,7 @@ class MenstrualCycleWidget {
       try {
         logDate = defaultDateFormat.format(symptomsLogDate);
       } catch (e) {
-        throw Strings.errorInvalidSymptomsLogDate;
+        throw BaseLanguage.errorInvalidSymptomsLogDate;
       }
     }
 
@@ -256,10 +257,10 @@ class MenstrualCycleWidget {
       try {
         logDate = defaultDateFormat.format(symptomsLogDate);
       } catch (e) {
-        throw Strings.errorInvalidSymptomsLogDate;
+        throw BaseLanguage.errorInvalidSymptomsLogDate;
       }
     } else {
-      throw Strings.errorInvalidSymptomsLogDate;
+      throw BaseLanguage.errorInvalidSymptomsLogDate;
     }
 
     UserSymptomsLogs userSymptomsLogs = UserSymptomsLogs(symptomData: []);
@@ -310,7 +311,7 @@ class MenstrualCycleWidget {
   /// get Today's symptoms ids
   Future<List<int>> getSymptomsId(DateTime? symptomsLogDate) async {
     if (symptomsLogDate == null) {
-      throw Strings.errorInvalidSymptomsLogDate;
+      throw BaseLanguage.errorInvalidSymptomsLogDate;
     }
 
     List<int> symptomsIds = [];
@@ -1140,11 +1141,11 @@ class MenstrualCycleWidget {
     double cycleCRS = await getCycleRegularityScore();
     String cycleCRSStatus = "";
     if (cycleCRS > 89) {
-      cycleCRSStatus = Strings.regularTitle;
+      cycleCRSStatus = BaseLanguage.regularTitle;
     } else if (cycleCRS > 74) {
-      cycleCRSStatus = Strings.normalTitle;
+      cycleCRSStatus = BaseLanguage.normalTitle;
     } else if (cycleCRS > 0) {
-      cycleCRSStatus = Strings.irregularTitle;
+      cycleCRSStatus = BaseLanguage.irregularTitle;
     }
     return cycleCRSStatus;
   }
@@ -1179,11 +1180,11 @@ class MenstrualCycleWidget {
     double periodPRS = await getPeriodRegularityScore();
     String periodCRSStatus = "";
     if (periodPRS > 89) {
-      periodCRSStatus = Strings.regularTitle;
+      periodCRSStatus = BaseLanguage.regularTitle;
     } else if (periodPRS > 74) {
-      periodCRSStatus = Strings.normalTitle;
+      periodCRSStatus = BaseLanguage.normalTitle;
     } else if (periodPRS > 0) {
-      periodCRSStatus = Strings.irregularTitle;
+      periodCRSStatus = BaseLanguage.irregularTitle;
     }
     return periodCRSStatus;
   }

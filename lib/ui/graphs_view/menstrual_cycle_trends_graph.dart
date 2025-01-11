@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/chart_cycle_data.dart';
@@ -12,16 +13,16 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
   final bool isShowHeader;
   final bool isShowMoreOptions;
   final bool isShowNormalRangeHint;
-  final String normalRangeHintTitle;
+  final String? normalRangeHintTitle;
   final TextStyle? normalRangeHintTextStyle;
-  final String headerTitle;
+  final String? headerTitle;
   final TextStyle? headerTitleTextStyle;
-  final String loadingText;
-  final String xAxisTitle;
+  final String? loadingText;
+  final String? xAxisTitle;
   final bool isShowXAxisTitle;
   final TextStyle? xAxisTitleTextStyle;
   final TextStyle? yAxisTitleTextStyle;
-  final String yAxisTitle;
+  final String? yAxisTitle;
   final bool isShowYAxisTitle;
   final Color themeColor;
   final Function? onImageDownloadCallback;
@@ -31,10 +32,10 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
       {super.key,
       this.isShowSeriesColor = true,
       this.isShowHeader = true,
-      this.headerTitle = Strings.graphCycleTrends,
-      this.loadingText = Strings.loading,
+      this.headerTitle,
+      this.loadingText,
       this.isShowMoreOptions = false,
-      this.xAxisTitle = Strings.graphCycleStartDate,
+      this.xAxisTitle,
       this.isShowNormalRangeHint = true,
       this.xAxisTitleTextStyle,
       this.normalRangeHintTextStyle,
@@ -42,8 +43,8 @@ class MenstrualCycleTrendsGraph extends StatefulWidget {
       this.yAxisTitleTextStyle,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
-      this.yAxisTitle = Strings.graphCycleLengthDays,
-      this.normalRangeHintTitle = Strings.graphCycleNormalDays,
+      this.yAxisTitle,
+      this.normalRangeHintTitle,
       this.themeColor = Colors.black,
       this.onImageDownloadCallback,
       this.onPdfDownloadCallback});
@@ -82,6 +83,11 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       _normalRangeHintTextStyle,
       _yAxisTitleTextStyle,
       _headerTitleTextStyle;
+  String _headerTitle = BaseLanguage.graphCycleTrends;
+  String _loadingText = BaseLanguage.loading;
+  String _xAxisTitle = BaseLanguage.graphCycleStartDate;
+  String _yAxisTitle = BaseLanguage.graphCycleLengthDays;
+  String _normalRangeHintTitle = BaseLanguage.graphCycleNormalDays;
 
   @override
   void initState() {
@@ -91,12 +97,8 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
   }
 
   void _initializeVariables() async {
-    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
-    _normalRangeHintTextStyle = getTextStyle(widget.normalRangeHintTextStyle);
-    _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
-    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
-
     _chartKey = GlobalKey();
+
     _labelPosition = ChartDataLabelAlignment.top;
     _chartAlignment = ChartAlignment.center;
     _seriesColor = widget.isShowSeriesColor;
@@ -115,6 +117,26 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       maximumZoomLevel: 0.3,
       zoomMode: ZoomMode.x,
     );
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _normalRangeHintTextStyle = getTextStyle(widget.normalRangeHintTextStyle);
+    _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+    if (widget.normalRangeHintTitle != null &&
+        widget.normalRangeHintTitle!.isNotEmpty) {
+      _normalRangeHintTitle = widget.normalRangeHintTitle!;
+    }
+    if (widget.headerTitle != null && widget.headerTitle!.isNotEmpty) {
+      _headerTitle = widget.headerTitle!;
+    }
+    if (widget.loadingText != null && widget.loadingText!.isNotEmpty) {
+      _loadingText = widget.loadingText!;
+    }
+    if (widget.xAxisTitle != null && widget.xAxisTitle!.isNotEmpty) {
+      _xAxisTitle = widget.xAxisTitle!;
+    }
+    if (widget.yAxisTitle != null && widget.yAxisTitle!.isNotEmpty) {
+      _yAxisTitle = widget.yAxisTitle!;
+    }
   }
 
   init() async {
@@ -191,9 +213,8 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (isGetData)
-              ? const Text(Strings.noDataFound)
-              : Text(widget.loadingText),
+          child:
+              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
         ),
       );
     }
@@ -227,7 +248,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
         labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
-                text: widget.xAxisTitle,
+                text: _xAxisTitle,
                 textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
@@ -245,7 +266,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
         labelStyle: _yAxisTitleTextStyle,
         title: (widget.isShowYAxisTitle)
             ? AxisTitle(
-                text: widget.yAxisTitle,
+                text: _yAxisTitle,
                 textStyle: _yAxisTitleTextStyle,
               )
             : const AxisTitle(
@@ -258,7 +279,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
                   start: 21,
                   end: 36,
                   color: Colors.grey.withOpacity(0.2),
-                  text: widget.normalRangeHintTitle,
+                  text: _normalRangeHintTitle,
                   textStyle: _normalRangeHintTextStyle,
                 ),
               ]
@@ -339,7 +360,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
         xValueMapper: (ChartCycleData sales, _) => sales.dateTime as String,
         yValueMapper: (ChartCycleData sales, _) => sales.cycleLength,
         markerSettings: const MarkerSettings(isVisible: true),
-        name: widget.headerTitle,
+        name: _headerTitle,
         onRendererCreated:
             (ChartSeriesController<ChartCycleData, String>? controller) {
           seriesController = controller;

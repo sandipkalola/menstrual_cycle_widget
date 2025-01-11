@@ -1,4 +1,4 @@
-import 'strings.dart';
+import '../languages/base_language.dart';
 
 /// Default Cycle length of menstrual cycle
 const defaultCycleLength = 28;
@@ -16,9 +16,9 @@ const defaultOvulationDay = 5;
 const futureMonthCount = 12;
 
 /// Default option of graph view
-const List<String> choices = <String>[
-  Strings.optionsDownloadImage,
-  Strings.optionsDownloadPDF,
+List<String> choices = <String>[
+  BaseLanguage.optionsDownloadImage,
+  BaseLanguage.optionsDownloadPDF,
 ];
 
 const flutterPackageName = "menstrual_cycle_widget";

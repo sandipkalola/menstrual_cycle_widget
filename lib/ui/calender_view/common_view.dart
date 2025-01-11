@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import 'calender_view.dart';
 
@@ -77,7 +78,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          Strings.periodLabel,
+          BaseLanguage.periodLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -104,7 +105,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          Strings.predictOvulationDateLabel,
+          BaseLanguage.predictOvulationDateLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -131,7 +132,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          Strings.predictPeriodDateLabel,
+          BaseLanguage.predictPeriodDateLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -150,7 +151,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          Strings.selectedDateLabel,
+          BaseLanguage.selectedDateLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -169,7 +170,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          Strings.todayLabel,
+          BaseLanguage.todayLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,

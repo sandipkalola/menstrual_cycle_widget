@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/chart_cycle_periods_data.dart';
@@ -8,35 +9,35 @@ import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualCyclePeriodsGraph extends StatefulWidget {
-  final String loadingText;
-  final String xAxisTitle;
+  final String? loadingText;
+  final String? xAxisTitle;
   final bool isShowXAxisTitle;
   final bool isShowMoreOptions;
   final TextStyle? xAxisTitleTextStyle;
   final TextStyle? yAxisTitleTextStyle;
-  final String yAxisTitle;
+  final String? yAxisTitle;
   final bool isShowYAxisTitle;
   final Color periodDaysColor;
-  final String periodDaysTitle;
+  final String? periodDaysTitle;
   final Color otherCycleDaysColor;
-  final String otherCycleDaysTitle;
+  final String? otherCycleDaysTitle;
   final Function? onImageDownloadCallback;
   final Function? onPdfDownloadCallback;
 
   const MenstrualCyclePeriodsGraph(
       {super.key,
-      this.loadingText = Strings.loading,
-      this.xAxisTitle = Strings.graphCycleStartDate,
+      this.loadingText,
+      this.xAxisTitle,
       this.xAxisTitleTextStyle,
       this.yAxisTitleTextStyle,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
-      this.yAxisTitle = Strings.graphCycleLengthDays,
+      this.yAxisTitle,
       this.periodDaysColor = defaultMenstruationColor,
-      this.periodDaysTitle = Strings.graphCyclePeriodDay,
+      this.periodDaysTitle,
       this.otherCycleDaysColor = defaultLutealPhaseColor,
       this.isShowMoreOptions = false,
-      this.otherCycleDaysTitle = Strings.graphCycleOtherDay,
+      this.otherCycleDaysTitle,
       this.onImageDownloadCallback,
       this.onPdfDownloadCallback});
 
@@ -65,6 +66,11 @@ class _MenstrualCyclePeriodsGraphState
   bool isLastRecord = false;
   late TextStyle _xAxisTitleTextStyle;
   late TextStyle _yAxisTitleTextStyle;
+  String _loadingText = BaseLanguage.loading;
+  String _xAxisTitle = BaseLanguage.graphCycleStartDate;
+  String _yAxisTitle = BaseLanguage.graphCycleLengthDays;
+  String _periodDaysTitle = BaseLanguage.graphCyclePeriodDay;
+  String _otherCycleDaysTitle = BaseLanguage.graphCycleOtherDay;
 
   @override
   void initState() {
@@ -74,10 +80,8 @@ class _MenstrualCyclePeriodsGraphState
   }
 
   void _initializeVariables() async {
-    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
-    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
-
     _chartKey = GlobalKey();
+
     _tooltipBehavior = TooltipBehavior(
       enable: true,
     );
@@ -94,6 +98,24 @@ class _MenstrualCyclePeriodsGraphState
       maximumZoomLevel: 0.3,
       zoomMode: ZoomMode.x,
     );
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+    if (widget.otherCycleDaysTitle != null &&
+        widget.otherCycleDaysTitle!.isNotEmpty) {
+      _otherCycleDaysTitle = widget.otherCycleDaysTitle!;
+    }
+    if (widget.periodDaysTitle != null && widget.periodDaysTitle!.isNotEmpty) {
+      _periodDaysTitle = widget.periodDaysTitle!;
+    }
+    if (widget.xAxisTitle != null && widget.xAxisTitle!.isNotEmpty) {
+      _xAxisTitle = widget.xAxisTitle!;
+    }
+    if (widget.yAxisTitle != null && widget.yAxisTitle!.isNotEmpty) {
+      _yAxisTitle = widget.yAxisTitle!;
+    }
+    if (widget.loadingText != null && widget.loadingText!.isNotEmpty) {
+      _loadingText = widget.loadingText!;
+    }
   }
 
   init() async {
@@ -152,9 +174,8 @@ class _MenstrualCyclePeriodsGraphState
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (isGetData)
-              ? const Text(Strings.noDataFound)
-              : Text(widget.loadingText),
+          child:
+              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
         ),
       );
     }
@@ -184,7 +205,7 @@ class _MenstrualCyclePeriodsGraphState
         labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
-                text: widget.xAxisTitle,
+                text: _xAxisTitle,
                 textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
@@ -201,7 +222,7 @@ class _MenstrualCyclePeriodsGraphState
         labelStyle: _yAxisTitleTextStyle,
         title: (widget.isShowYAxisTitle)
             ? AxisTitle(
-                text: widget.yAxisTitle,
+                text: _yAxisTitle,
                 textStyle: _yAxisTitleTextStyle,
               )
             : const AxisTitle(
@@ -258,7 +279,7 @@ class _MenstrualCyclePeriodsGraphState
         dataLabelSettings: const DataLabelSettings(isVisible: true),
         xValueMapper: (ChartCyclePeriodsData sales, _) => sales.dateTime,
         yValueMapper: (ChartCyclePeriodsData sales, _) => sales.periodsLength,
-        name: widget.periodDaysTitle,
+        name: _periodDaysTitle,
       ),
       StackedColumnSeries<ChartCyclePeriodsData, String>(
         dataSource: periodCycleChartData,
@@ -270,7 +291,7 @@ class _MenstrualCyclePeriodsGraphState
         },
         xValueMapper: (ChartCyclePeriodsData sales, _) => sales.dateTime,
         yValueMapper: (ChartCyclePeriodsData sales, _) => sales.cycleLength,
-        name: widget.otherCycleDaysTitle,
+        name: _otherCycleDaysTitle,
       ),
     ];
   }

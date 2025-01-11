@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../calender_view/common_view.dart';
 import '../model/water_data.dart';
@@ -7,13 +8,13 @@ import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
 class MenstrualCycleWaterGraph extends StatefulWidget {
-  final String loadingText;
+  final String? loadingText;
   final WaterUnits? waterUnits;
   final bool isShowMoreOptions;
   final Function? onImageDownloadCallback;
   final Function? onPdfDownloadCallback;
-  final String xAxisTitle;
-  final String yAxisTitle;
+  final String? xAxisTitle;
+  final String? yAxisTitle;
   final TextStyle? xAxisTitleTextStyle;
   final TextStyle? yAxisTitleTextStyle;
   final bool isShowXAxisTitle;
@@ -25,13 +26,13 @@ class MenstrualCycleWaterGraph extends StatefulWidget {
       {super.key,
       this.waterUnits = WaterUnits.liters,
       this.isShowMoreOptions = false,
-      this.loadingText = Strings.loading,
+      this.loadingText,
       this.isShowXAxisTitle = true,
       this.isShowYAxisTitle = true,
       this.tooltipBackgroundColor = Colors.black,
-      this.yAxisTitle = Strings.graphWaterUnitTitle,
+      this.yAxisTitle,
       this.onImageDownloadCallback,
-      this.xAxisTitle = Strings.graphWaterDrinkDate,
+      this.xAxisTitle,
       this.graphColor = Colors.blue,
       this.xAxisTitleTextStyle,
       this.yAxisTitleTextStyle,
@@ -54,12 +55,15 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String waterUnitLbl = Strings.graphWaterUnitLiter;
+  String waterUnitLbl = BaseLanguage.graphWaterUnitLiter;
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Water_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
   late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
+  String _loadingText = BaseLanguage.loading;
+  String _yAxisTitle = BaseLanguage.graphWaterUnitTitle;
+  String _xAxisTitle = BaseLanguage.graphWaterDrinkDate;
 
   @override
   void initState() {
@@ -69,9 +73,6 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   }
 
   void _initializeVariables() async {
-    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
-    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
-
     _chartKey = GlobalKey();
     isLoadMoreView = false;
     isNeedToUpdateView = false;
@@ -92,6 +93,18 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       maximumZoomLevel: 0.3,
       zoomMode: ZoomMode.x,
     );
+    _xAxisTitleTextStyle = getTextStyle(widget.xAxisTitleTextStyle);
+    _yAxisTitleTextStyle = getTextStyle(widget.yAxisTitleTextStyle);
+
+    if (widget.loadingText != null && widget.loadingText!.isNotEmpty) {
+      _loadingText = widget.loadingText!;
+    }
+    if (widget.yAxisTitle != null && widget.yAxisTitle!.isNotEmpty) {
+      _yAxisTitle = widget.yAxisTitle!;
+    }
+    if (widget.xAxisTitle != null && widget.xAxisTitle!.isNotEmpty) {
+      _xAxisTitle = widget.xAxisTitle!;
+    }
   }
 
   init() async {
@@ -115,20 +128,20 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       isLastRecord = true;
     }
 
-    waterUnitLbl = Strings.graphWaterUnitLiter;
+    waterUnitLbl = BaseLanguage.graphWaterUnitLiter;
     WaterUnits waterUnits = widget.waterUnits!;
     if (waterUnits == WaterUnits.liters) {
-      waterUnitLbl = Strings.graphWaterUnitLiter;
+      waterUnitLbl = BaseLanguage.graphWaterUnitLiter;
     } else if (waterUnits == WaterUnits.cups) {
-      waterUnitLbl = Strings.graphWaterUnitCup;
+      waterUnitLbl = BaseLanguage.graphWaterUnitCup;
     } else if (waterUnits == WaterUnits.flOz) {
-      waterUnitLbl = Strings.graphWaterUnitFlOz;
+      waterUnitLbl = BaseLanguage.graphWaterUnitFlOz;
     } else if (waterUnits == WaterUnits.imperialGallons) {
-      waterUnitLbl = Strings.graphWaterUnitImperialGallons;
+      waterUnitLbl = BaseLanguage.graphWaterUnitImperialGallons;
     } else if (waterUnits == WaterUnits.usGallon) {
-      waterUnitLbl = Strings.graphWaterUnitUSGallon;
+      waterUnitLbl = BaseLanguage.graphWaterUnitUSGallon;
     } else if (waterUnits == WaterUnits.ml) {
-      waterUnitLbl = Strings.graphWaterUnitMl;
+      waterUnitLbl = BaseLanguage.graphWaterUnitMl;
     }
 
     isGetData = true;
@@ -152,9 +165,8 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: (isGetData)
-              ? const Text(Strings.noDataFound)
-              : Text(widget.loadingText),
+          child:
+              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
         ),
       );
     }
@@ -185,7 +197,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
         labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
-                text: widget.xAxisTitle,
+                text: _xAxisTitle,
                 textStyle: _xAxisTitleTextStyle,
               )
             : const AxisTitle(
@@ -203,7 +215,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
           labelStyle: _yAxisTitleTextStyle,
           title: (widget.isShowYAxisTitle)
               ? AxisTitle(
-                  text: "${widget.yAxisTitle} ($waterUnitLbl)",
+                  text: "$_yAxisTitle ($waterUnitLbl)",
                   textStyle: _yAxisTitleTextStyle,
                 )
               : const AxisTitle(
