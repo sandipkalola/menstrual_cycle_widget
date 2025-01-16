@@ -167,27 +167,13 @@ class MenstrualCyclePainter extends CustomPainter {
 
   @override
   Future<void> paint(Canvas canvas, Size size) async {
-    /*if (menstruationName!.isEmpty) {
-      menstruationName = BaseLanguage.menstruationLabel;
-    }
-    if (lutealPhaseName!.isEmpty) {
-      lutealPhaseName = BaseLanguage.lutealPhaseLabel;
-    }
-    if (dayTitle!.isEmpty) {
-      dayTitle = BaseLanguage.dayLabel;
-    }
-    if (follicularPhaseName!.isEmpty) {
-      follicularPhaseName = BaseLanguage.follicularPhaseLabel;
-    }
-    if (ovulationName!.isEmpty) {
-      ovulationName = BaseLanguage.ovulationLabel;;
-    }*/
-
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
 
     double selectedDayTextX = 0.0;
     double selectedDayTextY = 0.0;
-    TextPainter selectedDayTextPainter = TextPainter();
+    TextPainter selectedDayTextPainter = TextPainter(
+        textDirection:
+            (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr);
     String selectedDayLabel = "";
 
     final radius = min(size.width / 2, size.height / 2) -
@@ -285,7 +271,8 @@ class MenstrualCyclePainter extends CustomPainter {
         viewType == MenstrualCycleViewType.circleText) {
       final messageTextPainter = TextPainter(
           textAlign: TextAlign.center,
-          textDirection: TextDirection.ltr,
+          textDirection:
+              (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
           maxLines: 2,
           ellipsis: "...");
       double totalHeight = 0;
@@ -307,7 +294,8 @@ class MenstrualCyclePainter extends CustomPainter {
 
       final titleTextPainter = TextPainter(
           textAlign: TextAlign.center,
-          textDirection: TextDirection.ltr,
+          textDirection:
+              (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
           maxLines: 2,
           ellipsis: "...");
 
@@ -327,7 +315,8 @@ class MenstrualCyclePainter extends CustomPainter {
 
       final message2TextPainter = TextPainter(
           textAlign: TextAlign.center,
-          textDirection: TextDirection.ltr,
+          textDirection:
+              (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
           maxLines: 2,
           ellipsis: "...");
 
@@ -403,7 +392,8 @@ class MenstrualCyclePainter extends CustomPainter {
 
       final textPainter = TextPainter(
         textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
+        textDirection:
+            (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
       );
 
       Color circleBorderColor = getSelectedBorderColor(day);
@@ -605,7 +595,8 @@ class MenstrualCyclePainter extends CustomPainter {
               fontFamily: getFontFamily()),
         ),
         textAlign: TextAlign.center,
-        textDirection: TextDirection.ltr,
+        textDirection:
+            (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
       );
 
       textPainter.layout();
@@ -719,7 +710,8 @@ class MenstrualCyclePainter extends CustomPainter {
 
     final textPainter = TextPainter(
       textAlign: TextAlign.center,
-      textDirection: TextDirection.ltr,
+      textDirection:
+          (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
     );
 
     final labelAngle = startAngle + sweepAngle / 2;

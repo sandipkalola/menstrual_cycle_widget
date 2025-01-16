@@ -152,7 +152,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   Widget build(BuildContext context) {
     if (allDrinkWaterData.isNotEmpty) {
       return Stack(children: [
-        _buildBodyTemperatureView(),
+        _buildWaterGraphView(),
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
@@ -174,7 +174,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   }
 
   /// Get the body temperature graph view
-  SfCartesianChart _buildBodyTemperatureView() {
+  SfCartesianChart _buildWaterGraphView() {
     return SfCartesianChart(
       key: _chartKey,
       zoomPanBehavior: _zoomPanBehavior,

@@ -34,17 +34,21 @@ class _MenstrualCycleMonthlyCalenderViewState
 
   @override
   Widget build(BuildContext context) {
-    return CalenderMonthlyView(
-        themeColor: widget.themeColor!,
-        selectedColor: (widget.daySelectedColor != null)
-            ? widget.daySelectedColor
-            : Colors.grey,
-        cycleLength: _instance.getCycleLength(),
-        periodLength: _instance.getPeriodDuration(),
-        isFromCalender: widget.isShowCloseIcon,
-        onDataChanged: (value) {
-          widget.onDataChanged!.call(value);
-        },
-        hideInfoView: widget.hideInfoView);
+    return Directionality(
+      textDirection:
+          (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
+      child: CalenderMonthlyView(
+          themeColor: widget.themeColor!,
+          selectedColor: (widget.daySelectedColor != null)
+              ? widget.daySelectedColor
+              : Colors.grey,
+          cycleLength: _instance.getCycleLength(),
+          periodLength: _instance.getPeriodDuration(),
+          isFromCalender: widget.isShowCloseIcon,
+          onDataChanged: (value) {
+            widget.onDataChanged!.call(value);
+          },
+          hideInfoView: widget.hideInfoView),
+    );
   }
 }

@@ -395,87 +395,91 @@ class _MenstrualCycleCalenderViewState
 
   @override
   Widget build(BuildContext buildContext) {
-    return Card(
-      color: widget.backgroundColorCode,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              GestureDetector(
-                onTap: () {
-                  resetToToday();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.calendar_today,
+    return Directionality(
+      textDirection:
+          (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: widget.backgroundColorCode,
+        body: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    resetToToday();
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.calendar_today,
+                          color: widget.themeColor!,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: Text(
+                            today,
+                            style: TextStyle(
+                                color: widget.themeColor!,
+                                fontSize: 10.0,
+                                fontFamily: getFontFamily(),
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 50),
+                  child: Text(
+                    displayMonth,
+                    style: TextStyle(
+                        color: widget.themeColor!,
+                        fontSize: 15.0,
+                        fontFamily: getFontFamily(),
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: isExpanded ? previousMonth : previousWeek,
+                      icon: Icon(
+                        Icons.chevron_left,
                         color: widget.themeColor!,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 3),
-                        child: Text(
-                          today,
-                          style: TextStyle(
-                              color: widget.themeColor!,
-                              fontSize: 10.0,
-                              fontFamily: getFontFamily(),
-                              fontWeight: FontWeight.bold),
-                        ),
+                    ),
+                    IconButton(
+                      onPressed: isExpanded ? nextMonth : nextWeek,
+                      icon: Icon(
+                        Icons.chevron_right,
+                        color: widget.themeColor!,
                       ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 50),
-                child: Text(
-                  displayMonth,
-                  style: TextStyle(
-                      color: widget.themeColor!,
-                      fontSize: 15.0,
-                      fontFamily: getFontFamily(),
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                    onPressed: isExpanded ? previousMonth : previousWeek,
-                    icon: Icon(
-                      Icons.chevron_left,
-                      color: widget.themeColor!,
                     ),
-                  ),
-                  IconButton(
-                    onPressed: isExpanded ? nextMonth : nextWeek,
-                    icon: Icon(
-                      Icons.chevron_right,
-                      color: widget.themeColor!,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          ExpansionCrossFade(
-            collapsed: calendarGridView(),
-            expanded: calendarGridView(),
-            isExpanded: isExpanded,
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          (widget.hideInfoView!)
-              ? const SizedBox()
-              : getInformationView(selectedColor!, widget.themeColor!),
-          (widget.hideBottomBar!) ? const SizedBox() : bottomView()
-        ],
+                  ],
+                ),
+              ],
+            ),
+            ExpansionCrossFade(
+              collapsed: calendarGridView(),
+              expanded: calendarGridView(),
+              isExpanded: isExpanded,
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            (widget.hideInfoView!)
+                ? const SizedBox()
+                : getInformationView(selectedColor!, widget.themeColor!),
+            (widget.hideBottomBar!) ? const SizedBox() : bottomView()
+          ],
+        ),
       ),
     );
   }

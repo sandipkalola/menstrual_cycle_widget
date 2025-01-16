@@ -1,3 +1,7 @@
+## [3.0.0] - 16 Jan 2025
+* Enhancements: Added multi-language support
+* Enhancements: Added custom font support.
+
 ## [2.4.0] - 19 Dec 2024
 * Enhancements: Added pagination to the monthly calendar view for improved performance.
 * Enhancements: Changed the default color of the menstrual view for a better user experience.

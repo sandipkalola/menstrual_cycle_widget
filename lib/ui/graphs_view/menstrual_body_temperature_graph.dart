@@ -149,10 +149,7 @@ class _MenstrualBodyTemperatureGraphState
   Widget build(BuildContext context) {
     if (allBodyTemperatureData.isNotEmpty) {
       return Stack(children: [
-        Directionality(
-          textDirection: TextDirection.rtl,
-          child: _buildBodyTemperatureView(),
-        ),
+        _buildBodyTemperatureView(),
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,

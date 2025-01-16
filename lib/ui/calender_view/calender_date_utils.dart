@@ -14,7 +14,8 @@ class CalenderDateUtils {
   static final DateFormat _dayMonth = DateFormat('dd MMMM', getLanguageCode());
   static final DateFormat _firstDayFormat = DateFormat('MMM dd');
   static final DateFormat _dateWithYearFormat = DateFormat('dd-MM-yyyy');
-  static final DateFormat _graphDateFormat = DateFormat('dd MMM');
+  static final DateFormat _graphDateFormat =
+      DateFormat('dd MMM', getLanguageCode());
   static final DateFormat _fullDayFormat = DateFormat('EEE MMM dd, yyyy');
   static final DateFormat _fullDayName = DateFormat('EEEE', getLanguageCode());
   static final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
