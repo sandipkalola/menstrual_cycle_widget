@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../text_style/custom_text_style.dart';
 
 /// TODO Add start and end date to get data for all graph
@@ -30,8 +30,8 @@ class _MenstrualAllCycleHistoryGraphState
 
   bool isGetData = false;
   late TextStyle _headerTitleTextStyle;
-  String _headerTitle = BaseLanguage.graphCycleTitle;
-  String _loadingText = BaseLanguage.loading;
+  String _headerTitle = WidgetBaseLanguage.graphCycleTitle;
+  String _loadingText = WidgetBaseLanguage.loading;
 
   @override
   void initState() {
@@ -75,7 +75,7 @@ class _MenstrualAllCycleHistoryGraphState
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: (isGetData)
-                    ? Text(BaseLanguage.noDataFound)
+                    ? Text(WidgetBaseLanguage.noDataFound)
                     : Text(_loadingText),
               ),
             ),
@@ -103,7 +103,7 @@ class _MenstrualAllCycleHistoryGraphState
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       )
                     : Text(
-                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${BaseLanguage.graphCycleNowTitle}",
+                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${WidgetBaseLanguage.graphCycleNowTitle}",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                 Padding(
@@ -133,7 +133,7 @@ class _MenstrualAllCycleHistoryGraphState
                   ),
                 ),
                 Text(
-                  "${allPeriodRange[index].periodDuration!} ${BaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${BaseLanguage.graphCycleDaysCycle}",
+                  "${allPeriodRange[index].periodDuration!} ${WidgetBaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
                   style:
                       const TextStyle(color: Color(0xA6212121), fontSize: 10),
                 ),

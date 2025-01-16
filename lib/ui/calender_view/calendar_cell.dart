@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import "package:intl/intl.dart";
 
 import '../../menstrual_cycle_widget.dart';
 import '../text_style/custom_text_style.dart';
@@ -518,11 +517,11 @@ class _CalendarCellState extends State<CalendarCell> {
   bool checkIsPeriodDay() {
     bool isPeriodDay = false;
     if (widget.previousPeriodDate!.isNotEmpty) {
-      DateTime lastPeriodDate = DateFormat("yyyy-MM-dd")
+      DateTime lastPeriodDate = CalenderDateUtils.dateFormat
           .parse(widget.previousPeriodDate!)
           .add(const Duration(days: -1));
 
-      DateTime endPeriodDate = DateFormat("yyyy-MM-dd")
+      DateTime endPeriodDate = CalenderDateUtils.dateFormat
           .parse(widget.previousPeriodDate!)
           .add(Duration(days: widget.periodDuration));
 
@@ -581,7 +580,7 @@ class _CalendarCellState extends State<CalendarCell> {
   bool checkIsOvulationDay() {
     bool isOvlDay = false;
     if (widget.previousPeriodDate!.isNotEmpty) {
-      DateTime ovulationDay = DateFormat("yyyy-MM-dd")
+      DateTime ovulationDay = CalenderDateUtils.dateFormat
           .parse(widget.previousPeriodDate!)
           .add(Duration(days: widget.cycleLength))
           .add(const Duration(days: -14)); // TODO get backed on period cycle

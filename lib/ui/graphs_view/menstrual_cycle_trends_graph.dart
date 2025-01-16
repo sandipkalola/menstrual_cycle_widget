@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/chart_cycle_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -83,11 +83,11 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       _normalRangeHintTextStyle,
       _yAxisTitleTextStyle,
       _headerTitleTextStyle;
-  String _headerTitle = BaseLanguage.graphCycleTrends;
-  String _loadingText = BaseLanguage.loading;
-  String _xAxisTitle = BaseLanguage.graphCycleStartDate;
-  String _yAxisTitle = BaseLanguage.graphCycleLengthDays;
-  String _normalRangeHintTitle = BaseLanguage.graphCycleNormalDays;
+  String _headerTitle = WidgetBaseLanguage.graphCycleTrends;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _xAxisTitle = WidgetBaseLanguage.graphCycleStartDate;
+  String _yAxisTitle = WidgetBaseLanguage.graphCycleLengthDays;
+  String _normalRangeHintTitle = WidgetBaseLanguage.graphCycleNormalDays;
 
   @override
   void initState() {
@@ -213,8 +213,9 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -244,6 +245,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
         // labelRotation: -70,
+        isInversed: isArabicLanguage(),
         rangePadding: ChartRangePadding.normal,
         labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
@@ -258,6 +260,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
+        opposedPosition: isArabicLanguage(),
         minimum: minValue.toDouble(),
         maximum: maxValue.toDouble(),
         axisLine: const AxisLine(width: 0),

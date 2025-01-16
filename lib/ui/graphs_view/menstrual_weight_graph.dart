@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/weight_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -55,15 +55,15 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String weightUnitLbl = BaseLanguage.graphWaterUnitLiter;
+  String weightUnitLbl = WidgetBaseLanguage.graphWaterUnitLiter;
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Weight_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
   late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
-  String _loadingText = BaseLanguage.loading;
-  String _yAxisTitle = BaseLanguage.graphWeightUnitTitle;
-  String _xAxisTitle = BaseLanguage.graphWeightLogDate;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _yAxisTitle = WidgetBaseLanguage.graphWeightUnitTitle;
+  String _xAxisTitle = WidgetBaseLanguage.graphWeightLogDate;
 
   @override
   void initState() {
@@ -128,12 +128,12 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
       isLastRecord = true;
     }
 
-    weightUnitLbl = BaseLanguage.graphWeightKg;
+    weightUnitLbl = WidgetBaseLanguage.graphWeightKg;
     WeightUnits weightUnits = widget.weightUnits!;
     if (weightUnits == WeightUnits.kg) {
-      weightUnitLbl = BaseLanguage.graphWeightKg;
+      weightUnitLbl = WidgetBaseLanguage.graphWeightKg;
     } else if (weightUnits == WeightUnits.lb) {
-      weightUnitLbl = BaseLanguage.graphWeighLb;
+      weightUnitLbl = WidgetBaseLanguage.graphWeighLb;
     }
 
     isGetData = true;
@@ -157,8 +157,9 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -183,6 +184,7 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
       },
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
+        isInversed: isArabicLanguage(),
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         //labelRotation: -70,
@@ -199,6 +201,7 @@ class _MenstrualWeightGraphState extends State<MenstrualWeightGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
+          opposedPosition: isArabicLanguage(),
           labelFormat: '{value}',
           minimum: minValue,
           maximum: maxValue,

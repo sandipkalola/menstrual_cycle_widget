@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'dart:ui' as ui;
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/body_temperature_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -70,9 +70,9 @@ class _MenstrualBodyTemperatureGraphState
   late GlobalKey<State> globalKey;
   late TextStyle _xAxisTitleTextStyle;
   late TextStyle _yAxisTitleTextStyle;
-  String _loadingText = BaseLanguage.loading;
-  String _yAxisTitle = BaseLanguage.graphBodyTempTitle;
-  String _xAxisTitle = BaseLanguage.graphBodyTempDate;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _yAxisTitle = WidgetBaseLanguage.graphBodyTempTitle;
+  String _xAxisTitle = WidgetBaseLanguage.graphBodyTempDate;
 
   @override
   void initState() {
@@ -149,7 +149,10 @@ class _MenstrualBodyTemperatureGraphState
   Widget build(BuildContext context) {
     if (allBodyTemperatureData.isNotEmpty) {
       return Stack(children: [
-        _buildBodyTemperatureView(),
+        Directionality(
+          textDirection: TextDirection.rtl,
+          child: _buildBodyTemperatureView(),
+        ),
         (widget.isShowMoreOptions)
             ? getMenuWidget(
                 fileName: fileName,
@@ -162,8 +165,9 @@ class _MenstrualBodyTemperatureGraphState
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -173,6 +177,7 @@ class _MenstrualBodyTemperatureGraphState
   SfCartesianChart _buildBodyTemperatureView() {
     return SfCartesianChart(
       key: _chartKey,
+      legend: Legend(isVisible: true),
       zoomPanBehavior: _zoomPanBehavior,
       onZooming: (ZoomPanArgs args) {},
       onActualRangeChanged: (ActualRangeChangedArgs args) {
@@ -188,6 +193,7 @@ class _MenstrualBodyTemperatureGraphState
       },
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
+        isInversed: isArabicLanguage(),
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         // labelRotation: -70,
@@ -204,6 +210,7 @@ class _MenstrualBodyTemperatureGraphState
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
+          opposedPosition: isArabicLanguage(),
           labelFormat: '{value} °$tempUnit',
           minimum: minValue,
           maximum: maxValue,
@@ -249,7 +256,7 @@ class _MenstrualBodyTemperatureGraphState
             (ChartSeriesController<BodyTemperatureData, String>? controller) {
           seriesController = controller;
         },
-        name: BaseLanguage.lblBodyTemp,
+        name: WidgetBaseLanguage.lblBodyTemp,
         xValueMapper: (BodyTemperatureData sales, _) => sales.dateTime,
         yValueMapper: (BodyTemperatureData sales, _) => sales.bodyTemperature,
         animationDuration: 0,

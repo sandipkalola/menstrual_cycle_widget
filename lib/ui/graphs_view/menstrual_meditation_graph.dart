@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/meditation_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -54,16 +54,16 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String minUnitLbl = BaseLanguage.graphMeditationMin;
+  String minUnitLbl = WidgetBaseLanguage.graphMeditationMin;
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Meditation_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
 
   late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
-  String _loadingText = BaseLanguage.loading;
-  String _yAxisTitle = BaseLanguage.graphMeditationTitle;
-  String _xAxisTitle = BaseLanguage.graphMeditationDate;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _yAxisTitle = WidgetBaseLanguage.graphMeditationTitle;
+  String _xAxisTitle = WidgetBaseLanguage.graphMeditationDate;
 
   @override
   void initState() {
@@ -142,8 +142,9 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -168,6 +169,7 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
       },
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
+        isInversed: isArabicLanguage(),
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         //labelRotation: -70,
@@ -184,8 +186,9 @@ class _MenstrualMeditationGraphState extends State<MenstrualMeditationGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
-          labelFormat: '{value} ${BaseLanguage.graphMeditationMinTitle}',
+          labelFormat: '{value} ${WidgetBaseLanguage.graphMeditationMinTitle}',
           minimum: 1,
+          opposedPosition: isArabicLanguage(),
           maximum: maxValue,
           interval: 60,
           axisLine: const AxisLine(width: 0),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/chart_cycle_periods_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -66,11 +66,11 @@ class _MenstrualCyclePeriodsGraphState
   bool isLastRecord = false;
   late TextStyle _xAxisTitleTextStyle;
   late TextStyle _yAxisTitleTextStyle;
-  String _loadingText = BaseLanguage.loading;
-  String _xAxisTitle = BaseLanguage.graphCycleStartDate;
-  String _yAxisTitle = BaseLanguage.graphCycleLengthDays;
-  String _periodDaysTitle = BaseLanguage.graphCyclePeriodDay;
-  String _otherCycleDaysTitle = BaseLanguage.graphCycleOtherDay;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _xAxisTitle = WidgetBaseLanguage.graphCycleStartDate;
+  String _yAxisTitle = WidgetBaseLanguage.graphCycleLengthDays;
+  String _periodDaysTitle = WidgetBaseLanguage.graphCyclePeriodDay;
+  String _otherCycleDaysTitle = WidgetBaseLanguage.graphCycleOtherDay;
 
   @override
   void initState() {
@@ -174,8 +174,9 @@ class _MenstrualCyclePeriodsGraphState
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -186,6 +187,7 @@ class _MenstrualCyclePeriodsGraphState
     return SfCartesianChart(
       key: _chartKey,
       zoomPanBehavior: _zoomPanBehavior,
+      legend: Legend(isVisible: true),
       onZooming: (ZoomPanArgs args) {},
       onActualRangeChanged: (ActualRangeChangedArgs args) {
         if (args.orientation == AxisOrientation.horizontal) {
@@ -201,7 +203,7 @@ class _MenstrualCyclePeriodsGraphState
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
         majorGridLines: const MajorGridLines(width: 0),
-        //labelRotation: -70,
+        isInversed: isArabicLanguage(),
         labelStyle: _xAxisTitleTextStyle,
         title: (widget.isShowXAxisTitle)
             ? AxisTitle(
@@ -213,7 +215,7 @@ class _MenstrualCyclePeriodsGraphState
               ),
       ),
       primaryYAxis: NumericAxis(
-        //rangePadding: ChartRangePadding.none,
+        opposedPosition: isArabicLanguage(),
         axisLine: const AxisLine(width: 0),
         labelFormat: '{value}',
         maximum: maxValue.toDouble(),

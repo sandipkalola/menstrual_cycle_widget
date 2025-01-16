@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/sleep_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -62,9 +62,9 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
   late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
-  String _loadingText = BaseLanguage.loading;
-  String _yAxisTitle = BaseLanguage.graphSleepTitle;
-  String _xAxisTitle = BaseLanguage.graphSleepDate;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _yAxisTitle = WidgetBaseLanguage.graphSleepTitle;
+  String _xAxisTitle = WidgetBaseLanguage.graphSleepDate;
 
   @override
   void initState() {
@@ -144,8 +144,9 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -170,7 +171,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
       },
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
-        //Hide the gridlines of x-axis
+        isInversed: isArabicLanguage(),
         majorGridLines:
             MajorGridLines(width: (widget.isShowXAxisGridLine) ? 1 : 0),
         //Hide the axis line of x-axis
@@ -190,7 +191,7 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
-          //labelFormat: getLabelFormat('{value}'),
+          opposedPosition: isArabicLanguage(),
           axisLabelFormatter: (AxisLabelRenderDetails details) {
             return ChartAxisLabel(
                 getLabelFormat(details.value.toString()), _xAxisTitleTextStyle);
@@ -230,14 +231,14 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
     if (realValue > 24) {
       int nextDay = realValue.toInt() - 23;
       if (nextDay > 12) {
-        return "$nextDay:$min ${BaseLanguage.lblSleepPm}";
+        return "$nextDay:$min ${WidgetBaseLanguage.lblSleepPm}";
       }
-      return "$nextDay:$min ${BaseLanguage.lblSleepAm}";
+      return "$nextDay:$min ${WidgetBaseLanguage.lblSleepAm}";
     }
     if (realValue > 12) {
-      return "${realValue.toInt()}:$min ${BaseLanguage.lblSleepPm}";
+      return "${realValue.toInt()}:$min ${WidgetBaseLanguage.lblSleepPm}";
     }
-    return "${realValue.toInt()}:$min ${BaseLanguage.lblSleepAm}";
+    return "${realValue.toInt()}:$min ${WidgetBaseLanguage.lblSleepAm}";
   }
 
   String getLabelFormat(String value) {
@@ -246,14 +247,14 @@ class _MenstrualSleepGraphState extends State<MenstrualSleepGraph> {
     if (realValue > 24) {
       int nextDay = realValue.toInt() - 23;
       if (nextDay > 12) {
-        return "$nextDay ${BaseLanguage.lblSleepPm}";
+        return "$nextDay ${WidgetBaseLanguage.lblSleepPm}";
       }
-      return "$nextDay ${BaseLanguage.lblSleepAm}";
+      return "$nextDay ${WidgetBaseLanguage.lblSleepAm}";
     }
     if (realValue > 12) {
-      return "${realValue.toInt()} ${BaseLanguage.lblSleepPm}";
+      return "${realValue.toInt()} ${WidgetBaseLanguage.lblSleepPm}";
     }
-    return "${realValue.toInt()} ${BaseLanguage.lblSleepAm}";
+    return "${realValue.toInt()} ${WidgetBaseLanguage.lblSleepAm}";
   }
 
   /// The method returns line series to chart.

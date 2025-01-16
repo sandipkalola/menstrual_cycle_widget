@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:intl/intl.dart';
 
-import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
+import '../widget_languages/languages.dart';
 import 'calender_view/calender_view.dart';
 import 'text_style/custom_text_style.dart';
 
@@ -56,14 +55,15 @@ class _MenstrualCycleCalenderViewState
   List<String> futureOvulationDays = [];
   List<String>? pastAllPeriodsDays = [];
 
-  List<String> weekTitles = CalenderDateUtils.weekTitles;
+  List<String> weekTitles = [];
 
   Color? selectedColor = Colors.grey;
-  String _logPeriodText = BaseLanguage.logPeriodLabel;
+  String _logPeriodText = WidgetBaseLanguage.logPeriodLabel;
 
   @override
   void initState() {
     super.initState();
+    weekTitles = getWeekTitle();
     _selectedDateTime = DateTime.now();
     selectedMonthsDays = _daysInMonth(selectedDateTime);
     selectedWeekDays = CalenderDateUtils.daysInRange(
@@ -77,10 +77,22 @@ class _MenstrualCycleCalenderViewState
           today = todayFormat;
         }));
 
-    if (widget.logPeriodText!.isNotEmpty) {
+    if (widget.logPeriodText != null && widget.logPeriodText!.isNotEmpty) {
       _logPeriodText = widget.logPeriodText!;
     }
     init();
+  }
+
+  getWeekTitle() {
+    return [
+      WidgetBaseLanguage.weekTitlesSun,
+      WidgetBaseLanguage.weekTitlesMon,
+      WidgetBaseLanguage.weekTitlesTue,
+      WidgetBaseLanguage.weekTitlesWed,
+      WidgetBaseLanguage.weekTitlesThu,
+      WidgetBaseLanguage.weekTitlesFri,
+      WidgetBaseLanguage.weekTitlesSat,
+    ];
   }
 
   init() async {
@@ -350,8 +362,7 @@ class _MenstrualCycleCalenderViewState
                       ),
                     ),
               Text(
-                DateFormat("EEEE MMMM dd, yyyy", "en_US")
-                    .format(selectedDateTime),
+                CalenderDateUtils.fullFormat.format(selectedDateTime),
                 style: TextStyle(
                   fontSize: 13,
                   color: widget.themeColor!,

@@ -1,6 +1,6 @@
 import 'language_functions.dart';
 
-class BaseLanguage {
+class WidgetBaseLanguage {
   static String get saveLogs => getSaveLogsTitle();
 
   static String get secretKeyLabel => getSecretKeyLabel();

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import 'calender_view.dart';
 
 /// get future prediction due periods dates of next period
@@ -13,7 +12,7 @@ initFuturePeriodDay() async {
   int cycleLength = instance.getCycleLength() - 1;
   int periodLength = instance.getPeriodDuration();
   if (instance.getPreviousPeriodDay().isNotEmpty) {
-    DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
+    DateTime nextPeriodDate = CalenderDateUtils.dateFormat
         .parse(instance.getPreviousPeriodDay())
         .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
@@ -37,7 +36,7 @@ initFutureOvulationDay() async {
   List<String> futureOvulationDays = [];
   int cycleLength = instance.getCycleLength();
   if (instance.getPreviousPeriodDay().isNotEmpty) {
-    DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
+    DateTime nextPeriodDate = CalenderDateUtils.dateFormat
         .parse(instance.getPreviousPeriodDay())
         .add(Duration(days: cycleLength));
     // printLogs("Dates: ${defaultDateFormat.format(nextPeriodDate)}");
@@ -78,7 +77,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          BaseLanguage.periodLabel,
+          WidgetBaseLanguage.periodLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -105,7 +104,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          BaseLanguage.predictOvulationDateLabel,
+          WidgetBaseLanguage.predictOvulationDateLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -132,7 +131,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          BaseLanguage.predictPeriodDateLabel,
+          WidgetBaseLanguage.predictPeriodDateLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -151,7 +150,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          BaseLanguage.selectedDateLabel,
+          WidgetBaseLanguage.selectedDateLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,
@@ -170,7 +169,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           ),
         ),
         Text(
-          BaseLanguage.todayLabel,
+          WidgetBaseLanguage.todayLabel,
           style: TextStyle(
             fontSize: fontSize,
             fontFamily: MenstrualCycleWidget.defaultFontFamily,

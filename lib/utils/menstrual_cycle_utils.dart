@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 
-import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
+import '../widget_languages/languages.dart';
 
 /// Print logs to console
 printMenstrualCycleLogs(String message) {
   String currentDate = currentDateFormat.format(DateTime.now());
   if (kDebugMode) {
-    print("${BaseLanguage.printLogLabel} ($currentDate): $message");
+    print("${WidgetBaseLanguage.printLogLabel} ($currentDate): $message");
   }
 }
 
@@ -55,4 +55,12 @@ String convertMinutesToHours(int minutes) {
   int hours = minutes ~/ 60;
   int remainingMinutes = minutes % 60;
   return '${hours}h ${remainingMinutes}m';
+}
+
+/// check if arabic language
+bool isArabicLanguage() {
+  if (MenstrualCycleWidget.currentLanguage == Languages.arabic) {
+    return true;
+  }
+  return false;
 }

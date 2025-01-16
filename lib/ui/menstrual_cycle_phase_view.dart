@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
+import '../widget_languages/languages.dart';
 import 'custom_painter/menstrual_cycle_painter.dart';
 
 class MenstrualCyclePhaseView extends StatefulWidget {
@@ -198,11 +198,11 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   String _title = "";
   String _message = "";
   String _message2 = "";
-  String _menstruationName = BaseLanguage.menstruationLabel;
-  String _follicularPhaseName = BaseLanguage.follicularPhaseLabel;
-  String _ovulationName = BaseLanguage.ovulationLabel;
-  String _lutealPhaseName = BaseLanguage.lutealPhaseLabel;
-  String _dayTitle = BaseLanguage.dayLabel;
+  String _menstruationName = WidgetBaseLanguage.menstruationLabel;
+  String _follicularPhaseName = WidgetBaseLanguage.follicularPhaseLabel;
+  String _ovulationName = WidgetBaseLanguage.ovulationLabel;
+  String _lutealPhaseName = WidgetBaseLanguage.lutealPhaseLabel;
+  String _dayTitle = WidgetBaseLanguage.dayLabel;
 
   Future<void> _init(String imagePath) async {
     if (widget.menstruationName != null &&
@@ -357,54 +357,54 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
       // Check if last period date is more then current cycle length + period duration.
       // Then show only total late period day
       if (totalDiffCurrentLastPeriod >= totalDuration) {
-        _message = BaseLanguage.pastCycleLabel;
+        _message = WidgetBaseLanguage.pastCycleLabel;
         _title =
-            "$totalDiffCurrentLastPeriod ${BaseLanguage.circleDaysLateLabel} ";
-        _message2 = BaseLanguage.lateLabel;
+            "$totalDiffCurrentLastPeriod ${WidgetBaseLanguage.circleDaysLateLabel} ";
+        _message2 = WidgetBaseLanguage.lateLabel;
         return;
       }
       // check if last period date is more then current cycle and less then total duration (current cycle length + period duration)
       // The show below messages
       else if (totalDiffCurrentLastPeriod >= _instance.getCycleLength() &&
           totalDiffCurrentLastPeriod <= totalDuration) {
-        _message = BaseLanguage.timeForPregnancyTestLabel;
+        _message = WidgetBaseLanguage.timeForPregnancyTestLabel;
         int dayTestCount = totalDuration - totalDiffCurrentLastPeriod - 1;
         //printMenstrualCycleLogs("dayTestCount : $dayTestCount");
         if (dayTestCount == 0) {
-          _title = BaseLanguage.timeForPregnancyTestTitleLabel3;
+          _title = WidgetBaseLanguage.timeForPregnancyTestTitleLabel3;
         } else {
           if (dayTestCount > 1) {
             _title =
-                "${BaseLanguage.timeForPregnancyTestTitleLabel} $dayTestCount ${BaseLanguage.timeForPregnancyTestTitleLabel4}";
+                "${WidgetBaseLanguage.timeForPregnancyTestTitleLabel} $dayTestCount ${WidgetBaseLanguage.timeForPregnancyTestTitleLabel4}";
           } else {
             _title =
-                "${BaseLanguage.timeForPregnancyTestTitleLabel} $dayTestCount ${BaseLanguage.timeForPregnancyTestTitleLabel2}";
+                "${WidgetBaseLanguage.timeForPregnancyTestTitleLabel} $dayTestCount ${WidgetBaseLanguage.timeForPregnancyTestTitleLabel2}";
           }
         }
         _message2 =
-            "${BaseLanguage.predictPeriodLabel} ${totalDiffCurrentLastPeriod - _instance.getCycleLength() + 1}";
+            "${WidgetBaseLanguage.predictPeriodLabel} ${totalDiffCurrentLastPeriod - _instance.getCycleLength() + 1}";
         return;
       }
       // Check if period day started
       // Then show below messages
       else if (totalDiffCurrentLastPeriod >= 0 &&
           totalDiffCurrentLastPeriod < _instance.getPeriodDuration()) {
-        _message = BaseLanguage.conceiveLabel;
-        _title = "$conceiveDays ${BaseLanguage.phaseDaysLabel}";
-        _message2 = "${BaseLanguage.periodPhaseLabel} $_selectedDay ";
+        _message = WidgetBaseLanguage.conceiveLabel;
+        _title = "$conceiveDays ${WidgetBaseLanguage.phaseDaysLabel}";
+        _message2 = "${WidgetBaseLanguage.periodPhaseLabel} $_selectedDay ";
         return;
       }
       // Check if period over and before ovulation day
       // Then show below messages
       else if (totalDiffCurrentLastPeriod >= _instance.getPeriodDuration() &&
           totalDiffCurrentLastPeriod < totalDayBeforeOvulationStart) {
-        _message = BaseLanguage.conceiveLabel;
+        _message = WidgetBaseLanguage.conceiveLabel;
         if (conceiveDays > 1) {
-          _title = "$conceiveDays ${BaseLanguage.phaseDaysLabel}";
+          _title = "$conceiveDays ${WidgetBaseLanguage.phaseDaysLabel}";
         } else {
-          _title = "$conceiveDays ${BaseLanguage.phaseDayLabel}";
+          _title = "$conceiveDays ${WidgetBaseLanguage.phaseDayLabel}";
         }
-        _message2 = BaseLanguage.pregnancyChanceMsg1;
+        _message2 = WidgetBaseLanguage.pregnancyChanceMsg1;
         return;
       }
       // Check if ovulation day started
@@ -419,21 +419,21 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         //printMenstrualCycleLogs("ovulationDay $ovulationDay");
 
         if (ovulationDay == totalDiffCurrentLastPeriod) {
-          _message = BaseLanguage.ovulationDayMsg1;
-          _title = BaseLanguage.ovulationDayTitle;
-          _message2 = BaseLanguage.pregnancyChanceMsg2;
+          _message = WidgetBaseLanguage.ovulationDayMsg1;
+          _title = WidgetBaseLanguage.ovulationDayTitle;
+          _message2 = WidgetBaseLanguage.pregnancyChanceMsg2;
         } else {
-          _message = BaseLanguage.conceiveLabel2;
-          _message2 = BaseLanguage.pregnancyChanceMsg2;
+          _message = WidgetBaseLanguage.conceiveLabel2;
+          _message2 = WidgetBaseLanguage.pregnancyChanceMsg2;
           if (dayOvulationDayCount == 0) {
-            _title = BaseLanguage.timeForPregnancyTestTitleLabel3;
-            _message2 = BaseLanguage.pregnancyChanceMsg3;
+            _title = WidgetBaseLanguage.timeForPregnancyTestTitleLabel3;
+            _message2 = WidgetBaseLanguage.pregnancyChanceMsg3;
           } else if (dayOvulationDayCount > 1) {
             _title =
-                "${BaseLanguage.timeForPregnancyTestTitleLabel} $dayOvulationDayCount ${BaseLanguage.timeForPregnancyTestTitleLabel4}";
+                "${WidgetBaseLanguage.timeForPregnancyTestTitleLabel} $dayOvulationDayCount ${WidgetBaseLanguage.timeForPregnancyTestTitleLabel4}";
           } else {
             _title =
-                "${BaseLanguage.timeForPregnancyTestTitleLabel} $dayOvulationDayCount ${BaseLanguage.timeForPregnancyTestTitleLabel2}";
+                "${WidgetBaseLanguage.timeForPregnancyTestTitleLabel} $dayOvulationDayCount ${WidgetBaseLanguage.timeForPregnancyTestTitleLabel2}";
           }
         }
       }
@@ -443,17 +443,17 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         int totalRemainingDayForNextPeriod =
             _instance.getCycleLength() - totalDiffCurrentLastPeriod;
         if (totalRemainingDayForNextPeriod > 1) {
-          _message = BaseLanguage.predictPeriodDayStartLabel;
+          _message = WidgetBaseLanguage.predictPeriodDayStartLabel;
           _title =
-              "$totalRemainingDayForNextPeriod ${BaseLanguage.phaseDaysLabel}";
+              "$totalRemainingDayForNextPeriod ${WidgetBaseLanguage.phaseDaysLabel}";
         } else {
-          _message = BaseLanguage.predictPeriodDayStartLabel2;
-          _title = BaseLanguage.predictPeriodDayStartLabel1;
+          _message = WidgetBaseLanguage.predictPeriodDayStartLabel2;
+          _title = WidgetBaseLanguage.predictPeriodDayStartLabel1;
         }
         if (totalRemainingDayForNextPeriod < 2) {
-          _message2 = BaseLanguage.lateLabel;
+          _message2 = WidgetBaseLanguage.lateLabel;
         } else {
-          _message2 = BaseLanguage.pregnancyChanceMsg4;
+          _message2 = WidgetBaseLanguage.pregnancyChanceMsg4;
         }
       } else {
         // Never found but still show current date time
@@ -494,19 +494,19 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   /// Check Default Validation
   _checkValidation() {
     if (widget.size < 200) {
-      throw "${BaseLanguage.errorInvalidSize} $websiteUrl";
+      throw "${WidgetBaseLanguage.errorInvalidSize} $websiteUrl";
     }
     if (widget.totalCycleDays < 10) {
-      throw "${BaseLanguage.errorInvalidCount} $websiteUrl";
+      throw "${WidgetBaseLanguage.errorInvalidCount} $websiteUrl";
     }
     if (widget.menstruationDayCount < 0) {
-      throw "${BaseLanguage.errorInvalidMenstruationDayCount} $websiteUrl";
+      throw "${WidgetBaseLanguage.errorInvalidMenstruationDayCount} $websiteUrl";
     }
     if (widget.follicularDayCount < 0) {
-      throw "${BaseLanguage.errorInvalidFollicularDayCount} $websiteUrl";
+      throw "${WidgetBaseLanguage.errorInvalidFollicularDayCount} $websiteUrl";
     }
     if (widget.ovulationDayCount < 0) {
-      throw "${BaseLanguage.errorInvalidOvulationDayCount} $websiteUrl";
+      throw "${WidgetBaseLanguage.errorInvalidOvulationDayCount} $websiteUrl";
     }
   }
 

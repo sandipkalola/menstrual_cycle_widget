@@ -1,21 +1,32 @@
 import 'package:intl/intl.dart';
 
-import '../../languages/base_language.dart';
+import '../../widget_languages/language_functions.dart';
 
 class CalenderDateUtils {
   CalenderDateUtils._();
 
-  static final DateFormat _monthFormat = DateFormat('MMMM yyyy');
+  static final DateFormat displayMonthYear =
+      DateFormat('MMMM yyyy', getLanguageCode());
+
+  static final DateFormat _monthFormat =
+      DateFormat('MMMM yyyy', getLanguageCode());
   static final DateFormat _dayFormat = DateFormat('dd');
-  static final DateFormat _dayMonth = DateFormat('dd MMMM');
+  static final DateFormat _dayMonth = DateFormat('dd MMMM', getLanguageCode());
   static final DateFormat _firstDayFormat = DateFormat('MMM dd');
   static final DateFormat _dateWithYearFormat = DateFormat('dd-MM-yyyy');
   static final DateFormat _graphDateFormat = DateFormat('dd MMM');
   static final DateFormat _fullDayFormat = DateFormat('EEE MMM dd, yyyy');
-  static final DateFormat _fullDayName = DateFormat('EEEE');
-  static final DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
-  static final DateFormat _yearFormat = DateFormat('yyyy');
+  static final DateFormat _fullDayName = DateFormat('EEEE', getLanguageCode());
+  static final DateFormat dateFormat = DateFormat('yyyy-MM-dd');
+  static final DateFormat _yearFormat = DateFormat('yyyy', getLanguageCode());
   static final DateFormat _fullDate = DateFormat('yyyy_MM_dd_hh_mm');
+  static final DateFormat fullFormat =
+      DateFormat('EEEE MMMM dd, yyyy', getLanguageCode());
+  static final DateFormat fullFormatWithTime =
+      DateFormat('yyyy-MM-dd hh:mm:ss');
+  static final DateFormat dateFormatYMD = DateFormat('yyyy-MM-dd');
+  static final DateFormat dateFormatDMY = DateFormat('dd-MM-yyyy');
+  static final DateFormat dateFormatMDY = DateFormat('MM-dd-yyyy');
 
   static String fullDateTime(DateTime d) => _fullDate.format(d);
 
@@ -37,20 +48,7 @@ class CalenderDateUtils {
 
   static String fullDayFormat(DateTime d) => _fullDayFormat.format(d);
 
-  static String dateDayFormat(DateTime d) => _dateFormat.format(d);
-
-  /// May 2024
-  static var monthYear = DateFormat('MMM yyyy');
-
-  static List<String> weekTitles = [
-    BaseLanguage.weekTitlesSun,
-    BaseLanguage.weekTitlesMon,
-    BaseLanguage.weekTitlesTue,
-    BaseLanguage.weekTitlesWed,
-    BaseLanguage.weekTitlesThu,
-    BaseLanguage.weekTitlesFri,
-    BaseLanguage.weekTitlesSat,
-  ];
+  static String dateDayFormat(DateTime d) => dateFormat.format(d);
 
   /// The list of days in a given month
   static List<DateTime> daysInMonth(DateTime month) {
@@ -186,6 +184,6 @@ class CalenderDateUtils {
   }
 
   static DateTime getDay(DateTime date) {
-    return DateTime.parse(DateFormat('yyyy-MM-dd').format(date));
+    return DateTime.parse(dateFormat.format(date));
   }
 }

@@ -1,33 +1,33 @@
-import 'package:intl/intl.dart';
-
-import '../languages/base_language.dart';
 import '../menstrual_cycle_widget.dart';
+import '../widget_languages/widget_base_language.dart';
 
 // Last Id is: 21131
 /// Default symptoms data
 List<SymptomsCategory> defaultSymptomsData = [
   SymptomsCategory(
     categoryId: 5,
-    categoryName: BaseLanguage.categoryPeriod,
+    categoryName: WidgetBaseLanguage.categoryPeriod,
     categoryColor: "FF0000",
     symptomsData: [
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameLight, symptomId: 210342),
+          symptomName: WidgetBaseLanguage.symptomsNameLight, symptomId: 210342),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMedium, symptomId: 21043),
+          symptomName: WidgetBaseLanguage.symptomsNameMedium, symptomId: 21043),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameHeavy,
+          symptomName: WidgetBaseLanguage.symptomsNameHeavy,
           symptomId: 21044,
           phaseIds: [1]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSuperHeavy, symptomId: 21045),
+          symptomName: WidgetBaseLanguage.symptomsNameSuperHeavy,
+          symptomId: 21045),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameDontKnow, symptomId: 21046),
+          symptomName: WidgetBaseLanguage.symptomsNameDontKnow,
+          symptomId: 21046),
     ],
   ),
   SymptomsCategory(
     categoryId: 1,
-    categoryName: BaseLanguage.categoryFeelings,
+    categoryName: WidgetBaseLanguage.categoryFeelings,
     categoryColor: "FFA500",
     symptomsData: [
       /*SymptomsData(symptomName: "Sensitive", symptomId: 21001),
@@ -47,56 +47,60 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Anxiety", symptomId: 21012, phaseIds: [4]),
       SymptomsData(symptomName: "Excited", symptomId: 21013, phaseIds: [2]),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSensitive, symptomId: 21001),
+          symptomName: WidgetBaseLanguage.symptomsNameSensitive,
+          symptomId: 21001),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNotInControl, symptomId: 21002),
+          symptomName: WidgetBaseLanguage.symptomsNameNotInControl,
+          symptomId: 21002),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameHappy,
+          symptomName: WidgetBaseLanguage.symptomsNameHappy,
           symptomId: 21003,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFrisky,
+          symptomName: WidgetBaseLanguage.symptomsNameFrisky,
           symptomId: 21004,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMoodSwings,
+          symptomName: WidgetBaseLanguage.symptomsNameMoodSwings,
           symptomId: 21005,
           phaseIds: [1, 4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameIrritated,
+          symptomName: WidgetBaseLanguage.symptomsNameIrritated,
           symptomId: 21006,
           phaseIds: [1, 4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSad,
+          symptomName: WidgetBaseLanguage.symptomsNameSad,
           symptomId: 21007,
           phaseIds: [1]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameTension,
+          symptomName: WidgetBaseLanguage.symptomsNameTension,
           symptomId: 21008,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAngry, symptomId: 21009),
+          symptomName: WidgetBaseLanguage.symptomsNameAngry, symptomId: 21009),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameConfident,
+          symptomName: WidgetBaseLanguage.symptomsNameConfident,
           symptomId: 21131,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameInsecure, symptomId: 21010),
+          symptomName: WidgetBaseLanguage.symptomsNameInsecure,
+          symptomId: 21010),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameGrateful, symptomId: 21011),
+          symptomName: WidgetBaseLanguage.symptomsNameGrateful,
+          symptomId: 21011),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAnxiety,
+          symptomName: WidgetBaseLanguage.symptomsNameAnxiety,
           symptomId: 21012,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameExcited,
+          symptomName: WidgetBaseLanguage.symptomsNameExcited,
           symptomId: 21013,
           phaseIds: [2]),
     ],
   ),
   SymptomsCategory(
     categoryId: 2,
-    categoryName: BaseLanguage.categoryMind,
+    categoryName: WidgetBaseLanguage.categoryMind,
     categoryColor: "8B0000",
     symptomsData: [
       /*SymptomsData(symptomName: "Calm", symptomId: 21014, phaseIds: [2]),
@@ -111,44 +115,49 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Productive", symptomId: 21023, phaseIds: [2]),
       SymptomsData(symptomName: "Unproductive", symptomId: 21024),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCalm,
+          symptomName: WidgetBaseLanguage.symptomsNameCalm,
           symptomId: 21014,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameDistracted, symptomId: 21015),
+          symptomName: WidgetBaseLanguage.symptomsNameDistracted,
+          symptomId: 21015),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFocused,
+          symptomName: WidgetBaseLanguage.symptomsNameFocused,
           symptomId: 21016,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameDepressed, symptomId: 21017),
+          symptomName: WidgetBaseLanguage.symptomsNameDepressed,
+          symptomId: 21017),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameConfused, symptomId: 21018),
+          symptomName: WidgetBaseLanguage.symptomsNameConfused,
+          symptomId: 21018),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameStressed, symptomId: 21019),
+          symptomName: WidgetBaseLanguage.symptomsNameStressed,
+          symptomId: 21019),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMotivated,
+          symptomName: WidgetBaseLanguage.symptomsNameMotivated,
           symptomId: 21020,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameUnmotivated,
+          symptomName: WidgetBaseLanguage.symptomsNameUnmotivated,
           symptomId: 21021,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCreative,
+          symptomName: WidgetBaseLanguage.symptomsNameCreative,
           symptomId: 21022,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameProductive,
+          symptomName: WidgetBaseLanguage.symptomsNameProductive,
           symptomId: 21023,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameUnproductive, symptomId: 21024),
+          symptomName: WidgetBaseLanguage.symptomsNameUnproductive,
+          symptomId: 21024),
     ],
   ),
   SymptomsCategory(
     categoryId: 3,
-    categoryName: BaseLanguage.categorySexualLife,
+    categoryName: WidgetBaseLanguage.categorySexualLife,
     categoryColor: "A52A2A",
     symptomsData: [
       /*SymptomsData(symptomName: "No sex", symptomId: 21025),
@@ -166,63 +175,71 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Orgasm", symptomId: 21035),
       SymptomsData(symptomName: "No orgasm", symptomId: 21036),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNoSex, symptomId: 21025),
+          symptomName: WidgetBaseLanguage.symptomsNameNoSex, symptomId: 21025),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameProtectedSex,
+          symptomName: WidgetBaseLanguage.symptomsNameProtectedSex,
           symptomId: 21026,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameUnprotectedSex,
+          symptomName: WidgetBaseLanguage.symptomsNameUnprotectedSex,
           symptomId: 21027,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameOralSex, symptomId: 21028),
+          symptomName: WidgetBaseLanguage.symptomsNameOralSex,
+          symptomId: 21028),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAnalSex, symptomId: 21029),
+          symptomName: WidgetBaseLanguage.symptomsNameAnalSex,
+          symptomId: 21029),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMasturbation, symptomId: 21030),
+          symptomName: WidgetBaseLanguage.symptomsNameMasturbation,
+          symptomId: 21030),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameHighSexDrive, symptomId: 21031),
+          symptomName: WidgetBaseLanguage.symptomsNameHighSexDrive,
+          symptomId: 21031),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNeutralSexDrive,
+          symptomName: WidgetBaseLanguage.symptomsNameNeutralSexDrive,
           symptomId: 21032),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameLowSexDrive, symptomId: 21033),
+          symptomName: WidgetBaseLanguage.symptomsNameLowSexDrive,
+          symptomId: 21033),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSexToys, symptomId: 21034),
+          symptomName: WidgetBaseLanguage.symptomsNameSexToys,
+          symptomId: 21034),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameOrgasm, symptomId: 21035),
+          symptomName: WidgetBaseLanguage.symptomsNameOrgasm, symptomId: 21035),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNoOrgasm, symptomId: 21036),
+          symptomName: WidgetBaseLanguage.symptomsNameNoOrgasm,
+          symptomId: 21036),
     ],
   ),
   SymptomsCategory(
     categoryId: 4,
-    categoryName: BaseLanguage.categoryEnergy,
+    categoryName: WidgetBaseLanguage.categoryEnergy,
     categoryColor: "0000FF",
     symptomsData: [
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameExhausted,
+          symptomName: WidgetBaseLanguage.symptomsNameExhausted,
           symptomId: 21037,
           phaseIds: [1]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameTired,
+          symptomName: WidgetBaseLanguage.symptomsNameTired,
           symptomId: 21038,
           phaseIds: [1]),
-      SymptomsData(symptomName: BaseLanguage.symptomsNameOK, symptomId: 21039),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameEnergetic,
+          symptomName: WidgetBaseLanguage.symptomsNameOK, symptomId: 21039),
+      SymptomsData(
+          symptomName: WidgetBaseLanguage.symptomsNameEnergetic,
           symptomId: 21040,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFullyEnergized,
+          symptomName: WidgetBaseLanguage.symptomsNameFullyEnergized,
           symptomId: 21041,
           phaseIds: [2, 3]),
     ],
   ),
   SymptomsCategory(
     categoryId: 6,
-    categoryName: BaseLanguage.categorySymptoms,
+    categoryName: WidgetBaseLanguage.categorySymptoms,
     categoryColor: "808080",
     symptomsData: [
       /*SymptomsData(symptomName: "Everything well", symptomId: 21047),
@@ -236,36 +253,37 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Fatigue", symptomId: 21054, phaseIds: [4]),*/
 
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameEverythingWell,
+          symptomName: WidgetBaseLanguage.symptomsNameEverythingWell,
           symptomId: 21047),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCramps,
+          symptomName: WidgetBaseLanguage.symptomsNameCramps,
           symptomId: 21048,
           phaseIds: [1]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameTenderBreasts,
+          symptomName: WidgetBaseLanguage.symptomsNameTenderBreasts,
           symptomId: 21049,
           phaseIds: [1, 4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameHeadache, symptomId: 21050),
+          symptomName: WidgetBaseLanguage.symptomsNameHeadache,
+          symptomId: 21050),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAcne, symptomId: 21051),
+          symptomName: WidgetBaseLanguage.symptomsNameAcne, symptomId: 21051),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameBackache,
+          symptomName: WidgetBaseLanguage.symptomsNameBackache,
           symptomId: 21052,
           phaseIds: [1, 4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAbdominalPain,
+          symptomName: WidgetBaseLanguage.symptomsNameAbdominalPain,
           symptomId: 21053),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFatigue,
+          symptomName: WidgetBaseLanguage.symptomsNameFatigue,
           symptomId: 21054,
           phaseIds: [4]),
     ],
   ),
   SymptomsCategory(
     categoryId: 7,
-    categoryName: BaseLanguage.categoryPain,
+    categoryName: WidgetBaseLanguage.categoryPain,
     categoryColor: "800080",
     symptomsData: [
       /*SymptomsData(symptomName: "Pain free", symptomId: 21055),
@@ -279,35 +297,40 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Leg", symptomId: 21063),
       SymptomsData(symptomName: "Joint", symptomId: 21064),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNamePainFree, symptomId: 21055),
+          symptomName: WidgetBaseLanguage.symptomsNamePainFree,
+          symptomId: 21055),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNamePeriodCramps, symptomId: 21056),
+          symptomName: WidgetBaseLanguage.symptomsNamePeriodCramps,
+          symptomId: 21056),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameOvulation, symptomId: 21057),
+          symptomName: WidgetBaseLanguage.symptomsNameOvulation,
+          symptomId: 21057),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameBreastTenderness,
+          symptomName: WidgetBaseLanguage.symptomsNameBreastTenderness,
           symptomId: 21058),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameHeadache,
+          symptomName: WidgetBaseLanguage.symptomsNameHeadache,
           symptomId: 21059,
           phaseIds: [1]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMigraine,
+          symptomName: WidgetBaseLanguage.symptomsNameMigraine,
           symptomId: 21060,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMigraineWithAura,
+          symptomName: WidgetBaseLanguage.symptomsNameMigraineWithAura,
           symptomId: 21061),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameLowerBack, symptomId: 21062),
-      SymptomsData(symptomName: BaseLanguage.symptomsNameLeg, symptomId: 21063),
+          symptomName: WidgetBaseLanguage.symptomsNameLowerBack,
+          symptomId: 21062),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameJoint, symptomId: 21064),
+          symptomName: WidgetBaseLanguage.symptomsNameLeg, symptomId: 21063),
+      SymptomsData(
+          symptomName: WidgetBaseLanguage.symptomsNameJoint, symptomId: 21064),
     ],
   ),
   SymptomsCategory(
     categoryId: 8,
-    categoryName: BaseLanguage.categoryVaginalDischarge,
+    categoryName: WidgetBaseLanguage.categoryVaginalDischarge,
     categoryColor: "0000FF",
     isVisibleCategory: 0,
     symptomsData: [
@@ -323,30 +346,34 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Gray", symptomId: 21072),*/
 
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNoDischarge, symptomId: 21065),
+          symptomName: WidgetBaseLanguage.symptomsNameNoDischarge,
+          symptomId: 21065),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameLightDischarge,
+          symptomName: WidgetBaseLanguage.symptomsNameLightDischarge,
           symptomId: 21130,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCreamy, symptomId: 21066),
+          symptomName: WidgetBaseLanguage.symptomsNameCreamy, symptomId: 21066),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameWatery, symptomId: 21067),
+          symptomName: WidgetBaseLanguage.symptomsNameWatery, symptomId: 21067),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameUnusual, symptomId: 21068),
+          symptomName: WidgetBaseLanguage.symptomsNameUnusual,
+          symptomId: 21068),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSpotting, symptomId: 21069),
+          symptomName: WidgetBaseLanguage.symptomsNameSpotting,
+          symptomId: 21069),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSticky, symptomId: 21070),
+          symptomName: WidgetBaseLanguage.symptomsNameSticky, symptomId: 21070),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameEggWhite, symptomId: 21071),
+          symptomName: WidgetBaseLanguage.symptomsNameEggWhite,
+          symptomId: 21071),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameGray, symptomId: 21072),
+          symptomName: WidgetBaseLanguage.symptomsNameGray, symptomId: 21072),
     ],
   ),
   SymptomsCategory(
     categoryId: 9,
-    categoryName: BaseLanguage.categoryDigestion,
+    categoryName: WidgetBaseLanguage.categoryDigestion,
     categoryColor: "FF0000",
     symptomsData: [
       /*SymptomsData(symptomName: "OK", symptomId: 21073),
@@ -355,30 +382,32 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Heartburn", symptomId: 21076, phaseIds: [4]),
       SymptomsData(symptomName: "Nauseous", symptomId: 21077, phaseIds: [1]),
       SymptomsData(symptomName: "Vomiting", symptomId: 21078),*/
-      SymptomsData(symptomName: BaseLanguage.symptomsNameOK, symptomId: 21073),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameGassy,
+          symptomName: WidgetBaseLanguage.symptomsNameOK, symptomId: 21073),
+      SymptomsData(
+          symptomName: WidgetBaseLanguage.symptomsNameGassy,
           symptomId: 21074,
           phaseIds: [1, 4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameBloating,
+          symptomName: WidgetBaseLanguage.symptomsNameBloating,
           symptomId: 21075,
           phaseIds: [1, 4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameHeartburn,
+          symptomName: WidgetBaseLanguage.symptomsNameHeartburn,
           symptomId: 21076,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNauseous,
+          symptomName: WidgetBaseLanguage.symptomsNameNauseous,
           symptomId: 21077,
           phaseIds: [1]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameVomiting, symptomId: 21078),
+          symptomName: WidgetBaseLanguage.symptomsNameVomiting,
+          symptomId: 21078),
     ],
   ),
   SymptomsCategory(
     categoryId: 10,
-    categoryName: BaseLanguage.categoryActivity,
+    categoryName: WidgetBaseLanguage.categoryActivity,
     categoryColor: "8B0000",
     symptomsData: [
       /*SymptomsData(symptomName: "Yoga", symptomId: 21079, phaseIds: [2]),
@@ -394,44 +423,49 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Rest day", symptomId: 21088),
       SymptomsData(symptomName: "Meditation", symptomId: 21089),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameYoga,
+          symptomName: WidgetBaseLanguage.symptomsNameYoga,
           symptomId: 21079,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameRunning,
+          symptomName: WidgetBaseLanguage.symptomsNameRunning,
           symptomId: 21080,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameGym,
+          symptomName: WidgetBaseLanguage.symptomsNameGym,
           symptomId: 21081,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSwimming,
+          symptomName: WidgetBaseLanguage.symptomsNameSwimming,
           symptomId: 21082,
           phaseIds: [3]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCycling, symptomId: 21083),
+          symptomName: WidgetBaseLanguage.symptomsNameCycling,
+          symptomId: 21083),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameWalking,
+          symptomName: WidgetBaseLanguage.symptomsNameWalking,
           symptomId: 21084,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNamePilates, symptomId: 21085),
+          symptomName: WidgetBaseLanguage.symptomsNamePilates,
+          symptomId: 21085),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameStrengthTraining,
+          symptomName: WidgetBaseLanguage.symptomsNameStrengthTraining,
           symptomId: 21086,
           phaseIds: [2]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameStretching, symptomId: 21087),
+          symptomName: WidgetBaseLanguage.symptomsNameStretching,
+          symptomId: 21087),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameRestDay, symptomId: 21088),
+          symptomName: WidgetBaseLanguage.symptomsNameRestDay,
+          symptomId: 21088),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMeditation, symptomId: 21089),
+          symptomName: WidgetBaseLanguage.symptomsNameMeditation,
+          symptomId: 21089),
     ],
   ),
   SymptomsCategory(
     categoryId: 11,
-    categoryName: BaseLanguage.categoryCravings,
+    categoryName: WidgetBaseLanguage.categoryCravings,
     categoryColor: "A52A2A",
     symptomsData: [
       /*SymptomsData(symptomName: "Sweet", symptomId: 21090, phaseIds: [4]),
@@ -440,40 +474,43 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Spicy", symptomId: 21093),
       SymptomsData(symptomName: "Carbs", symptomId: 21094),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSweet,
+          symptomName: WidgetBaseLanguage.symptomsNameSweet,
           symptomId: 21090,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSalty,
+          symptomName: WidgetBaseLanguage.symptomsNameSalty,
           symptomId: 21091,
           phaseIds: [4]),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameGreasy, symptomId: 21092),
+          symptomName: WidgetBaseLanguage.symptomsNameGreasy, symptomId: 21092),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSpicy, symptomId: 21093),
+          symptomName: WidgetBaseLanguage.symptomsNameSpicy, symptomId: 21093),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCarbs, symptomId: 21094),
+          symptomName: WidgetBaseLanguage.symptomsNameCarbs, symptomId: 21094),
     ],
   ),
   SymptomsCategory(
     categoryId: 12,
-    categoryName: BaseLanguage.categoryTests,
+    categoryName: WidgetBaseLanguage.categoryTests,
     categoryColor: "0000FF",
     symptomsData: [
       /* SymptomsData(symptomName: "Don't take test", symptomId: 21095),
       SymptomsData(symptomName: "Negative", symptomId: 21096),
       SymptomsData(symptomName: "Positive", symptomId: 21097),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameDontTakeTest, symptomId: 21095),
+          symptomName: WidgetBaseLanguage.symptomsNameDontTakeTest,
+          symptomId: 21095),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameNegative, symptomId: 21096),
+          symptomName: WidgetBaseLanguage.symptomsNameNegative,
+          symptomId: 21096),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNamePositive, symptomId: 21097),
+          symptomName: WidgetBaseLanguage.symptomsNamePositive,
+          symptomId: 21097),
     ],
   ),
   SymptomsCategory(
     categoryId: 13,
-    categoryName: BaseLanguage.categoryAilments,
+    categoryName: WidgetBaseLanguage.categoryAilments,
     categoryColor: "FFA500",
     symptomsData: [
       /*SymptomsData(symptomName: "Cold or flu", symptomId: 21098),
@@ -482,18 +519,22 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "UTI", symptomId: 21101),
       SymptomsData(symptomName: "STI", symptomId: 21102),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameColdOrFlu, symptomId: 21098),
+          symptomName: WidgetBaseLanguage.symptomsNameColdOrFlu,
+          symptomId: 21098),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAllergy, symptomId: 21099),
+          symptomName: WidgetBaseLanguage.symptomsNameAllergy,
+          symptomId: 21099),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFever, symptomId: 21100),
-      SymptomsData(symptomName: BaseLanguage.symptomsNameUTI, symptomId: 21101),
-      SymptomsData(symptomName: BaseLanguage.symptomsNameSTI, symptomId: 21102),
+          symptomName: WidgetBaseLanguage.symptomsNameFever, symptomId: 21100),
+      SymptomsData(
+          symptomName: WidgetBaseLanguage.symptomsNameUTI, symptomId: 21101),
+      SymptomsData(
+          symptomName: WidgetBaseLanguage.symptomsNameSTI, symptomId: 21102),
     ],
   ),
   SymptomsCategory(
     categoryId: 14,
-    categoryName: BaseLanguage.categoryAppointments,
+    categoryName: WidgetBaseLanguage.categoryAppointments,
     categoryColor: "800080",
     symptomsData: [
       /*SymptomsData(symptomName: "GYN", symptomId: 21103),
@@ -501,21 +542,25 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "STI check-up", symptomId: 21105),
       SymptomsData(symptomName: "General check-up", symptomId: 21106),
       SymptomsData(symptomName: "Vaccination", symptomId: 21107),*/
-      SymptomsData(symptomName: BaseLanguage.symptomsNameGYN, symptomId: 21103),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNamePAPSmear, symptomId: 21104),
+          symptomName: WidgetBaseLanguage.symptomsNameGYN, symptomId: 21103),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameSTICheckUp, symptomId: 21105),
+          symptomName: WidgetBaseLanguage.symptomsNamePAPSmear,
+          symptomId: 21104),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameGeneralCheckUp,
+          symptomName: WidgetBaseLanguage.symptomsNameSTICheckUp,
+          symptomId: 21105),
+      SymptomsData(
+          symptomName: WidgetBaseLanguage.symptomsNameGeneralCheckUp,
           symptomId: 21106),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameVaccination, symptomId: 21107),
+          symptomName: WidgetBaseLanguage.symptomsNameVaccination,
+          symptomId: 21107),
     ],
   ),
   SymptomsCategory(
     categoryId: 15,
-    categoryName: BaseLanguage.categoryBirthControlPill,
+    categoryName: WidgetBaseLanguage.categoryBirthControlPill,
     categoryColor: "0000FF",
     symptomsData: [
       /*SymptomsData(symptomName: "Taken", symptomId: 21108),
@@ -524,38 +569,41 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Double dose", symptomId: 21111),
       SymptomsData(symptomName: "Vaccination", symptomId: 21112),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameTaken, symptomId: 21108),
+          symptomName: WidgetBaseLanguage.symptomsNameTaken, symptomId: 21108),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMissed, symptomId: 21109),
+          symptomName: WidgetBaseLanguage.symptomsNameMissed, symptomId: 21109),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameLate, symptomId: 21110),
+          symptomName: WidgetBaseLanguage.symptomsNameLate, symptomId: 21110),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameDoubleDose, symptomId: 21111),
+          symptomName: WidgetBaseLanguage.symptomsNameDoubleDose,
+          symptomId: 21111),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameVaccinationDuplicate,
+          symptomName: WidgetBaseLanguage.symptomsNameVaccinationDuplicate,
           symptomId: 21112),
     ],
   ),
   SymptomsCategory(
     categoryId: 16,
-    categoryName: BaseLanguage.categoryIUD,
+    categoryName: WidgetBaseLanguage.categoryIUD,
     categoryColor: "FF0000",
     symptomsData: [
       /*SymptomsData(symptomName: "Thread checked", symptomId: 21113),
       SymptomsData(symptomName: "Inserted", symptomId: 21114),
       SymptomsData(symptomName: "Removed", symptomId: 21115),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameThreadChecked,
+          symptomName: WidgetBaseLanguage.symptomsNameThreadChecked,
           symptomId: 21113),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameInserted, symptomId: 21114),
+          symptomName: WidgetBaseLanguage.symptomsNameInserted,
+          symptomId: 21114),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameRemoved, symptomId: 21115),
+          symptomName: WidgetBaseLanguage.symptomsNameRemoved,
+          symptomId: 21115),
     ],
   ),
   SymptomsCategory(
     categoryId: 17,
-    categoryName: BaseLanguage.categorySupplements,
+    categoryName: WidgetBaseLanguage.categorySupplements,
     categoryColor: "8B0000",
     symptomsData: [
       /*SymptomsData(symptomName: "Multivitamin", symptomId: 21116),
@@ -566,54 +614,61 @@ List<SymptomsCategory> defaultSymptomsData = [
       SymptomsData(symptomName: "Folic acid", symptomId: 21121),
       SymptomsData(symptomName: "Prenatal vitamins", symptomId: 21122),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMultivitamin, symptomId: 21116),
+          symptomName: WidgetBaseLanguage.symptomsNameMultivitamin,
+          symptomId: 21116),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameMagnesium, symptomId: 21117),
+          symptomName: WidgetBaseLanguage.symptomsNameMagnesium,
+          symptomId: 21117),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameIron, symptomId: 21118),
+          symptomName: WidgetBaseLanguage.symptomsNameIron, symptomId: 21118),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameVitaminD, symptomId: 21119),
+          symptomName: WidgetBaseLanguage.symptomsNameVitaminD,
+          symptomId: 21119),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameCalcium, symptomId: 21120),
+          symptomName: WidgetBaseLanguage.symptomsNameCalcium,
+          symptomId: 21120),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFolicAcid, symptomId: 21121),
+          symptomName: WidgetBaseLanguage.symptomsNameFolicAcid,
+          symptomId: 21121),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNamePrenatalVitamins,
+          symptomName: WidgetBaseLanguage.symptomsNamePrenatalVitamins,
           symptomId: 21122),
     ],
   ),
   SymptomsCategory(
     categoryId: 18,
-    categoryName: BaseLanguage.categoryUrine,
+    categoryName: WidgetBaseLanguage.categoryUrine,
     categoryColor: "0000FF",
     symptomsData: [
       /* SymptomsData(symptomName: "Frequent urination", symptomId: 21123),
       SymptomsData(symptomName: "Burning sensation", symptomId: 21124),
       SymptomsData(symptomName: "Leaks or dribbles", symptomId: 21125),*/
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameFrequentUrination,
+          symptomName: WidgetBaseLanguage.symptomsNameFrequentUrination,
           symptomId: 21123),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameBurningSensation,
+          symptomName: WidgetBaseLanguage.symptomsNameBurningSensation,
           symptomId: 21124),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameLeaksOrDribbles,
+          symptomName: WidgetBaseLanguage.symptomsNameLeaksOrDribbles,
           symptomId: 21125),
     ],
   ),
   SymptomsCategory(
     categoryId: 19,
-    categoryName: BaseLanguage.categoryOther,
+    categoryName: WidgetBaseLanguage.categoryOther,
     categoryColor: "c336a7",
     symptomsData: [
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameTravel, symptomId: 21126),
+          symptomName: WidgetBaseLanguage.symptomsNameTravel, symptomId: 21126),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameStress, symptomId: 21127),
+          symptomName: WidgetBaseLanguage.symptomsNameStress, symptomId: 21127),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameAlcohol, symptomId: 21128),
+          symptomName: WidgetBaseLanguage.symptomsNameAlcohol,
+          symptomId: 21128),
       SymptomsData(
-          symptomName: BaseLanguage.symptomsNameJournaling, symptomId: 21129),
+          symptomName: WidgetBaseLanguage.symptomsNameJournaling,
+          symptomId: 21129),
       /*SymptomsData(symptomName: "Travel", symptomId: 21126),
       SymptomsData(symptomName: "Stress", symptomId: 21127),
       SymptomsData(symptomName: "Alcohol", symptomId: 21128),
@@ -623,7 +678,15 @@ List<SymptomsCategory> defaultSymptomsData = [
 ];
 
 /// 2024-06-20
-var defaultDateFormat = DateFormat('yyyy-MM-dd');
+var defaultDateFormat = getDefaultDateFormat();
 
 /// 2024-06-20 12:20:11
-var currentDateFormat = DateFormat('yyyy-MM-dd hh:mm:ss');
+var currentDateFormat = getCurrentDateFormat();
+
+getDefaultDateFormat() {
+  return CalenderDateUtils.dateFormat;
+}
+
+getCurrentDateFormat() {
+  return CalenderDateUtils.fullFormatWithTime;
+}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:menstrual_cycle_widget/ui/calender_view/scroll_to_index.dart';
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../text_style/custom_text_style.dart';
 import 'calender_view.dart';
 
@@ -44,7 +44,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   bool isEditMode = false;
   List<DateTime> selectedPeriodsDate = [];
   bool isChangedData = false;
-  final List<String> weekTitles = CalenderDateUtils.weekTitles;
+  List<String> weekTitles = [];
   List<String> futurePeriodDays = [];
   List<String> futureOvulationDays = [];
   List<String>? pastAllPeriodsDays = [];
@@ -61,6 +61,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
   @override
   void initState() {
     super.initState();
+    weekTitles = getWeekTitle();
     controller = AutoScrollController(
         viewportBoundaryGetter: () =>
             Rect.fromLTRB(0, 0, 0, MediaQuery.of(context).padding.bottom),
@@ -68,6 +69,18 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     init();
     _selectedDate = widget.initialDate ?? DateTime.now();
     generateMonthData(true);
+  }
+
+  getWeekTitle() {
+    return [
+      WidgetBaseLanguage.weekTitlesSun,
+      WidgetBaseLanguage.weekTitlesMon,
+      WidgetBaseLanguage.weekTitlesTue,
+      WidgetBaseLanguage.weekTitlesWed,
+      WidgetBaseLanguage.weekTitlesThu,
+      WidgetBaseLanguage.weekTitlesFri,
+      WidgetBaseLanguage.weekTitlesSat,
+    ];
   }
 
   init() async {
@@ -101,17 +114,17 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
     // Past month data
     for (int index = pastMonthCount; index > 0; index--) {
       DateTime currantMonth = getDateTimeFromMonthsAgo(index);
-      monthTitle.add(CalenderDateUtils.monthYear.format(currantMonth));
+      monthTitle.add(CalenderDateUtils.displayMonthYear.format(currantMonth));
       monthWidgets
           .add(monthCalendarBuilder(currantMonth, isConsiderFutureDate));
     }
-    monthTitle.add(CalenderDateUtils.monthYear.format(_selectedDate));
+    monthTitle.add(CalenderDateUtils.displayMonthYear.format(_selectedDate));
     monthWidgets.add(monthCalendarBuilder(_selectedDate, isConsiderFutureDate));
     // Next month data
     if (isConsiderFutureDate) {
       DateTime nextMonth = CalenderDateUtils.nextMonth(_selectedDate);
       for (int index = 0; index < nextMonthCount; index++) {
-        monthTitle.add(CalenderDateUtils.monthYear.format(nextMonth));
+        monthTitle.add(CalenderDateUtils.displayMonthYear.format(nextMonth));
         monthWidgets.add(monthCalendarBuilder(nextMonth, isConsiderFutureDate));
         nextMonth = CalenderDateUtils.nextMonth(nextMonth);
       }
@@ -305,8 +318,10 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                           pastMonthCount = pastMonthCount + 1;
                           DateTime currantMonth =
                               getDateTimeFromMonthsAgo(pastMonthCount);
-                          monthTitle.insert(0,
-                              CalenderDateUtils.monthYear.format(currantMonth));
+                          monthTitle.insert(
+                              0,
+                              CalenderDateUtils.displayMonthYear
+                                  .format(currantMonth));
                           monthWidgets.insert(
                               0, monthCalendarBuilder(currantMonth, false));
 
@@ -327,7 +342,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                 index <
                                     nextMonthCount + nextMonthIncrementCount;
                                 index++) {
-                              monthTitle.add(CalenderDateUtils.monthYear
+                              monthTitle.add(CalenderDateUtils.displayMonthYear
                                   .format(nextMonth));
                               monthWidgets
                                   .add(monthCalendarBuilder(nextMonth, true));
@@ -454,7 +469,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                               width: 150,
                               child: Center(
                                 child: Text(
-                                  BaseLanguage.saveLabel,
+                                  WidgetBaseLanguage.saveLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: MenstrualCycleWidget
@@ -489,7 +504,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                               ),
                               child: Center(
                                 child: Text(
-                                  BaseLanguage.cancelLabel,
+                                  WidgetBaseLanguage.cancelLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontFamily: MenstrualCycleWidget
@@ -535,7 +550,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                           ),
                         ),
                         child: Text(
-                          BaseLanguage.editPeriodDateLabel,
+                          WidgetBaseLanguage.editPeriodDateLabel,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,

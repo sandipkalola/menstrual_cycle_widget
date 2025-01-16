@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'languages/base_language.dart';
 import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
 import 'ui/model/meditation_data.dart';
@@ -14,6 +13,7 @@ import 'ui/model/symptoms_count.dart';
 import 'ui/model/user_symptoms_logs.dart';
 import 'ui/model/water_data.dart';
 import 'ui/model/weight_data.dart';
+import 'widget_languages/languages.dart';
 
 class MenstrualCycleWidget {
   // AES secret key  for data encryption
@@ -40,9 +40,13 @@ class MenstrualCycleWidget {
   // customer id for storing date
   String _customerId = "0"; // Default is Zero
 
+  // current Date format
+  DateFormats _currentDateFormat = DateFormats.dmy;
+
   // Current language
   static Languages currentLanguage = Languages.english;
 
+  // instance of  MenstrualCycleWidget object
   static MenstrualCycleWidget? instance;
 
   // Return previous period day into string
@@ -56,6 +60,8 @@ class MenstrualCycleWidget {
 
   String getIvKey() => _aesIvKey;
 
+  DateFormats getCurrentDateFormat() => _currentDateFormat;
+
   MenstrualCycleWidget._();
 
   /// Initialize MenstrualCycleWidget
@@ -63,8 +69,8 @@ class MenstrualCycleWidget {
     required String? secretKey,
     required String? ivKey,
   }) {
-    assert(secretKey!.isNotEmpty, BaseLanguage.secretKeyLabel);
-    assert(ivKey!.isNotEmpty, BaseLanguage.ivKeyLabel);
+    assert(secretKey!.isNotEmpty, WidgetBaseLanguage.secretKeyLabel);
+    assert(ivKey!.isNotEmpty, WidgetBaseLanguage.ivKeyLabel);
     MenstrualCycleWidget.instance ??= MenstrualCycleWidget._();
     MenstrualCycleWidget.instance!
         .initialize(secretKey: secretKey!, ivKey: ivKey!);
@@ -90,18 +96,23 @@ class MenstrualCycleWidget {
       DateTime? lastPeriodDate,
       bool isClearData = false,
       String fontFamily = "",
+      DateFormats dateFormat = DateFormats.dmy,
       Languages defaultLanguage = Languages.english}) async {
-    assert(_cycleLength > 0, BaseLanguage.totalCycleDaysLabel);
-    assert(_periodDuration > 0, BaseLanguage.totalPeriodDaysLabel);
+    assert(_cycleLength > 0, WidgetBaseLanguage.totalCycleDaysLabel);
+    assert(_periodDuration > 0, WidgetBaseLanguage.totalPeriodDaysLabel);
     // printLogs("userId $userId");
     if (customerId!.isNotEmpty) {
       _customerId = customerId;
     }
 
+    initializeDateFormatting();
+
     if (fontFamily.isNotEmpty) {
       defaultFontFamily = fontFamily;
     }
+
     currentLanguage = defaultLanguage;
+    _currentDateFormat = dateFormat;
     _cycleLength = cycleLength!;
     _periodDuration = periodDuration!;
     final dbHelper = MenstrualCycleDbHelper.instance;
@@ -193,7 +204,7 @@ class MenstrualCycleWidget {
       try {
         logDate = defaultDateFormat.format(symptomsLogDate);
       } catch (e) {
-        throw BaseLanguage.errorInvalidSymptomsLogDate;
+        throw WidgetBaseLanguage.errorInvalidSymptomsLogDate;
       }
     }
 
@@ -250,6 +261,23 @@ class MenstrualCycleWidget {
     }
   }
 
+  /// get symptoms name
+  getSymptomsName(int symptomsId) {
+    List<SymptomsData> listSymptomsData = defaultSymptomsData
+        .expand((category) => category.symptomsData ?? <SymptomsData>[])
+        .where((symptomsData) => symptomsData.symptomId! == symptomsId)
+        .toList();
+
+    //printMenstrualCycleLogs("listSymptomsData size ${listSymptomsData.length}");
+    if (listSymptomsData.isNotEmpty) {
+      /*printMenstrualCycleLogs(
+          "symptomName Name ${listSymptomsData[0].symptomName}");*/
+      return listSymptomsData[0].symptomName;
+    }
+
+    return "";
+  }
+
   /// Return UserSymptomsLogs based on log date
   Future<UserSymptomsLogs> getSymptomsData(DateTime? symptomsLogDate) async {
     String logDate = "";
@@ -257,10 +285,10 @@ class MenstrualCycleWidget {
       try {
         logDate = defaultDateFormat.format(symptomsLogDate);
       } catch (e) {
-        throw BaseLanguage.errorInvalidSymptomsLogDate;
+        throw WidgetBaseLanguage.errorInvalidSymptomsLogDate;
       }
     } else {
-      throw BaseLanguage.errorInvalidSymptomsLogDate;
+      throw WidgetBaseLanguage.errorInvalidSymptomsLogDate;
     }
 
     UserSymptomsLogs userSymptomsLogs = UserSymptomsLogs(symptomData: []);
@@ -311,7 +339,7 @@ class MenstrualCycleWidget {
   /// get Today's symptoms ids
   Future<List<int>> getSymptomsId(DateTime? symptomsLogDate) async {
     if (symptomsLogDate == null) {
-      throw BaseLanguage.errorInvalidSymptomsLogDate;
+      throw WidgetBaseLanguage.errorInvalidSymptomsLogDate;
     }
 
     List<int> symptomsIds = [];
@@ -828,6 +856,19 @@ class MenstrualCycleWidget {
       List<dynamic> jsonData = json.decode(symptomsData.trim());
       userLogsData.symptomsData =
           jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList();
+
+      List<SymptomsData> newSymptomsDataList = [];
+
+      for (int index = 0; index < userLogsData.symptomsData!.length; index++) {
+        SymptomsData symptomsData = userLogsData.symptomsData![index];
+        //   printMenstrualCycleLogs("Oringal Name ${symptomsData.symptomName}");
+        symptomsData.symptomName = getSymptomsName(symptomsData.symptomId!);
+        newSymptomsDataList.add(symptomsData);
+      }
+
+      userLogsData.symptomsData!.clear();
+      userLogsData.symptomsData!.addAll(newSymptomsDataList);
+
       userLogsData.bodyTemperature = Encryption.instance.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]);
       userLogsData.bodyTemperatureUnit = Encryption.instance.decrypt(
@@ -1141,11 +1182,11 @@ class MenstrualCycleWidget {
     double cycleCRS = await getCycleRegularityScore();
     String cycleCRSStatus = "";
     if (cycleCRS > 89) {
-      cycleCRSStatus = BaseLanguage.regularTitle;
+      cycleCRSStatus = WidgetBaseLanguage.regularTitle;
     } else if (cycleCRS > 74) {
-      cycleCRSStatus = BaseLanguage.normalTitle;
+      cycleCRSStatus = WidgetBaseLanguage.normalTitle;
     } else if (cycleCRS > 0) {
-      cycleCRSStatus = BaseLanguage.irregularTitle;
+      cycleCRSStatus = WidgetBaseLanguage.irregularTitle;
     }
     return cycleCRSStatus;
   }
@@ -1180,11 +1221,11 @@ class MenstrualCycleWidget {
     double periodPRS = await getPeriodRegularityScore();
     String periodCRSStatus = "";
     if (periodPRS > 89) {
-      periodCRSStatus = BaseLanguage.regularTitle;
+      periodCRSStatus = WidgetBaseLanguage.regularTitle;
     } else if (periodPRS > 74) {
-      periodCRSStatus = BaseLanguage.normalTitle;
+      periodCRSStatus = WidgetBaseLanguage.normalTitle;
     } else if (periodPRS > 0) {
-      periodCRSStatus = BaseLanguage.irregularTitle;
+      periodCRSStatus = WidgetBaseLanguage.irregularTitle;
     }
     return periodCRSStatus;
   }
@@ -1203,7 +1244,7 @@ class MenstrualCycleWidget {
   Future<String> getNextPredictedPeriodDate() async {
     if (_lastPeriodDate.isNotEmpty) {
       int cycleLength = getCycleLength();
-      DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
+      DateTime nextPeriodDate = CalenderDateUtils.dateFormat
           .parse(getPreviousPeriodDay())
           .add(Duration(days: cycleLength));
 
@@ -1217,9 +1258,9 @@ class MenstrualCycleWidget {
     String nextPeriodDate = await getNextPredictedPeriodDate();
     if (nextPeriodDate.isNotEmpty) {
       DateTime today = DateTime.now();
-      String formattedToday = DateFormat('yyyy-MM-dd').format(today);
+      String formattedToday = CalenderDateUtils.dateFormat.format(today);
       String formattedInput =
-          DateFormat('yyyy-MM-dd').format(DateTime.parse(nextPeriodDate));
+          CalenderDateUtils.dateFormat.format(DateTime.parse(nextPeriodDate));
       if (formattedInput == formattedToday) {
         return true;
       } else {
@@ -1234,9 +1275,10 @@ class MenstrualCycleWidget {
     String nextPeriodDate = await getNextPredictedPeriodDate();
     if (nextPeriodDate.isNotEmpty) {
       DateTime tomorrowDate = DateTime.now().add(Duration(days: 1));
-      String formattedTomorrow = DateFormat('yyyy-MM-dd').format(tomorrowDate);
+      String formattedTomorrow =
+          CalenderDateUtils.dateFormat.format(tomorrowDate);
       String formattedInput =
-          DateFormat('yyyy-MM-dd').format(DateTime.parse(nextPeriodDate));
+          CalenderDateUtils.dateFormat.format(DateTime.parse(nextPeriodDate));
       if (formattedInput == formattedTomorrow) {
         return true;
       } else {
@@ -1251,14 +1293,14 @@ class MenstrualCycleWidget {
     if (_lastPeriodDate.isNotEmpty) {
       int cycleLength = getCycleLength();
       DateTime nextPeriodDate =
-          DateFormat("yyyy-MM-dd").parse(getPreviousPeriodDay());
+          CalenderDateUtils.dateFormat.parse(getPreviousPeriodDay());
 
       DateTime ovulationDate = nextPeriodDate
           .add(Duration(days: cycleLength))
           .add(const Duration(days: -14));
 
       if (DateTime.now().isAfter(ovulationDate)) {
-        DateTime nextPeriodDate = DateFormat("yyyy-MM-dd")
+        DateTime nextPeriodDate = CalenderDateUtils.dateFormat
             .parse(getPreviousPeriodDay())
             .add(Duration(days: cycleLength));
         DateTime ovulationDate = nextPeriodDate

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../languages/base_language.dart';
 import '../../menstrual_cycle_widget.dart';
+import '../../widget_languages/languages.dart';
 import '../calender_view/common_view.dart';
 import '../model/water_data.dart';
 import '../text_style/custom_text_style.dart';
@@ -55,15 +55,15 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
   double maxValue = 0;
   bool isGetData = false;
   bool isLastRecord = false;
-  String waterUnitLbl = BaseLanguage.graphWaterUnitLiter;
+  String waterUnitLbl = WidgetBaseLanguage.graphWaterUnitLiter;
   TooltipBehavior? _tooltipBehavior;
   String fileName = "Water_graph_";
   late ZoomPanBehavior? _zoomPanBehavior;
   late GlobalKey<State> globalKey;
   late TextStyle _xAxisTitleTextStyle, _yAxisTitleTextStyle;
-  String _loadingText = BaseLanguage.loading;
-  String _yAxisTitle = BaseLanguage.graphWaterUnitTitle;
-  String _xAxisTitle = BaseLanguage.graphWaterDrinkDate;
+  String _loadingText = WidgetBaseLanguage.loading;
+  String _yAxisTitle = WidgetBaseLanguage.graphWaterUnitTitle;
+  String _xAxisTitle = WidgetBaseLanguage.graphWaterDrinkDate;
 
   @override
   void initState() {
@@ -128,20 +128,20 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       isLastRecord = true;
     }
 
-    waterUnitLbl = BaseLanguage.graphWaterUnitLiter;
+    waterUnitLbl = WidgetBaseLanguage.graphWaterUnitLiter;
     WaterUnits waterUnits = widget.waterUnits!;
     if (waterUnits == WaterUnits.liters) {
-      waterUnitLbl = BaseLanguage.graphWaterUnitLiter;
+      waterUnitLbl = WidgetBaseLanguage.graphWaterUnitLiter;
     } else if (waterUnits == WaterUnits.cups) {
-      waterUnitLbl = BaseLanguage.graphWaterUnitCup;
+      waterUnitLbl = WidgetBaseLanguage.graphWaterUnitCup;
     } else if (waterUnits == WaterUnits.flOz) {
-      waterUnitLbl = BaseLanguage.graphWaterUnitFlOz;
+      waterUnitLbl = WidgetBaseLanguage.graphWaterUnitFlOz;
     } else if (waterUnits == WaterUnits.imperialGallons) {
-      waterUnitLbl = BaseLanguage.graphWaterUnitImperialGallons;
+      waterUnitLbl = WidgetBaseLanguage.graphWaterUnitImperialGallons;
     } else if (waterUnits == WaterUnits.usGallon) {
-      waterUnitLbl = BaseLanguage.graphWaterUnitUSGallon;
+      waterUnitLbl = WidgetBaseLanguage.graphWaterUnitUSGallon;
     } else if (waterUnits == WaterUnits.ml) {
-      waterUnitLbl = BaseLanguage.graphWaterUnitMl;
+      waterUnitLbl = WidgetBaseLanguage.graphWaterUnitMl;
     }
 
     isGetData = true;
@@ -165,8 +165,9 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child:
-              (isGetData) ? Text(BaseLanguage.noDataFound) : Text(_loadingText),
+          child: (isGetData)
+              ? Text(WidgetBaseLanguage.noDataFound)
+              : Text(_loadingText),
         ),
       );
     }
@@ -191,6 +192,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
       },
       plotAreaBorderWidth: 0,
       primaryXAxis: CategoryAxis(
+        isInversed: isArabicLanguage(),
         majorGridLines: const MajorGridLines(width: 0),
         rangePadding: ChartRangePadding.normal,
         //labelRotation: -70,
@@ -207,6 +209,7 @@ class _MenstrualWaterGraphState extends State<MenstrualCycleWaterGraph> {
         edgeLabelPlacement: EdgeLabelPlacement.shift,
       ),
       primaryYAxis: NumericAxis(
+          opposedPosition: isArabicLanguage(),
           labelFormat: '{value}',
           minimum: 0,
           maximum: maxValue,

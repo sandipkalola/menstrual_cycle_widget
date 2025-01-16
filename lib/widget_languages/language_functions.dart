@@ -1,7 +1,19 @@
-import 'package:menstrual_cycle_widget/utils/enumeration.dart';
-
-import '../menstrual_cycle_widget_base.dart';
+import '../menstrual_cycle_widget.dart';
 import 'languages.dart';
+
+/// return language code
+getLanguageCode() {
+  if (MenstrualCycleWidget.currentLanguage == Languages.english) {
+    return "en";
+  }
+  if (MenstrualCycleWidget.currentLanguage == Languages.hindi) {
+    return "hi";
+  }
+  if (MenstrualCycleWidget.currentLanguage == Languages.arabic) {
+    return "ar";
+  }
+  return "en";
+}
 
 getSaveLogsTitle() {
   final logsByLanguage = {
