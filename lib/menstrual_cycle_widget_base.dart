@@ -88,6 +88,12 @@ class MenstrualCycleWidget {
     MenstrualCycleDbHelper.instance.setCurrentUserDetail();
   }
 
+  /// Update language of menstrual cycle
+  void updateLanguageConfiguration(
+      {Languages defaultLanguage = Languages.english}) async {
+    currentLanguage = defaultLanguage;
+  }
+
   /// Update configuration of MenstrualCycleWidget
   void updateConfiguration(
       {required int? cycleLength,
@@ -98,8 +104,8 @@ class MenstrualCycleWidget {
       String fontFamily = "",
       DateFormats dateFormat = DateFormats.dmy,
       Languages defaultLanguage = Languages.english}) async {
-    assert(_cycleLength > 0, WidgetBaseLanguage.totalCycleDaysLabel);
-    assert(_periodDuration > 0, WidgetBaseLanguage.totalPeriodDaysLabel);
+    assert(cycleLength! > 0, WidgetBaseLanguage.totalCycleDaysLabel);
+    assert(periodDuration! > 0, WidgetBaseLanguage.totalPeriodDaysLabel);
     // printLogs("userId $userId");
     if (customerId!.isNotEmpty) {
       _customerId = customerId;
@@ -1438,8 +1444,6 @@ class MenstrualCycleWidget {
       },
       "predicted_symptoms_pattern_today":
           todaySymptomsData.map((e) => e.toJson()).toList()
-      /*"predicted_symptoms_pattern_today":
-          jsonEncode(todaySymptomsData.map((e) => e.toJson()).toList())*/
     };
     return summaryData;
   }
