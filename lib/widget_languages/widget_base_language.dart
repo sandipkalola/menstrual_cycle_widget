@@ -37,6 +37,8 @@ class WidgetBaseLanguage {
 
   static String get lutealPhaseLabel => getLutealPhaseLabel();
 
+  static String get latePeriodLabel => getLatePeriodLabel();
+
   static String get dayLabel => getDayLabel();
 
   static String get logPeriodLabel => getLogPeriodLabel();

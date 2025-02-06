@@ -281,7 +281,7 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
                 PlotBand(
                   start: 21,
                   end: 36,
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.grey.withAlpha((0.2 * 255).toInt()),
                   text: _normalRangeHintTitle,
                   textStyle: _normalRangeHintTextStyle,
                 ),

@@ -248,22 +248,24 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       phaseId = 5;
     }
 
-    if (DateTime.parse(logDate) == DateTime(now.year, now.month, now.day)) {
-      List<SymptomsData> listSymptomsData = defaultSymptomsData
-          .expand((category) => category.symptomsData ?? <SymptomsData>[])
-          .where((symptomsData) =>
-              symptomsData.phaseIds?.contains(phaseId) ?? false)
-          .toList();
+    if (widget.isShowCustomSymptomsOnly! == false) {
+      if (DateTime.parse(logDate) == DateTime(now.year, now.month, now.day)) {
+        List<SymptomsData> listSymptomsData = defaultSymptomsData
+            .expand((category) => category.symptomsData ?? <SymptomsData>[])
+            .where((symptomsData) =>
+                symptomsData.phaseIds?.contains(phaseId) ?? false)
+            .toList();
 
-      if (listSymptomsData.isNotEmpty) {
-        symptomsList.insert(
-          0,
-          SymptomsCategory(
-            categoryId: 99999,
-            categoryName: WidgetBaseLanguage.feelingTodayTitle,
-            symptomsData: listSymptomsData,
-          ),
-        );
+        if (listSymptomsData.isNotEmpty) {
+          symptomsList.insert(
+            0,
+            SymptomsCategory(
+              categoryId: 99999,
+              categoryName: WidgetBaseLanguage.feelingTodayTitle,
+              symptomsData: listSymptomsData,
+            ),
+          );
+        }
       }
     }
     setState(() {

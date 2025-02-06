@@ -191,6 +191,16 @@ getLutealPhaseLabel() {
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
 
+getLatePeriodLabel() {
+  final logsByLanguage = {
+    Languages.english: enLatePeriod,
+    Languages.hindi: hiLatePeriod,
+    Languages.arabic: arLatePeriod,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
 getDayLabel() {
   final logsByLanguage = {
     Languages.english: enDayLabel,

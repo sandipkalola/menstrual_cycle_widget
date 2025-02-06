@@ -287,3 +287,5 @@ const String enProtectedData = "Your data is protected";
 const String enRegularTitle = "Regular";
 const String enNormalTitle = "Normal";
 const String enIrregularTitle = "Irregular";
+
+const String enLatePeriod = "Late Period";

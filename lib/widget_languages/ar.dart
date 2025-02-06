@@ -278,3 +278,5 @@ const String arProtectedData = "بياناتك محمية";
 const String arRegularTitle = "عادي";
 const String arNormalTitle = "طبيعي";
 const String arIrregularTitle = "غير منتظم";
+
+const String arLatePeriod = "الفترة المتأخرة";

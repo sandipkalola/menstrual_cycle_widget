@@ -1,6 +1,17 @@
-# menstrual_cycle_widget
+# Menstrual Cycle Widget
 
-[![pub package](https://img.shields.io/pub/v/url_launcher.svg)](https://pub.dev/packages/menstrual_cycle_widget)
+<div align="center">
+<a href="https://pub.dev/packages/menstrual_cycle_widget/"><img src="https://img.shields.io/pub/v/url_launcher.svg" /></a>
+<a href="https://opensource.org/licenses/MIT" target="_blank"><img src="https://img.shields.io/badge/License-MIT-yellow.svg"/></a>
+<a href="https://opensource.org/licenses/Apache-2.0" target="_blank"><img src="https://badges.frapsoft.com/os/v1/open-source.svg?v=102"/></a>
+<a href="https://github.com/sandipkalola/menstrual_cycle_widget/issues" target="_blank"><img alt="GitHub: sandipkalola" src="https://img.shields.io/github/issues-raw/sandipkalola/menstrual_cycle_widget?style=flat" /></a>
+<img src="https://img.shields.io/github/last-commit/sandipkalola/menstrual_cycle_widget" />
+<a href="https://github.com/sandipkalola"><img alt="GitHub: sandipkalola" src="https://img.shields.io/github/followers/sandipkalola?label=Follow&style=social" /></a>
+<a href="https://github.com/sandipkalola/menstrual_cycle_widget"><img src="https://img.shields.io/github/stars/sandipkalola/menstrual_cycle_widget?style=social" /></a>
+
+<a href="https://github.com/sponsors/sandipkalola"><img src="https://img.shields.io/github/sponsors/sandipkalola" /></a>
+
+</div>
 
 ### Overview
 
@@ -64,9 +75,9 @@ complete details about this widget.
 
 ### Multi-Language Support
 
-| **English**                                                                                                                           | **Arabic**                                                                                                                            | **Hindi**                                                                                                                              |
-|---------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------|
-| <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/language_en.jpg?raw=true" height = "200px"> | <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/language_ar.jpg?raw=true" height = "200px"> | <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/language_hi.jpg?raw=true"  height = "200px"> |
+| **English**                                                                                                                           | **Arabic**                                                                                                                            | 
+|---------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------|
+| <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/language_en.jpg?raw=true" height = "200px"> | <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/language_ar.jpg?raw=true" height = "200px"> |
 
 ### Menstrual cycle widget theme example
 

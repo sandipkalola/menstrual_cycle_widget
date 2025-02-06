@@ -281,3 +281,5 @@ const String hiProtectedData = "आपका डेटा सुरक्षि�
 const String hiRegularTitle = "नियमित";
 const String hiNormalTitle = "सामान्य";
 const String hiIrregularTitle = "अनियमित";
+
+const String hiLatePeriod = "देर से मासिक धर्म";

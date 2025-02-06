@@ -10,6 +10,7 @@ import 'ui/model/body_temperature_data.dart';
 import 'ui/model/meditation_data.dart';
 import 'ui/model/sleep_data.dart';
 import 'ui/model/symptoms_count.dart';
+import 'ui/model/symptoms_pattern.dart';
 import 'ui/model/user_symptoms_logs.dart';
 import 'ui/model/water_data.dart';
 import 'ui/model/weight_data.dart';
@@ -1346,9 +1347,15 @@ class MenstrualCycleWidget {
       }
 
       if (isForTomorrow) {
-        currentCycleDay = currentCycleDay + 1;
+        // Check if period start from tomorrow then set currentCycleDay is 1
+        if (currentCycleDay >= getCycleLength()) {
+          currentCycleDay = 1;
+        } else {
+          currentCycleDay = currentCycleDay + 1;
+        }
       }
     }
+
     if (currentCycleDay > 0) {
       final dbHelper = MenstrualCycleDbHelper.instance;
       String customerId = getCustomerId();
@@ -1359,6 +1366,7 @@ class MenstrualCycleWidget {
 
       List<SymptomsData> pastSymptomsData = [];
 
+      // printMenstrualCycleLogs("Count: ${queryResponse.length}");
       List.generate(queryResponse.length, (i) {
         String symptomsData = Encryption.instance.decrypt(
             queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
@@ -1376,6 +1384,9 @@ class MenstrualCycleWidget {
               symptom.name!.toLowerCase() == symptomName.toLowerCase());
           SymptomsCount oldSymptomsData = symptomAnalysisData[index];
           oldSymptomsData.occurrences = oldSymptomsData.occurrences! + 1;
+          oldSymptomsData.accuracy =
+              ((oldSymptomsData.occurrences! * 100) / queryResponse.length)
+                  .toStringAsFixed(2);
           symptomAnalysisData.removeAt(index);
           symptomAnalysisData.add(oldSymptomsData);
         } else {
@@ -1384,8 +1395,8 @@ class MenstrualCycleWidget {
         }
       }
     }
-    List<SymptomsCount> newSymptomAnalysisData =
-        []; // only those data which come more then 2  times
+    // only those data which come more then 2  times
+    List<SymptomsCount> newSymptomAnalysisData = [];
     for (var symptomsData in symptomAnalysisData) {
       if (symptomsData.occurrences! > 2) {
         newSymptomAnalysisData.add(symptomsData);
@@ -1394,6 +1405,32 @@ class MenstrualCycleWidget {
     symptomAnalysisData.clear();
     symptomAnalysisData.addAll(newSymptomAnalysisData);
     return symptomAnalysisData;
+  }
+
+  /// get current phase name based on cycle day
+  Future<String> getCurrentPhaseName() async {
+    int currentCycleDay = await getCurrentCycleDay();
+    int cycleLength = getCycleLength();
+    int menstruationDayCount = getPeriodDuration();
+
+    int follicularEnd = menstruationDayCount + defaultFollicularDay;
+    int ovulationEnd = follicularEnd + defaultOvulationDay;
+
+    if (currentCycleDay <= 0) return "";
+    if (currentCycleDay <= menstruationDayCount) {
+      return WidgetBaseLanguage.menstruationLabel;
+    }
+    if (currentCycleDay <= follicularEnd) {
+      return WidgetBaseLanguage.follicularPhaseLabel;
+    }
+    if (currentCycleDay <= ovulationEnd) {
+      return WidgetBaseLanguage.ovulationLabel;
+    }
+    if (currentCycleDay <= cycleLength) {
+      return WidgetBaseLanguage.lutealPhaseLabel;
+    }
+
+    return WidgetBaseLanguage.latePeriodLabel;
   }
 
   /// get matrix summary data btn two date
@@ -1418,7 +1455,10 @@ class MenstrualCycleWidget {
     bool periodStartFromToday = await isPeriodStartFromToday();
     bool periodStartFromTomorrow = await isPeriodStartFromTomorrow();
     List<SymptomsCount> todaySymptomsData = await getSymptomsPattern();
-    String currentPhase = "";
+    List<SymptomsCount> tomorrowSymptomsData =
+        await getSymptomsPattern(isForTomorrow: true);
+
+    String currentPhase = await getCurrentPhaseName();
 
     Map<String, dynamic> summaryData = {
       "key_matrix": {
@@ -1438,14 +1478,182 @@ class MenstrualCycleWidget {
       },
       "prediction_matrix": {
         "next_period_day": nextPeriodDay,
-        "ovulation_day": nextOvulationDate,
+        "next_ovulation_day": nextOvulationDate,
         "is_period_start_from_today": periodStartFromToday,
         "is_period_start_from_tomorrow": periodStartFromTomorrow
       },
       "predicted_symptoms_pattern_today":
-          todaySymptomsData.map((e) => e.toJson()).toList()
+          todaySymptomsData.map((e) => e.toJson()).toList(),
+      "predicted_symptoms_pattern_tomorrow":
+          tomorrowSymptomsData.map((e) => e.toJson()).toList()
     };
     return summaryData;
+  }
+
+  /// get Symptoms Pattern based on cycle
+  Future<List<SymptomsPattern>> getSymptomsPatternBasedOnCycleOld(
+      {int numberOfCycle = 5}) async {
+    List<SymptomsPattern> symptomsPatternList = [];
+    // Fetch logged symptoms data
+    List<UserLogReportData> loggedData = await getSymptomsLogReport(
+        startDate: DateTime.now().add(const Duration(days: -10000)),
+        endDate: DateTime.now());
+
+    if (loggedData.isEmpty) return symptomsPatternList;
+    List<SymptomsData> symptomsDataList = [];
+
+    Set<String> uniqueSymptoms = {}; // Using Set to prevent duplicates
+    // printMenstrualCycleLogs("loggedData count ${loggedData.length}");
+    if (loggedData.isNotEmpty) {
+      // generate logged symptoms list
+
+      for (var report in loggedData) {
+        for (var symptom in report.symptomsData ?? []) {
+          String symptomName = symptom.symptomName?.toLowerCase() ?? '';
+          if (symptomName.isNotEmpty && uniqueSymptoms.add(symptomName)) {
+            symptomsDataList.add(SymptomsData(
+                symptomId: symptom.symptomId,
+                symptomName: symptom.symptomName));
+          }
+        }
+      }
+      // printMenstrualCycleLogs("symptomsDataList count ${symptomsDataList.length}");
+      if (symptomsDataList.isNotEmpty) {
+        // get symptoms data based on cycle
+        List<PeriodsDateRange> periodRange = await getAllPeriodsDetails();
+        for (var symptoms in symptomsDataList) {
+          // printMenstrualCycleLogs("symptomName ${symptoms.symptomName}");
+          SymptomsPattern symptomsPattern = SymptomsPattern(cycleData: []);
+          int symptomsCount = 0;
+          symptomsPattern.symptomsName = symptoms.symptomName;
+          // printMenstrualCycleLogs("symptomsName ${symptoms.symptomName}");
+          for (var periodRangeItem in periodRange) {
+            // generate cycle data
+            CycleData cycleData = CycleData(cycleDates: []);
+            // generate symptoms data
+            List<CycleDates> cycleDatesList = [];
+            for (int i = 0; i <= (periodRangeItem.cycleLength ?? 0); i++) {
+              CycleDates cycleDates = CycleDates();
+              cycleDates.cycleDate = CalenderDateUtils.dateDayFormat(
+                  DateTime.parse(periodRangeItem.cycleStartDate!)
+                      .add(Duration(days: i)));
+              //printMenstrualCycleLogs("cycleDate ${ cycleDates.cycleDate}");
+              cycleDates.isFoundSymptoms = false;
+
+              UserLogReportData? selectedObject = loggedData.firstWhere(
+                (obj) => obj.logDate == DateTime.parse(cycleDates.cycleDate!),
+                orElse: () => UserLogReportData(symptomsData: []),
+              );
+
+              if (selectedObject.symptomsData!.isNotEmpty) {
+                for (SymptomsData symptom
+                    in selectedObject.symptomsData ?? []) {
+                  bool exists = symptom.symptomName!.toLowerCase() ==
+                      symptoms.symptomName!.toLowerCase();
+                  if (exists) {
+                    symptomsCount = symptomsCount + 1;
+                    cycleDates.isFoundSymptoms = true;
+                  }
+                }
+              }
+              cycleDatesList.add(cycleDates);
+            }
+            cycleData.cycleDates!.addAll(cycleDatesList);
+            cycleData.cycleStartDate = periodRangeItem.cycleStartDate;
+            cycleData.cycleEndDate = periodRangeItem.cycleEndDate;
+            cycleData.isCurrentCycle = (periodRangeItem.cycleEndDate != null &&
+                    periodRangeItem.cycleEndDate!.isNotEmpty)
+                ? false
+                : true;
+            symptomsPattern.cycleData!.add(cycleData);
+          }
+          symptomsPattern.numberOfCount = symptomsCount;
+          symptomsPatternList.add(symptomsPattern);
+        }
+      }
+    }
+    return symptomsPatternList;
+  }
+
+  Future<List<SymptomsPattern>> getSymptomsPatternBasedOnCycle(
+      {int numberOfCycle = 5}) async {
+    List<SymptomsPattern> symptomsPatternList = [];
+    // Fetch logged symptoms data
+    List<UserLogReportData> loggedData = await getSymptomsLogReport(
+        startDate: DateTime.now().add(const Duration(days: -10000)),
+        endDate: DateTime.now());
+
+    if (loggedData.isEmpty) return symptomsPatternList;
+
+    // Create a unique set of symptoms
+    Map<String, SymptomsData> symptomsMap = {};
+    for (var report in loggedData) {
+      for (var symptom in report.symptomsData ?? []) {
+        symptomsMap[symptom.symptomName!.toLowerCase()] = symptom;
+      }
+    }
+
+    if (symptomsMap.isEmpty) return symptomsPatternList;
+
+    // Create a map of log data for quick lookup
+    Map<String, List<SymptomsData>> logDataMap = {
+      for (var log in loggedData)
+        CalenderDateUtils.dateDayFormat(log.logDate!): log.symptomsData ?? []
+    };
+
+    // printMenstrualCycleLogs("logDataMap ${logDataMap.toString()}");
+
+    // get symptoms data based on cycle
+    List<PeriodsDateRange> periodRange = await getAllPeriodsDetails();
+    for (var symptoms in symptomsMap.values) {
+      // printMenstrualCycleLogs("symptomName ${symptoms.symptomName}");
+      SymptomsPattern symptomsPattern = SymptomsPattern(cycleData: []);
+      int symptomsCount = 0;
+      symptomsPattern.symptomsName = symptoms.symptomName;
+      // printMenstrualCycleLogs("symptomsName ${symptoms.symptomName}");
+      for (var periodRangeItem in periodRange) {
+        // generate cycle data
+        CycleData cycleData = CycleData(cycleDates: []);
+        // generate symptoms data
+        List<CycleDates> cycleDatesList = [];
+        for (int i = 0; i <= (periodRangeItem.cycleLength ?? 0); i++) {
+          CycleDates cycleDates = CycleDates();
+          cycleDates.cycleDate = CalenderDateUtils.dateDayFormat(
+              DateTime.parse(periodRangeItem.cycleStartDate!)
+                  .add(Duration(days: i)));
+          //printMenstrualCycleLogs("cycleDate ${ cycleDates.cycleDate}");
+          cycleDates.isFoundSymptoms = false;
+
+          String cycleDate = CalenderDateUtils.dateDayFormat(
+              DateTime.parse(periodRangeItem.cycleStartDate!)
+                  .add(Duration(days: i)));
+
+          bool isFound = logDataMap[cycleDate]?.any((s) =>
+                  s.symptomName!.toLowerCase() ==
+                  symptoms.symptomName!.toLowerCase()) ??
+              false;
+
+          if (isFound) {
+            symptomsCount = symptomsCount + 1;
+            cycleDates.isFoundSymptoms = true;
+          }
+
+          cycleDatesList.add(cycleDates);
+        }
+        cycleData.cycleDates!.addAll(cycleDatesList);
+        cycleData.cycleStartDate = periodRangeItem.cycleStartDate;
+        cycleData.cycleEndDate = periodRangeItem.cycleEndDate;
+        cycleData.isCurrentCycle = (periodRangeItem.cycleEndDate != null &&
+                periodRangeItem.cycleEndDate!.isNotEmpty)
+            ? false
+            : true;
+        symptomsPattern.cycleData!.add(cycleData);
+      }
+      symptomsPattern.numberOfCount = symptomsCount;
+      symptomsPatternList.add(symptomsPattern);
+    }
+
+    return symptomsPatternList;
   }
 
   Future<void> addDummyData(
