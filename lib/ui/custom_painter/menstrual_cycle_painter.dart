@@ -551,9 +551,9 @@ class MenstrualCyclePainter extends CustomPainter {
       );
     }
 
-    if (selectedDay > 0) {
-      drawArrow(canvas, center, radius, selectedDay, totalCycleDays);
-    }
+    /*if (selectedDay > 0) {
+     // drawArrow(canvas, center, radius, selectedDay, totalCycleDays);
+    }*/
   }
 
   @override
