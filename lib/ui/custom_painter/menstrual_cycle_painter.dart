@@ -550,11 +550,51 @@ class MenstrualCyclePainter extends CustomPainter {
         textOffset,
       );
     }
+
+    if (selectedDay > 0) {
+      drawArrow(canvas, center, radius, selectedDay, totalCycleDays);
+    }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
+  }
+
+  /// Draw arrow sign
+  void drawArrow(Canvas canvas, Offset center, double radius, int selectedDay,
+      int totalCycleDays) {
+    final double arrowLength = 20; // Length of the arrow
+    final double arrowWidth = 10; // Width of the arrowhead
+
+    // Calculate the angle for the selected day
+    final double angle = (2 * pi / totalCycleDays) * (selectedDay - 1) - pi / 2;
+
+    // Calculate the position of the arrow tip
+    final double tipX = center.dx + (radius + arrowLength) * cos(angle);
+    final double tipY = center.dy + (radius + arrowLength) * sin(angle);
+
+    // Calculate the positions of the arrowhead base points
+    final double baseX1 = tipX - arrowWidth * cos(angle + pi / 2);
+    final double baseY1 = tipY - arrowWidth * sin(angle + pi / 2);
+    final double baseX2 = tipX + arrowWidth * cos(angle + pi / 2);
+    final double baseY2 = tipY + arrowWidth * sin(angle + pi / 2);
+
+    // Draw the arrow using a Path
+    final path = Path();
+    path.moveTo(tipX, tipY); // Start at the tip of the arrow
+    path.lineTo(baseX1, baseY1); // Draw to the first base point
+    path.lineTo(baseX2, baseY2); // Draw to the second base point
+    path.close(); // Close the path to form a triangle
+
+    // Paint for the arrow
+    final paint = Paint()
+      ..strokeWidth = 7
+      ..color = Colors.red // Arrow color
+      ..style = PaintingStyle.stroke;
+
+    // Draw the arrow on the canvas
+    canvas.drawPath(path, paint);
   }
 
   /// Draw Phase text outside circle like Menstruation, Ovulation etc

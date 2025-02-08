@@ -137,7 +137,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       }
     }
 
-    final dbHelper = MenstrualCycleDbHelper.instance;
+    /*final dbHelper = MenstrualCycleDbHelper.instance;
     String lastPeriodDate = await dbHelper.getLastPeriodDate();
     if (lastPeriodDate.isNotEmpty) {
       String lastPeriodDay =
@@ -151,6 +151,26 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         if (difference < 0) {
           intCycleDay = 0;
         }
+      } else {
+        cycleDay = "";
+        intCycleDay = 0;
+      }
+    }*/
+
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+
+    if (lastPeriodDate.isNotEmpty) {
+      String lastPeriodDay =
+          await dbHelper.getLastPeriodDateFromInputDate(logDate);
+
+      if (lastPeriodDay.isNotEmpty) {
+        int difference = DateTime.parse(logDate)
+            .difference(DateTime.parse(lastPeriodDay))
+            .inDays;
+
+        intCycleDay = (difference < 0) ? 0 : difference + 1;
+        cycleDay = "${WidgetBaseLanguage.cycleDayTitle} $intCycleDay";
       } else {
         cycleDay = "";
         intCycleDay = 0;
@@ -234,19 +254,15 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
     regenerateData();
 
     final now = DateTime.now();
-    int phaseId;
-
-    if (intCycleDay > 0 && intCycleDay < 6) {
-      phaseId = 1;
-    } else if (intCycleDay < 13) {
-      phaseId = 2;
-    } else if (intCycleDay < 16) {
-      phaseId = 3;
-    } else if (intCycleDay < 30) {
-      phaseId = 4;
-    } else {
-      phaseId = 5;
-    }
+    int phaseId = (intCycleDay < 6)
+        ? 1
+        : (intCycleDay < 13)
+            ? 2
+            : (intCycleDay < 16)
+                ? 3
+                : (intCycleDay < 30)
+                    ? 4
+                    : 5;
 
     if (widget.isShowCustomSymptomsOnly! == false) {
       if (DateTime.parse(logDate) == DateTime(now.year, now.month, now.day)) {

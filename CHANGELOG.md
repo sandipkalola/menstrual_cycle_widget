@@ -1,4 +1,4 @@
-## [3.2.0] - 6 Feb 2025
+## [3.2.1] - 8 Feb 2025
 
 * Enhancements: Added new JSON parameter `predicted_symptoms_pattern_tomorrow` into summary
 * New Feature: Implemented function to retrieve symptoms pattern based on the current cycle day.

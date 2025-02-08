@@ -12,6 +12,9 @@ class CalenderDateUtils {
       DateFormat('MMMM yyyy', getLanguageCode());
   static final DateFormat _dayFormat = DateFormat('dd');
   static final DateFormat _dayMonth = DateFormat('dd MMMM', getLanguageCode());
+  static final DateFormat _dayMonthShort =
+      DateFormat('dd MMM', getLanguageCode());
+
   static final DateFormat _firstDayFormat =
       DateFormat('MMMM dd', getLanguageCode());
   static final DateFormat _dateWithYearFormat = DateFormat('dd-MM-yyyy');
@@ -43,6 +46,8 @@ class CalenderDateUtils {
   static String fullDayName(DateTime d) => _fullDayName.format(d);
 
   static String formatDayMonth(DateTime d) => _dayMonth.format(d);
+
+  static String formatDayMonthShort(DateTime d) => _dayMonthShort.format(d);
 
   static String formatDay(DateTime d) => _dayFormat.format(d);
 

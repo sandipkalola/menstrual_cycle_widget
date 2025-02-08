@@ -1033,10 +1033,13 @@ class MenstrualCycleWidget {
             DateTime previousDate = periodDateRange[i - 1];
             DateTime currentDate = periodDateRange[i];
             int inDays = currentDate.difference(previousDate).inDays - 1;
+
             if (inDays > 1) {
               periodDates = [];
               periodDuration = 1;
-              periodsDateRange.cycleLength = inDays;
+              periodsDateRange.cycleLength = currentDate
+                  .difference(DateTime.parse(periodsDateRange.cycleStartDate!))
+                  .inDays;
               periodsDateRange.cycleEndDate = CalenderDateUtils.dateDayFormat(
                   currentDate.add(const Duration(days: -1)));
               listPeriodsDateRange.add(periodsDateRange);
@@ -1575,8 +1578,37 @@ class MenstrualCycleWidget {
     return symptomsPatternList;
   }
 
+  Future<int> getPhaseId() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    final now = DateTime.now();
+    final logDate = defaultDateFormat.format(now);
+
+    final lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isEmpty) {
+      return 5; // Default phase if no data is available
+    }
+    final lastPeriodDay =
+        await dbHelper.getLastPeriodDateFromInputDate(logDate);
+    if (lastPeriodDay.isEmpty) return 5;
+
+    final difference = DateTime.parse(logDate)
+        .difference(DateTime.parse(lastPeriodDay))
+        .inDays;
+    final intCycleDay = difference < 0 ? 0 : difference + 1;
+
+    if (intCycleDay > 0 && intCycleDay < 6) return 1;
+    if (intCycleDay < 13) return 2;
+    if (intCycleDay < 16) return 3;
+    if (intCycleDay < 30) return 4;
+    return 5;
+  }
+
   Future<List<SymptomsPattern>> getSymptomsPatternBasedOnCycle(
       {int numberOfCycle = 5}) async {
+    if (numberOfCycle < 1) {
+      throw "Required valid number of cycle day";
+    }
+
     List<SymptomsPattern> symptomsPatternList = [];
     // Fetch logged symptoms data
     List<UserLogReportData> loggedData = await getSymptomsLogReport(
@@ -1585,11 +1617,25 @@ class MenstrualCycleWidget {
 
     if (loggedData.isEmpty) return symptomsPatternList;
 
-    // Create a unique set of symptoms
+    int phaseId = await getPhaseId();
+    List<SymptomsData> listSymptomsDataBasedOnPhase = defaultSymptomsData
+        .expand((category) => category.symptomsData ?? <SymptomsData>[])
+        .where(
+            (symptomsData) => symptomsData.phaseIds?.contains(phaseId) ?? false)
+        .toList();
+
     Map<String, SymptomsData> symptomsMap = {};
+    Set<String> phaseSymptomsSet = {
+      for (var phaseSymptom in listSymptomsDataBasedOnPhase)
+        phaseSymptom.symptomName?.toLowerCase() ?? ''
+    };
+
     for (var report in loggedData) {
       for (var symptom in report.symptomsData ?? []) {
-        symptomsMap[symptom.symptomName!.toLowerCase()] = symptom;
+        String symptomNameLower = symptom.symptomName?.toLowerCase() ?? '';
+        if (phaseSymptomsSet.contains(symptomNameLower)) {
+          symptomsMap[symptomNameLower] = symptom;
+        }
       }
     }
 
@@ -1601,27 +1647,27 @@ class MenstrualCycleWidget {
         CalenderDateUtils.dateDayFormat(log.logDate!): log.symptomsData ?? []
     };
 
-    // printMenstrualCycleLogs("logDataMap ${logDataMap.toString()}");
-
     // get symptoms data based on cycle
     List<PeriodsDateRange> periodRange = await getAllPeriodsDetails();
     for (var symptoms in symptomsMap.values) {
-      // printMenstrualCycleLogs("symptomName ${symptoms.symptomName}");
       SymptomsPattern symptomsPattern = SymptomsPattern(cycleData: []);
       int symptomsCount = 0;
       symptomsPattern.symptomsName = symptoms.symptomName;
-      // printMenstrualCycleLogs("symptomsName ${symptoms.symptomName}");
+      int cycleCount = 1;
+      x:
       for (var periodRangeItem in periodRange) {
         // generate cycle data
+        if (cycleCount > numberOfCycle) {
+          break x;
+        }
         CycleData cycleData = CycleData(cycleDates: []);
         // generate symptoms data
         List<CycleDates> cycleDatesList = [];
-        for (int i = 0; i <= (periodRangeItem.cycleLength ?? 0); i++) {
+        for (int i = 0; i < (periodRangeItem.cycleLength ?? 0); i++) {
           CycleDates cycleDates = CycleDates();
           cycleDates.cycleDate = CalenderDateUtils.dateDayFormat(
               DateTime.parse(periodRangeItem.cycleStartDate!)
                   .add(Duration(days: i)));
-          //printMenstrualCycleLogs("cycleDate ${ cycleDates.cycleDate}");
           cycleDates.isFoundSymptoms = false;
 
           String cycleDate = CalenderDateUtils.dateDayFormat(
@@ -1648,6 +1694,7 @@ class MenstrualCycleWidget {
             ? false
             : true;
         symptomsPattern.cycleData!.add(cycleData);
+        cycleCount = cycleCount + 1;
       }
       symptomsPattern.numberOfCount = symptomsCount;
       symptomsPatternList.add(symptomsPattern);
