@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/foundation.dart';
@@ -95,12 +96,14 @@ class MenstrualCyclePhaseView extends StatefulWidget {
   final double size;
 
   final bool isAutoSetData;
+  final Function? onDayClick;
 
   const MenstrualCyclePhaseView(
       {super.key,
       this.totalCycleDays = defaultCycleLength,
       required this.size,
       this.selectedDay = 0,
+      this.onDayClick,
 
       // Menstruation Params
       this.menstruationName,
@@ -183,9 +186,10 @@ class MenstrualCyclePhaseView extends StatefulWidget {
 class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   final _instance = MenstrualCycleWidget.instance!;
 
+  int actuallySelectedDay = 0;
   MenstrualCyclePainter? _painter;
   ui.Image? _image;
-
+  Size size = Size(300, 300); // Define your size
   String websiteUrl = Strings.pkgUrl;
   double selectedDayCircleSize = 15;
   double widgetSize = 0;
@@ -232,10 +236,15 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         DateTime lastPeriod = DateTime.parse(lastPeriodDate);
         int inDays = DateTime.now().difference(lastPeriod).inDays;
         //printMenstrualCycleLogs("inDays: $inDays");
-        if (inDays > _totalCycleDays) {
-          _selectedDay = 0;
-        } else {
-          _selectedDay = (inDays + 1);
+        if (_selectedDay == 0) {
+          if (inDays > _totalCycleDays) {
+            _selectedDay = 0;
+          } else {
+            _selectedDay = (inDays + 1);
+          }
+        }
+        if (actuallySelectedDay == 0) {
+          actuallySelectedDay = _selectedDay;
         }
       }
       generateMessagesText(lastPeriodDate);
@@ -247,7 +256,12 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
       _menstruationDayCount = widget.menstruationDayCount;
       _follicularDayCount = widget.follicularDayCount;
       _ovulationDayCount = widget.ovulationDayCount;
-      _selectedDay = widget.selectedDay;
+      if (_selectedDay == 0) {
+        _selectedDay = widget.selectedDay;
+      }
+      if (actuallySelectedDay == 0) {
+        actuallySelectedDay = widget.selectedDay;
+      }
     }
     if (imagePath.isNotEmpty) {
       final ByteData data = await rootBundle.load(imagePath);
@@ -268,9 +282,13 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     } else {
       phaseTextBoundaries = widget.phaseTextBoundaries;
     }
+    updatePaintObject();
+  }
 
+  updatePaintObject() {
     _painter = MenstrualCyclePainter(
         totalCycleDays: _totalCycleDays,
+        actuallySelectedDay: actuallySelectedDay,
         menstruationDayCount: _menstruationDayCount,
         follicularDayCount: _follicularDayCount,
         ovulationDayCount: _ovulationDayCount,
@@ -337,8 +355,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   /// Generate dynamic messages based on different conditions
   generateMessagesText(lastPeriodDate) {
     if (lastPeriodDate.isNotEmpty) {
-      int totalDiffCurrentLastPeriod =
-          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays;
+      int totalDiffCurrentLastPeriod = _selectedDay;
       //printMenstrualCycleLogs(
       //   "totalDiffCurrentLastPeriod : $totalDiffCurrentLastPeriod");
       int totalDuration =
@@ -353,7 +370,6 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
           totalDayBeforeOvulationStart - totalDiffCurrentLastPeriod;
       //printMenstrualCycleLogs(
       //   "beforeOvulationDayCount : $totalDayBeforeOvulationStart");
-
       // Check if last period date is more then current cycle length + period duration.
       // Then show only total late period day
       if (totalDiffCurrentLastPeriod >= totalDuration) {
@@ -510,6 +526,39 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
     }
   }
 
+  void _handleDayClick(Offset tapPosition) {
+    final center = Offset(size.width / 2, size.height / 2);
+
+    final dx = tapPosition.dx - center.dx;
+    final dy = tapPosition.dy - center.dy;
+    final angle = atan2(dy, dx);
+
+    int day = ((angle + pi / 2) / (2 * pi) * _totalCycleDays).ceil();
+
+    if (day < 1) {
+      day = _totalCycleDays + day;
+    }
+    if (day >= 1 && day <= _totalCycleDays) {
+      setState(() {
+        _selectedDay = day;
+      });
+      if (widget.imageAssets.isNotEmpty) {
+        _init(widget.imageAssets);
+      } else {
+        _init("");
+      }
+      if (widget.onDayClick != null) {
+        String lastPeriodDate = _instance.getPreviousPeriodDay();
+        if (lastPeriodDate.isNotEmpty) {
+          DateTime lastPeriod =
+              DateTime.parse(lastPeriodDate).add(Duration(days: day - 1));
+          String selectedDate = CalenderDateUtils.dateFormat.format(lastPeriod);
+          widget.onDayClick!.call(day, selectedDate);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     /// set dynamically size if provided size more then current screen size
@@ -528,9 +577,15 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
         widgetSize = MediaQuery.of(context).size.height - 100;
       }
     }
-    return CustomPaint(
-      size: Size(widgetSize, widgetSize),
-      painter: _painter,
+    size = Size(widgetSize, widgetSize);
+    return GestureDetector(
+      onTapDown: (TapDownDetails details) {
+        _handleDayClick(details.localPosition);
+      },
+      child: CustomPaint(
+        size: Size(widgetSize, widgetSize),
+        painter: _painter,
+      ),
     );
   }
 }

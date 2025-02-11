@@ -10,6 +10,7 @@ class MenstrualCyclePainter extends CustomPainter {
   int totalCycleDays;
   double selectedDayCircleSize;
   int selectedDay;
+  int actuallySelectedDay;
 
   /// Menstruation Params variables
   String? menstruationName;
@@ -93,6 +94,7 @@ class MenstrualCyclePainter extends CustomPainter {
   MenstrualCyclePainter(
       {required this.totalCycleDays,
       this.selectedDay = 0,
+      this.actuallySelectedDay = 0,
       // Menstruation Params
       this.menstruationName,
       required this.menstruationDayCount,
@@ -167,14 +169,16 @@ class MenstrualCyclePainter extends CustomPainter {
 
   @override
   Future<void> paint(Canvas canvas, Size size) async {
+    /*printMenstrualCycleLogs(
+        "inside selcted Day = $selectedDay $actuallySelectedDay");*/
     final rect = Rect.fromLTWH(0, 0, size.width, size.height);
 
-    double selectedDayTextX = 0.0;
+    /*double selectedDayTextX = 0.0;
     double selectedDayTextY = 0.0;
     TextPainter selectedDayTextPainter = TextPainter(
         textDirection:
             (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr);
-    String selectedDayLabel = "";
+    String selectedDayLabel = "";*/
 
     final radius = min(size.width / 2, size.height / 2) -
         20; // 20 is Manage circle outerline
@@ -397,13 +401,13 @@ class MenstrualCyclePainter extends CustomPainter {
       );
 
       Color circleBorderColor = getSelectedBorderColor(day);
-      Color dayTextColor = getSelectedDayTextColor(day);
+      //Color dayTextColor = getSelectedDayTextColor(day);
 
       /// Draw "Day" label
       TextSpan dayLabel = TextSpan(
         text: dayTitle,
         style: TextStyle(
-            color: dayTextColor,
+            color: getColor(day),
             fontSize: dayTitleFontSize,
             fontWeight: FontWeight.normal,
             fontFamily: getFontFamily()),
@@ -440,9 +444,9 @@ class MenstrualCyclePainter extends CustomPainter {
 
       /// highlight current days
       if (day == selectedDay) {
-        selectedDayTextX = textX;
+        /* selectedDayTextX = textX;
         selectedDayTextY = textY;
-        selectedDayLabel = day.toString();
+        selectedDayLabel = day.toString();*/
 
         /// draw outer boarder for selected day
         final Paint borderPaint = Paint()
@@ -474,9 +478,15 @@ class MenstrualCyclePainter extends CustomPainter {
       TextSpan dayText = TextSpan(
         text: day.toString(),
         style: TextStyle(
-            color: dayTextColor,
-            fontSize: (day == selectedDay) ? selectedDayFontSize : dayFontSize,
-            fontWeight: dayFontWeight,
+            color: getColor(day),
+            fontSize: (selectedDay != actuallySelectedDay &&
+                    day == actuallySelectedDay)
+                ? dayFontSize + 2
+                : (day == selectedDay)
+                    ? selectedDayFontSize
+                    : dayFontSize,
+            fontWeight:
+                (day == actuallySelectedDay) ? FontWeight.bold : dayFontWeight,
             fontFamily: getFontFamily()),
       );
       textPainter.text = dayText;
@@ -487,11 +497,11 @@ class MenstrualCyclePainter extends CustomPainter {
         canvas,
         textOffset,
       );
-      selectedDayTextPainter = textPainter;
+      //selectedDayTextPainter = textPainter;
     }
 
     /// Re-draw selected day
-    if (selectedDayTextY > 0) {
+    /*if (selectedDayTextY > 0) {
       double topPos = 2;
       if (isShowDayTitle) {
         topPos = 2.5;
@@ -549,7 +559,7 @@ class MenstrualCyclePainter extends CustomPainter {
         canvas,
         textOffset,
       );
-    }
+    }*/
 
     /*if (selectedDay > 0) {
      // drawArrow(canvas, center, radius, selectedDay, totalCycleDays);
@@ -561,40 +571,16 @@ class MenstrualCyclePainter extends CustomPainter {
     return true;
   }
 
-  /// Draw arrow sign
-  void drawArrow(Canvas canvas, Offset center, double radius, int selectedDay,
-      int totalCycleDays) {
-    final double arrowLength = 20; // Length of the arrow
-    final double arrowWidth = 10; // Width of the arrowhead
-
-    // Calculate the angle for the selected day
-    final double angle = (2 * pi / totalCycleDays) * (selectedDay - 1) - pi / 2;
-
-    // Calculate the position of the arrow tip
-    final double tipX = center.dx + (radius + arrowLength) * cos(angle);
-    final double tipY = center.dy + (radius + arrowLength) * sin(angle);
-
-    // Calculate the positions of the arrowhead base points
-    final double baseX1 = tipX - arrowWidth * cos(angle + pi / 2);
-    final double baseY1 = tipY - arrowWidth * sin(angle + pi / 2);
-    final double baseX2 = tipX + arrowWidth * cos(angle + pi / 2);
-    final double baseY2 = tipY + arrowWidth * sin(angle + pi / 2);
-
-    // Draw the arrow using a Path
-    final path = Path();
-    path.moveTo(tipX, tipY); // Start at the tip of the arrow
-    path.lineTo(baseX1, baseY1); // Draw to the first base point
-    path.lineTo(baseX2, baseY2); // Draw to the second base point
-    path.close(); // Close the path to form a triangle
-
-    // Paint for the arrow
-    final paint = Paint()
-      ..strokeWidth = 7
-      ..color = Colors.red // Arrow color
-      ..style = PaintingStyle.stroke;
-
-    // Draw the arrow on the canvas
-    canvas.drawPath(path, paint);
+  /// Return today text as different color
+  Color getColor(int day) {
+    if (selectedDay != actuallySelectedDay && day == actuallySelectedDay) {
+      if (day > 0 && day <= ovulationDayCountNew) {
+        return Colors.black;
+      } else {
+        return menstruationColor;
+      }
+    }
+    return getSelectedDayTextColor(day);
   }
 
   /// Draw Phase text outside circle like Menstruation, Ovulation etc

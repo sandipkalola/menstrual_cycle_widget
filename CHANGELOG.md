@@ -1,3 +1,7 @@
+## [3.1.1] - 11 Feb 2025
+
+* Feature: Added a callback for day click in MenstrualCyclePhaseView, allowing users to handle day selection events.
+
 ## [3.2.2] - 8 Feb 2025
 
 * Enhancements: Added new JSON parameter `predicted_symptoms_pattern_tomorrow` into summary
