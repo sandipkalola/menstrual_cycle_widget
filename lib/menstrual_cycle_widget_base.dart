@@ -1486,9 +1486,15 @@ class MenstrualCycleWidget {
         "next_ovulation_day": nextOvulationDate,
         "is_period_start_from_today": periodStartFromToday,
         "is_period_start_from_tomorrow": periodStartFromTomorrow,
-        "expected_due_date": "", // TODO
-        "expected_pregnancy_test_date": "", // TODO
-        "chances_of_pregnancy": "" // TODO
+        "chances_of_pregnancy": getPregnancyChances(),
+        "expected_pregnancy_test_date": getExpectedPregnancyTestDate(),
+      },
+      "pregnancy_matrix": {
+        "current_day": getCurrentPregnancyDay(),
+        "current_week": getCurrentPregnancyWeek(),
+        "current_month": getCurrentPregnancyMonth(),
+        "current_trimester": getCurrentTrimester(),
+        "expected_due_date": getExpectedDueDate(),
       },
       "predicted_symptoms_pattern_today":
           todaySymptomsData.map((e) => e.toJson()).toList(),
@@ -1496,6 +1502,116 @@ class MenstrualCycleWidget {
           tomorrowSymptomsData.map((e) => e.toJson()).toList()
     };
     return summaryData;
+  }
+
+  /// get Current day of pregnancy
+  Future<int> getCurrentPregnancyDay() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    int currentPregnancyDay = 0;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      currentPregnancyDay =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
+    }
+    return currentPregnancyDay;
+  }
+
+  /// get Current week of pregnancy
+  Future<int> getCurrentPregnancyWeek() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    int currentPregnancyWeek = 0;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      final difference =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
+      currentPregnancyWeek = (difference / 7).floor() + 1;
+    }
+    return currentPregnancyWeek;
+  }
+
+  /// get Current month of pregnancy
+  Future<int> getCurrentPregnancyMonth() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    int currentPregnancyMonth = 0;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      final difference =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
+      currentPregnancyMonth = (difference / 30).ceil();
+    }
+    return currentPregnancyMonth;
+  }
+
+  /// get Current trimester of pregnancy
+  Future<int> getCurrentTrimester() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      final difference =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
+      int gestationalWeeks = (difference / 7).floor() + 1;
+      if (gestationalWeeks <= 12) {
+        return 1;
+      } else if (gestationalWeeks <= 27) {
+        return 2;
+      } else if (gestationalWeeks <= 40) {
+        return 3;
+      } else {
+        return 4;
+      }
+    }
+    return 0;
+  }
+
+  /// get expected pregnancy test date
+  Future<String> getPregnancyChances() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String pregnancyChancesStatus = "Low";
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      int totalDayBeforeOvulationStart =
+          getFollicularDayCounts() + getPeriodDuration();
+      int totalDayBeforeOvulationEnd =
+          totalDayBeforeOvulationStart + defaultOvulationDay;
+
+      final totalDiffCurrentLastPeriod =
+          DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
+      if (totalDiffCurrentLastPeriod >= getPeriodDuration() &&
+          totalDiffCurrentLastPeriod < totalDayBeforeOvulationStart) {
+        pregnancyChancesStatus = "Medium";
+      } else if (totalDiffCurrentLastPeriod >= totalDayBeforeOvulationStart &&
+          totalDiffCurrentLastPeriod < totalDayBeforeOvulationEnd) {
+        pregnancyChancesStatus = "High";
+      } else if (totalDiffCurrentLastPeriod >= totalDayBeforeOvulationEnd &&
+          totalDiffCurrentLastPeriod <= getCycleLength()) {
+        pregnancyChancesStatus = "Low";
+      }
+    }
+    return pregnancyChancesStatus;
+  }
+
+  /// get expected pregnancy test date
+  Future<String> getExpectedPregnancyTestDate() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String expectedTestDate = "";
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      expectedTestDate = CalenderDateUtils.dateWithYear(
+          DateTime.parse(lastPeriodDate).add(Duration(days: getCycleLength())));
+    }
+    return expectedTestDate;
+  }
+
+  /// get Expected Due Date for baby
+  Future<String> getExpectedDueDate() async {
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String expectedDueDate = "";
+    String lastPeriodDate = await dbHelper.getLastPeriodDate();
+    if (lastPeriodDate.isNotEmpty) {
+      expectedDueDate = CalenderDateUtils.dateWithYear(
+          DateTime.parse(lastPeriodDate).add(Duration(days: 280)));
+    }
+    return expectedDueDate;
   }
 
   /// get Symptoms Pattern based on cycle
