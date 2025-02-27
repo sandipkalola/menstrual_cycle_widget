@@ -1252,6 +1252,7 @@ class MenstrualCycleWidget {
 
   /// get Next Predicted Period Date
   Future<String> getNextPredictedPeriodDate() async {
+    // TODO Check if period date is less then current day then return blank
     if (_lastPeriodDate.isNotEmpty) {
       int cycleLength = getCycleLength();
       DateTime nextPeriodDate = CalenderDateUtils.dateFormat
@@ -1321,6 +1322,7 @@ class MenstrualCycleWidget {
       } else {
         return CalenderDateUtils.dateDayFormat(ovulationDate);
       }
+      // TODO Check if ovulation date is less then current day then return blank
     }
     return "";
   }
@@ -1483,7 +1485,10 @@ class MenstrualCycleWidget {
         "next_period_day": nextPeriodDay,
         "next_ovulation_day": nextOvulationDate,
         "is_period_start_from_today": periodStartFromToday,
-        "is_period_start_from_tomorrow": periodStartFromTomorrow
+        "is_period_start_from_tomorrow": periodStartFromTomorrow,
+        "expected_due_date": "", // TODO
+        "expected_pregnancy_test_date": "", // TODO
+        "chances_of_pregnancy": "" // TODO
       },
       "predicted_symptoms_pattern_today":
           todaySymptomsData.map((e) => e.toJson()).toList(),

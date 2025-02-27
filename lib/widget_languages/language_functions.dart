@@ -161,6 +161,36 @@ getMenstruationLabel() {
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
 
+getThirdTrimesterName() {
+  final logsByLanguage = {
+    Languages.english: enThirdTrimesterName,
+    Languages.hindi: hiThirdTrimesterName,
+    Languages.arabic: arThirdTrimesterName,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
+getSecondTrimesterName() {
+  final logsByLanguage = {
+    Languages.english: enSecondTrimesterName,
+    Languages.hindi: hiSecondTrimesterName,
+    Languages.arabic: arSecondTrimesterName,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
+getFirstTrimesterName() {
+  final logsByLanguage = {
+    Languages.english: enFirstTrimesterName,
+    Languages.hindi: hiFirstTrimesterName,
+    Languages.arabic: arFirstTrimesterName,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
 getFollicularPhaseLabel() {
   final logsByLanguage = {
     Languages.english: enFollicularPhaseLabel,

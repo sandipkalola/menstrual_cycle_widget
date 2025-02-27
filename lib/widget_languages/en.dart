@@ -21,6 +21,10 @@ const String enLutealPhaseLabel = "Luteal phase";
 const String enDayLabel = "Day";
 const String enLogPeriodLabel = "Log Period";
 
+const String enFirstTrimesterName = "1st Trimester";
+const String enSecondTrimesterName = "2nd Trimester";
+const String enThirdTrimesterName = "3rd Trimester";
+
 const String enSaveLogs = "Apply";
 
 /// Messages for circle text

@@ -1,4 +1,9 @@
-## [3.1.1] - 11 Feb 2025
+## [3.4.1] - 27 Feb 2025
+
+* New Feature: Pregnancy view to display the current trimester.
+* Improved: Enhanced UI/UX for better readability of pregnancy-related details
+
+## [3.3.2] - 11 Feb 2025
 
 * Feature: Added a callback for day click in MenstrualCyclePhaseView, allowing users to handle day selection events.
 

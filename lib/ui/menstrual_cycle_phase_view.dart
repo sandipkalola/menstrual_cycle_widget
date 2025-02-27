@@ -183,9 +183,11 @@ class MenstrualCyclePhaseView extends StatefulWidget {
       _MenstrualCyclePhaseViewState();
 }
 
-class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
+class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
   final _instance = MenstrualCycleWidget.instance!;
-
+  int newTotalCycleDays = 0;
   int actuallySelectedDay = 0;
   MenstrualCyclePainter? _painter;
   ui.Image? _image;
@@ -287,7 +289,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
 
   updatePaintObject() {
     _painter = MenstrualCyclePainter(
-        totalCycleDays: _totalCycleDays,
+        totalCycleDays: newTotalCycleDays,
         actuallySelectedDay: actuallySelectedDay,
         menstruationDayCount: _menstruationDayCount,
         follicularDayCount: _follicularDayCount,
@@ -487,8 +489,31 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 1),
+      vsync: this,
+    );
+
+    Tween<double>(begin: 0, end: 1).animate(_controller).addListener(() async {
+      if (_totalCycleDays > newTotalCycleDays) {
+        newTotalCycleDays = newTotalCycleDays + 1;
+      }
+      setState(() {
+        updatePaintObject();
+      });
+      await Future.delayed(Duration(seconds: 10));
+    });
+
+    _controller.forward();
+
     _checkValidation();
     if (widget.selectedDayCircleSize == 1) {
       if (widget.theme == MenstrualCycleTheme.basic) {

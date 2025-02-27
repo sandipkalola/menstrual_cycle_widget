@@ -280,3 +280,7 @@ const String arNormalTitle = "طبيعي";
 const String arIrregularTitle = "غير منتظم";
 
 const String arLatePeriod = "الفترة المتأخرة";
+
+const String arFirstTrimesterName = "الفصل الدراسي الأول";
+const String arSecondTrimesterName = "الفصل الدراسي الثاني";
+const String arThirdTrimesterName = "الفصل الدراسي الثالث";

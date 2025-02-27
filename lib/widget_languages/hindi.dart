@@ -283,3 +283,7 @@ const String hiNormalTitle = "सामान्य";
 const String hiIrregularTitle = "अनियमित";
 
 const String hiLatePeriod = "देर से मासिक धर्म";
+
+const String hiFirstTrimesterName = "पहली तिमाही";
+const String hiSecondTrimesterName = "दूसरी तिमाही";
+const String hiThirdTrimesterName = "तीसरी तिमाही";

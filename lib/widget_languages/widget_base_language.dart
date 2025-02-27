@@ -31,6 +31,12 @@ class WidgetBaseLanguage {
 
   static String get menstruationLabel => getMenstruationLabel();
 
+  static String get firstTrimesterName => getFirstTrimesterName();
+
+  static String get secondTrimesterName => getSecondTrimesterName();
+
+  static String get thirdTrimesterName => getThirdTrimesterName();
+
   static String get follicularPhaseLabel => getFollicularPhaseLabel();
 
   static String get ovulationLabel => getOvulationLabel();
