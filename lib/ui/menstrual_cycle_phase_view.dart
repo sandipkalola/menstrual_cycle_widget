@@ -185,9 +185,8 @@ class MenstrualCyclePhaseView extends StatefulWidget {
 
 class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  //late AnimationController _controller;
   final _instance = MenstrualCycleWidget.instance!;
-  int newTotalCycleDays = 0;
   int actuallySelectedDay = 0;
   MenstrualCyclePainter? _painter;
   ui.Image? _image;
@@ -289,7 +288,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
 
   updatePaintObject() {
     _painter = MenstrualCyclePainter(
-        totalCycleDays: newTotalCycleDays,
+        totalCycleDays: _totalCycleDays,
         actuallySelectedDay: actuallySelectedDay,
         menstruationDayCount: _menstruationDayCount,
         follicularDayCount: _follicularDayCount,
@@ -490,14 +489,14 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
 
   @override
   void dispose() {
-    _controller.dispose();
+    //_controller.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+    /*_controller = AnimationController(
       duration: const Duration(seconds: 1),
       vsync: this,
     );
@@ -512,7 +511,7 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
       await Future.delayed(Duration(seconds: 10));
     });
 
-    _controller.forward();
+    _controller.forward();*/
 
     _checkValidation();
     if (widget.selectedDayCircleSize == 1) {

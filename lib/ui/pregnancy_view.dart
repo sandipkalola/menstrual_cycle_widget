@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:async';
 import '../menstrual_cycle_widget.dart';
 import '../widget_languages/languages.dart';
 import 'custom_painter/pregnancy_painter.dart';
+import 'dart:ui' as ui;
+import 'package:http/http.dart' as http;
 
 class PregnancyView extends StatefulWidget {
   final String? firstTrimesterName;
@@ -30,6 +32,10 @@ class PregnancyView extends StatefulWidget {
   final int spaceBtnTitleMessage;
   final double size;
 
+  final String imageUrl;
+  final double imageWidth;
+  final double imageHeight;
+
   const PregnancyView(
       {super.key,
       required this.size,
@@ -37,6 +43,7 @@ class PregnancyView extends StatefulWidget {
       this.firstTrimesterColor = defaultMenstruationColor,
       this.firstTrimesterTextColor = Colors.white,
       this.secondTrimesterName = "",
+      this.imageUrl = "",
       this.highlightCurrentMonthColor,
       this.secondTrimesterColor = defaultFollicularColor,
       this.secondTrimesterTextColor = Colors.white,
@@ -45,6 +52,8 @@ class PregnancyView extends StatefulWidget {
       this.thirdTrimesterTextColor = Colors.white,
       this.titleTextColor = Colors.black,
       this.titleTextSize = 20,
+      this.imageWidth = 100,
+      this.imageHeight = 100,
       this.titleFontWeight = FontWeight.bold,
       this.messageTextColor = Colors.black45,
       this.messageTextSize = 10,
@@ -57,7 +66,8 @@ class PregnancyView extends StatefulWidget {
 
 class _PregnancyViewState extends State<PregnancyView> {
   final _instance = MenstrualCycleWidget.instance!;
-
+  Timer? _timer;
+  bool _showImage = false;
   int _currentMonth = 0;
   PregnancyPainter? _painter;
   Size size = Size(300, 300); // Define your size
@@ -66,7 +76,8 @@ class _PregnancyViewState extends State<PregnancyView> {
   double widgetSize = 0;
   PhaseTextBoundaries? phaseTextBoundaries;
   Color? _highlightCurrentMonthColor;
-
+  ui.Image? _image;
+  int _messageIndex = 0;
   String _title = "";
   String _message = "";
   String _message2 = "";
@@ -83,6 +94,7 @@ class _PregnancyViewState extends State<PregnancyView> {
         widget.secondTrimesterName!.isNotEmpty) {
       _secondTrimesterName = widget.secondTrimesterName!;
     }
+
     if (widget.thirdTrimesterName != null &&
         widget.thirdTrimesterName!.isNotEmpty) {
       _thirdTrimesterName = widget.thirdTrimesterName!;
@@ -107,6 +119,11 @@ class _PregnancyViewState extends State<PregnancyView> {
         secondTrimesterTextColor: widget.secondTrimesterTextColor,
         firstTrimesterColor: widget.firstTrimesterColor,
         currentMonth: _currentMonth,
+        image: _image,
+        messageIndex: _messageIndex,
+        showImage: _showImage,
+        imageHeight: widget.imageHeight,
+        imageWidth: widget.imageWidth,
         highlightCurrentMonthColor: _highlightCurrentMonthColor,
         firstTrimesterName: _firstTrimesterName,
         firstTrimesterTextColor: widget.firstTrimesterTextColor,
@@ -139,7 +156,7 @@ class _PregnancyViewState extends State<PregnancyView> {
       int monthNumber = (difference / 30).ceil();
       _currentMonth = monthNumber - 1;
       _message = "$monthNumber${getOrdinalSuffix(monthNumber)} Month";
-      _message2 = "$weekNumber${getOrdinalSuffix(weekNumber)} Week";
+      _message2 = "Week $weekNumber";
     }
   }
 
@@ -163,8 +180,39 @@ class _PregnancyViewState extends State<PregnancyView> {
   void initState() {
     super.initState();
     _checkValidation();
+    if (widget.imageUrl.isNotEmpty) {
+      printMenstrualCycleLogs("URL ${widget.imageUrl}");
+      loadImageFromUrl(widget.imageUrl).then((img) {
+        setState(() {
+          _image = img;
+        });
+        _startTimer();
+        updatePaintObject();
+      });
+    }
     widgetSize = widget.size;
     _init();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) {
+      setState(() {
+        _showImage = !_showImage; // Toggle between text & image
+        if (_showImage) {
+          _messageIndex = _messageIndex + 1;
+          if (_messageIndex > 2) {
+            _messageIndex = 1;
+          }
+        }
+      });
+      updatePaintObject();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   /// Check Default Validation
@@ -172,6 +220,16 @@ class _PregnancyViewState extends State<PregnancyView> {
     if (widget.size < 200) {
       throw "${WidgetBaseLanguage.errorInvalidSize} $websiteUrl";
     }
+  }
+
+  Future<ui.Image> loadImageFromUrl(String url) async {
+    final http.Response response = await http.get(Uri.parse(url));
+    final Uint8List bytes = response.bodyBytes;
+    final Completer<ui.Image> completer = Completer();
+    ui.decodeImageFromList(bytes, (ui.Image img) {
+      completer.complete(img);
+    });
+    return completer.future;
   }
 
   @override

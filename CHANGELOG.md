@@ -1,13 +1,18 @@
+## [3.5.0] - 13 March 2025
+
+* Improved: Enhanced UI/UX for better readability of pregnancy-related details
+* Enhancements: Added new parameter `imageHeight`,`imageWidth`,`imageUrl` into PregnancyView
+
 ## [3.4.2] - 27 Feb 2025
 
 * New Feature: Pregnancy view to display the current trimester.
 * Improved: Enhanced UI/UX for better readability of pregnancy-related details
 * Enhancements: Added new JSON parameter `pregnancy_matrix` into summary
 
-
 ## [3.3.2] - 11 Feb 2025
 
-* Feature: Added a callback for day click in MenstrualCyclePhaseView, allowing users to handle day selection events.
+* Feature: Added a callback for day click in MenstrualCyclePhaseView, allowing users to handle day
+  selection events.
 
 ## [3.2.2] - 8 Feb 2025
 

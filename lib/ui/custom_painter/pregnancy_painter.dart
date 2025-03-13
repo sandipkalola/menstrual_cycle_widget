@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:menstrual_cycle_widget/ui/text_style/custom_text_style.dart';
-
+import 'dart:ui' as ui;
 import '../../menstrual_cycle_widget.dart';
 
 class PregnancyPainter extends CustomPainter {
@@ -33,12 +33,22 @@ class PregnancyPainter extends CustomPainter {
   double messageTextSize;
   FontWeight messageFontWeight;
   int spaceBtnTitleMessage;
+  double imageWidth;
+  double imageHeight;
+  ui.Image? image;
+  bool showImage;
+  int messageIndex;
 
   PregnancyPainter(
       {this.totalTrimester = 3,
       this.currentMonth = 1,
       this.firstTrimesterName,
       this.highlightCurrentMonthColor,
+      this.image,
+      this.showImage = false,
+      this.imageWidth = 100,
+      this.messageIndex = 0,
+      this.imageHeight = 100,
       this.firstTrimesterColor = defaultMenstruationColor,
       this.firstTrimesterTextColor = Colors.white,
       this.secondTrimesterName,
@@ -106,97 +116,118 @@ class PregnancyPainter extends CustomPainter {
         getBackgroundColor(i),
       );
 
-      drawInsideText(canvas, radiusNew, sizeNew, "${i + 1}Month  ", i, i + 1);
+      String textTitle = "${i + 1}Month";
+      if (i == currentMonth) {
+        if (showImage) {
+          if (messageIndex == 1) {
+            textTitle = title;
+          } else if (messageIndex == 2) {
+            textTitle = message2;
+          }
+        }
+      }
+
+      drawInsideText(canvas, radiusNew, sizeNew, textTitle, i, i + 1);
     }
 
-    final messageTextPainter = TextPainter(
-        textAlign: TextAlign.center,
-        textDirection:
-            (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
-        maxLines: 2,
-        ellipsis: "...");
-    double totalHeight = 0;
-    List<TextPainter> textPainters = [];
+    if (showImage && image != null) {
+      final double dx = (size.width - imageWidth) / 2;
+      final double dy = (size.height - imageHeight) / 2;
+      final Rect src = Rect.fromLTWH(
+          0, 0, image!.width.toDouble(), image!.height.toDouble());
+      final Rect dst = Rect.fromLTWH(dx, dy, imageWidth, imageHeight);
+      canvas.drawImageRect(image!, src, dst, Paint());
+    } else {
+      final messageTextPainter = TextPainter(
+          textAlign: TextAlign.center,
+          textDirection:
+              (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
+          maxLines: 2,
+          ellipsis: "...");
+      double totalHeight = 0;
+      List<TextPainter> textPainters = [];
 
-    /// show title text
-    TextSpan message1 = TextSpan(
-      text: message,
-      style: TextStyle(
-          color: messageTextColor,
-          fontSize: messageTextSize,
-          fontWeight: messageFontWeight,
-          fontFamily: getFontFamily()),
-    );
-    messageTextPainter.text = message1;
-    messageTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
-    textPainters.add(messageTextPainter);
-    totalHeight += messageTextPainter.height;
+      /// show title text
+      TextSpan message1 = TextSpan(
+        text: message,
+        style: TextStyle(
+            color: messageTextColor,
+            fontSize: messageTextSize,
+            fontWeight: messageFontWeight,
+            fontFamily: getFontFamily()),
+      );
+      messageTextPainter.text = message1;
+      messageTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
+      textPainters.add(messageTextPainter);
+      totalHeight += messageTextPainter.height;
 
-    final titleTextPainter = TextPainter(
-        textAlign: TextAlign.center,
-        textDirection:
-            (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
-        maxLines: 2,
-        ellipsis: "...");
+      final titleTextPainter = TextPainter(
+          textAlign: TextAlign.center,
+          textDirection:
+              (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
+          maxLines: 2,
+          ellipsis: "...");
 
-    /// Show title text
-    TextSpan titleText = TextSpan(
-      text: title,
-      style: TextStyle(
-          color: titleTextColor,
-          fontSize: titleTextSize,
-          fontWeight: titleFontWeight,
-          fontFamily: getFontFamily()),
-    );
-    titleTextPainter.text = titleText;
-    titleTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.70);
-    textPainters.add(titleTextPainter);
-    totalHeight += titleTextPainter.height;
+      /// Show title text
+      TextSpan titleText = TextSpan(
+        text: title,
+        style: TextStyle(
+            color: titleTextColor,
+            fontSize: titleTextSize,
+            fontWeight: titleFontWeight,
+            fontFamily: getFontFamily()),
+      );
+      titleTextPainter.text = titleText;
+      titleTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.70);
+      textPainters.add(titleTextPainter);
+      totalHeight += titleTextPainter.height;
 
-    final message2TextPainter = TextPainter(
-        textAlign: TextAlign.center,
-        textDirection:
-            (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
-        maxLines: 2,
-        ellipsis: "...");
+      final message2TextPainter = TextPainter(
+          textAlign: TextAlign.center,
+          textDirection:
+              (isArabicLanguage()) ? TextDirection.rtl : TextDirection.ltr,
+          maxLines: 2,
+          ellipsis: "...");
 
-    /// show message2 text
-    TextSpan messageText2 = TextSpan(
-      text: message2,
-      style: TextStyle(
-          color: messageTextColor,
-          fontSize: messageTextSize,
-          fontWeight: messageFontWeight,
-          fontFamily: getFontFamily()),
-    );
-    message2TextPainter.text = messageText2;
-    message2TextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
-    textPainters.add(message2TextPainter);
-    totalHeight += message2TextPainter.height;
+      /// show message2 text
+      TextSpan messageText2 = TextSpan(
+        text: message2,
+        style: TextStyle(
+            color: messageTextColor,
+            fontSize: messageTextSize,
+            fontWeight: messageFontWeight,
+            fontFamily: getFontFamily()),
+      );
+      message2TextPainter.text = messageText2;
+      message2TextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
+      textPainters.add(message2TextPainter);
+      totalHeight += message2TextPainter.height;
 
-    // Starting Y position
-    double startY = center.dy - totalHeight / 2;
-    Offset titleOffset = Offset(center.dx - textPainters[0].width / 2, startY);
+      // Starting Y position
+      double startY = center.dy - totalHeight / 2;
+      Offset titleOffset =
+          Offset(center.dx - textPainters[0].width / 2, startY);
 
-    messageTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
-    messageTextPainter.paint(canvas, titleOffset);
+      messageTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
+      messageTextPainter.paint(canvas, titleOffset);
 
-    Offset messageOffset = Offset(
-      center.dx - textPainters[1].width / 2,
-      titleOffset.dy + textPainters[0].height + spaceBtnTitleMessage,
-    );
+      Offset messageOffset = Offset(
+        center.dx - textPainters[1].width / 2,
+        titleOffset.dy + textPainters[0].height + spaceBtnTitleMessage,
+      );
 
-    titleTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.70);
-    titleTextPainter.paint(canvas, messageOffset);
+      titleTextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.70);
+      titleTextPainter.paint(canvas, messageOffset);
 
-    // Paint message2
-    Offset message2Offset = Offset(
-      center.dx - textPainters[2].width / 2,
-      messageOffset.dy + textPainters[1].height + spaceBtnTitleMessage,
-    );
+      // Paint message2
+      Offset message2Offset = Offset(
+        center.dx - textPainters[2].width / 2,
+        messageOffset.dy + textPainters[1].height + spaceBtnTitleMessage,
+      );
 
-    message2TextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
-    message2TextPainter.paint(canvas, message2Offset);
+      message2TextPainter.layout(minWidth: 0, maxWidth: sizeNew.width * 0.60);
+      message2TextPainter.paint(canvas, message2Offset);
+    }
   }
 
   @override
