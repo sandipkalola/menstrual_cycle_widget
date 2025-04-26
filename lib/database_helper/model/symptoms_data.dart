@@ -57,7 +57,7 @@ class SymptomsData {
     isSelected = json['isSelected'];
     symptomId = json['symptomId'];
     phaseIds = json['phaseIds'];
-    phaseIds = json['phaseIds'].cast<int>();
+    phaseIds = (json['phaseIds'] != null) ? json['phaseIds'].cast<int>() : [];
   }
 
   Map<String, dynamic> toJson() {

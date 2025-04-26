@@ -138,9 +138,9 @@ class MenstrualCycleDbHelper {
     /// Check if found logs on provided date
     int? recordExist = Sqflite.firstIntValue(await db!.rawQuery(
         "SELECT COUNT(*) FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'"));
-    /* printLogs("Found Data logDate : $logDate");
-    printLogs("Found Data customerId : $customerId");
-    printLogs("Found Data recordExist : $recordExist");*/
+    printMenstrualCycleLogs("Found Data logDate : $logDate");
+    printMenstrualCycleLogs("Found Data customerId : $customerId");
+    printMenstrualCycleLogs("Found Data recordExist : $recordExist");
 
     if (recordExist! > 0) {
       /// remove old logs
@@ -151,7 +151,7 @@ class MenstrualCycleDbHelper {
 
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
-    //printMenstrualCycleLogs("Insert Data");
+    printMenstrualCycleLogs("Insert Data");
     return id;
   }
 
@@ -181,8 +181,6 @@ class MenstrualCycleDbHelper {
         await db!.rawQuery("Select * from $tableCurrentUserDetails");
 
     if (queryResponse.isNotEmpty) {
-      //printMenstrualCycleLogs(
-      //    "queryResponse[i][columnCustomerId] ${queryResponse[0][columnCustomerId]}");
       List.generate(queryResponse.length, (i) {
         MenstrualCycleWidget.instance!.setCurrentUserData(
             queryResponse[i][columnCustomerId],
@@ -255,6 +253,27 @@ class MenstrualCycleDbHelper {
     }
     //printMenstrualCycleLogs("Insert Period Data");
     return 0;
+  }
+
+  /// insert user's period data on userId and log date
+  Future<void> insertOrUpdatePeriodLog(
+      List<dynamic> selectedPeriodsDate) async {
+    // printMenstrualCycleLogs("selectedPeriodsDate ${selectedPeriodsDate.toString()}");
+    final mInstance = MenstrualCycleWidget.instance!;
+    String customerId = mInstance.getCustomerId();
+    Database? db = await instance.database;
+
+    for (int i = 0; i < selectedPeriodsDate.length; i++) {
+      Map<String, dynamic> data = {
+        columnCustomerId: customerId,
+        columnPeriodEncryptDate: Encryption.instance.encrypt(
+            CalenderDateUtils.dateDayFormat(
+                DateTime.parse(selectedPeriodsDate[i]))),
+      };
+
+      ///insert a new periods log
+      await db!.insert(tableUserPeriodsLogsData, data);
+    }
   }
 
   /// Check if found period date

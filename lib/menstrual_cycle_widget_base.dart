@@ -223,30 +223,26 @@ class MenstrualCycleWidget {
     final dbHelper = MenstrualCycleDbHelper.instance;
 
     currentDate = currentDateFormat.format(DateTime.now());
-
-    String encryptedData =
-        Encryption.instance.encrypt(json.encode(userSymptomsData));
+    final encryption = Encryption.instance;
+    String encryptedData = encryption.encrypt(json.encode(userSymptomsData));
 
     Map<String, dynamic> userData = {
       MenstrualCycleDbHelper.columnCustomerId: getCustomerId(),
       MenstrualCycleDbHelper.columnUserEncryptData: encryptedData,
       MenstrualCycleDbHelper.columnMeditationTime:
-          Encryption.instance.encrypt(meditationTime),
-      MenstrualCycleDbHelper.columnSleepTime:
-          Encryption.instance.encrypt(sleepTime),
-      MenstrualCycleDbHelper.columnWater:
-          Encryption.instance.encrypt(waterValue),
+          encryption.encrypt(meditationTime),
+      MenstrualCycleDbHelper.columnSleepTime: encryption.encrypt(sleepTime),
+      MenstrualCycleDbHelper.columnWater: encryption.encrypt(waterValue),
       MenstrualCycleDbHelper.columnWaterUnit:
-          Encryption.instance.encrypt(waterUnit.toString()),
+          encryption.encrypt(waterUnit.toString()),
       MenstrualCycleDbHelper.columnBodyTemperatureUnit:
-          Encryption.instance.encrypt(bodyTemperatureUnit.toString()),
+          encryption.encrypt(bodyTemperatureUnit.toString()),
       MenstrualCycleDbHelper.columnWeightUnit:
-          Encryption.instance.encrypt(weightUnit.toString()),
-      MenstrualCycleDbHelper.columnNotes:
-          Encryption.instance.encrypt(customNotes),
-      MenstrualCycleDbHelper.columnWeight: Encryption.instance.encrypt(weight),
+          encryption.encrypt(weightUnit.toString()),
+      MenstrualCycleDbHelper.columnNotes: encryption.encrypt(customNotes),
+      MenstrualCycleDbHelper.columnWeight: encryption.encrypt(weight),
       MenstrualCycleDbHelper.columnBodyTemperature:
-          Encryption.instance.encrypt(bodyTemperature),
+          encryption.encrypt(bodyTemperature),
       MenstrualCycleDbHelper.columnLogDate: logDate,
       MenstrualCycleDbHelper.columnCycleDay: cycleDay,
       MenstrualCycleDbHelper.columnCreatedDateTime: currentDate,
@@ -304,11 +300,11 @@ class MenstrualCycleWidget {
     Database? db = await dbHelper.database;
     String customerId = mInstance.getCustomerId();
     List<SymptomsData> symptomsDataList = [];
-
+    final encryption = Encryption.instance;
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnLogDate}='$logDate' AND ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
     List.generate(queryResponse.length, (i) {
-      String userDecryptData = Encryption.instance.decrypt(
+      String userDecryptData = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
 
       List<dynamic> jsonData = json.decode(userDecryptData.trim());
@@ -316,24 +312,24 @@ class MenstrualCycleWidget {
       symptomsDataList.addAll(
           jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList());
 
-      userSymptomsLogs.meditationTime = Encryption.instance.decrypt(
+      userSymptomsLogs.meditationTime = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]);
 
-      userSymptomsLogs.bodyTemperature = Encryption.instance.decrypt(
+      userSymptomsLogs.bodyTemperature = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]);
-      userSymptomsLogs.waterValue = Encryption.instance
+      userSymptomsLogs.waterValue = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]);
-      userSymptomsLogs.weight = Encryption.instance
+      userSymptomsLogs.weight = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]);
-      userSymptomsLogs.weightUnit = Encryption.instance
+      userSymptomsLogs.weightUnit = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
-      userSymptomsLogs.sleepTime = Encryption.instance
+      userSymptomsLogs.sleepTime = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
-      userSymptomsLogs.waterUnit = Encryption.instance
+      userSymptomsLogs.waterUnit = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
-      userSymptomsLogs.bodyTemperatureUnit = Encryption.instance.decrypt(
+      userSymptomsLogs.bodyTemperatureUnit = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
-      userSymptomsLogs.notes = Encryption.instance
+      userSymptomsLogs.notes = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
     });
 
@@ -376,11 +372,11 @@ class MenstrualCycleWidget {
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
-
+    final encryption = Encryption.instance;
     List.generate(queryResponse.length, (i) {
-      String weightUnit = Encryption.instance
+      String weightUnit = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
-      double weightValue = double.parse(Encryption.instance
+      double weightValue = double.parse(encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]));
       double weight = 0.0;
       if (weightValue > 0) {
@@ -473,9 +469,10 @@ class MenstrualCycleWidget {
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+    final encryption = Encryption.instance;
 
     List.generate(queryResponse.length, (i) {
-      double meditationTime = double.parse(Encryption.instance.decrypt(
+      double meditationTime = double.parse(encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]));
       if (meditationTime > 0) {
         if (minValue == 0) {
@@ -539,11 +536,11 @@ class MenstrualCycleWidget {
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
-
+    final encryption = Encryption.instance;
     List.generate(queryResponse.length, (i) {
-      String waterUnit = Encryption.instance
+      String waterUnit = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
-      double drinkWaterValue = double.parse(Encryption.instance
+      double drinkWaterValue = double.parse(encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]));
       double drinkWater = 0.0;
       if (drinkWaterValue > 0) {
@@ -648,9 +645,10 @@ class MenstrualCycleWidget {
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+    final encryption = Encryption.instance;
 
     List.generate(queryResponse.length, (i) {
-      String sleepTime = Encryption.instance
+      String sleepTime = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
       List<String> time = sleepTime.split("T");
       List<String> sleepBedTime = time[0].split(":");
@@ -746,11 +744,12 @@ class MenstrualCycleWidget {
 
     final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
         "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+    final encryption = Encryption.instance;
 
     List.generate(queryResponse.length, (i) {
-      String tempUnit = Encryption.instance.decrypt(
+      String tempUnit = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
-      double tempValue = double.parse(Encryption.instance.decrypt(
+      double tempValue = double.parse(encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]));
       double temp = 0.0;
       if (tempValue > 0) {
@@ -844,6 +843,7 @@ class MenstrualCycleWidget {
     final dbHelper = MenstrualCycleDbHelper.instance;
     int offset = (pageNumber - 1) * itemsPerPage;
     String customerId = getCustomerId();
+    printMenstrualCycleLogs("customerId $customerId");
     Database? db = await dbHelper.database;
     final List<Map<String, dynamic>> queryResponse;
     if (isRequiredPagination) {
@@ -853,12 +853,14 @@ class MenstrualCycleWidget {
       queryResponse = await db!.rawQuery(
           "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnLogDate} BETWEEN '$logStartDate' AND '$logEndDate'");
     }
+    final encryption = Encryption.instance;
+
     List.generate(queryResponse.length, (i) {
       UserLogReportData userLogsData = UserLogReportData();
       userLogsData.id = queryResponse[i][MenstrualCycleDbHelper.columnID];
       userLogsData.customerId =
           queryResponse[i][MenstrualCycleDbHelper.columnCustomerId];
-      String symptomsData = Encryption.instance.decrypt(
+      String symptomsData = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
       List<dynamic> jsonData = json.decode(symptomsData.trim());
       userLogsData.symptomsData =
@@ -876,23 +878,23 @@ class MenstrualCycleWidget {
       userLogsData.symptomsData!.clear();
       userLogsData.symptomsData!.addAll(newSymptomsDataList);
 
-      userLogsData.bodyTemperature = Encryption.instance.decrypt(
+      userLogsData.bodyTemperature = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]);
-      userLogsData.bodyTemperatureUnit = Encryption.instance.decrypt(
+      userLogsData.bodyTemperatureUnit = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
-      userLogsData.weightUnit = Encryption.instance
+      userLogsData.weightUnit = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
-      userLogsData.weight = Encryption.instance
+      userLogsData.weight = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]);
-      userLogsData.waterUnit = Encryption.instance
+      userLogsData.waterUnit = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
-      userLogsData.waterValue = Encryption.instance
+      userLogsData.waterValue = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]);
-      userLogsData.sleepTime = Encryption.instance
+      userLogsData.sleepTime = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
-      userLogsData.notes = Encryption.instance
+      userLogsData.notes = encryption
           .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
-      userLogsData.meditationTime = Encryption.instance.decrypt(
+      userLogsData.meditationTime = encryption.decrypt(
           queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]);
       userLogsData.logDate = DateTime.parse(
           queryResponse[i][MenstrualCycleDbHelper.columnLogDate]);
@@ -1370,10 +1372,11 @@ class MenstrualCycleWidget {
           "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId' AND ${MenstrualCycleDbHelper.columnCycleDay}=$currentCycleDay AND ${MenstrualCycleDbHelper.columnLogDate} < '$lastPeriodDate'");
 
       List<SymptomsData> pastSymptomsData = [];
+      final encryption = Encryption.instance;
 
       // printMenstrualCycleLogs("Count: ${queryResponse.length}");
       List.generate(queryResponse.length, (i) {
-        String symptomsData = Encryption.instance.decrypt(
+        String symptomsData = encryption.decrypt(
             queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
         List<dynamic> jsonData = json.decode(symptomsData.trim());
         pastSymptomsData.addAll(
@@ -1436,6 +1439,183 @@ class MenstrualCycleWidget {
     }
 
     return WidgetBaseLanguage.latePeriodLabel;
+  }
+
+  /// Return All UserSymptomsLogs for backup
+  Future<List<UserSymptomsLogs>> getAllSymptomsData() async {
+    List<UserSymptomsLogs> allUserSymptomsLogs = [];
+    final mInstance = MenstrualCycleWidget.instance!;
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    Database? db = await dbHelper.database;
+    String customerId = mInstance.getCustomerId();
+
+    final encryption = Encryption.instance;
+    final List<Map<String, dynamic>> queryResponse = await db!.rawQuery(
+        "Select * from ${MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData} WHERE ${MenstrualCycleDbHelper.columnCustomerId}='$customerId'");
+    List.generate(queryResponse.length, (i) {
+      UserSymptomsLogs userSymptomsLogs = UserSymptomsLogs(symptomData: []);
+      List<SymptomsData> symptomsDataList = [];
+      String userDecryptData = encryption.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
+
+      List<dynamic> jsonData = json.decode(userDecryptData.trim());
+      //printMenstrualCycleLogs("jsonData ${jsonData}");
+      symptomsDataList.addAll(
+          jsonData.map((symptom) => SymptomsData.fromMap(symptom)).toList());
+
+      userSymptomsLogs.meditationTime = encryption.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnMeditationTime]);
+
+      userSymptomsLogs.bodyTemperature = encryption.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperature]);
+      userSymptomsLogs.waterValue = encryption
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWater]);
+      userSymptomsLogs.weight = encryption
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeight]);
+      userSymptomsLogs.weightUnit = encryption
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWeightUnit]);
+      userSymptomsLogs.sleepTime = encryption
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnSleepTime]);
+      userSymptomsLogs.waterUnit = encryption
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnWaterUnit]);
+      userSymptomsLogs.bodyTemperatureUnit = encryption.decrypt(
+          queryResponse[i][MenstrualCycleDbHelper.columnBodyTemperatureUnit]);
+      userSymptomsLogs.notes = encryption
+          .decrypt(queryResponse[i][MenstrualCycleDbHelper.columnNotes]);
+      userSymptomsLogs.logDate =
+          queryResponse[i][MenstrualCycleDbHelper.columnLogDate];
+      userSymptomsLogs.cycleDay =
+          queryResponse[i][MenstrualCycleDbHelper.columnLogDate];
+
+      userSymptomsLogs.symptomData!.addAll(symptomsDataList);
+
+      allUserSymptomsLogs.add(userSymptomsLogs);
+    });
+
+    return allUserSymptomsLogs;
+  }
+
+  /// Get All Menstrual cycle data for backup
+  Future<Map<String, dynamic>> getBackupOfMenstrualCycleData(
+      {bool isEncryptData = true}) async {
+    List<UserSymptomsLogs> userSymptomsLogsData = await getAllSymptomsData();
+    List<String> allPeriodsLogs = [];
+    if (_lastPeriodDate.isNotEmpty) {
+      final dbHelper = MenstrualCycleDbHelper.instance;
+      allPeriodsLogs = await dbHelper.getPastPeriodDates();
+    }
+
+    Map<String, dynamic> allSummaryData = {
+      "allTableData": {
+        MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData:
+            userSymptomsLogsData.map((e) => e.toJson()).toList(),
+        MenstrualCycleDbHelper.tableUserPeriodsLogsData: allPeriodsLogs,
+      },
+      "cycleLength": getCycleLength(),
+      "periodDuration": getPeriodDuration(),
+      "backupDate": "${currentDateFormat.format(DateTime.now())}"
+    };
+
+    if (isEncryptData) {
+      return {
+        "encryptedData":
+            Encryption.instance.encrypt((jsonEncode(allSummaryData))),
+      };
+    }
+
+    return allSummaryData;
+  }
+
+  /// Restore backup of user's data
+  Future<bool> restoreBackupOfMenstrualCycleData(
+      {bool isDecryptData = true,
+      required Map<String, dynamic> backupData,
+      required String customerId}) async {
+    if (backupData.isEmpty) return false;
+
+    final dbHelper = MenstrualCycleDbHelper.instance;
+
+    Map<String, dynamic> decryptData = {};
+    if (isDecryptData) {
+      if (backupData.containsKey("encryptedData")) {
+        try {
+          decryptData = jsonDecode(
+              Encryption.instance.decrypt(backupData["encryptedData"]));
+        } catch (e) {
+          throw "Error decrypting data: $e";
+        }
+      } else {
+        throw "Encrypted data with 'encryptedData' key is required";
+      }
+    } else {
+      decryptData = backupData;
+    }
+    // Restore Symptom Logs Data
+    List<dynamic> symptomsLogsData = decryptData["allTableData"]
+            [MenstrualCycleDbHelper.tableDailyUserSymptomsLogsData] ??
+        [];
+    final encryption = Encryption.instance;
+
+    if (symptomsLogsData.isNotEmpty) {
+      dbHelper.clearSymptomsLog(customerId);
+      for (var log in symptomsLogsData) {
+        UserSymptomsLogs userSymptomLog = UserSymptomsLogs.fromJson(log);
+        String encryptedData =
+            encryption.encrypt(json.encode(userSymptomLog.symptomData!));
+
+        Map<String, dynamic> userData = {
+          MenstrualCycleDbHelper.columnCustomerId:
+              encryption.encrypt(customerId),
+          MenstrualCycleDbHelper.columnUserEncryptData: encryptedData,
+          MenstrualCycleDbHelper.columnMeditationTime:
+              encryption.encrypt(userSymptomLog.meditationTime ?? ""),
+          MenstrualCycleDbHelper.columnSleepTime:
+              encryption.encrypt(userSymptomLog.sleepTime ?? ""),
+          MenstrualCycleDbHelper.columnWater:
+              encryption.encrypt(userSymptomLog.waterValue ?? ""),
+          MenstrualCycleDbHelper.columnWaterUnit:
+              encryption.encrypt(userSymptomLog.waterUnit ?? ""),
+          MenstrualCycleDbHelper.columnBodyTemperatureUnit:
+              encryption.encrypt(userSymptomLog.bodyTemperatureUnit ?? ""),
+          MenstrualCycleDbHelper.columnWeightUnit:
+              encryption.encrypt(userSymptomLog.weightUnit ?? ""),
+          MenstrualCycleDbHelper.columnNotes:
+              encryption.encrypt(userSymptomLog.notes ?? ""),
+          MenstrualCycleDbHelper.columnWeight:
+              encryption.encrypt(userSymptomLog.weight ?? ""),
+          MenstrualCycleDbHelper.columnBodyTemperature:
+              encryption.encrypt(userSymptomLog.bodyTemperature ?? ""),
+          MenstrualCycleDbHelper.columnLogDate: userSymptomLog.logDate,
+          MenstrualCycleDbHelper.columnCycleDay: userSymptomLog.cycleDay,
+          MenstrualCycleDbHelper.columnCreatedDateTime:
+              userSymptomLog.createdDate,
+          MenstrualCycleDbHelper.columnIsCustomLog: userSymptomLog.isCustomLog
+        };
+        await dbHelper.insertDailyLog(
+            userData, userSymptomLog.logDate ?? "", customerId);
+      }
+    }
+
+    // Restore Period Logs Data
+    List<dynamic> periodLogsData = decryptData["allTableData"]
+            [MenstrualCycleDbHelper.tableUserPeriodsLogsData] ??
+        [];
+    if (periodLogsData.isNotEmpty) {
+      dbHelper.clearPeriodLog(customerId);
+      await dbHelper.insertOrUpdatePeriodLog(periodLogsData);
+    }
+
+    // Restore Cycle Length and Period Duration
+    int cycleLength = decryptData["cycleLength"] ?? 28;
+    int periodDuration = decryptData["periodDuration"] ?? 5;
+
+    // Update cycle and period details
+    await dbHelper.insertCurrentUserDetails(
+        cycleLength: cycleLength,
+        periodDuration: periodDuration,
+        customerId: customerId);
+
+    return false;
   }
 
   /// get matrix summary data btn two date
@@ -1822,6 +2002,17 @@ class MenstrualCycleWidget {
     }
 
     return symptomsPatternList;
+  }
+
+  /// Clear all logs data
+  Future<void> clearAllData() async {
+    // clear data
+    final dbHelper = MenstrualCycleDbHelper.instance;
+    String encryptedUserid = getCustomerId();
+    // Clear period data
+    await dbHelper.clearPeriodLog(encryptedUserid);
+    // Clear symptoms data
+    await dbHelper.clearSymptomsLog(encryptedUserid);
   }
 
   Future<void> addDummyData(

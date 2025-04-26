@@ -11,6 +11,10 @@ class UserSymptomsLogs {
   String? weight;
   String? bodyTemperature;
   String? logDate;
+  String? cycleDay;
+  String? createdDate;
+  String? isCustomLog;
+
   List<SymptomsData>? symptomData = <SymptomsData>[];
 
   UserSymptomsLogs(
@@ -24,6 +28,9 @@ class UserSymptomsLogs {
       this.weight,
       this.bodyTemperature,
       this.logDate,
+      this.cycleDay,
+      this.isCustomLog,
+      this.createdDate,
       this.symptomData});
 
   UserSymptomsLogs.fromJson(Map<String, dynamic> json) {
@@ -36,6 +43,9 @@ class UserSymptomsLogs {
     notes = json['notes'];
     weight = json['weight'];
     logDate = json['logDate'];
+    logDate = json['logDate'];
+    isCustomLog = json['isCustomLog'];
+    createdDate = json['createdDate'];
     bodyTemperature = json['bodyTemperature'];
     if (json['symptomData'] != null) {
       symptomData = <SymptomsData>[];
@@ -53,9 +63,12 @@ class UserSymptomsLogs {
     data['bodyTemperatureUnit'] = bodyTemperatureUnit;
     data['waterUnit'] = waterUnit;
     data['weightUnit'] = weightUnit;
+    data['isCustomLog'] = isCustomLog;
+    data['cycleDay'] = cycleDay;
     data['notes'] = notes;
     data['weight'] = weight;
     data['logDate'] = logDate;
+    data['createdDate'] = createdDate;
     data['bodyTemperature'] = bodyTemperature;
     if (symptomData != null) {
       data['symptomData'] = symptomData!.map((v) => v.toJson()).toList();

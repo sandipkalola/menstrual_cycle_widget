@@ -243,7 +243,10 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
           } else {
             _selectedDay = (inDays + 1);
           }
+        } else {
+          _selectedDay = widget.selectedDay;
         }
+
         if (actuallySelectedDay == 0) {
           actuallySelectedDay = _selectedDay;
         }

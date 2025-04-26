@@ -1,3 +1,9 @@
+## [3.6.0] - 26 April 2025
+
+* New Feature: Users can now create backups of their data.
+* New Feature: Users can restore from previously saved backups.
+
+
 ## [3.5.0] - 13 March 2025
 
 * Improved: Enhanced UI/UX for better readability of pregnancy-related details
