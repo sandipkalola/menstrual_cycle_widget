@@ -137,26 +137,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
       }
     }
 
-    /*final dbHelper = MenstrualCycleDbHelper.instance;
-    String lastPeriodDate = await dbHelper.getLastPeriodDate();
-    if (lastPeriodDate.isNotEmpty) {
-      String lastPeriodDay =
-          await dbHelper.getLastPeriodDateFromInputDate(logDate);
-      if (lastPeriodDay.isNotEmpty) {
-        final difference = DateTime.parse(logDate)
-            .difference(DateTime.parse(lastPeriodDay))
-            .inDays;
-        cycleDay = "${WidgetBaseLanguage.cycleDayTitle} ${difference + 1}";
-        intCycleDay = difference + 1;
-        if (difference < 0) {
-          intCycleDay = 0;
-        }
-      } else {
-        cycleDay = "";
-        intCycleDay = 0;
-      }
-    }*/
-
     final dbHelper = MenstrualCycleDbHelper.instance;
     String lastPeriodDate = await dbHelper.getLastPeriodDate();
 
@@ -931,7 +911,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                     children: [
                       ClipOval(
                         child: Material(
-                          color: const Color(0xFFD6D6D6), // Button color
+                          color: const Color(0xFFEDEDED), // Button color
                           child: InkWell(
                             splashColor: Colors.black26, // Splash color
                             onTap: () {
@@ -950,7 +930,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                       ),
                       ClipOval(
                         child: Material(
-                          color: const Color(0xFFD6D6D6), // Button color
+                          color: const Color(0xFFFEECF3), // Button color
                           child: InkWell(
                             splashColor: Colors.black26, // Splash color
                             onTap: () {
@@ -1027,19 +1007,6 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: const Icon(
-                  Icons.close,
-                  color: Colors.black,
-                  size: 30,
-                ),
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -1072,14 +1039,16 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                         fontFamily: getFontFamily(),
                       ),
                     ),
-                    Text(
-                      cycleDay,
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 12,
-                        fontFamily: getFontFamily(),
-                      ),
-                    ),
+                    (cycleDay.isNotEmpty)
+                        ? Text(
+                            cycleDay,
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 12,
+                              fontFamily: getFontFamily(),
+                            ),
+                          )
+                        : SizedBox(),
                   ],
                 ),
                 GestureDetector(
@@ -1105,7 +1074,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
               ],
             ),
             SizedBox(
-              height: 8,
+              height: 4,
             ),
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1125,7 +1094,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                   )
                 ]),
             SizedBox(
-              height: 2,
+              height: 5,
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -1164,6 +1133,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                                             fontFamily: getFontFamily(),
                                           ),
                                         ),
+                                        Divider(color: Color(0xFFD3D3D3)),
                                         Wrap(
                                             children: symptomsList[index]
                                                 .symptomsData!
@@ -1236,9 +1206,10 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                       (widget.isRequiredWeightView!)
                           ? logView(
                               title: WidgetBaseLanguage.lblWeight,
-                              addIcon: const Icon(
+                              addIcon: Icon(
                                 Icons.edit,
                                 size: 20,
+                                color: widget.themeColor,
                               ),
                               hintText:
                                   (logReportList[0].finalValue!.isNotEmpty)
@@ -1261,15 +1232,17 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
+                                color: Color(0xFF2F2F2F),
                               ),
                               typeString: "/ ${WidgetBaseLanguage.weightKg}")
                           : const SizedBox(),
                       (widget.isRequiredBodyTemperatureView!)
                           ? logView(
                               title: WidgetBaseLanguage.lblBodyTemp,
-                              addIcon: const Icon(
+                              addIcon: Icon(
                                 Icons.edit,
                                 size: 20,
+                                color: widget.themeColor,
                               ),
                               hintText:
                                   (logReportList[1].finalValue!.isNotEmpty)
@@ -1292,6 +1265,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
+                                color: Color(0xFF2F2F2F),
                               ),
                               typeString: "/ °${WidgetBaseLanguage.bodyTempC}")
                           : const SizedBox(),
@@ -1339,15 +1313,17 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
+                                color: Color(0xFF2F2F2F),
                               ),
                               typeString: "")
                           : const SizedBox(),
                       (widget.isRequiredMeditationView!)
                           ? logView(
                               title: WidgetBaseLanguage.lblMeditation,
-                              addIcon: const Icon(
+                              addIcon: Icon(
                                 Icons.edit,
                                 size: 20,
+                                color: widget.themeColor,
                               ),
                               hintText:
                                   (logReportList[3].finalValue!.isNotEmpty)
@@ -1372,15 +1348,17 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
+                                color: Color(0xFF2F2F2F),
                               ),
                               typeString: "")
                           : const SizedBox(),
                       (widget.isRequiredWaterView!)
                           ? logView(
                               title: WidgetBaseLanguage.lblWater,
-                              addIcon: const Icon(
+                              addIcon: Icon(
                                 Icons.edit,
                                 size: 20,
+                                color: widget.themeColor,
                               ),
                               hintText:
                                   (logReportList[4].finalValue!.isNotEmpty)
@@ -1404,6 +1382,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                               removeIcon: const Icon(
                                 Icons.delete,
                                 size: 20,
+                                color: Color(0xFF2F2F2F),
                               ),
                               typeString:
                                   "/ ${WidgetBaseLanguage.graphWaterUnitLiter}")
@@ -1413,34 +1392,68 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: () {
-                saveTodayLogs();
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: widget.themeColor,
-                  ),
-                  color: widget.themeColor,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                ),
-                margin: const EdgeInsets.all(10),
-                child: Center(
-                  child: Text(
-                    WidgetBaseLanguage.saveLogs,
-                    style: TextStyle(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                      ),
                       color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: getFontFamily(),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    child: Center(
+                      child: Text(
+                        WidgetBaseLanguage.cancelLabel,
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: getFontFamily(),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
+                GestureDetector(
+                  onTap: () {
+                    saveTodayLogs();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: widget.themeColor,
+                      ),
+                      color: widget.themeColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    margin: const EdgeInsets.all(10),
+                    child: Center(
+                      child: Text(
+                        WidgetBaseLanguage.saveLogs,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: getFontFamily(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             )
           ],
         ),

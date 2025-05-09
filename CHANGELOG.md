@@ -1,8 +1,12 @@
+## [3.6.2] - 9 May 2025
+
+* Improved: Enhanced UI/UX for better readability of symptoms log view
+
+
 ## [3.6.1] - 30 April 2025
 
 * New Feature: Users can now create backups of their data.
 * New Feature: Users can restore from previously saved backups.
-
 
 ## [3.5.0] - 13 March 2025
 
