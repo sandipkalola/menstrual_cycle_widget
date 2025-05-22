@@ -1,3 +1,9 @@
+
+## [3.7.0] - 22 May 2025
+
+* New Feature: Added Estrogen-Progesterone Graph.
+
+
 ## [3.6.2] - 9 May 2025
 
 * Improved: Enhanced UI/UX for better readability of symptoms log view

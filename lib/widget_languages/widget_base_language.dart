@@ -43,6 +43,10 @@ class WidgetBaseLanguage {
 
   static String get lutealPhaseLabel => getLutealPhaseLabel();
 
+  static String get estrogenLabel => getEstrogenLabel();
+
+  static String get progesteroneLabel => getProgesteroneLabel();
+
   static String get latePeriodLabel => getLatePeriodLabel();
 
   static String get dayLabel => getDayLabel();

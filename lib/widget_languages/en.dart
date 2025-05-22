@@ -18,6 +18,9 @@ const String enMenstruationLabel = "Menstruation";
 const String enFollicularPhaseLabel = "Follicular phase";
 const String enOvulationLabel = "Ovulation";
 const String enLutealPhaseLabel = "Luteal phase";
+const String enEstrogenLabel = "Estrogen";
+const String enProgesteroneLabel = "Progesterone";
+
 const String enDayLabel = "Day";
 const String enLogPeriodLabel = "Log Period";
 

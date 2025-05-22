@@ -284,3 +284,6 @@ const String arLatePeriod = "الفترة المتأخرة";
 const String arFirstTrimesterName = "الفصل الدراسي الأول";
 const String arSecondTrimesterName = "الفصل الدراسي الثاني";
 const String arThirdTrimesterName = "الفصل الدراسي الثالث";
+
+const String arEstrogenLabel = "الإستروجين";
+const String arProgesteroneLabel = "البروجستيرون";

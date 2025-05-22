@@ -236,8 +236,6 @@ class _MenstrualCyclePhaseViewState extends State<MenstrualCyclePhaseView>
       if (lastPeriodDate.isNotEmpty) {
         DateTime lastPeriod = DateTime.parse(lastPeriodDate);
         int inDays = DateTime.now().difference(lastPeriod).inDays;
-        printMenstrualCycleLogs("inDays: $inDays");
-        printMenstrualCycleLogs("widget.selectedDay: ${widget.selectedDay}");
         if (widget.selectedDay == 0) {
           if (_selectedDay == 0) {
             if (inDays > _totalCycleDays) {

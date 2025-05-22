@@ -49,6 +49,7 @@ visualizations to support users in understanding their menstrual days.
 - Sleep graph
 - Weight graph
 - Meditation graph
+- Estrogen & Progesterone Graph
 
 ##### 4) Customization:
 
@@ -107,6 +108,10 @@ complete details about this widget.
 ## [Monthly calender view](https://sks-organization-5.gitbook.io/menstrual-cycle-widget/widgets/monthly-calender-view)
 
 <img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/month_view.jpeg?raw=true" height = "400px"> 
+
+## Estrogen & Progesterone Graph
+
+<img src="https://github.com/sandipkalola/menstrual_cycle_widget_example/blob/main/assets/estrogen.jpg?raw=true" height = "400px">
 
 ## [Weekly calender view](https://sks-organization-5.gitbook.io/menstrual-cycle-widget/widgets/weekly-calender-view)
 

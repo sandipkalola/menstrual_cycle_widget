@@ -10,4 +10,5 @@ export 'graphs_view/menstrual_water_graph.dart';
 export 'graphs_view/menstrual_sleep_graph.dart';
 export 'graphs_view/menstrual_weight_graph.dart';
 export 'graphs_view/menstrual_meditation_graph.dart';
+export 'graphs_view/estrogen_progesterone_graph.dart';
 export 'pregnancy_view.dart';

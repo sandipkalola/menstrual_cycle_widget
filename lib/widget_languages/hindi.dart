@@ -287,3 +287,6 @@ const String hiLatePeriod = "देर से मासिक धर्म";
 const String hiFirstTrimesterName = "पहली तिमाही";
 const String hiSecondTrimesterName = "दूसरी तिमाही";
 const String hiThirdTrimesterName = "तीसरी तिमाही";
+
+const String hiEstrogenLabel = "एस्ट्रोजन";
+const String hiProgesteroneLabel = "प्रोजेस्टेरोन";

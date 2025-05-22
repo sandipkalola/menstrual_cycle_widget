@@ -160,8 +160,6 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
       }
     }
     updateData();
-    /* minValue = minValue - 5;
-    maxValue = maxValue + 5;*/
     minValue = 10;
     maxValue = 45;
     if (minValue < 0) {
