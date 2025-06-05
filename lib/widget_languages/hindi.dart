@@ -290,3 +290,7 @@ const String hiThirdTrimesterName = "तीसरी तिमाही";
 
 const String hiEstrogenLabel = "एस्ट्रोजन";
 const String hiProgesteroneLabel = "प्रोजेस्टेरोन";
+
+const String hiLowLabel = "कम";
+const String hiMediumLabel = "मध्यम";
+const String hiHighLabel = "उच्च";

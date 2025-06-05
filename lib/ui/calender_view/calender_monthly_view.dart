@@ -451,11 +451,46 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                         children: [
                           GestureDetector(
                             onTap: () {
+                              setState(() {
+                                if (isEditMode) {
+                                  generateMonthData(true);
+                                  isEditMode = false;
+                                } else {
+                                  isEditMode = true;
+                                }
+                              });
+                            },
+                            child: Container(
+                              height: 40,
+                              width: 150,
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.only(left: 5),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    width: 1.0, color: widget.themeColor),
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(10),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  WidgetBaseLanguage.cancelLabel,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: MenstrualCycleWidget
+                                          .defaultFontFamily,
+                                      color: widget.themeColor),
+                                ),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
                               saveSelectedPeriodDate();
                             },
                             child: Container(
                               padding: const EdgeInsets.all(8),
-                              margin: const EdgeInsets.only(left: 5),
+                              margin: const EdgeInsets.only(right: 5),
                               decoration: BoxDecoration(
                                 color: widget.themeColor,
                                 shape: BoxShape.rectangle,
@@ -475,41 +510,6 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                       fontFamily: MenstrualCycleWidget
                                           .defaultFontFamily,
                                       color: Colors.white),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (isEditMode) {
-                                  generateMonthData(true);
-                                  isEditMode = false;
-                                } else {
-                                  isEditMode = true;
-                                }
-                              });
-                            },
-                            child: Container(
-                              height: 40,
-                              width: 150,
-                              padding: const EdgeInsets.all(8),
-                              margin: const EdgeInsets.only(right: 5),
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                    width: 1.0, color: widget.themeColor),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(10),
-                                ),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  WidgetBaseLanguage.cancelLabel,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: MenstrualCycleWidget
-                                          .defaultFontFamily,
-                                      color: widget.themeColor),
                                 ),
                               ),
                             ),

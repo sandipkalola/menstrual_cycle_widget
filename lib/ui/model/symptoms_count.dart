@@ -3,7 +3,7 @@ class SymptomsCount {
 
   String? name;
   int? occurrences = 0;
-  String? accuracy = "0";
+  double? accuracy = 0.0;
 
   // Convert the object to a JSON-compatible map
   Map<String, dynamic> toJson() {

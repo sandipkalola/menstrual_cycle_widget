@@ -21,6 +21,10 @@ const String enLutealPhaseLabel = "Luteal phase";
 const String enEstrogenLabel = "Estrogen";
 const String enProgesteroneLabel = "Progesterone";
 
+const String enLowLabel = "Low";
+const String enMediumLabel = "Medium";
+const String enHighLabel = "High";
+
 const String enDayLabel = "Day";
 const String enLogPeriodLabel = "Log Period";
 

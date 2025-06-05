@@ -221,6 +221,36 @@ getLutealPhaseLabel() {
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
 
+getMediumLabel() {
+  final logsByLanguage = {
+    Languages.english: enMediumLabel,
+    Languages.hindi: hiMediumLabel,
+    Languages.arabic: arMediumLabel,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
+getLowLabel() {
+  final logsByLanguage = {
+    Languages.english: enLowLabel,
+    Languages.hindi: hiLowLabel,
+    Languages.arabic: arLowLabel,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
+getHighLabel() {
+  final logsByLanguage = {
+    Languages.english: enHighLabel,
+    Languages.hindi: hiHighLabel,
+    Languages.arabic: arHighLabel,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
 getEstrogenLabel() {
   final logsByLanguage = {
     Languages.english: enEstrogenLabel,

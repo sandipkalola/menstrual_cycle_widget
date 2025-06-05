@@ -920,7 +920,7 @@ class MenstrualCycleWidget {
     await dbHelper.clearPeriodLog(encryptedUserid);
   }
 
-  /// get last period date. Default is 1971-01-01
+/*  /// get last period date. Default is 1971-01-01
   Future<DateTime> getPreviousPeriodDate() async {
     String defaultDate = "1971-01-01";
     DateTime returnDateTime = DateTime.parse(defaultDate);
@@ -928,7 +928,7 @@ class MenstrualCycleWidget {
       returnDateTime = DateTime.parse(_lastPeriodDate);
     }
     return returnDateTime;
-  }
+  }*/
 
   /// get encrypt text
   Future<String> encryptText(String normalText) async {
@@ -1106,18 +1106,19 @@ class MenstrualCycleWidget {
   /// check if period started
   Future<bool> isPeriodStarted() async {
     bool periodStart = false;
-    DateTime lastPeriodDate = await getPreviousPeriodDate();
-    DateTime expEndPeriodDate =
-        lastPeriodDate.add(Duration(days: getPeriodDuration()));
-    DateTime today = DateTime.now();
+    if (_lastPeriodDate.isNotEmpty) {
+      DateTime lastPeriodDate = DateTime.parse(getPreviousPeriodDay());
+      DateTime expEndPeriodDate =
+          lastPeriodDate.add(Duration(days: getPeriodDuration()));
+      DateTime today = DateTime.now();
 
-    if (today.isAfter(lastPeriodDate) && today.isBefore(expEndPeriodDate)) {
-      periodStart = true;
-    } else if (today.isAtSameMomentAs(lastPeriodDate) ||
-        today.isAtSameMomentAs(expEndPeriodDate)) {
-      periodStart = true;
+      if (today.isAfter(lastPeriodDate) && today.isBefore(expEndPeriodDate)) {
+        periodStart = true;
+      } else if (today.isAtSameMomentAs(lastPeriodDate) ||
+          today.isAtSameMomentAs(expEndPeriodDate)) {
+        periodStart = true;
+      }
     }
-
     return periodStart;
   }
 
@@ -1134,14 +1135,16 @@ class MenstrualCycleWidget {
   /// check if today is ovulation day
   Future<bool> isOvulationDay() async {
     bool ovulationDay = false;
-    DateTime lastPeriodDate = await getPreviousPeriodDate();
-    int totalDiffCurrentLastPeriod =
-        DateTime.now().difference(lastPeriodDate).inDays;
-    int getOvulationDay = getPeriodDuration() +
-        getFollicularDayCounts() +
-        defaultOvulationDay ~/ 2;
-    if (getOvulationDay == totalDiffCurrentLastPeriod) {
-      ovulationDay = true;
+    if (_lastPeriodDate.isNotEmpty) {
+      DateTime lastPeriodDate = DateTime.parse(getPreviousPeriodDay());
+      int totalDiffCurrentLastPeriod =
+          DateTime.now().difference(lastPeriodDate).inDays;
+      int getOvulationDay = getPeriodDuration() +
+          getFollicularDayCounts() +
+          defaultOvulationDay ~/ 2;
+      if (getOvulationDay == totalDiffCurrentLastPeriod) {
+        ovulationDay = true;
+      }
     }
     return ovulationDay;
   }
@@ -1149,16 +1152,19 @@ class MenstrualCycleWidget {
   /// get current period day
   Future<int> getCurrentPeriodDay() async {
     int currentPeriodDay = 0;
-    DateTime lastPeriodDate = await getPreviousPeriodDate();
-    DateTime expEndPeriodDate =
-        lastPeriodDate.add(Duration(days: getPeriodDuration()));
-    DateTime today = DateTime.now();
+    if (_lastPeriodDate.isNotEmpty) {
+      DateTime lastPeriodDate = DateTime.parse(getPreviousPeriodDay());
+      DateTime expEndPeriodDate =
+          lastPeriodDate.add(Duration(days: getPeriodDuration()));
+      DateTime today = DateTime.now();
 
-    if (today.isAfter(lastPeriodDate) && today.isBefore(expEndPeriodDate)) {
-      currentPeriodDay = DateTime.now().difference(lastPeriodDate).inDays + 1;
-    } else if (today.isAtSameMomentAs(lastPeriodDate) ||
-        today.isAtSameMomentAs(expEndPeriodDate)) {
-      currentPeriodDay = (DateTime.now().difference(lastPeriodDate).inDays) + 1;
+      if (today.isAfter(lastPeriodDate) && today.isBefore(expEndPeriodDate)) {
+        currentPeriodDay = DateTime.now().difference(lastPeriodDate).inDays + 1;
+      } else if (today.isAtSameMomentAs(lastPeriodDate) ||
+          today.isAtSameMomentAs(expEndPeriodDate)) {
+        currentPeriodDay =
+            (DateTime.now().difference(lastPeriodDate).inDays) + 1;
+      }
     }
 
     return currentPeriodDay;
@@ -1374,7 +1380,6 @@ class MenstrualCycleWidget {
       List<SymptomsData> pastSymptomsData = [];
       final encryption = Encryption.instance;
 
-      // printMenstrualCycleLogs("Count: ${queryResponse.length}");
       List.generate(queryResponse.length, (i) {
         String symptomsData = encryption.decrypt(
             queryResponse[i][MenstrualCycleDbHelper.columnUserEncryptData]);
@@ -1392,9 +1397,9 @@ class MenstrualCycleWidget {
               symptom.name!.toLowerCase() == symptomName.toLowerCase());
           SymptomsCount oldSymptomsData = symptomAnalysisData[index];
           oldSymptomsData.occurrences = oldSymptomsData.occurrences! + 1;
-          oldSymptomsData.accuracy =
+          oldSymptomsData.accuracy = double.parse(
               ((oldSymptomsData.occurrences! * 100) / queryResponse.length)
-                  .toStringAsFixed(2);
+                  .toStringAsFixed(2));
           symptomAnalysisData.removeAt(index);
           symptomAnalysisData.add(oldSymptomsData);
         } else {
@@ -1412,6 +1417,9 @@ class MenstrualCycleWidget {
     }
     symptomAnalysisData.clear();
     symptomAnalysisData.addAll(newSymptomAnalysisData);
+
+    // Sort by accuracy in descending order
+    symptomAnalysisData.sort((a, b) => b.accuracy!.compareTo(a.accuracy!));
     return symptomAnalysisData;
   }
 
@@ -1746,7 +1754,7 @@ class MenstrualCycleWidget {
   /// get expected pregnancy test date
   Future<String> getPregnancyChances() async {
     final dbHelper = MenstrualCycleDbHelper.instance;
-    String pregnancyChancesStatus = "Low";
+    String pregnancyChancesStatus = WidgetBaseLanguage.lowLabel;
     String lastPeriodDate = await dbHelper.getLastPeriodDate();
     if (lastPeriodDate.isNotEmpty) {
       int totalDayBeforeOvulationStart =
@@ -1758,13 +1766,13 @@ class MenstrualCycleWidget {
           DateTime.now().difference(DateTime.parse(lastPeriodDate)).inDays + 1;
       if (totalDiffCurrentLastPeriod >= getPeriodDuration() &&
           totalDiffCurrentLastPeriod < totalDayBeforeOvulationStart) {
-        pregnancyChancesStatus = "Medium";
+        pregnancyChancesStatus = WidgetBaseLanguage.mediumLabel;
       } else if (totalDiffCurrentLastPeriod >= totalDayBeforeOvulationStart &&
           totalDiffCurrentLastPeriod < totalDayBeforeOvulationEnd) {
-        pregnancyChancesStatus = "High";
+        pregnancyChancesStatus = WidgetBaseLanguage.highLabel;
       } else if (totalDiffCurrentLastPeriod >= totalDayBeforeOvulationEnd &&
           totalDiffCurrentLastPeriod <= getCycleLength()) {
-        pregnancyChancesStatus = "Low";
+        pregnancyChancesStatus = WidgetBaseLanguage.lowLabel;
       }
     }
     return pregnancyChancesStatus;
@@ -2013,6 +2021,8 @@ class MenstrualCycleWidget {
     await dbHelper.clearPeriodLog(encryptedUserid);
     // Clear symptoms data
     await dbHelper.clearSymptomsLog(encryptedUserid);
+    // Clear last cycle day
+    _lastPeriodDate = "";
   }
 
   Future<void> addDummyData(

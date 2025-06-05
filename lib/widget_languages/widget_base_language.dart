@@ -45,6 +45,12 @@ class WidgetBaseLanguage {
 
   static String get estrogenLabel => getEstrogenLabel();
 
+  static String get lowLabel => getLowLabel();
+
+  static String get mediumLabel => getMediumLabel();
+
+  static String get highLabel => getHighLabel();
+
   static String get progesteroneLabel => getProgesteroneLabel();
 
   static String get latePeriodLabel => getLatePeriodLabel();

@@ -101,7 +101,7 @@ class _EstrogenProgesteroneGraphState extends State<EstrogenProgesteroneGraph> {
           final int day = details.value.toInt();
           if (day == selectedDay) {
             return ChartAxisLabel(
-                '⬆', TextStyle(fontSize: 10, color: Colors.green));
+                '⬆ \n $day', TextStyle(fontSize: 10, color: Colors.green));
           } else {
             return ChartAxisLabel('', TextStyle(fontSize: 0));
           }

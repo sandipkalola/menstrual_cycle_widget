@@ -170,14 +170,16 @@ class _MenstrualCycleTrendsGraphState extends State<MenstrualCycleTrendsGraph> {
   }
 
   updateData() {
-    int start = periodCycleChartData.length;
+    int start = periodCycleChartData.length + 1;
+    // printMenstrualCycleLogs("start : $start");
     int end = start + itemsPerPage;
     if (end > allPeriodDates.length) end = allPeriodDates.length;
     lastDataLength = 0;
     for (int i = start; i < end; i++) {
-      int cycleDuration =
-          allPeriodDates[i].cycleLength! + allPeriodDates[i].periodDuration!;
-      //  printMenstrualCycleLogs("cycleDuration : $cycleDuration");
+      int cycleDuration = allPeriodDates[i].cycleLength!;
+      /*  printMenstrualCycleLogs("cycleLength : ${allPeriodDates[i].cycleLength!}");
+      printMenstrualCycleLogs("cycleStartDate : ${allPeriodDates[i].cycleStartDate!}");
+      printMenstrualCycleLogs("cycleEndDate : ${allPeriodDates[i].cycleEndDate!}");*/
       if (cycleDuration < 50) {
         DateTime startDate = DateTime.parse(allPeriodDates[i].periodStartDate!);
         periodCycleChartData.add(

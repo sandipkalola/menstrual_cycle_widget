@@ -9,7 +9,9 @@ import 'dart:io';
 import 'package:syncfusion_flutter_pdf/pdf.dart';
 import 'dart:ui' as dart_ui;
 
+import '../../utils/colors_utils.dart';
 import '../../utils/constant.dart';
+import '../../utils/model/periods_date_range.dart';
 import '../../widget_languages/languages.dart';
 import '../calender_view/calender_date_utils.dart';
 
@@ -129,5 +131,56 @@ Widget tooltipView(String title) {
       title,
       style: const TextStyle(color: Colors.white, fontSize: 10),
     ),
+  );
+}
+
+Widget getCycleHistoryView(int index, List<PeriodsDateRange> allPeriodRange) {
+  return Column(
+    mainAxisSize: MainAxisSize.min,
+    mainAxisAlignment: MainAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      (index != 0)
+          ? Text(
+              "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleEndDate!))}",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            )
+          : Text(
+              "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${WidgetBaseLanguage.graphCycleNowTitle}",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+      Padding(
+        padding: const EdgeInsets.only(top: 5),
+        child: SizedBox(
+          height: 25,
+          child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              physics: const ClampingScrollPhysics(),
+              itemCount: allPeriodRange[index].cycleLength,
+              itemBuilder: (BuildContext context, int inx) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 2),
+                  child: Container(
+                    width: 8,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: (inx > allPeriodRange[index].periodDuration!)
+                          ? const Color(0x26212121)
+                          : defaultMenstruationColor,
+                    ),
+                  ),
+                );
+              }),
+        ),
+      ),
+      Text(
+        "${allPeriodRange[index].periodDuration!} ${WidgetBaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
+        style: const TextStyle(color: Color(0xA6212121), fontSize: 10),
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+    ],
   );
 }

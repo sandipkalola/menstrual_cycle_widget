@@ -287,3 +287,7 @@ const String arThirdTrimesterName = "الفصل الدراسي الثالث";
 
 const String arEstrogenLabel = "الإستروجين";
 const String arProgesteroneLabel = "البروجستيرون";
+
+const String arLowLabel = "قليل";
+const String arMediumLabel = "واسطة";
+const String arHighLabel = "عالي";

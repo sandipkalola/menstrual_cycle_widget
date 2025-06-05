@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../menstrual_cycle_widget.dart';
 import '../../widget_languages/languages.dart';
 import '../text_style/custom_text_style.dart';
+import 'graph_util.dart';
 
 /// TODO Add start and end date to get data for all graph
 class MenstrualAllCycleHistoryGraph extends StatefulWidget {
@@ -92,56 +93,7 @@ class _MenstrualAllCycleHistoryGraphState
           physics: const ClampingScrollPhysics(),
           itemCount: allPeriodRange.length,
           itemBuilder: (BuildContext context, int index) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                (index != 0)
-                    ? Text(
-                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${(allPeriodRange[index].cycleEndDate != null) ? CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleEndDate!)) : "-"}",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    : Text(
-                        "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${WidgetBaseLanguage.graphCycleNowTitle}",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5),
-                  child: SizedBox(
-                    height: 25,
-                    child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        physics: const ClampingScrollPhysics(),
-                        itemCount: allPeriodRange[index].cycleLength,
-                        itemBuilder: (BuildContext context, int inx) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 2),
-                            child: Container(
-                              width: 8,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: (inx >
-                                        allPeriodRange[index].periodDuration!)
-                                    ? const Color(0x26212121)
-                                    : const Color(0x80ff584f),
-                              ),
-                            ),
-                          );
-                        }),
-                  ),
-                ),
-                Text(
-                  "${allPeriodRange[index].periodDuration!} ${WidgetBaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
-                  style:
-                      const TextStyle(color: Color(0xA6212121), fontSize: 10),
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-              ],
-            );
+            return getCycleHistoryView(index, allPeriodRange);
           }),
     );
   }

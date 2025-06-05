@@ -1,5 +1,9 @@
+## [3.7.2] - 5 June 2025
 
-## [3.7.0] - 22 May 2025
+* Bug Fixes: Resolved minor bugs to enhance overall stability and performance.
+
+
+## [3.7.1] - 22 May 2025
 
 * New Feature: Added Estrogen-Progesterone Graph.
 
