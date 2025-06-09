@@ -8,9 +8,11 @@ import 'package:sqflite/sqflite.dart';
 import 'menstrual_cycle_widget.dart';
 import 'ui/model/body_temperature_data.dart';
 import 'ui/model/meditation_data.dart';
+import 'ui/model/phases_percentage.dart';
 import 'ui/model/sleep_data.dart';
 import 'ui/model/symptoms_count.dart';
 import 'ui/model/symptoms_pattern.dart';
+import 'ui/model/symptoms_patterns.dart';
 import 'ui/model/user_symptoms_logs.dart';
 import 'ui/model/water_data.dart';
 import 'ui/model/weight_data.dart';
@@ -955,6 +957,15 @@ class MenstrualCycleWidget {
     return avgPeriodDuration;
   }
 
+  /// get total number of cycle. Default is 0
+  Future<int> getTotalNumberOfCycle() async {
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    if (allPeriodRange.isNotEmpty) {
+      return allPeriodRange.length;
+    }
+    return 0;
+  }
+
   /// get average cycle length. Default is 0
   Future<int> getAvgCycleLength() async {
     List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
@@ -1022,6 +1033,7 @@ class MenstrualCycleWidget {
       PeriodsDateRange periodsDateRange = PeriodsDateRange(allPeriodDates: []);
       if (periodDateRange.length > 1) {
         for (int i = 0; i < periodDateRange.length; i++) {
+          // printMenstrualCycleLogs('periodDateRange[i] ${periodDateRange[i]}');
           periodDuration = periodDuration + 1;
           if (i == 0) {
             periodsDateRange.id = indexId;
@@ -1061,14 +1073,16 @@ class MenstrualCycleWidget {
                   .add(CalenderDateUtils.dateDayFormat(periodDateRange[i]));
               periodsDateRange.periodEndDate =
                   CalenderDateUtils.dateDayFormat(currentDate);
+
               periodsDateRange.periodDuration = periodDuration;
               periodsDateRange.allPeriodDates = periodDates;
             }
           }
         }
         periodsDateRange.cycleLength = DateTime.now()
-            .difference(DateTime.parse(periodsDateRange.cycleStartDate!))
-            .inDays;
+                .difference(DateTime.parse(periodsDateRange.cycleStartDate!))
+                .inDays +
+            1; // TODO Change on 6-6-2025 -. add +1
         listPeriodsDateRange.add(periodsDateRange);
       } else {
         periodsDateRange.id = indexId;
@@ -1335,6 +1349,87 @@ class MenstrualCycleWidget {
     return "";
   }
 
+  Future<List<SymptomsPatterns>> getSymptomsPatternForReport() async {
+    List<SymptomsPatterns> symptomAnalysisData = [];
+    List<SymptomsPattern> symptomsPatternData =
+        await getSymptomsPatternBasedOnCycle(numberOfCycle: 10);
+
+    List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
+    int numberOfCycle = allPeriodRange.length;
+
+    for (var symptomsPattern in symptomsPatternData) {
+      SymptomsPatterns symptomsPatterns = SymptomsPatterns();
+
+      int cyclesWithSymptom = symptomsPattern.cycleData!.where((cycleData) {
+        return cycleData.cycleDates!
+            .any((date) => date.isFoundSymptoms == true);
+      }).length;
+
+      double percentCyclesWithSymptom =
+          (cyclesWithSymptom / numberOfCycle) * 100;
+
+      int totalSymptomDays = 0;
+
+      // Prepare map to count symptoms per phase
+      Map<String, int> phaseSymptomCount = {
+        WidgetBaseLanguage.menstruationLabel: 0,
+        WidgetBaseLanguage.follicularPhaseLabel: 0,
+        WidgetBaseLanguage.ovulationLabel: 0,
+        WidgetBaseLanguage.lutealPhaseLabel: 0
+      };
+
+      // Process cycle data
+      for (var cycleData in symptomsPattern.cycleData!) {
+        for (int i = 0; i < cycleData.cycleDates!.length; i++) {
+          var date = cycleData.cycleDates![i];
+          if (date.isFoundSymptoms == true) {
+            // Determine phase based on cycleDay if available, fallback to index
+            int? cycleDayInt;
+            if (date.cycleDay != null && date.cycleDay!.isNotEmpty) {
+              cycleDayInt = int.tryParse(date.cycleDay!);
+            }
+
+            int cycleDay = cycleDayInt ?? (i + 1); // Fallback if null
+            String phaseName;
+            if (cycleDay >= 1 && cycleDay <= 5) {
+              phaseName = WidgetBaseLanguage.menstruationLabel;
+            } else if (cycleDay >= 6 && cycleDay <= 13) {
+              phaseName = WidgetBaseLanguage.follicularPhaseLabel;
+            } else if (cycleDay == 14) {
+              phaseName = WidgetBaseLanguage.ovulationLabel;
+            } else {
+              phaseName = WidgetBaseLanguage.lutealPhaseLabel;
+            }
+
+            phaseSymptomCount[phaseName] =
+                (phaseSymptomCount[phaseName] ?? 0) + 1;
+            totalSymptomDays++;
+          }
+        }
+      }
+
+      // Prepare list of phases where symptom was found
+      List<PhasePercentage> phasePercentage = [];
+
+      phaseSymptomCount.forEach((phase, count) {
+        double percent =
+            totalSymptomDays > 0 ? (count / totalSymptomDays) * 100 : 0.0;
+        phasePercentage.add(PhasePercentage(
+          phaseName: phase,
+          percentage: double.parse(percent.toStringAsFixed(1)),
+        ));
+      });
+      // Set result
+      symptomsPatterns.name = symptomsPattern.symptomsName;
+      symptomsPatterns.percentageOfCycles = percentCyclesWithSymptom.round();
+      symptomsPatterns.phases = phasePercentage;
+
+      symptomAnalysisData.add(symptomsPatterns);
+    }
+
+    return symptomAnalysisData;
+  }
+
   /// Get symptoms patter for today or tomorrow
   Future<List<SymptomsCount>> getSymptomsPattern(
       {bool isForTomorrow = false}) async {
@@ -1370,7 +1465,6 @@ class MenstrualCycleWidget {
     }
 
     if (currentCycleDay > 0) {
-      final dbHelper = MenstrualCycleDbHelper.instance;
       String customerId = getCustomerId();
       Database? db = await dbHelper.database;
       final List<Map<String, dynamic>> queryResponse;
@@ -1627,10 +1721,46 @@ class MenstrualCycleWidget {
   }
 
   /// get matrix summary data btn two date
-  Future<Map<String, dynamic>> getMenstrualCycleSummary(
+  Future<Map<String, dynamic>> getMenstrualCycleReportData(
       {DateTime? summaryStartDate,
       DateTime? summaryEndDate,
       bool fetchAllData = false}) async {
+    int avgPeriodDuration = await getAvgPeriodDuration();
+    int avgCycleLength = await getAvgCycleLength();
+    int prevPeriodDuration = await getPreviousPeriodDuration();
+    int prevCycleLength = await getPreviousCycleLength();
+    double cycleCRS = await getCycleRegularityScore();
+    String cycleCRSStatus = await getCycleRegularityScoreStatus();
+    double periodPRS = await getPeriodRegularityScore();
+    String periodPRSStatus = await getPeriodRegularityScoreStatus();
+    String nextPeriodDay = await getNextPredictedPeriodDate();
+    String nextOvulationDate = await getNextOvulationDate();
+    List<SymptomsPatterns> symptomsPatterns =
+        await getSymptomsPatternForReport();
+
+    Map<String, dynamic> summaryData = {
+      "key_matrix": {
+        "avg_cycle_length": avgCycleLength,
+        "avg_period_duration": avgPeriodDuration,
+        "prev_cycle_length": prevCycleLength,
+        "prev_period_duration": prevPeriodDuration,
+        "cycle_regularity_score_status": cycleCRSStatus,
+        "cycle_regularity_score": cycleCRS,
+        "period_regularity_score_status": periodPRSStatus,
+        "period_regularity_score": periodPRS,
+      },
+      "prediction_matrix": {
+        "next_period_day": nextPeriodDay,
+        "next_ovulation_day": nextOvulationDate,
+      },
+      "symptom_patterns_summary":
+          symptomsPatterns.map((e) => e.toJson()).toList(),
+    };
+    return summaryData;
+  }
+
+  /// get matrix summary data btn two date
+  Future<Map<String, dynamic>> getMenstrualCycleSummary() async {
     int currentDayCycle = await getCurrentCycleDay();
     int avgPeriodDuration = await getAvgPeriodDuration();
     int avgCycleLength = await getAvgCycleLength();
@@ -1926,29 +2056,18 @@ class MenstrualCycleWidget {
 
     if (loggedData.isEmpty) return symptomsPatternList;
 
-    int phaseId = await getPhaseId();
+    /*int phaseId = await getPhaseId();
     List<SymptomsData> listSymptomsDataBasedOnPhase = defaultSymptomsData
         .expand((category) => category.symptomsData ?? <SymptomsData>[])
         .where(
             (symptomsData) => symptomsData.phaseIds?.contains(phaseId) ?? false)
-        .toList();
+        .toList();*/
 
     Map<String, SymptomsData> symptomsMap = {};
-    Set<String> phaseSymptomsSet = {
+    /*  Set<String> phaseSymptomsSet = {
       for (var phaseSymptom in listSymptomsDataBasedOnPhase)
         phaseSymptom.symptomName?.toLowerCase() ?? ''
-    };
-
-    for (var report in loggedData) {
-      for (var symptom in report.symptomsData ?? []) {
-        String symptomNameLower = symptom.symptomName?.toLowerCase() ?? '';
-        if (phaseSymptomsSet.contains(symptomNameLower)) {
-          symptomsMap[symptomNameLower] = symptom;
-        }
-      }
-    }
-
-    if (symptomsMap.isEmpty) return symptomsPatternList;
+    };*/
 
     // Create a map of log data for quick lookup
     Map<String, List<SymptomsData>> logDataMap = {
@@ -1956,34 +2075,60 @@ class MenstrualCycleWidget {
         CalenderDateUtils.dateDayFormat(log.logDate!): log.symptomsData ?? []
     };
 
+    Map<String, UserLogReportData> logReportMap = {};
+
+    for (var report in loggedData) {
+      String dateKey = CalenderDateUtils.dateDayFormat(report.logDate!);
+
+      logReportMap[dateKey] = report;
+
+      for (var symptom in report.symptomsData ?? []) {
+        String symptomNameLower = symptom.symptomName?.toLowerCase() ?? '';
+        if (!symptomsMap.containsKey(symptomNameLower)) {
+          symptomsMap[symptomNameLower] = symptom;
+        }
+      }
+    }
+
+    if (symptomsMap.isEmpty) return symptomsPatternList;
+
     // get symptoms data based on cycle
     List<PeriodsDateRange> periodRange = await getAllPeriodsDetails();
+
     for (var symptoms in symptomsMap.values) {
+      //printMenstrualCycleLogs("symptoms ${symptoms.symptomName}");
       SymptomsPattern symptomsPattern = SymptomsPattern(cycleData: []);
       int symptomsCount = 0;
       symptomsPattern.symptomsName = symptoms.symptomName;
       int cycleCount = 1;
-      x:
       for (var periodRangeItem in periodRange) {
         // generate cycle data
-        if (cycleCount > numberOfCycle) {
-          break x;
-        }
+        if (cycleCount >= numberOfCycle) break;
+
         CycleData cycleData = CycleData(cycleDates: []);
         // generate symptoms data
         List<CycleDates> cycleDatesList = [];
+        /*  printMenstrualCycleLogs(
+            'periodRangeItem.cycleLength ${periodRangeItem.cycleStartDate}');
+
+        printMenstrualCycleLogs(
+            'periodRangeItem.cycleLength ${periodRangeItem.cycleLength}');*/
+
         for (int i = 0; i < (periodRangeItem.cycleLength ?? 0); i++) {
           CycleDates cycleDates = CycleDates();
-          cycleDates.cycleDate = CalenderDateUtils.dateDayFormat(
+
+          DateTime cycleDateObj =
               DateTime.parse(periodRangeItem.cycleStartDate!)
-                  .add(Duration(days: i)));
+                  .add(Duration(days: i));
+          String cycleDateStr = CalenderDateUtils.dateDayFormat(cycleDateObj);
+          // printMenstrualCycleLogs('cycleDateStr ${cycleDateStr}');
+          int? loggedCycleDay = logReportMap[cycleDateStr]?.cycleDay;
+
+          cycleDates.cycleDay = "${loggedCycleDay ?? (i + 1)}";
+          cycleDates.cycleDate = cycleDateStr;
           cycleDates.isFoundSymptoms = false;
 
-          String cycleDate = CalenderDateUtils.dateDayFormat(
-              DateTime.parse(periodRangeItem.cycleStartDate!)
-                  .add(Duration(days: i)));
-
-          bool isFound = logDataMap[cycleDate]?.any((s) =>
+          bool isFound = logDataMap[cycleDateStr]?.any((s) =>
                   s.symptomName!.toLowerCase() ==
                   symptoms.symptomName!.toLowerCase()) ??
               false;

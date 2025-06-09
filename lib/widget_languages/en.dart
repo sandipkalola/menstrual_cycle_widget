@@ -14,10 +14,10 @@ const String enPredictOvulationDateLabel = "Predict ovulation date";
 const String enPredictPeriodDateLabel = "Predict period date";
 const String enSelectedDateLabel = "Selected date";
 const String enTodayLabel = "Today";
-const String enMenstruationLabel = "Menstruation";
-const String enFollicularPhaseLabel = "Follicular phase";
+const String enMenstruationLabel = "Menstrual";
+const String enFollicularPhaseLabel = "Follicular";
 const String enOvulationLabel = "Ovulation";
-const String enLutealPhaseLabel = "Luteal phase";
+const String enLutealPhaseLabel = "Luteal";
 const String enEstrogenLabel = "Estrogen";
 const String enProgesteroneLabel = "Progesterone";
 

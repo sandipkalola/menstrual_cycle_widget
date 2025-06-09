@@ -155,6 +155,7 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
         cycleDay = "";
         intCycleDay = 0;
       }
+      //  printMenstrualCycleLogs('cycleDay ${cycleDay} --- intCycleDay $intCycleDay');
     }
     // Set existing data - start
     UserSymptomsLogs userSymptomsLogs = await mInstance.getSymptomsData(date);

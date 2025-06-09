@@ -1,6 +1,7 @@
-## [3.7.2] - 5 June 2025
+## [3.8.0] - 9 June 2025
 
 * Bug Fixes: Resolved minor bugs to enhance overall stability and performance.
+* New Feature: Added Custom function to generate detailed report for Menstrual Cycle.
 
 
 ## [3.7.1] - 22 May 2025

@@ -138,9 +138,9 @@ class MenstrualCycleDbHelper {
     /// Check if found logs on provided date
     int? recordExist = Sqflite.firstIntValue(await db!.rawQuery(
         "SELECT COUNT(*) FROM $tableDailyUserSymptomsLogsData WHERE $columnLogDate='$logDate' AND $columnCustomerId='$customerId'"));
-    printMenstrualCycleLogs("Found Data logDate : $logDate");
+    /* printMenstrualCycleLogs("Found Data logDate : $logDate");
     printMenstrualCycleLogs("Found Data customerId : $customerId");
-    printMenstrualCycleLogs("Found Data recordExist : $recordExist");
+    printMenstrualCycleLogs("Found Data recordExist : $recordExist");*/
 
     if (recordExist! > 0) {
       /// remove old logs
@@ -151,7 +151,7 @@ class MenstrualCycleDbHelper {
 
     ///insert a new logs
     int id = await db.insert(tableDailyUserSymptomsLogsData, data);
-    printMenstrualCycleLogs("Insert Data");
+    // printMenstrualCycleLogs("Insert Data");
     return id;
   }
 
