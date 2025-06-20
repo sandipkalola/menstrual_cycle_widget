@@ -266,23 +266,6 @@ class MenstrualCycleWidget {
     }
   }
 
-  /// get symptoms name
-  getSymptomsName(int symptomsId) {
-    List<SymptomsData> listSymptomsData = defaultSymptomsData
-        .expand((category) => category.symptomsData ?? <SymptomsData>[])
-        .where((symptomsData) => symptomsData.symptomId! == symptomsId)
-        .toList();
-
-    //printMenstrualCycleLogs("listSymptomsData size ${listSymptomsData.length}");
-    if (listSymptomsData.isNotEmpty) {
-      /*printMenstrualCycleLogs(
-          "symptomName Name ${listSymptomsData[0].symptomName}");*/
-      return listSymptomsData[0].symptomName;
-    }
-
-    return "";
-  }
-
   /// Return UserSymptomsLogs based on log date
   Future<UserSymptomsLogs> getSymptomsData(DateTime? symptomsLogDate) async {
     String logDate = "";
@@ -845,7 +828,7 @@ class MenstrualCycleWidget {
     final dbHelper = MenstrualCycleDbHelper.instance;
     int offset = (pageNumber - 1) * itemsPerPage;
     String customerId = getCustomerId();
-    printMenstrualCycleLogs("customerId $customerId");
+    // printMenstrualCycleLogs("customerId $customerId");
     Database? db = await dbHelper.database;
     final List<Map<String, dynamic>> queryResponse;
     if (isRequiredPagination) {
@@ -872,8 +855,8 @@ class MenstrualCycleWidget {
 
       for (int index = 0; index < userLogsData.symptomsData!.length; index++) {
         SymptomsData symptomsData = userLogsData.symptomsData![index];
-        //   printMenstrualCycleLogs("Oringal Name ${symptomsData.symptomName}");
-        symptomsData.symptomName = getSymptomsName(symptomsData.symptomId!);
+        //  printMenstrualCycleLogs("Oringal Name ${symptomsData.symptomName}");
+        symptomsData.symptomName = symptomsData.symptomName;
         newSymptomsDataList.add(symptomsData);
       }
 
@@ -1352,8 +1335,9 @@ class MenstrualCycleWidget {
   Future<List<SymptomsPatterns>> getSymptomsPatternForReport() async {
     List<SymptomsPatterns> symptomAnalysisData = [];
     List<SymptomsPattern> symptomsPatternData =
-        await getSymptomsPatternBasedOnCycle(numberOfCycle: 10);
+        await getSymptomsPatternBasedOnCycle(numberOfCycle: 15);
 
+    // printMenstrualCycleLogs("symptomsPatternData ${symptomsPatternData.length}");
     List<PeriodsDateRange> allPeriodRange = await getAllPeriodsDetails();
     int numberOfCycle = allPeriodRange.length;
 
@@ -2053,6 +2037,7 @@ class MenstrualCycleWidget {
     List<UserLogReportData> loggedData = await getSymptomsLogReport(
         startDate: DateTime.now().add(const Duration(days: -10000)),
         endDate: DateTime.now());
+    // printMenstrualCycleLogs("loggedData ${loggedData.length}");
 
     if (loggedData.isEmpty) return symptomsPatternList;
 
@@ -2082,8 +2067,10 @@ class MenstrualCycleWidget {
 
       logReportMap[dateKey] = report;
 
+      //printMenstrualCycleLogs("report.symptomsData ${report.symptomsData!.length}");
       for (var symptom in report.symptomsData ?? []) {
         String symptomNameLower = symptom.symptomName?.toLowerCase() ?? '';
+        // printMenstrualCycleLogs("symptomNameLower ${symptomNameLower}");
         if (!symptomsMap.containsKey(symptomNameLower)) {
           symptomsMap[symptomNameLower] = symptom;
         }
@@ -2091,6 +2078,7 @@ class MenstrualCycleWidget {
     }
 
     if (symptomsMap.isEmpty) return symptomsPatternList;
+    // printMenstrualCycleLogs("symptomsMap ${symptomsMap.length}");
 
     // get symptoms data based on cycle
     List<PeriodsDateRange> periodRange = await getAllPeriodsDetails();
