@@ -75,9 +75,9 @@ const String enErrorInvalidSymptomsLogDate =
     "Invalid symptoms log date. Date format is yyyy-MM-dd";
 const String enGraphCycleTitle = "Cycle History";
 const String enGraphCycleDaysPeriod = "days period";
-const String enGraphCycleDaysCycle = "days cycle";
+const String enGraphCycleDaysCycle = "days";
 const String enGraphCycleNowTitle = "Now";
-const String enGraphCycleViewAllTitle = "View All";
+const String enGraphCycleViewAllTitle = "See all";
 const String enGraphCycleStartDate = "Cycle start date";
 const String enLoading = "Loading...";
 const String enGraphCycleTrends = "Cycle trends";

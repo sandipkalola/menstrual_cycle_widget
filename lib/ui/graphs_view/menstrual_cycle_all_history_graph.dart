@@ -5,18 +5,19 @@ import '../../widget_languages/languages.dart';
 import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 
-/// TODO Add start and end date to get data for all graph
 class MenstrualAllCycleHistoryGraph extends StatefulWidget {
   final String? headerTitle;
   final TextStyle? headerTitleTextStyle;
   final String? loadingText;
   final Color appBarBackgroundColor;
+  final Color iconColor;
 
   const MenstrualAllCycleHistoryGraph({
     super.key,
     this.headerTitle,
     this.loadingText,
     this.appBarBackgroundColor = Colors.blueAccent,
+    this.iconColor = Colors.white,
     this.headerTitleTextStyle,
   });
 
@@ -64,6 +65,7 @@ class _MenstrualAllCycleHistoryGraphState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: widget.iconColor),
         backgroundColor: widget.appBarBackgroundColor,
         title: Text(
           _headerTitle,

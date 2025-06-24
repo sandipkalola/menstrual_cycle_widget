@@ -1708,7 +1708,8 @@ class MenstrualCycleWidget {
   Future<Map<String, dynamic>> getMenstrualCycleReportData(
       {DateTime? summaryStartDate,
       DateTime? summaryEndDate,
-      bool fetchAllData = false}) async {
+      bool fetchAllData = false,
+      int numberOfCycle = 5}) async {
     int avgPeriodDuration = await getAvgPeriodDuration();
     int avgCycleLength = await getAvgCycleLength();
     int prevPeriodDuration = await getPreviousPeriodDuration();
@@ -1721,6 +1722,18 @@ class MenstrualCycleWidget {
     String nextOvulationDate = await getNextOvulationDate();
     List<SymptomsPatterns> symptomsPatterns =
         await getSymptomsPatternForReport();
+
+    List<PeriodsDateRange> periodsDateRange = [];
+
+    List<PeriodsDateRange> periodRange =
+        await MenstrualCycleWidget.instance!.getAllPeriodsDetails();
+    for (int i = 0; i < periodRange.length; i++) {
+      if (i >= numberOfCycle) break;
+      int cycleDuration = periodRange[i].cycleLength!;
+      if (cycleDuration > 0 && cycleDuration < 50) {
+        periodsDateRange.add(periodRange[i]);
+      }
+    }
 
     Map<String, dynamic> summaryData = {
       "key_matrix": {
@@ -1739,6 +1752,7 @@ class MenstrualCycleWidget {
       },
       "symptom_patterns_summary":
           symptomsPatterns.map((e) => e.toJson()).toList(),
+      "cycle_summary": periodsDateRange.map((e) => e.toJson()).toList(),
     };
     return summaryData;
   }

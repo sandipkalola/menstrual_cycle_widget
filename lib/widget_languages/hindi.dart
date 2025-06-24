@@ -61,7 +61,7 @@ const String hiErrorInvalidSymptomsLogDate =
     "अमान्य लक्षण लॉग दिनांक. दिनांक प्रारूप yyyy-MM-dd है";
 const String hiGraphCycleTitle = "चक्र इतिहास";
 const String hiGraphCycleDaysPeriod = "दिनों की अवधि";
-const String hiGraphCycleDaysCycle = "दिन चक्र";
+const String hiGraphCycleDaysCycle = "दिन";
 const String hiGraphCycleNowTitle = "अब";
 const String hiGraphCycleViewAllTitle = "सभी को देखें";
 const String hiGraphCycleStartDate = "चक्र आरंभ तिथि";

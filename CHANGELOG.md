@@ -1,3 +1,9 @@
+## [3.9.0] - 24 June 2025
+
+* Bug Fixes: Resolved minor bugs to enhance overall stability and performance.
+* New Feature: Redesigned Cycle History Graph for a cleaner and more modern look.
+
+
 ## [3.8.1] - 20 June 2025
 
 * Bug Fixes: Resolved minor bugs to enhance overall stability and performance.

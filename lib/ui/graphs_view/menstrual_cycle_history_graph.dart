@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../menstrual_cycle_widget.dart';
 import '../../widget_languages/languages.dart';
-import '../text_style/custom_text_style.dart';
 import 'graph_util.dart';
 import 'menstrual_cycle_all_history_graph.dart';
 
@@ -12,6 +11,7 @@ class MenstrualCycleHistoryGraph extends StatefulWidget {
   final String? loadingText;
   final int viewCycleHistoryLength;
   final Color appBarBackgroundColor;
+  final Color iconColor;
 
   const MenstrualCycleHistoryGraph({
     super.key,
@@ -19,6 +19,7 @@ class MenstrualCycleHistoryGraph extends StatefulWidget {
     this.loadingText,
     this.appBarBackgroundColor = Colors.blueAccent,
     this.viewCycleHistoryLength = 3,
+    this.iconColor = Colors.white,
     this.headerTitleTextStyle,
   });
 
@@ -43,7 +44,8 @@ class _MenstrualCycleHistoryGraphState
   }
 
   init() async {
-    _headerTitleTextStyle = getTextStyle(widget.headerTitleTextStyle);
+    _headerTitleTextStyle = widget.headerTitleTextStyle ??
+        TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
 
     if (widget.headerTitle != null && widget.headerTitle!.isNotEmpty) {
       _headerTitle = widget.headerTitle!;
@@ -105,6 +107,7 @@ class _MenstrualCycleHistoryGraphState
                               headerTitle: widget.headerTitle,
                               headerTitleTextStyle: _headerTitleTextStyle,
                               loadingText: widget.loadingText,
+                              iconColor: widget.iconColor,
                               appBarBackgroundColor:
                                   widget.appBarBackgroundColor,
                             ),
@@ -114,8 +117,7 @@ class _MenstrualCycleHistoryGraphState
                       child: Text(
                         WidgetBaseLanguage.graphCycleViewAllTitle,
                         style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                        ),
+                            fontWeight: FontWeight.normal, fontSize: 14),
                       ),
                     )
                   : const SizedBox(),

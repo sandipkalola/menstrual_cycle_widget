@@ -25,12 +25,18 @@ Future<void> renderPdf(
 
   document.pageSettings.orientation = PdfPageOrientation.portrait;
   document.pageSettings.margins.all = 0;
-  document.pageSettings.size =
-      Size(bitmap.width.toDouble(), bitmap.height.toDouble());
+  const double padding = 5.0;
+  document.pageSettings.size = Size(
+    bitmap.width.toDouble() + (padding * 2),
+    bitmap.height.toDouble() + (padding * 2),
+  );
+
   final PdfPage page = document.pages.add();
-  final Size pageSize = page.getClientSize();
-  page.graphics
-      .drawImage(bitmap, Rect.fromLTWH(0, 0, pageSize.width, pageSize.height));
+
+  page.graphics.drawImage(
+      bitmap,
+      Rect.fromLTWH(
+          padding, padding, bitmap.width.toDouble(), bitmap.height.toDouble()));
   final List<int> bytes = document.saveSync();
   Directory documentsDirectory = await getApplicationDocumentsDirectory();
   final String path = documentsDirectory.path;
@@ -45,13 +51,35 @@ Future<void> renderPdf(
   onDownloadPdfPath!.call(file);
 }
 
-/// Read image data
+/// Read image data with background color
 Future<List<int>> readImageData(
     GlobalKey<SfCartesianChartState>? globalKey) async {
-  final dart_ui.Image? data =
+  final dart_ui.Image? chartImage =
       await globalKey!.currentState!.toImage(pixelRatio: 3.0);
+
+  if (chartImage == null) {
+    throw Exception("Failed to capture chart image.");
+  }
+
+  final recorder = dart_ui.PictureRecorder();
+  final canvas = Canvas(recorder);
+
+  final paint = Paint()..color = Colors.white;
+  canvas.drawRect(
+      Rect.fromLTWH(
+          0, 0, chartImage.width.toDouble(), chartImage.height.toDouble()),
+      paint);
+
+  // Draw the chart image on top of background
+  canvas.drawImage(chartImage, Offset.zero, Paint());
+
+  final picture = recorder.endRecording();
+  final dart_ui.Image finalImage =
+      await picture.toImage(chartImage.width, chartImage.height);
+
   final ByteData? bytes =
-      await data?.toByteData(format: dart_ui.ImageByteFormat.png);
+      await finalImage.toByteData(format: dart_ui.ImageByteFormat.png);
+
   return bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
 }
 
@@ -140,19 +168,19 @@ Widget getCycleHistoryView(int index, List<PeriodsDateRange> allPeriodRange) {
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      (index != 0)
+      (index == 0)
           ? Text(
-              "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleEndDate!))}",
+              "Current Cycle: ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
               style: const TextStyle(fontWeight: FontWeight.bold),
             )
           : Text(
-              "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${WidgetBaseLanguage.graphCycleNowTitle}",
+              "${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
       Padding(
         padding: const EdgeInsets.only(top: 5),
         child: SizedBox(
-          height: 25,
+          height: 8,
           child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
@@ -174,10 +202,19 @@ Widget getCycleHistoryView(int index, List<PeriodsDateRange> allPeriodRange) {
               }),
         ),
       ),
-      Text(
+      /*   Text(
         "${allPeriodRange[index].periodDuration!} ${WidgetBaseLanguage.graphCycleDaysPeriod} , ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
         style: const TextStyle(color: Color(0xA6212121), fontSize: 10),
-      ),
+      ),*/
+      (index != 0)
+          ? Text(
+              "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleEndDate!))}",
+              style: const TextStyle(color: Color(0xA6212121), fontSize: 10),
+            )
+          : Text(
+              "${CalenderDateUtils.formatFirstDay(DateTime.parse(allPeriodRange[index].cycleStartDate!))} - ${WidgetBaseLanguage.graphCycleNowTitle}",
+              style: const TextStyle(color: Color(0xA6212121), fontSize: 10),
+            ),
       const SizedBox(
         height: 5,
       ),
