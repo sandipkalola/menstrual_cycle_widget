@@ -170,7 +170,7 @@ Widget getCycleHistoryView(int index, List<PeriodsDateRange> allPeriodRange) {
     children: [
       (index == 0)
           ? Text(
-              "Current Cycle: ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
+              "${WidgetBaseLanguage.currentCycle}: ${allPeriodRange[index].cycleLength!} ${WidgetBaseLanguage.graphCycleDaysCycle}",
               style: const TextStyle(fontWeight: FontWeight.bold),
             )
           : Text(

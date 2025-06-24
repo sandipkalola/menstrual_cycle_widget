@@ -751,6 +751,16 @@ getOptionsViewLandscape() {
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
 
+getCurrentCycle() {
+  final logsByLanguage = {
+    Languages.english: enCurrentCycle,
+    Languages.hindi: hiCurrentCycle,
+    Languages.arabic: arCurrentCycle,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
 getToolTip() {
   final logsByLanguage = {
     Languages.english: enToolTip,

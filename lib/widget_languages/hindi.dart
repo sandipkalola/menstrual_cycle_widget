@@ -66,6 +66,7 @@ const String hiGraphCycleNowTitle = "अब";
 const String hiGraphCycleViewAllTitle = "सभी को देखें";
 const String hiGraphCycleStartDate = "चक्र आरंभ तिथि";
 const String hiLoading = "लोड हो रहा है...";
+const String hiCurrentCycle = "वर्तमान चक्र";
 const String hiGraphCycleTrends = "चक्र रुझान";
 const String hiGraphCycleLengthDays = "चक्र की लंबाई (दिनों में)";
 const String hiGraphCycleNormalDays = "सामान्य दिनों का चक्र";

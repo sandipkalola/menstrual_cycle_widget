@@ -89,6 +89,7 @@ const String enOptionsDownloadImage = "Download Image";
 const String enOptionsDownloadPDF = "Download PDF";
 const String enOptionsViewLandscape = "Landscape mode";
 const String enToolTip = "Show menu";
+const String enCurrentCycle = "Current Cycle";
 const String enNoDataFound = "No data found";
 const String enGraphBodyTempDate = "Body temperature log date";
 const String enGraphBodyTempTitle = "Temperature unit";

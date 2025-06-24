@@ -60,6 +60,7 @@ const String arGraphCycleTitle = "تاريخ الدورة";
 const String arGraphCycleDaysPeriod = "فترة أيام";
 const String arGraphCycleDaysCycle = "دورة الأيام";
 const String arGraphCycleNowTitle = "الآن";
+const String arCurrentCycle = "الدورة الحالية";
 const String arGraphCycleViewAllTitle = "عرض الكل";
 const String arGraphCycleStartDate = "تاريخ بدء الدورة";
 const String arLoading = "تحميل...";

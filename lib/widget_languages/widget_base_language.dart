@@ -162,6 +162,8 @@ class WidgetBaseLanguage {
 
   static String get toolTip => getToolTip();
 
+  static String get currentCycle => getCurrentCycle();
+
   static String get noDataFound => getNoDataFound();
 
   static String get graphBodyTempDate => getGraphBodyTempDate();
