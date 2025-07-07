@@ -35,7 +35,7 @@ class MenstrualCycleWidget {
   String _lastPeriodDate = "";
 
   // font family
-  static String defaultFontFamily = "";
+  String _defaultFontFamily = "Default";
 
   // all past periods date
   List<String> pastAllPeriodDays = [];
@@ -56,6 +56,8 @@ class MenstrualCycleWidget {
   String getPreviousPeriodDay() => _lastPeriodDate;
 
   String getSecretKey() => _aesSecretKey;
+
+  String getDefaultFontFamily() => _defaultFontFamily;
 
   int getPeriodDuration() => _periodDuration;
 
@@ -117,7 +119,7 @@ class MenstrualCycleWidget {
     initializeDateFormatting();
 
     if (fontFamily.isNotEmpty) {
-      defaultFontFamily = fontFamily;
+      _defaultFontFamily = fontFamily;
     }
 
     currentLanguage = defaultLanguage;

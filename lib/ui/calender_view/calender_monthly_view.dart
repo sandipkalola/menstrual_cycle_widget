@@ -424,8 +424,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                     cycleLength: widget.cycleLength,
                                     periodDuration: widget.periodLength,
                                     dateStyles: TextStyle(
-                                        fontFamily: MenstrualCycleWidget
-                                            .defaultFontFamily,
+                                        fontFamily: getFontFamily(),
                                         color: widget.themeColor,
                                         fontWeight: FontWeight.normal),
                                     isSelected: false,
@@ -477,8 +476,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                   WidgetBaseLanguage.cancelLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: MenstrualCycleWidget
-                                          .defaultFontFamily,
+                                      fontFamily: getFontFamily(),
                                       color: widget.themeColor),
                                 ),
                               ),
@@ -507,8 +505,7 @@ class _CalenderMonthlyViewState extends State<CalenderMonthlyView> {
                                   WidgetBaseLanguage.saveLabel,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontFamily: MenstrualCycleWidget
-                                          .defaultFontFamily,
+                                      fontFamily: getFontFamily(),
                                       color: Colors.white),
                                 ),
                               ),

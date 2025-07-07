@@ -4,7 +4,7 @@ import '../../menstrual_cycle_widget_base.dart';
 
 /// get font family name
 getFontFamily() {
-  return MenstrualCycleWidget.defaultFontFamily;
+  return MenstrualCycleWidget.instance?.getDefaultFontFamily();
 }
 
 /// text style with black color and font size is 10

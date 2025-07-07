@@ -1002,461 +1002,466 @@ class _MenstrualLogPeriodViewState extends State<MenstrualLogPeriodView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xfff2f2f2),
-      body: Padding(
-        padding: const EdgeInsets.only(top: 40),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: const Icon(
-                      Icons.arrow_back_ios_new,
-                      color: Colors.black,
-                      size: 20,
-                    ),
-                  ),
-                  onTap: () {
-                    DateTime newDateTime = DateTime.parse(logDate);
-                    DateTime previousDate =
-                        newDateTime.subtract(Duration(days: 1));
-                    logDate = defaultDateFormat.format(previousDate);
-                    init(previousDate);
-                  },
-                ),
-                Column(
-                  children: [
-                    Text(
-                      getTitle(),
-                      style: TextStyle(
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: const Icon(
+                        Icons.arrow_back_ios_new,
                         color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        fontFamily: getFontFamily(),
+                        size: 20,
                       ),
                     ),
-                    (cycleDay.isNotEmpty)
-                        ? Text(
-                            cycleDay,
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 12,
-                              fontFamily: getFontFamily(),
-                            ),
-                          )
-                        : SizedBox(),
-                  ],
-                ),
-                GestureDetector(
-                  child: SizedBox(
-                    width: 40,
-                    height: 40,
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      color: Colors.black,
-                      size: 20,
-                    ),
+                    onTap: () {
+                      DateTime newDateTime = DateTime.parse(logDate);
+                      DateTime previousDate =
+                          newDateTime.subtract(Duration(days: 1));
+                      logDate = defaultDateFormat.format(previousDate);
+                      init(previousDate);
+                    },
                   ),
-                  onTap: () {
-                    DateTime newDateTime = DateTime.now();
-                    DateTime currentDate = DateTime.parse(logDate);
-                    DateTime nextDate = currentDate.add(Duration(days: 1));
-                    if (!nextDate.isAfter(newDateTime)) {
-                      logDate = defaultDateFormat.format(nextDate);
-                      init(nextDate);
-                    }
-                  },
-                )
-              ],
-            ),
-            SizedBox(
-              height: 4,
-            ),
-            Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Icon(
-                    Icons.verified_user,
-                    color: Colors.green,
-                    size: 18,
-                  ),
-                  Text(
-                    " ${WidgetBaseLanguage.protectedData}",
-                    style: TextStyle(
-                      fontSize: 10,
-                      fontFamily: getFontFamily(),
-                    ),
-                  )
-                ]),
-            SizedBox(
-              height: 5,
-            ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      top: 0, left: 8, right: 8, bottom: 20),
-                  child: Column(
+                  Column(
                     children: [
-                      (isLoading)
-                          ? Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: CircularProgressIndicator(),
+                      Text(
+                        getTitle(),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          fontFamily: getFontFamily(),
+                        ),
+                      ),
+                      (cycleDay.isNotEmpty)
+                          ? Text(
+                              cycleDay,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 12,
+                                fontFamily: getFontFamily(),
+                              ),
                             )
-                          : ListView.builder(
-                              padding: const EdgeInsets.all(8),
-                              shrinkWrap: true,
-                              physics: const ClampingScrollPhysics(),
-                              itemCount: symptomsList.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return Card(
-                                  color: Colors.white,
-                                  elevation: 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${symptomsList[index].categoryName}",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: getFontFamily(),
+                          : SizedBox(),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: SizedBox(
+                      width: 40,
+                      height: 40,
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        color: Colors.black,
+                        size: 20,
+                      ),
+                    ),
+                    onTap: () {
+                      DateTime newDateTime = DateTime.now();
+                      DateTime currentDate = DateTime.parse(logDate);
+                      DateTime nextDate = currentDate.add(Duration(days: 1));
+                      if (!nextDate.isAfter(newDateTime)) {
+                        logDate = defaultDateFormat.format(nextDate);
+                        init(nextDate);
+                      }
+                    },
+                  )
+                ],
+              ),
+              SizedBox(
+                height: 4,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(
+                      Icons.verified_user,
+                      color: Colors.green,
+                      size: 18,
+                    ),
+                    Text(
+                      " ${WidgetBaseLanguage.protectedData}",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontFamily: getFontFamily(),
+                      ),
+                    )
+                  ]),
+              SizedBox(
+                height: 5,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        top: 0, left: 8, right: 8, bottom: 20),
+                    child: Column(
+                      children: [
+                        (isLoading)
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(),
+                              )
+                            : ListView.builder(
+                                padding: const EdgeInsets.all(8),
+                                shrinkWrap: true,
+                                physics: const ClampingScrollPhysics(),
+                                itemCount: symptomsList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Card(
+                                    color: Colors.white,
+                                    elevation: 0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${symptomsList[index].categoryName}",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: getFontFamily(),
+                                            ),
                                           ),
-                                        ),
-                                        Divider(color: Color(0xFFD3D3D3)),
-                                        Wrap(
-                                            children: symptomsList[index]
-                                                .symptomsData!
-                                                .map((chip) {
-                                          return Padding(
-                                            padding:
-                                                const EdgeInsets.only(right: 3),
-                                            child: Stack(
-                                              alignment: Alignment.bottomRight,
-                                              children: [
-                                                FilterChip(
-                                                  shape:
-                                                      const RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                      Radius.circular(50),
+                                          Divider(color: Color(0xFFD3D3D3)),
+                                          Wrap(
+                                              children: symptomsList[index]
+                                                  .symptomsData!
+                                                  .map((chip) {
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 3),
+                                              child: Stack(
+                                                alignment:
+                                                    Alignment.bottomRight,
+                                                children: [
+                                                  FilterChip(
+                                                    shape:
+                                                        const RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                        Radius.circular(50),
+                                                      ),
                                                     ),
+                                                    key: ValueKey(chip),
+                                                    side: chip.isSelected
+                                                        ? BorderSide(
+                                                            color: Color(
+                                                              int.parse(
+                                                                  "0xff${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
+                                                            ),
+                                                          )
+                                                        : BorderSide.none,
+                                                    label: Text(
+                                                      "${chip.symptomName}",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              getFontFamily()),
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(1),
+                                                    backgroundColor:
+                                                        chip.isSelected
+                                                            ? Colors.white
+                                                            : Color(
+                                                                int.parse(
+                                                                    "0x0D${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
+                                                              ),
+                                                    onSelected: (bool value) {
+                                                      setState(() {
+                                                        chip.isSelected =
+                                                            !chip.isSelected;
+                                                      });
+                                                    },
                                                   ),
-                                                  key: ValueKey(chip),
-                                                  side: chip.isSelected
-                                                      ? BorderSide(
+                                                  (chip.isSelected)
+                                                      ? Icon(
+                                                          Icons
+                                                              .check_circle_rounded,
                                                           color: Color(
                                                             int.parse(
                                                                 "0xff${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
                                                           ),
-                                                        )
-                                                      : BorderSide.none,
-                                                  label: Text(
-                                                    "${chip.symptomName}",
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            getFontFamily()),
-                                                  ),
-                                                  padding:
-                                                      const EdgeInsets.all(1),
-                                                  backgroundColor:
-                                                      chip.isSelected
-                                                          ? Colors.white
-                                                          : Color(
-                                                              int.parse(
-                                                                  "0x0D${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
-                                                            ),
-                                                  onSelected: (bool value) {
-                                                    setState(() {
-                                                      chip.isSelected =
-                                                          !chip.isSelected;
-                                                    });
-                                                  },
-                                                ),
-                                                (chip.isSelected)
-                                                    ? Icon(
-                                                        Icons
-                                                            .check_circle_rounded,
-                                                        color: Color(
-                                                          int.parse(
-                                                              "0xff${symptomsList[index].categoryColor!.replaceAll("#", "")}"),
-                                                        ),
-                                                        size: 16)
-                                                    : const SizedBox(),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList()),
-                                      ],
+                                                          size: 16)
+                                                      : const SizedBox(),
+                                                ],
+                                              ),
+                                            );
+                                          }).toList()),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                            ),
-                      (widget.isRequiredWeightView!)
-                          ? logView(
-                              title: WidgetBaseLanguage.lblWeight,
-                              addIcon: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: widget.themeColor,
+                                  );
+                                },
                               ),
-                              hintText:
-                                  (logReportList[0].finalValue!.isNotEmpty)
-                                      ? logReportList[0].finalValue!
-                                      : "000",
-                              image: weightImage,
-                              onAddClick: () {
-                                _showBottomSheetView(
-                                    context: context,
-                                    type: WidgetBaseLanguage.weightKg,
-                                    onClick: saveWeightLog,
-                                    childView: _buildWeightPicker(),
-                                    title: WidgetBaseLanguage.lblWeightTitle);
-                              },
-                              onRemoveClick: () {
-                                setState(() {
-                                  logReportList[0].finalValue = "";
-                                });
-                              },
-                              removeIcon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: Color(0xFF2F2F2F),
-                              ),
-                              typeString: "/ ${WidgetBaseLanguage.weightKg}")
-                          : const SizedBox(),
-                      (widget.isRequiredBodyTemperatureView!)
-                          ? logView(
-                              title: WidgetBaseLanguage.lblBodyTemp,
-                              addIcon: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: widget.themeColor,
-                              ),
-                              hintText:
-                                  (logReportList[1].finalValue!.isNotEmpty)
-                                      ? logReportList[1].finalValue!
-                                      : "000",
-                              image: temperatureImage,
-                              onAddClick: () {
-                                _showBottomSheetView(
-                                    context: context,
-                                    title: WidgetBaseLanguage.lblBodyTempTitle,
-                                    childView: _buildTemperaturePicker(),
-                                    onClick: saveBodyTempLog,
-                                    type: "°${WidgetBaseLanguage.bodyTempC}");
-                              },
-                              onRemoveClick: () {
-                                setState(() {
-                                  logReportList[1].finalValue = "";
-                                });
-                              },
-                              removeIcon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: Color(0xFF2F2F2F),
-                              ),
-                              typeString: "/ °${WidgetBaseLanguage.bodyTempC}")
-                          : const SizedBox(),
-                      (widget.isRequiredSleepView!)
-                          ? sleepView(
-                              title: WidgetBaseLanguage.lblSleep,
-                              startTimeHintText:
-                                  (logReportList[2].finalValue!.isNotEmpty)
-                                      ? logReportList[2].finalValue!
-                                      : "00 h : 00 m",
-                              endTimeHintText:
-                                  (logReportList[5].finalValue!.isNotEmpty)
-                                      ? logReportList[5].finalValue!
-                                      : "00 h : 00 m",
-                              image: sleepImage,
-                              onEndTimeClick: () {
-                                _showBottomSheetView(
-                                    context: context,
-                                    type: "",
-                                    onClick: saveSleepWackUpLog,
-                                    childView:
-                                        _buildSleepPicker(isWakeUpTime: true),
-                                    title: WidgetBaseLanguage
-                                        .logPeriodWakeUpTimeLog);
-                              },
-                              onStartTimeClick: () {
-                                _showBottomSheetView(
-                                    context: context,
-                                    type: "",
-                                    onClick: saveSleepLog,
-                                    childView: _buildSleepPicker(),
-                                    title:
-                                        WidgetBaseLanguage.logPeriodBedTimeLog);
-                              },
-                              onRemoveClick: () {
-                                setState(() {
-                                  logReportList[2].finalValue = "";
-                                  logReportList[2].mainValue = 0;
-                                  logReportList[2].subValue = 0;
-                                  logReportList[5].finalValue = "";
-                                  logReportList[5].mainValue = 0;
-                                  logReportList[5].subValue = 0;
-                                });
-                              },
-                              removeIcon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: Color(0xFF2F2F2F),
-                              ),
-                              typeString: "")
-                          : const SizedBox(),
-                      (widget.isRequiredMeditationView!)
-                          ? logView(
-                              title: WidgetBaseLanguage.lblMeditation,
-                              addIcon: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: widget.themeColor,
-                              ),
-                              hintText:
-                                  (logReportList[3].finalValue!.isNotEmpty)
-                                      ? logReportList[3].finalValue!
-                                      : "00 h : 00 m",
-                              image: yogaImage,
-                              onAddClick: () {
-                                _showBottomSheetView(
-                                    context: context,
-                                    type: "",
-                                    onClick: saveMeditationLog,
-                                    childView: _buildMeditationPicker(),
-                                    title:
-                                        WidgetBaseLanguage.lblMeditationTitle);
-                              },
-                              onRemoveClick: () {
-                                setState(() {
-                                  logReportList[3].finalValue = "";
-                                  logReportList[3].totalMin = 0;
-                                });
-                              },
-                              removeIcon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: Color(0xFF2F2F2F),
-                              ),
-                              typeString: "")
-                          : const SizedBox(),
-                      (widget.isRequiredWaterView!)
-                          ? logView(
-                              title: WidgetBaseLanguage.lblWater,
-                              addIcon: Icon(
-                                Icons.edit,
-                                size: 20,
-                                color: widget.themeColor,
-                              ),
-                              hintText:
-                                  (logReportList[4].finalValue!.isNotEmpty)
-                                      ? logReportList[4].finalValue!
-                                      : "00",
-                              image: drinkWaterImage,
-                              onAddClick: () {
-                                _showBottomSheetView(
-                                    context: context,
-                                    title: WidgetBaseLanguage.lblWaterTitle,
-                                    childView: _buildWaterPicker(),
-                                    onClick: saveWaterLog,
-                                    type:
-                                        WidgetBaseLanguage.graphWaterUnitLiter);
-                              },
-                              onRemoveClick: () {
-                                setState(() {
-                                  logReportList[4].finalValue = "";
-                                });
-                              },
-                              removeIcon: const Icon(
-                                Icons.delete,
-                                size: 20,
-                                color: Color(0xFF2F2F2F),
-                              ),
-                              typeString:
-                                  "/ ${WidgetBaseLanguage.graphWaterUnitLiter}")
-                          : const SizedBox(),
-                    ],
+                        (widget.isRequiredWeightView!)
+                            ? logView(
+                                title: WidgetBaseLanguage.lblWeight,
+                                addIcon: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                  color: widget.themeColor,
+                                ),
+                                hintText:
+                                    (logReportList[0].finalValue!.isNotEmpty)
+                                        ? logReportList[0].finalValue!
+                                        : "000",
+                                image: weightImage,
+                                onAddClick: () {
+                                  _showBottomSheetView(
+                                      context: context,
+                                      type: WidgetBaseLanguage.weightKg,
+                                      onClick: saveWeightLog,
+                                      childView: _buildWeightPicker(),
+                                      title: WidgetBaseLanguage.lblWeightTitle);
+                                },
+                                onRemoveClick: () {
+                                  setState(() {
+                                    logReportList[0].finalValue = "";
+                                  });
+                                },
+                                removeIcon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Color(0xFF2F2F2F),
+                                ),
+                                typeString: "/ ${WidgetBaseLanguage.weightKg}")
+                            : const SizedBox(),
+                        (widget.isRequiredBodyTemperatureView!)
+                            ? logView(
+                                title: WidgetBaseLanguage.lblBodyTemp,
+                                addIcon: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                  color: widget.themeColor,
+                                ),
+                                hintText:
+                                    (logReportList[1].finalValue!.isNotEmpty)
+                                        ? logReportList[1].finalValue!
+                                        : "000",
+                                image: temperatureImage,
+                                onAddClick: () {
+                                  _showBottomSheetView(
+                                      context: context,
+                                      title:
+                                          WidgetBaseLanguage.lblBodyTempTitle,
+                                      childView: _buildTemperaturePicker(),
+                                      onClick: saveBodyTempLog,
+                                      type: "°${WidgetBaseLanguage.bodyTempC}");
+                                },
+                                onRemoveClick: () {
+                                  setState(() {
+                                    logReportList[1].finalValue = "";
+                                  });
+                                },
+                                removeIcon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Color(0xFF2F2F2F),
+                                ),
+                                typeString:
+                                    "/ °${WidgetBaseLanguage.bodyTempC}")
+                            : const SizedBox(),
+                        (widget.isRequiredSleepView!)
+                            ? sleepView(
+                                title: WidgetBaseLanguage.lblSleep,
+                                startTimeHintText:
+                                    (logReportList[2].finalValue!.isNotEmpty)
+                                        ? logReportList[2].finalValue!
+                                        : "00 h : 00 m",
+                                endTimeHintText:
+                                    (logReportList[5].finalValue!.isNotEmpty)
+                                        ? logReportList[5].finalValue!
+                                        : "00 h : 00 m",
+                                image: sleepImage,
+                                onEndTimeClick: () {
+                                  _showBottomSheetView(
+                                      context: context,
+                                      type: "",
+                                      onClick: saveSleepWackUpLog,
+                                      childView:
+                                          _buildSleepPicker(isWakeUpTime: true),
+                                      title: WidgetBaseLanguage
+                                          .logPeriodWakeUpTimeLog);
+                                },
+                                onStartTimeClick: () {
+                                  _showBottomSheetView(
+                                      context: context,
+                                      type: "",
+                                      onClick: saveSleepLog,
+                                      childView: _buildSleepPicker(),
+                                      title: WidgetBaseLanguage
+                                          .logPeriodBedTimeLog);
+                                },
+                                onRemoveClick: () {
+                                  setState(() {
+                                    logReportList[2].finalValue = "";
+                                    logReportList[2].mainValue = 0;
+                                    logReportList[2].subValue = 0;
+                                    logReportList[5].finalValue = "";
+                                    logReportList[5].mainValue = 0;
+                                    logReportList[5].subValue = 0;
+                                  });
+                                },
+                                removeIcon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Color(0xFF2F2F2F),
+                                ),
+                                typeString: "")
+                            : const SizedBox(),
+                        (widget.isRequiredMeditationView!)
+                            ? logView(
+                                title: WidgetBaseLanguage.lblMeditation,
+                                addIcon: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                  color: widget.themeColor,
+                                ),
+                                hintText:
+                                    (logReportList[3].finalValue!.isNotEmpty)
+                                        ? logReportList[3].finalValue!
+                                        : "00 h : 00 m",
+                                image: yogaImage,
+                                onAddClick: () {
+                                  _showBottomSheetView(
+                                      context: context,
+                                      type: "",
+                                      onClick: saveMeditationLog,
+                                      childView: _buildMeditationPicker(),
+                                      title: WidgetBaseLanguage
+                                          .lblMeditationTitle);
+                                },
+                                onRemoveClick: () {
+                                  setState(() {
+                                    logReportList[3].finalValue = "";
+                                    logReportList[3].totalMin = 0;
+                                  });
+                                },
+                                removeIcon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Color(0xFF2F2F2F),
+                                ),
+                                typeString: "")
+                            : const SizedBox(),
+                        (widget.isRequiredWaterView!)
+                            ? logView(
+                                title: WidgetBaseLanguage.lblWater,
+                                addIcon: Icon(
+                                  Icons.edit,
+                                  size: 20,
+                                  color: widget.themeColor,
+                                ),
+                                hintText:
+                                    (logReportList[4].finalValue!.isNotEmpty)
+                                        ? logReportList[4].finalValue!
+                                        : "00",
+                                image: drinkWaterImage,
+                                onAddClick: () {
+                                  _showBottomSheetView(
+                                      context: context,
+                                      title: WidgetBaseLanguage.lblWaterTitle,
+                                      childView: _buildWaterPicker(),
+                                      onClick: saveWaterLog,
+                                      type: WidgetBaseLanguage
+                                          .graphWaterUnitLiter);
+                                },
+                                onRemoveClick: () {
+                                  setState(() {
+                                    logReportList[4].finalValue = "";
+                                  });
+                                },
+                                removeIcon: const Icon(
+                                  Icons.delete,
+                                  size: 20,
+                                  color: Color(0xFF2F2F2F),
+                                ),
+                                typeString:
+                                    "/ ${WidgetBaseLanguage.graphWaterUnitLiter}")
+                            : const SizedBox(),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    child: Center(
-                      child: Text(
-                        WidgetBaseLanguage.cancelLabel,
-                        style: TextStyle(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                        border: Border.all(
                           color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: getFontFamily(),
+                        ),
+                        color: Colors.white,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                      ),
+                      margin: const EdgeInsets.all(10),
+                      child: Center(
+                        child: Text(
+                          WidgetBaseLanguage.cancelLabel,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: getFontFamily(),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    saveTodayLogs();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    decoration: BoxDecoration(
-                      border: Border.all(
+                  GestureDetector(
+                    onTap: () {
+                      saveTodayLogs();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(10),
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: widget.themeColor,
+                        ),
                         color: widget.themeColor,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
                       ),
-                      color: widget.themeColor,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10),
-                      ),
-                    ),
-                    margin: const EdgeInsets.all(10),
-                    child: Center(
-                      child: Text(
-                        WidgetBaseLanguage.saveLogs,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: getFontFamily(),
+                      margin: const EdgeInsets.all(10),
+                      child: Center(
+                        child: Text(
+                          WidgetBaseLanguage.saveLogs,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: getFontFamily(),
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

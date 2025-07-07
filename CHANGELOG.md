@@ -1,3 +1,8 @@
+## [3.9.2] - 7 july 2025
+
+* Bug Fixes: Resolved minor bugs to enhance overall stability and performance.
+
+
 ## [3.9.1] - 24 June 2025
 
 * Bug Fixes: Resolved minor bugs to enhance overall stability and performance.

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../menstrual_cycle_widget.dart';
 import '../../widget_languages/languages.dart';
+import '../text_style/custom_text_style.dart';
 import 'calender_view.dart';
 
 /// get future prediction due periods dates of next period
@@ -80,7 +81,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           WidgetBaseLanguage.periodLabel,
           style: TextStyle(
             fontSize: fontSize,
-            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+            fontFamily: getFontFamily(),
           ),
         ),
         const SizedBox(
@@ -107,7 +108,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           WidgetBaseLanguage.predictOvulationDateLabel,
           style: TextStyle(
             fontSize: fontSize,
-            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+            fontFamily: getFontFamily(),
           ),
         ),
         const SizedBox(
@@ -134,7 +135,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           WidgetBaseLanguage.predictPeriodDateLabel,
           style: TextStyle(
             fontSize: fontSize,
-            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+            fontFamily: getFontFamily(),
           ),
         ),
         const SizedBox(
@@ -153,7 +154,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           WidgetBaseLanguage.selectedDateLabel,
           style: TextStyle(
             fontSize: fontSize,
-            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+            fontFamily: getFontFamily(),
           ),
         ),
         const SizedBox(
@@ -172,7 +173,7 @@ Widget getInformationView(Color daySelectedColor, Color themeColor) {
           WidgetBaseLanguage.todayLabel,
           style: TextStyle(
             fontSize: fontSize,
-            fontFamily: MenstrualCycleWidget.defaultFontFamily,
+            fontFamily: getFontFamily(),
           ),
         ),
       ],
