@@ -28,6 +28,27 @@ enum WeightUnits {
   lb,
 }
 
-enum Languages { english, hindi, arabic, spanish }
+enum Languages {
+  english,
+  hindi,
+  arabic,
+  spanish,
+  mandarin,
+  french,
+  bengali,
+  portuguese,
+  russian,
+  japanese,
+  german,
+  punjabi,
+  javanese,
+  wuChinese,
+  korean,
+  tamil,
+  turkish,
+  urdu,
+  vietnamese,
+  italian
+}
 
 enum DateFormats { dmy, ymd, mdy }
