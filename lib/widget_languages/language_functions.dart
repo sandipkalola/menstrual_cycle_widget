@@ -12,6 +12,9 @@ getLanguageCode() {
   if (MenstrualCycleWidget.currentLanguage == Languages.arabic) {
     return "ar";
   }
+  if (MenstrualCycleWidget.currentLanguage == Languages.spanish) {
+    return "es";
+  }
   return "en";
 }
 
@@ -20,6 +23,7 @@ getSaveLogsTitle() {
     Languages.english: enSaveLogs,
     Languages.hindi: hiSaveLogs,
     Languages.arabic: arSaveLogs,
+    Languages.spanish: esSaveLogs,
   };
 
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
