@@ -1,8 +1,12 @@
-const String deSecretKeyLabel = "Muss erforderlich SecretKey für die Datenverschlüsselung";
+const String deSecretKeyLabel =
+    "Muss erforderlich SecretKey für die Datenverschlüsselung";
 
-const String deIvKeyLabel = "Muss erforderlich Ivkey für die Datenverschlüsselung";
-const String deTotalCycleDaysLabel = "Die Größe der Gesamtcycclingedays muss größer als 0 sein";
-const String deTotalPeriodDaysLabel = "Die Größe der Gesamtdauer muss größer als 0 sein";
+const String deIvKeyLabel =
+    "Muss erforderlich Ivkey für die Datenverschlüsselung";
+const String deTotalCycleDaysLabel =
+    "Die Größe der Gesamtcycclingedays muss größer als 0 sein";
+const String deTotalPeriodDaysLabel =
+    "Die Größe der Gesamtdauer muss größer als 0 sein";
 const String dePrintLogLabel = "Protokoll aus dem Menstruationszyklus";
 const String deSaveLabel = "Speichern";
 const String deCancelLabel = "Stornieren";
@@ -55,16 +59,23 @@ const String dePregnancyChanceMsg4 = "Geringe Chance, schwanger zu werden";
 const String deOvulationDayMsg1 = "Vorhersage";
 const String deOvulationDayTitle = "Ovulationstag";
 const String dePredictPeriodDayStartLabel = "Vorhersagezeiten beginnen in";
-const String dePredictPeriodDayStartLabel2 = "Kann Ihr Zeitraum sein, wird sein";
+const String dePredictPeriodDayStartLabel2 =
+    "Kann Ihr Zeitraum sein, wird sein";
 const String dePredictPeriodDayStartLabel1 = "Morgen";
 
 /// Error
-const String deErrorInvalidSize = "Ungültige Menstruationscyclephaseview -Widgetgröße. Die Größe muss größer oder gleich 200 sein. Siehe";
-const String deErrorInvalidCount = "Ungültiges 'Totalcycledays' Count. Die Anzahl muss größer oder gleich 10 sein. Siehe";
-const String deErrorInvalidMenstruationDayCount = "Ungültiges Menstruationstagscount -Zählung. Die Anzahl muss größer oder gleich 0 sein. Siehe";
-const String deErrorInvalidFollicularDayCount = "Ungültiges FolliculardayCount Graf. Die Anzahl muss größer oder gleich 0 sein. Siehe";
-const String deErrorInvalidOvulationDayCount = "Ungültiges 'OvulationdayCount' Count. Die Anzahl muss größer oder gleich 0 sein. Siehe";
-const String deErrorInvalidSymptomsLogDate = "Ungültige Symptome Protokolldatum. Datumsformat ist yjyy-mm-dd";
+const String deErrorInvalidSize =
+    "Ungültige Menstruationscyclephaseview -Widgetgröße. Die Größe muss größer oder gleich 200 sein. Siehe";
+const String deErrorInvalidCount =
+    "Ungültiges 'Totalcycledays' Count. Die Anzahl muss größer oder gleich 10 sein. Siehe";
+const String deErrorInvalidMenstruationDayCount =
+    "Ungültiges Menstruationstagscount -Zählung. Die Anzahl muss größer oder gleich 0 sein. Siehe";
+const String deErrorInvalidFollicularDayCount =
+    "Ungültiges FolliculardayCount Graf. Die Anzahl muss größer oder gleich 0 sein. Siehe";
+const String deErrorInvalidOvulationDayCount =
+    "Ungültiges 'OvulationdayCount' Count. Die Anzahl muss größer oder gleich 0 sein. Siehe";
+const String deErrorInvalidSymptomsLogDate =
+    "Ungültige Symptome Protokolldatum. Datumsformat ist yjyy-mm-dd";
 const String deGraphCycleTitle = "Zyklusgeschichte";
 const String deGraphCycleDaysPeriod = "Tagesperiode";
 const String deGraphCycleDaysCycle = "Tage";
@@ -91,7 +102,8 @@ const String deGraphWaterUnitLiter = "Liter";
 const String deBodyTempC = "C";
 const String deWeightKg = "kg";
 const String deBodyTempF = "F";
-const String deErrorInvalidSymptomsDate = "Ungültige Symptome Protokolldatum. Datumsformat ist yjyy-mm-dd";
+const String deErrorInvalidSymptomsDate =
+    "Ungültige Symptome Protokolldatum. Datumsformat ist yjyy-mm-dd";
 const String deLblDone = "Erledigt";
 const String deLblWeight = "Gewicht";
 const String deLblWeightTitle = "Protokollieren Sie Ihr Gewicht";

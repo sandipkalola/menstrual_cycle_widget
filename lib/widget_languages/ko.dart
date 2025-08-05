@@ -59,12 +59,18 @@ const String koPredictPeriodDayStartLabel2 = "당신의 시대가 시작될 수 
 const String koPredictPeriodDayStartLabel1 = "내일";
 
 /// Error
-const String koErrorInvalidSize = "잘못된 'menstualcyclephaseview'위젯 크기. 크기는 200보다 크거나 같아야합니다.";
-const String koErrorInvalidCount = "유효하지 않은 'TotalCycledays'수. 수는 10보다 크거나 동일해야합니다.";
-const String koErrorInvalidMenstruationDayCount = "유효하지 않은 'MenstratureDayCount'수. 수는 0보다 크거나 같아야합니다.";
-const String koErrorInvalidFollicularDayCount = "유효하지 않은 'folliculardaycount'카운트. 수는 0보다 크거나 같아야합니다.";
-const String koErrorInvalidOvulationDayCount = "유효하지 않은 '배란용 날카 컨트'카운트. 수는 0보다 크거나 같아야합니다.";
-const String koErrorInvalidSymptomsLogDate = "잘못된 증상 로그 날짜. 날짜 형식은 yyyy-mm-dd입니다";
+const String koErrorInvalidSize =
+    "잘못된 'menstualcyclephaseview'위젯 크기. 크기는 200보다 크거나 같아야합니다.";
+const String koErrorInvalidCount =
+    "유효하지 않은 'TotalCycledays'수. 수는 10보다 크거나 동일해야합니다.";
+const String koErrorInvalidMenstruationDayCount =
+    "유효하지 않은 'MenstratureDayCount'수. 수는 0보다 크거나 같아야합니다.";
+const String koErrorInvalidFollicularDayCount =
+    "유효하지 않은 'folliculardaycount'카운트. 수는 0보다 크거나 같아야합니다.";
+const String koErrorInvalidOvulationDayCount =
+    "유효하지 않은 '배란용 날카 컨트'카운트. 수는 0보다 크거나 같아야합니다.";
+const String koErrorInvalidSymptomsLogDate =
+    "잘못된 증상 로그 날짜. 날짜 형식은 yyyy-mm-dd입니다";
 const String koGraphCycleTitle = "사이클 이력";
 const String koGraphCycleDaysPeriod = "일 기간";
 const String koGraphCycleDaysCycle = "날";

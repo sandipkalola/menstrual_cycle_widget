@@ -1,8 +1,10 @@
-const String trSecretKeyLabel = "Veri şifrelemesi için gerekli SecretKey olmalı";
+const String trSecretKeyLabel =
+    "Veri şifrelemesi için gerekli SecretKey olmalı";
 
 const String trIvKeyLabel = "Veri şifrelemesi için gerekli IVKey olmalı";
 const String trTotalCycleDaysLabel = "TotalSycledays Boyutu 0'dan büyük olmalı";
-const String trTotalPeriodDaysLabel = "TotalPerioddays Boyutu 0'dan büyük olmalı";
+const String trTotalPeriodDaysLabel =
+    "TotalPerioddays Boyutu 0'dan büyük olmalı";
 const String trPrintLogLabel = "Menstrüel Döngüsünden Günlük";
 const String trSaveLabel = "Kaydetmek";
 const String trCancelLabel = "İptal etmek";
@@ -54,17 +56,25 @@ const String trPregnancyChanceMsg3 = "Bu döngünün son verimli günü";
 const String trPregnancyChanceMsg4 = "Hamile kalma şansı düşük";
 const String trOvulationDayMsg1 = "Tahmin";
 const String trOvulationDayTitle = "Yumurtlama günü";
-const String trPredictPeriodDayStartLabel = "Tahmin süresinin başlamasını öngörmek";
-const String trPredictPeriodDayStartLabel2 = "Döneminiz olabilir başlıyor olabilir";
+const String trPredictPeriodDayStartLabel =
+    "Tahmin süresinin başlamasını öngörmek";
+const String trPredictPeriodDayStartLabel2 =
+    "Döneminiz olabilir başlıyor olabilir";
 const String trPredictPeriodDayStartLabel1 = "Yarın";
 
 /// Error
-const String trErrorInvalidSize = "Geçersiz 'menstrualcyclephaseView' widget boyutu. Boyut 200'den büyük veya 200'e eşit olmalıdır. Bkz.";
-const String trErrorInvalidCount = "Geçersiz 'Totalcycledays' sayısı. Sayı 10'dan büyük veya 10'a eşit olmalıdır. Bkz.";
-const String trErrorInvalidMenstruationDayCount = "Geçersiz 'MenstruationdayCount' sayısı. Sayı 0'dan büyük veya 0'a eşit olmalıdır. Bkz.";
-const String trErrorInvalidFollicularDayCount = "Geçersiz 'folliculardaycount' sayısı. Sayı 0'dan büyük veya 0'a eşit olmalıdır. Bkz.";
-const String trErrorInvalidOvulationDayCount = "Geçersiz 'OvulationdayCount' sayısı. Sayı 0'dan büyük veya 0'a eşit olmalıdır. Bkz.";
-const String trErrorInvalidSymptomsLogDate = "Geçersiz Semptomlar Günlük Tarihi. Tarih biçimi yyyy-mm-dd";
+const String trErrorInvalidSize =
+    "Geçersiz 'menstrualcyclephaseView' widget boyutu. Boyut 200'den büyük veya 200'e eşit olmalıdır. Bkz.";
+const String trErrorInvalidCount =
+    "Geçersiz 'Totalcycledays' sayısı. Sayı 10'dan büyük veya 10'a eşit olmalıdır. Bkz.";
+const String trErrorInvalidMenstruationDayCount =
+    "Geçersiz 'MenstruationdayCount' sayısı. Sayı 0'dan büyük veya 0'a eşit olmalıdır. Bkz.";
+const String trErrorInvalidFollicularDayCount =
+    "Geçersiz 'folliculardaycount' sayısı. Sayı 0'dan büyük veya 0'a eşit olmalıdır. Bkz.";
+const String trErrorInvalidOvulationDayCount =
+    "Geçersiz 'OvulationdayCount' sayısı. Sayı 0'dan büyük veya 0'a eşit olmalıdır. Bkz.";
+const String trErrorInvalidSymptomsLogDate =
+    "Geçersiz Semptomlar Günlük Tarihi. Tarih biçimi yyyy-mm-dd";
 const String trGraphCycleTitle = "Bisiklet Geçmişi";
 const String trGraphCycleDaysPeriod = "gün";
 const String trGraphCycleDaysCycle = "günler";
@@ -91,7 +101,8 @@ const String trGraphWaterUnitLiter = "Litre";
 const String trBodyTempC = "C";
 const String trWeightKg = "kilogram";
 const String trBodyTempF = "F";
-const String trErrorInvalidSymptomsDate = "Geçersiz Semptomlar Günlük Tarihi. Tarih biçimi yyyy-mm-dd";
+const String trErrorInvalidSymptomsDate =
+    "Geçersiz Semptomlar Günlük Tarihi. Tarih biçimi yyyy-mm-dd";
 const String trLblDone = "Tamamlamak";
 const String trLblWeight = "Ağırlık";
 const String trLblWeightTitle = "Kilonuzu kaydedin";

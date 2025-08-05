@@ -1,8 +1,12 @@
-const String itSecretKeyLabel = "Deve essere richiesto secreto per la crittografia dei dati";
+const String itSecretKeyLabel =
+    "Deve essere richiesto secreto per la crittografia dei dati";
 
-const String itIvKeyLabel = "Deve essere richiesto Ivkey per la crittografia dei dati";
-const String itTotalCycleDaysLabel = "La dimensione di TotalCycledays deve essere maggiore di 0";
-const String itTotalPeriodDaysLabel = "La dimensione di TotalPerioDdays deve essere maggiore di 0";
+const String itIvKeyLabel =
+    "Deve essere richiesto Ivkey per la crittografia dei dati";
+const String itTotalCycleDaysLabel =
+    "La dimensione di TotalCycledays deve essere maggiore di 0";
+const String itTotalPeriodDaysLabel =
+    "La dimensione di TotalPerioDdays deve essere maggiore di 0";
 const String itPrintLogLabel = "Registra dal ciclo mestruale";
 const String itSaveLabel = "Salva";
 const String itCancelLabel = "Cancellare";
@@ -54,17 +58,25 @@ const String itPregnancyChanceMsg3 = "Ultima giornata fertile di questo ciclo";
 const String itPregnancyChanceMsg4 = "Bassa possibilità di rimanere incinta";
 const String itOvulationDayMsg1 = "Previsione";
 const String itOvulationDayTitle = "Giorno dell'ovulazione";
-const String itPredictPeriodDayStartLabel = "Prevedere il periodo iniziale è in";
-const String itPredictPeriodDayStartLabel2 = "Potrebbe essere il tuo periodo di inizio sarà";
+const String itPredictPeriodDayStartLabel =
+    "Prevedere il periodo iniziale è in";
+const String itPredictPeriodDayStartLabel2 =
+    "Potrebbe essere il tuo periodo di inizio sarà";
 const String itPredictPeriodDayStartLabel1 = "Domani";
 
 /// Error
-const String itErrorInvalidSize = "Dimensione del widget mestrualcyclephaseview non valida. La dimensione deve essere maggiore o uguale a 200. Vedi";
-const String itErrorInvalidCount = "Conteggio di totalcycledays non valido. Il conteggio deve essere maggiore o uguale a 10. Vedi";
-const String itErrorInvalidMenstruationDayCount = "Conteggio non valido MenstruationDayCount. Il conteggio deve essere maggiore o uguale a 0. Vedi";
-const String itErrorInvalidFollicularDayCount = "Conteggio follicolardaycount non valido. Il conteggio deve essere maggiore o uguale a 0. Vedi";
-const String itErrorInvalidOvulationDayCount = "Conteggio non valido OvulationDayCount. Il conteggio deve essere maggiore o uguale a 0. Vedi";
-const String itErrorInvalidSymptomsLogDate = "Data del registro dei sintomi non validi. Il formato della data è yyyy-mm-dd";
+const String itErrorInvalidSize =
+    "Dimensione del widget mestrualcyclephaseview non valida. La dimensione deve essere maggiore o uguale a 200. Vedi";
+const String itErrorInvalidCount =
+    "Conteggio di totalcycledays non valido. Il conteggio deve essere maggiore o uguale a 10. Vedi";
+const String itErrorInvalidMenstruationDayCount =
+    "Conteggio non valido MenstruationDayCount. Il conteggio deve essere maggiore o uguale a 0. Vedi";
+const String itErrorInvalidFollicularDayCount =
+    "Conteggio follicolardaycount non valido. Il conteggio deve essere maggiore o uguale a 0. Vedi";
+const String itErrorInvalidOvulationDayCount =
+    "Conteggio non valido OvulationDayCount. Il conteggio deve essere maggiore o uguale a 0. Vedi";
+const String itErrorInvalidSymptomsLogDate =
+    "Data del registro dei sintomi non validi. Il formato della data è yyyy-mm-dd";
 const String itGraphCycleTitle = "Storia del ciclo";
 const String itGraphCycleDaysPeriod = "Periodo giorni";
 const String itGraphCycleDaysCycle = "giorni";
@@ -83,7 +95,8 @@ const String itOptionsViewLandscape = "Modalità paesaggista";
 const String itToolTip = "Mostra il menu";
 const String itCurrentCycle = "Ciclo corrente";
 const String itNoDataFound = "Nessun dato trovato";
-const String itGraphBodyTempDate = "Data del registro della temperatura corporea";
+const String itGraphBodyTempDate =
+    "Data del registro della temperatura corporea";
 const String itGraphBodyTempTitle = "Unità di temperatura";
 const String itGraphWaterDrinkDate = "Data di bere dell'acqua";
 const String itGraphWaterUnitTitle = "Unità d'acqua";
@@ -91,7 +104,8 @@ const String itGraphWaterUnitLiter = "Litri";
 const String itBodyTempC = "C";
 const String itWeightKg = "kg";
 const String itBodyTempF = "F";
-const String itErrorInvalidSymptomsDate = "Data del registro dei sintomi non validi. Il formato della data è yyyy-mm-dd";
+const String itErrorInvalidSymptomsDate =
+    "Data del registro dei sintomi non validi. Il formato della data è yyyy-mm-dd";
 const String itLblDone = "Fatto";
 const String itLblWeight = "Peso";
 const String itLblWeightTitle = "Registra il tuo peso";
@@ -128,7 +142,8 @@ const String itCategoryIUD = "Iud";
 const String itCategorySupplements = "Integratori";
 const String itCategoryUrine = "Urina";
 const String itCategoryOther = "Altro";
-const String itGraphMeditationTitle = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String itGraphMeditationTitle =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String itGraphMeditationDate = "Data di meditazione";
 const String itGraphMeditationMin = "in pochi minuti";
 const String itGraphMeditationMinTitle = "min";

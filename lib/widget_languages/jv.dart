@@ -1,8 +1,10 @@
 const String jvSecretKeyLabel = "Must required secretKey for data encryption";
 
 const String jvIvKeyLabel = "Must required ivKey for data encryption";
-const String jvTotalCycleDaysLabel = "totalCycleDays size must be greater than 0";
-const String jvTotalPeriodDaysLabel = "totalPeriodDays size must be greater than 0";
+const String jvTotalCycleDaysLabel =
+    "totalCycleDays size must be greater than 0";
+const String jvTotalPeriodDaysLabel =
+    "totalPeriodDays size must be greater than 0";
 const String jvPrintLogLabel = "LOG FROM MENSTRUAL CYCLE";
 const String jvSaveLabel = "Save";
 const String jvCancelLabel = "Cancel";
@@ -59,12 +61,18 @@ const String jvPredictPeriodDayStartLabel2 = "May be your period start will be";
 const String jvPredictPeriodDayStartLabel1 = "Tomorrow";
 
 /// Error
-const String jvErrorInvalidSize = "Invalid 'MenstrualCyclePhaseView' widget size. Size must be greater than or equal to 200. See ";
-const String jvErrorInvalidCount = "Invalid 'totalCycleDays' count. Count must be greater than or equal to 10. See ";
-const String jvErrorInvalidMenstruationDayCount = "Invalid 'menstruationDayCount' count. Count must be greater than or equal to 0. See ";
-const String jvErrorInvalidFollicularDayCount = "Invalid 'follicularDayCount' count. Count must be greater than or equal to 0. See ";
-const String jvErrorInvalidOvulationDayCount = "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
-const String jvErrorInvalidSymptomsLogDate = "Invalid symptoms log date. Date format is yyyy-MM-dd";
+const String jvErrorInvalidSize =
+    "Invalid 'MenstrualCyclePhaseView' widget size. Size must be greater than or equal to 200. See ";
+const String jvErrorInvalidCount =
+    "Invalid 'totalCycleDays' count. Count must be greater than or equal to 10. See ";
+const String jvErrorInvalidMenstruationDayCount =
+    "Invalid 'menstruationDayCount' count. Count must be greater than or equal to 0. See ";
+const String jvErrorInvalidFollicularDayCount =
+    "Invalid 'follicularDayCount' count. Count must be greater than or equal to 0. See ";
+const String jvErrorInvalidOvulationDayCount =
+    "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
+const String jvErrorInvalidSymptomsLogDate =
+    "Invalid symptoms log date. Date format is yyyy-MM-dd";
 const String jvGraphCycleTitle = "Cycle History";
 const String jvGraphCycleDaysPeriod = "days period";
 const String jvGraphCycleDaysCycle = "days";
@@ -91,7 +99,8 @@ const String jvGraphWaterUnitLiter = "Liters";
 const String jvBodyTempC = "C";
 const String jvWeightKg = "kg";
 const String jvBodyTempF = "F";
-const String jvErrorInvalidSymptomsDate = "Invalid symptoms log date. Date format is yyyy-MM-dd";
+const String jvErrorInvalidSymptomsDate =
+    "Invalid symptoms log date. Date format is yyyy-MM-dd";
 const String jvLblDone = "Done";
 const String jvLblWeight = "Weight";
 const String jvLblWeightTitle = "Log your weight";

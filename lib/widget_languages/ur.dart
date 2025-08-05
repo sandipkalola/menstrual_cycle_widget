@@ -59,12 +59,18 @@ const String urPredictPeriodDayStartLabel2 = "ہوسکتا ہے کہ آپ کی �
 const String urPredictPeriodDayStartLabel1 = "کل";
 
 /// Error
-const String urErrorInvalidSize = "غلط 'ماہواری سائکلفیس ویو' ویجیٹ سائز۔ سائز 200 سے زیادہ یا اس کے برابر ہونا چاہئے۔ دیکھیں";
-const String urErrorInvalidCount = "غلط 'ٹوٹلائکلڈیز' گنتی۔ گنتی 10 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
-const String urErrorInvalidMenstruationDayCount = "غلط 'حیض ڈے اکاؤنٹ' گنتی۔ گنتی 0 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
-const String urErrorInvalidFollicularDayCount = "غلط 'folliculardayCount' گنتی۔ گنتی 0 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
-const String urErrorInvalidOvulationDayCount = "غلط 'ovulationdacount' گنتی۔ گنتی 0 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
-const String urErrorInvalidSymptomsLogDate = "غلط علامات لاگ تاریخ۔ تاریخ کی شکل YYYY-MM-DD ہے";
+const String urErrorInvalidSize =
+    "غلط 'ماہواری سائکلفیس ویو' ویجیٹ سائز۔ سائز 200 سے زیادہ یا اس کے برابر ہونا چاہئے۔ دیکھیں";
+const String urErrorInvalidCount =
+    "غلط 'ٹوٹلائکلڈیز' گنتی۔ گنتی 10 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
+const String urErrorInvalidMenstruationDayCount =
+    "غلط 'حیض ڈے اکاؤنٹ' گنتی۔ گنتی 0 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
+const String urErrorInvalidFollicularDayCount =
+    "غلط 'folliculardayCount' گنتی۔ گنتی 0 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
+const String urErrorInvalidOvulationDayCount =
+    "غلط 'ovulationdacount' گنتی۔ گنتی 0 سے زیادہ یا اس کے برابر ہونی چاہئے۔ دیکھیں";
+const String urErrorInvalidSymptomsLogDate =
+    "غلط علامات لاگ تاریخ۔ تاریخ کی شکل YYYY-MM-DD ہے";
 const String urGraphCycleTitle = "سائیکل کی تاریخ";
 const String urGraphCycleDaysPeriod = "دن کی مدت";
 const String urGraphCycleDaysCycle = "دن";
@@ -91,7 +97,8 @@ const String urGraphWaterUnitLiter = "لیٹر";
 const String urBodyTempC = "c";
 const String urWeightKg = "کلوگرام";
 const String urBodyTempF = "f";
-const String urErrorInvalidSymptomsDate = "غلط علامات لاگ تاریخ۔ تاریخ کی شکل YYYY-MM-DD ہے";
+const String urErrorInvalidSymptomsDate =
+    "غلط علامات لاگ تاریخ۔ تاریخ کی شکل YYYY-MM-DD ہے";
 const String urLblDone = "کیا";
 const String urLblWeight = "وزن";
 const String urLblWeightTitle = "اپنا وزن لاگ ان کریں";

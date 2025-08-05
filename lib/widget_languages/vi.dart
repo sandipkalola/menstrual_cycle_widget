@@ -2,7 +2,8 @@ const String viSecretKeyLabel = "Phải yêu cầu SecretKey để mã hóa dữ
 
 const String viIvKeyLabel = "Phải yêu cầu IVkey để mã hóa dữ liệu";
 const String viTotalCycleDaysLabel = "Kích thước TotalCyclays phải lớn hơn 0";
-const String viTotalPeriodDaysLabel = "Totalperioddays Kích thước phải lớn hơn 0";
+const String viTotalPeriodDaysLabel =
+    "Totalperioddays Kích thước phải lớn hơn 0";
 const String viPrintLogLabel = "Đăng nhập từ chu kỳ kinh nguyệt";
 const String viSaveLabel = "Cứu";
 const String viCancelLabel = "Hủy bỏ";
@@ -54,17 +55,25 @@ const String viPregnancyChanceMsg3 = "Ngày sinh sản cuối cùng của chu k�
 const String viPregnancyChanceMsg4 = "Cơ hội mang thai thấp";
 const String viOvulationDayMsg1 = "Dự đoán";
 const String viOvulationDayTitle = "Ngày rụng trứng";
-const String viPredictPeriodDayStartLabel = "Dự đoán thời gian bắt đầu là trong";
-const String viPredictPeriodDayStartLabel2 = "Có thể là thời kỳ của bạn bắt đầu sẽ là";
+const String viPredictPeriodDayStartLabel =
+    "Dự đoán thời gian bắt đầu là trong";
+const String viPredictPeriodDayStartLabel2 =
+    "Có thể là thời kỳ của bạn bắt đầu sẽ là";
 const String viPredictPeriodDayStartLabel1 = "Ngày mai";
 
 /// Error
-const String viErrorInvalidSize = "Kích thước tiện ích 'E -E -E -ExstrcyclePhaseView' không hợp lệ. Kích thước phải lớn hơn hoặc bằng 200. Xem";
-const String viErrorInvalidCount = "Số lượng 'TotalCyclays' không hợp lệ. Số lượng phải lớn hơn hoặc bằng 10. Xem";
-const String viErrorInvalidMenstruationDayCount = "Số đếm 'kinh nguyệt không hợp lệ'. Đếm phải lớn hơn hoặc bằng 0. Xem";
-const String viErrorInvalidFollicularDayCount = "Không hợp lệ 'Folliculardaycount'. Đếm phải lớn hơn hoặc bằng 0. Xem";
-const String viErrorInvalidOvulationDayCount = "Số lượng 'rụng trứng không hợp lệ'. Đếm phải lớn hơn hoặc bằng 0. Xem";
-const String viErrorInvalidSymptomsLogDate = "Triệu chứng không hợp lệ Ngày đăng nhập. Định dạng ngày là yyyy-mm-dd";
+const String viErrorInvalidSize =
+    "Kích thước tiện ích 'E -E -E -ExstrcyclePhaseView' không hợp lệ. Kích thước phải lớn hơn hoặc bằng 200. Xem";
+const String viErrorInvalidCount =
+    "Số lượng 'TotalCyclays' không hợp lệ. Số lượng phải lớn hơn hoặc bằng 10. Xem";
+const String viErrorInvalidMenstruationDayCount =
+    "Số đếm 'kinh nguyệt không hợp lệ'. Đếm phải lớn hơn hoặc bằng 0. Xem";
+const String viErrorInvalidFollicularDayCount =
+    "Không hợp lệ 'Folliculardaycount'. Đếm phải lớn hơn hoặc bằng 0. Xem";
+const String viErrorInvalidOvulationDayCount =
+    "Số lượng 'rụng trứng không hợp lệ'. Đếm phải lớn hơn hoặc bằng 0. Xem";
+const String viErrorInvalidSymptomsLogDate =
+    "Triệu chứng không hợp lệ Ngày đăng nhập. Định dạng ngày là yyyy-mm-dd";
 const String viGraphCycleTitle = "Lịch sử chu kỳ";
 const String viGraphCycleDaysPeriod = "thời gian ngày";
 const String viGraphCycleDaysCycle = "ngày";
@@ -91,7 +100,8 @@ const String viGraphWaterUnitLiter = "Lít";
 const String viBodyTempC = "C";
 const String viWeightKg = "kg";
 const String viBodyTempF = "F";
-const String viErrorInvalidSymptomsDate = "Triệu chứng không hợp lệ Ngày đăng nhập. Định dạng ngày là yyyy-mm-dd";
+const String viErrorInvalidSymptomsDate =
+    "Triệu chứng không hợp lệ Ngày đăng nhập. Định dạng ngày là yyyy-mm-dd";
 const String viLblDone = "Xong";
 const String viLblWeight = "Cân nặng";
 const String viLblWeightTitle = "Đăng nhập trọng lượng của bạn";

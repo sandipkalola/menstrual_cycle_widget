@@ -59,11 +59,16 @@ const String jaPredictPeriodDayStartLabel2 = "あなたの期間の始まりが�
 const String jaPredictPeriodDayStartLabel1 = "明日";
 
 /// Error
-const String jaErrorInvalidSize = "無効な「menstrualcyclephaseview」ウィジェットサイズ。サイズは200以上でなければなりません。";
-const String jaErrorInvalidCount = "無効な「TotalCycledays」カウント。カウントは10以上でなければなりません。";
-const String jaErrorInvalidMenstruationDayCount = "無効な「MensstruationDayCount」カウント。カウントは0以上でなければなりません。";
-const String jaErrorInvalidFollicularDayCount = "無効な「folliculardaycount」カウント。カウントは0以上でなければなりません。";
-const String jaErrorInvalidOvulationDayCount = "無効な「ovulationdaycount」カウント。カウントは0以上でなければなりません。";
+const String jaErrorInvalidSize =
+    "無効な「menstrualcyclephaseview」ウィジェットサイズ。サイズは200以上でなければなりません。";
+const String jaErrorInvalidCount =
+    "無効な「TotalCycledays」カウント。カウントは10以上でなければなりません。";
+const String jaErrorInvalidMenstruationDayCount =
+    "無効な「MensstruationDayCount」カウント。カウントは0以上でなければなりません。";
+const String jaErrorInvalidFollicularDayCount =
+    "無効な「folliculardaycount」カウント。カウントは0以上でなければなりません。";
+const String jaErrorInvalidOvulationDayCount =
+    "無効な「ovulationdaycount」カウント。カウントは0以上でなければなりません。";
 const String jaErrorInvalidSymptomsLogDate = "無効な症状ログの日付。日付形式はyyyy-mm-ddです";
 const String jaGraphCycleTitle = "サイクル履歴";
 const String jaGraphCycleDaysPeriod = "日期";

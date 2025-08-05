@@ -1,7 +1,8 @@
 const String paSecretKeyLabel = "ਡਾਟਾ ਇਨਕ੍ਰਿਪਸ਼ਨ ਲਈ ਸਕੈਪਲ ਦੀ ਜ਼ਰੂਰਤ ਲਾਜ਼ਮੀ ਹੈ";
 
 const String paIvKeyLabel = "ਡਾਟਾ ਇਨਕ੍ਰਿਪਸ਼ਨ ਲਈ IVKYE ਜ਼ਰੂਰੀ ਹੈ";
-const String paTotalCycleDaysLabel = "ਕੁੱਲਸਾਈਕਲਯੇਸ ਅਕਾਰ 0 ਤੋਂ ਵੱਧ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ";
+const String paTotalCycleDaysLabel =
+    "ਕੁੱਲਸਾਈਕਲਯੇਸ ਅਕਾਰ 0 ਤੋਂ ਵੱਧ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ";
 const String paTotalPeriodDaysLabel = "ਕੁੱਲ ਸਾਧਾਰਣ";
 const String paPrintLogLabel = "ਮਾਹਵਾਰੀ ਚੱਕਰ ਤੋਂ ਲਾਗ";
 const String paSaveLabel = "ਸੇਵ";
@@ -43,7 +44,8 @@ const String paTimeForPregnancyTestTitleLabel2 = "ਹੋਰ ਦਿਨ";
 const String paTimeForPregnancyTestTitleLabel4 = "ਹੋਰ ਦਿਨ";
 const String paTimeForPregnancyTestTitleLabel3 = "ਆਖਰੀ ਦਿਨ";
 const String paPredictPeriodLabel = "ਪੀਰੀਅਡ ਡੇਅ ਦੀ ਭਵਿੱਖਬਾਣੀ ਕਰੋ:";
-const String paConceiveLabel = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String paConceiveLabel =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String paConceiveLabel2 = "ਗਰਭਪਾਤ ਕਰਨ ਦਾ ਸਭ ਤੋਂ ਵਧੀਆ ਮੌਕਾ";
 const String paPeriodPhaseLabel = "ਪੀਰੀਅਡ ਦਿਵਸ:";
 const String paPhaseDayLabel = "ਦਿਨ";
@@ -55,16 +57,23 @@ const String paPregnancyChanceMsg4 = "ਗਰਭਵਤੀ ਹੋਣ ਦਾ ਘੱ
 const String paOvulationDayMsg1 = "ਭਵਿੱਖਬਾਣੀ";
 const String paOvulationDayTitle = "ਓਵੂਲੇਸ਼ਨ ਦਿਵਸ";
 const String paPredictPeriodDayStartLabel = "ਭਵਿੱਖਬਾਣੀ ਅਵਧੀ ਸ਼ੁਰੂਆਤ ਵਿੱਚ ਹੈ";
-const String paPredictPeriodDayStartLabel2 = "ਤੁਹਾਡੀ ਮਿਆਦ ਦੀ ਸ਼ੁਰੂਆਤ ਹੋ ਸਕਦੀ ਹੈ";
+const String paPredictPeriodDayStartLabel2 =
+    "ਤੁਹਾਡੀ ਮਿਆਦ ਦੀ ਸ਼ੁਰੂਆਤ ਹੋ ਸਕਦੀ ਹੈ";
 const String paPredictPeriodDayStartLabel1 = "ਕੱਲ";
 
 /// Error
-const String paErrorInvalidSize = "ਗਲਤ 'ਮਰਮੇਸਟਲਸਾਈਕਲਫਸੈਕਵਿ iew ਵਿਡਿਏਟ ਦੇ ਅਕਾਰ. ਆਕਾਰ 200 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ. ਦੇਖੋ";
-const String paErrorInvalidCount = "ਅਵੈਧ 'ਪੂਰਨ ਇਲੈਕਟਕਲਸ ਦੀ ਗਿਣਤੀ. ਗਿਣਤੀ 10 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸ ਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
-const String paErrorInvalidMenstruationDayCount = "ਗਲਤ 'ਮਾਹਵਾਰੀ ਦਿਨ ਦੀ ਗਿਣਤੀ. ਗਿਣਤੀ 0 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
-const String paErrorInvalidFollicularDayCount = "ਅਵੈਧ 'folifulacount' ਗਿਣਤੀ. ਗਿਣਤੀ 0 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
-const String paErrorInvalidOvulationDayCount = "ਅਵੈਧ 'ਓਵਾਇਲੇਸ਼ਨ ਡੇਅਕੌਉਂਟ' ਗਿਣਤੀ. ਗਿਣਤੀ 0 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
-const String paErrorInvalidSymptomsLogDate = "ਅਵੈਧ ਲੱਛਣ ਦੀ ਲਾਗ ਦੀ ਮਿਤੀ. ਤਾਰੀਖ ਦਾ ਫਾਰਮੈਟ yyyy-mm-dd ਹੈ";
+const String paErrorInvalidSize =
+    "ਗਲਤ 'ਮਰਮੇਸਟਲਸਾਈਕਲਫਸੈਕਵਿ iew ਵਿਡਿਏਟ ਦੇ ਅਕਾਰ. ਆਕਾਰ 200 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣਾ ਚਾਹੀਦਾ ਹੈ. ਦੇਖੋ";
+const String paErrorInvalidCount =
+    "ਅਵੈਧ 'ਪੂਰਨ ਇਲੈਕਟਕਲਸ ਦੀ ਗਿਣਤੀ. ਗਿਣਤੀ 10 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸ ਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
+const String paErrorInvalidMenstruationDayCount =
+    "ਗਲਤ 'ਮਾਹਵਾਰੀ ਦਿਨ ਦੀ ਗਿਣਤੀ. ਗਿਣਤੀ 0 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
+const String paErrorInvalidFollicularDayCount =
+    "ਅਵੈਧ 'folifulacount' ਗਿਣਤੀ. ਗਿਣਤੀ 0 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
+const String paErrorInvalidOvulationDayCount =
+    "ਅਵੈਧ 'ਓਵਾਇਲੇਸ਼ਨ ਡੇਅਕੌਉਂਟ' ਗਿਣਤੀ. ਗਿਣਤੀ 0 ਤੋਂ ਵੱਧ ਜਾਂ ਇਸਦੇ ਬਰਾਬਰ ਹੋਣੀ ਚਾਹੀਦੀ ਹੈ. ਦੇਖੋ";
+const String paErrorInvalidSymptomsLogDate =
+    "ਅਵੈਧ ਲੱਛਣ ਦੀ ਲਾਗ ਦੀ ਮਿਤੀ. ਤਾਰੀਖ ਦਾ ਫਾਰਮੈਟ yyyy-mm-dd ਹੈ";
 const String paGraphCycleTitle = "ਚੱਕਰ ਦਾ ਇਤਿਹਾਸ";
 const String paGraphCycleDaysPeriod = "ਦਿਨ ਦੀ ਮਿਆਦ";
 const String paGraphCycleDaysCycle = "ਦਿਨ";
@@ -86,12 +95,14 @@ const String paNoDataFound = "ਕੋਈ ਡਾਟਾ ਨਹੀਂ ਮਿਲਿ�
 const String paGraphBodyTempDate = "ਸਰੀਰ ਦਾ ਤਾਪਮਾਨ ਲਾਗ ਮਿਤੀ";
 const String paGraphBodyTempTitle = "ਤਾਪਮਾਨ ਇਕਾਈ";
 const String paGraphWaterDrinkDate = "ਪਾਣੀ ਪੀਣ ਦੀ ਤਾਰੀਖ";
-const String paGraphWaterUnitTitle = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String paGraphWaterUnitTitle =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String paGraphWaterUnitLiter = "ਲੀਟਰ";
 const String paBodyTempC = "ਸੀ";
 const String paWeightKg = "ਕਿਲੋ";
 const String paBodyTempF = "F";
-const String paErrorInvalidSymptomsDate = "ਅਵੈਧ ਲੱਛਣ ਦੀ ਲਾਗ ਦੀ ਮਿਤੀ. ਤਾਰੀਖ ਦਾ ਫਾਰਮੈਟ yyyy-mm-dd ਹੈ";
+const String paErrorInvalidSymptomsDate =
+    "ਅਵੈਧ ਲੱਛਣ ਦੀ ਲਾਗ ਦੀ ਮਿਤੀ. ਤਾਰੀਖ ਦਾ ਫਾਰਮੈਟ yyyy-mm-dd ਹੈ";
 const String paLblDone = "ਕੀਤਾ";
 const String paLblWeight = "ਭਾਰ";
 const String paLblWeightTitle = "ਆਪਣਾ ਵਜ਼ਨ ਲੌਗ ਕਰੋ";

@@ -1,8 +1,12 @@
-const String bnSecretKeyLabel = "ডেটা এনক্রিপশনের জন্য অবশ্যই সিক্রেটকি প্রয়োজন";
+const String bnSecretKeyLabel =
+    "ডেটা এনক্রিপশনের জন্য অবশ্যই সিক্রেটকি প্রয়োজন";
 
-const String bnIvKeyLabel = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
-const String bnTotalCycleDaysLabel = "টোটালসাইক্লাইডেসের আকার অবশ্যই 0 এর চেয়ে বেশি হতে হবে";
-const String bnTotalPeriodDaysLabel = "টোটালপিরিওডিজের আকার অবশ্যই 0 এর চেয়ে বেশি হতে হবে";
+const String bnIvKeyLabel =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnTotalCycleDaysLabel =
+    "টোটালসাইক্লাইডেসের আকার অবশ্যই 0 এর চেয়ে বেশি হতে হবে";
+const String bnTotalPeriodDaysLabel =
+    "টোটালপিরিওডিজের আকার অবশ্যই 0 এর চেয়ে বেশি হতে হবে";
 const String bnPrintLogLabel = "মাসিক চক্র থেকে লগ";
 const String bnSaveLabel = "সংরক্ষণ করুন";
 const String bnCancelLabel = "বাতিল";
@@ -10,11 +14,13 @@ const String bnEditPeriodDateLabel = "পিরিয়ডের তারি�
 const String bnPeriodLabel = "পিরিয়ড";
 const String bnPredictOvulationDateLabel = "ডিম্বস্ফোটনের তারিখ পূর্বাভাস";
 const String bnPredictPeriodDateLabel = "পিরিয়ডের তারিখ পূর্বাভাস";
-const String bnSelectedDateLabel = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnSelectedDateLabel =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnTodayLabel = "আজ";
 const String bnMenstruationLabel = "মাসিক";
 const String bnFollicularPhaseLabel = "ফলিকুলার";
-const String bnOvulationLabel = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnOvulationLabel =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnLutealPhaseLabel = "লুটাল";
 const String bnEstrogenLabel = "ইস্ট্রোজেন";
 const String bnProgesteroneLabel = "প্রোজেস্টেরন";
@@ -26,7 +32,8 @@ const String bnHighLabel = "উচ্চ";
 const String bnDayLabel = "দিন";
 const String bnLogPeriodLabel = "লগ পিরিয়ড";
 
-const String bnFirstTrimesterName = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnFirstTrimesterName =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnSecondTrimesterName = "২ য় ত্রৈমাসিক";
 const String bnThirdTrimesterName = "তৃতীয় ত্রৈমাসিক";
 
@@ -39,7 +46,8 @@ const String bnCircleDayLateLabel = "দিন দেরী";
 const String bnLateLabel = "আরও ভাল পূর্বাভাসের জন্য আপনার পিরিয়ড লগ করুন";
 const String bnTimeForPregnancyTestLabel = "গর্ভাবস্থা পরীক্ষার জন্য সময়";
 const String bnTimeForPregnancyTestTitleLabel = "আজ এবং";
-const String bnTimeForPregnancyTestTitleLabel2 = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnTimeForPregnancyTestTitleLabel2 =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnTimeForPregnancyTestTitleLabel4 = "আরও দিন";
 const String bnTimeForPregnancyTestTitleLabel3 = "শেষ দিন";
 const String bnPredictPeriodLabel = "পূর্বাভাস সময়কাল:";
@@ -59,12 +67,18 @@ const String bnPredictPeriodDayStartLabel2 = "আপনার পিরিয়
 const String bnPredictPeriodDayStartLabel1 = "আগামীকাল";
 
 /// Error
-const String bnErrorInvalidSize = "অবৈধ 'stru তুস্রাবীফেসভিউ' উইজেটের আকার। আকার অবশ্যই 200 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
-const String bnErrorInvalidCount = "অবৈধ 'টোটালসাইক্লাইডেস' গণনা। গণনা অবশ্যই 10 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
-const String bnErrorInvalidMenstruationDayCount = "অবৈধ 'stru তুস্রাবের দিনকাউন্ট' গণনা। গণনা অবশ্যই 0 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
-const String bnErrorInvalidFollicularDayCount = "অবৈধ 'ফলিকুলারডাইকাউন্ট' গণনা। গণনা অবশ্যই 0 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
-const String bnErrorInvalidOvulationDayCount = "অবৈধ 'ওভুলেশন ডেকাউন্ট' গণনা। গণনা অবশ্যই 0 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
-const String bnErrorInvalidSymptomsLogDate = "অবৈধ লক্ষণ লগের তারিখ। তারিখের ফর্ম্যাটটি হ'ল yyyy-mm-dd";
+const String bnErrorInvalidSize =
+    "অবৈধ 'stru তুস্রাবীফেসভিউ' উইজেটের আকার। আকার অবশ্যই 200 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
+const String bnErrorInvalidCount =
+    "অবৈধ 'টোটালসাইক্লাইডেস' গণনা। গণনা অবশ্যই 10 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
+const String bnErrorInvalidMenstruationDayCount =
+    "অবৈধ 'stru তুস্রাবের দিনকাউন্ট' গণনা। গণনা অবশ্যই 0 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
+const String bnErrorInvalidFollicularDayCount =
+    "অবৈধ 'ফলিকুলারডাইকাউন্ট' গণনা। গণনা অবশ্যই 0 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
+const String bnErrorInvalidOvulationDayCount =
+    "অবৈধ 'ওভুলেশন ডেকাউন্ট' গণনা। গণনা অবশ্যই 0 এর চেয়ে বড় বা সমান হতে হবে। দেখুন";
+const String bnErrorInvalidSymptomsLogDate =
+    "অবৈধ লক্ষণ লগের তারিখ। তারিখের ফর্ম্যাটটি হ'ল yyyy-mm-dd";
 const String bnGraphCycleTitle = "চক্র ইতিহাস";
 const String bnGraphCycleDaysPeriod = "দিনের সময়কাল";
 const String bnGraphCycleDaysCycle = "দিন";
@@ -91,7 +105,8 @@ const String bnGraphWaterUnitLiter = "লিটার";
 const String bnBodyTempC = "গ";
 const String bnWeightKg = "কেজি";
 const String bnBodyTempF = "চ";
-const String bnErrorInvalidSymptomsDate = "অবৈধ লক্ষণ লগের তারিখ। তারিখের ফর্ম্যাটটি হ'ল yyyy-mm-dd";
+const String bnErrorInvalidSymptomsDate =
+    "অবৈধ লক্ষণ লগের তারিখ। তারিখের ফর্ম্যাটটি হ'ল yyyy-mm-dd";
 const String bnLblDone = "সম্পন্ন";
 const String bnLblWeight = "ওজন";
 const String bnLblWeightTitle = "আপনার ওজন লগ করুন";
@@ -169,7 +184,8 @@ const String bnSymptomsNameGrateful = "কৃতজ্ঞ";
 const String bnSymptomsNameAnxiety = "উদ্বেগ";
 const String bnSymptomsNameExcited = "উত্তেজিত";
 const String bnSymptomsNameCalm = "শান্ত";
-const String bnSymptomsNameDistracted = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnSymptomsNameDistracted =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnSymptomsNameFocused = "ফোকাস";
 const String bnSymptomsNameDepressed = "হতাশ";
 const String bnSymptomsNameConfused = "বিভ্রান্ত";
@@ -181,7 +197,8 @@ const String bnSymptomsNameProductive = "উত্পাদনশীল";
 const String bnSymptomsNameUnproductive = "অনুপাতহীন";
 const String bnSymptomsNameNoSex = "যৌনতা নেই";
 const String bnSymptomsNameProtectedSex = "সুরক্ষিত লিঙ্গ";
-const String bnSymptomsNameUnprotectedSex = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnSymptomsNameUnprotectedSex =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnSymptomsNameOralSex = "ওরাল সেক্স";
 const String bnSymptomsNameAnalSex = "মলদ্বার সেক্স";
 const String bnSymptomsNameMasturbation = "হস্তমৈথুন";
@@ -201,7 +218,8 @@ const String bnSymptomsNameAbdominalPain = "পেটে ব্যথা";
 const String bnSymptomsNameFatigue = "ক্লান্তি";
 const String bnSymptomsNamePainFree = "ব্যথা মুক্ত";
 const String bnSymptomsNamePeriodCramps = "পিরিয়ড ক্র্যাম্পস";
-const String bnSymptomsNameOvulation = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String bnSymptomsNameOvulation =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String bnSymptomsNameBreastTenderness = "স্তন কোমলতা";
 const String bnSymptomsNameMigraine = "মাইগ্রেন";
 const String bnSymptomsNameMigraineWithAura = "অরা দিয়ে মাইগ্রেন";

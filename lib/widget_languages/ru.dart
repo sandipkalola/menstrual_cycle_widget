@@ -2,7 +2,8 @@ const String ruSecretKeyLabel = "Требуется SecretKey для шифро�
 
 const String ruIvKeyLabel = "Требуется IVKey для шифрования данных";
 const String ruTotalCycleDaysLabel = "Общий размер";
-const String ruTotalPeriodDaysLabel = "TotalPerioDdays размер должен быть больше 0";
+const String ruTotalPeriodDaysLabel =
+    "TotalPerioDdays размер должен быть больше 0";
 const String ruPrintLogLabel = "Журнал из менструального цикла";
 const String ruSaveLabel = "Сохранять";
 const String ruCancelLabel = "Отмена";
@@ -59,12 +60,18 @@ const String ruPredictPeriodDayStartLabel2 = "Может быть, ваш пер
 const String ruPredictPeriodDayStartLabel1 = "Завтра";
 
 /// Error
-const String ruErrorInvalidSize = "Неверный размер виджета MensrualCyclephaseview '. Размер должен быть больше или равен 200. См.";
-const String ruErrorInvalidCount = "Недопустимое количество «общих дел». Счет должен быть больше или равен 10. См.";
-const String ruErrorInvalidMenstruationDayCount = "Недопустимый «menstruationdaycount». Счет должен быть больше или равен 0. См.";
-const String ruErrorInvalidFollicularDayCount = "Недопустимый «folliculardaycount». Счет должен быть больше или равен 0. См.";
-const String ruErrorInvalidOvulationDayCount = "Неверный «овуляционный день». Счет должен быть больше или равен 0. См.";
-const String ruErrorInvalidSymptomsLogDate = "Неверные симптомы дата. Формат даты yyyy-mm-dd";
+const String ruErrorInvalidSize =
+    "Неверный размер виджета MensrualCyclephaseview '. Размер должен быть больше или равен 200. См.";
+const String ruErrorInvalidCount =
+    "Недопустимое количество «общих дел». Счет должен быть больше или равен 10. См.";
+const String ruErrorInvalidMenstruationDayCount =
+    "Недопустимый «menstruationdaycount». Счет должен быть больше или равен 0. См.";
+const String ruErrorInvalidFollicularDayCount =
+    "Недопустимый «folliculardaycount». Счет должен быть больше или равен 0. См.";
+const String ruErrorInvalidOvulationDayCount =
+    "Неверный «овуляционный день». Счет должен быть больше или равен 0. См.";
+const String ruErrorInvalidSymptomsLogDate =
+    "Неверные симптомы дата. Формат даты yyyy-mm-dd";
 const String ruGraphCycleTitle = "Цикл История";
 const String ruGraphCycleDaysPeriod = "Дни";
 const String ruGraphCycleDaysCycle = "дни";
@@ -91,7 +98,8 @@ const String ruGraphWaterUnitLiter = "Литры";
 const String ruBodyTempC = "В";
 const String ruWeightKg = "кг";
 const String ruBodyTempF = "Фон";
-const String ruErrorInvalidSymptomsDate = "Неверные симптомы дата. Формат даты yyyy-mm-dd";
+const String ruErrorInvalidSymptomsDate =
+    "Неверные симптомы дата. Формат даты yyyy-mm-dd";
 const String ruLblDone = "Сделанный";
 const String ruLblWeight = "Масса";
 const String ruLblWeightTitle = "Зарегистрируйте свой вес";

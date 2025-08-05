@@ -1,8 +1,11 @@
-const String ptSecretKeyLabel = "Deve exigir secretKey para criptografia de dados";
+const String ptSecretKeyLabel =
+    "Deve exigir secretKey para criptografia de dados";
 
 const String ptIvKeyLabel = "Deve exigir ivkey para criptografia de dados";
-const String ptTotalCycleDaysLabel = "O tamanho total doscilosos deve ser maior que 0";
-const String ptTotalPeriodDaysLabel = "O tamanho total dos dias de dia deve ser maior que 0";
+const String ptTotalCycleDaysLabel =
+    "O tamanho total doscilosos deve ser maior que 0";
+const String ptTotalPeriodDaysLabel =
+    "O tamanho total dos dias de dia deve ser maior que 0";
 const String ptPrintLogLabel = "Registro do ciclo menstrual";
 const String ptSaveLabel = "Salvar";
 const String ptCancelLabel = "Cancelar";
@@ -54,17 +57,25 @@ const String ptPregnancyChanceMsg3 = "Último dia fértil deste ciclo";
 const String ptPregnancyChanceMsg4 = "Baixa chance de engravidar";
 const String ptOvulationDayMsg1 = "Previsão";
 const String ptOvulationDayTitle = "Dia da ovulação";
-const String ptPredictPeriodDayStartLabel = "O início do período de previsão está em";
-const String ptPredictPeriodDayStartLabel2 = "Pode ser o seu período de início será";
+const String ptPredictPeriodDayStartLabel =
+    "O início do período de previsão está em";
+const String ptPredictPeriodDayStartLabel2 =
+    "Pode ser o seu período de início será";
 const String ptPredictPeriodDayStartLabel1 = "Amanhã";
 
 /// Error
-const String ptErrorInvalidSize = "O tamanho do widget 'MenstrualCyclePhaseView' inválido. O tamanho deve ser maior ou igual a 200. Ver";
-const String ptErrorInvalidCount = "Contagem inválida de 'Totalcycledays'. A contagem deve ser maior ou igual a 10. Veja";
-const String ptErrorInvalidMenstruationDayCount = "Contagem inválida de 'menstruação no dia -dia'. A contagem deve ser maior ou igual a 0. Veja";
-const String ptErrorInvalidFollicularDayCount = "Contagem inválida de 'FollicularyCount'. A contagem deve ser maior ou igual a 0. Veja";
-const String ptErrorInvalidOvulationDayCount = "Contagem inválida de 'ovulação do dia -aço'. A contagem deve ser maior ou igual a 0. Veja";
-const String ptErrorInvalidSymptomsLogDate = "Data de log dos sintomas inválidos. O formato de data é aaaaa-mm-dd";
+const String ptErrorInvalidSize =
+    "O tamanho do widget 'MenstrualCyclePhaseView' inválido. O tamanho deve ser maior ou igual a 200. Ver";
+const String ptErrorInvalidCount =
+    "Contagem inválida de 'Totalcycledays'. A contagem deve ser maior ou igual a 10. Veja";
+const String ptErrorInvalidMenstruationDayCount =
+    "Contagem inválida de 'menstruação no dia -dia'. A contagem deve ser maior ou igual a 0. Veja";
+const String ptErrorInvalidFollicularDayCount =
+    "Contagem inválida de 'FollicularyCount'. A contagem deve ser maior ou igual a 0. Veja";
+const String ptErrorInvalidOvulationDayCount =
+    "Contagem inválida de 'ovulação do dia -aço'. A contagem deve ser maior ou igual a 0. Veja";
+const String ptErrorInvalidSymptomsLogDate =
+    "Data de log dos sintomas inválidos. O formato de data é aaaaa-mm-dd";
 const String ptGraphCycleTitle = "História do ciclo";
 const String ptGraphCycleDaysPeriod = "período de dias";
 const String ptGraphCycleDaysCycle = "dias";
@@ -91,7 +102,8 @@ const String ptGraphWaterUnitLiter = "Litros";
 const String ptBodyTempC = "C";
 const String ptWeightKg = "kg";
 const String ptBodyTempF = "F";
-const String ptErrorInvalidSymptomsDate = "Data de log dos sintomas inválidos. O formato de data é aaaaa-mm-dd";
+const String ptErrorInvalidSymptomsDate =
+    "Data de log dos sintomas inválidos. O formato de data é aaaaa-mm-dd";
 const String ptLblDone = "Feito";
 const String ptLblWeight = "Peso";
 const String ptLblWeightTitle = "Registre seu peso";
@@ -291,4 +303,5 @@ const String ptRegularTitle = "Regular";
 const String ptNormalTitle = "Normal";
 const String ptIrregularTitle = "Irregular";
 
-const String ptLatePeriod = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String ptLatePeriod =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";

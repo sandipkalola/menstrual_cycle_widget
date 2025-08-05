@@ -1,5 +1,3 @@
-import 'package:menstrual_cycle_widget/widget_languages/zh.dart';
-
 import '../menstrual_cycle_widget.dart';
 import 'languages.dart';
 
@@ -46,9 +44,8 @@ String getLanguageCode() {
       return "vi";
     case Languages.italian:
       return "it";
-    }
+  }
 }
-
 
 getSaveLogsTitle() {
   final logsByLanguage = {

@@ -59,10 +59,13 @@ const String zhPredictPeriodDayStartLabel2 = "可能是您的期间开始";
 const String zhPredictPeriodDayStartLabel1 = "明天";
 
 /// Error
-const String zhErrorInvalidSize = "无效的“ menstrualCyclePhaseView”小部件大小。大小必须大于或等于200。";
+const String zhErrorInvalidSize =
+    "无效的“ menstrualCyclePhaseView”小部件大小。大小必须大于或等于200。";
 const String zhErrorInvalidCount = "无效的“ cycledays”计数。计数必须大于或等于10。";
-const String zhErrorInvalidMenstruationDayCount = "无效的“ MenstruationDayCount”计数。计数必须大于或等于0。";
-const String zhErrorInvalidFollicularDayCount = "无效的“ folliculardaycount”计数。计数必须大于或等于0。";
+const String zhErrorInvalidMenstruationDayCount =
+    "无效的“ MenstruationDayCount”计数。计数必须大于或等于0。";
+const String zhErrorInvalidFollicularDayCount =
+    "无效的“ folliculardaycount”计数。计数必须大于或等于0。";
 const String zhErrorInvalidOvulationDayCount = "无效的“排卵日”计数。计数必须大于或等于0。";
 const String zhErrorInvalidSymptomsLogDate = "无效症状日志日期。日期格式为yyyy-mm-dd";
 const String zhGraphCycleTitle = "周期历史";

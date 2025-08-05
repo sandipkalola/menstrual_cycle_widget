@@ -1,8 +1,11 @@
-const String frSecretKeyLabel = "Doit exiger SecretKey pour le chiffrement des données";
+const String frSecretKeyLabel =
+    "Doit exiger SecretKey pour le chiffrement des données";
 
 const String frIvKeyLabel = "Doit exigé IVKEY pour le chiffrement des données";
-const String frTotalCycleDaysLabel = "TotalCycledays La taille doit être supérieure à 0";
-const String frTotalPeriodDaysLabel = "La taille totale du périodiod doit être supérieure à 0";
+const String frTotalCycleDaysLabel =
+    "TotalCycledays La taille doit être supérieure à 0";
+const String frTotalPeriodDaysLabel =
+    "La taille totale du périodiod doit être supérieure à 0";
 const String frPrintLogLabel = "Journal à partir du cycle menstruel";
 const String frSaveLabel = "Sauvegarder";
 const String frCancelLabel = "Annuler";
@@ -15,7 +18,8 @@ const String frTodayLabel = "Aujourd'hui";
 const String frMenstruationLabel = "Menstruel";
 const String frFollicularPhaseLabel = "Folliculaire";
 const String frOvulationLabel = "Ovulation";
-const String frLutealPhaseLabel = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frLutealPhaseLabel =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frEstrogenLabel = "Œstrogène";
 const String frProgesteroneLabel = "Progestérone";
 
@@ -36,11 +40,13 @@ const String frSaveLogs = "Appliquer";
 const String frPastCycleLabel = "Vos règles sont";
 const String frCircleDaysLateLabel = "Jours de retard";
 const String frCircleDayLateLabel = "Jour de retard";
-const String frLateLabel = "Enregistrez vos règles pour de meilleures prévisions";
+const String frLateLabel =
+    "Enregistrez vos règles pour de meilleures prévisions";
 const String frTimeForPregnancyTestLabel = "Test de temps pour la grossesse";
 const String frTimeForPregnancyTestTitleLabel = "Aujourd'hui &";
 const String frTimeForPregnancyTestTitleLabel2 = "Plus de jour";
-const String frTimeForPregnancyTestTitleLabel4 = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frTimeForPregnancyTestTitleLabel4 =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frTimeForPregnancyTestTitleLabel3 = "Dernier jour";
 const String frPredictPeriodLabel = "Prédire le jour de la période:";
 const String frConceiveLabel = "La meilleure chance de concevoir est dans";
@@ -50,21 +56,30 @@ const String frPhaseDayLabel = "Jour";
 const String frPhaseDaysLabel = "Jours";
 const String frPregnancyChanceMsg1 = "Chance moyenne de tomber enceinte";
 const String frPregnancyChanceMsg2 = "Forte chance de tomber enceinte";
-const String frPregnancyChanceMsg3 = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frPregnancyChanceMsg3 =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frPregnancyChanceMsg4 = "Basse chance de tomber enceinte";
 const String frOvulationDayMsg1 = "Prédiction";
 const String frOvulationDayTitle = "Jour d'ovulation";
-const String frPredictPeriodDayStartLabel = "Prédire le démarrage de la période est en";
-const String frPredictPeriodDayStartLabel2 = "Peut-être que votre démarrage des règles sera";
+const String frPredictPeriodDayStartLabel =
+    "Prédire le démarrage de la période est en";
+const String frPredictPeriodDayStartLabel2 =
+    "Peut-être que votre démarrage des règles sera";
 const String frPredictPeriodDayStartLabel1 = "Demain";
 
 /// Error
-const String frErrorInvalidSize = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
-const String frErrorInvalidCount = "Le nombre non valide de «totalcycledays». Le nombre doit être supérieur ou égal à 10. Voir";
-const String frErrorInvalidMenstruationDayCount = "Nombre de «MenstruationdayCount» non valide. Le nombre doit être supérieur ou égal à 0. Voir";
-const String frErrorInvalidFollicularDayCount = "Invalide «folliculardaycount». Le nombre doit être supérieur ou égal à 0. Voir";
-const String frErrorInvalidOvulationDayCount = "Nombre de «ovulation» invalide. Le nombre doit être supérieur ou égal à 0. Voir";
-const String frErrorInvalidSymptomsLogDate = "Symptômes non valides Date de journalisation. Le format de date est yyyy-mm-dd";
+const String frErrorInvalidSize =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frErrorInvalidCount =
+    "Le nombre non valide de «totalcycledays». Le nombre doit être supérieur ou égal à 10. Voir";
+const String frErrorInvalidMenstruationDayCount =
+    "Nombre de «MenstruationdayCount» non valide. Le nombre doit être supérieur ou égal à 0. Voir";
+const String frErrorInvalidFollicularDayCount =
+    "Invalide «folliculardaycount». Le nombre doit être supérieur ou égal à 0. Voir";
+const String frErrorInvalidOvulationDayCount =
+    "Nombre de «ovulation» invalide. Le nombre doit être supérieur ou égal à 0. Voir";
+const String frErrorInvalidSymptomsLogDate =
+    "Symptômes non valides Date de journalisation. Le format de date est yyyy-mm-dd";
 const String frGraphCycleTitle = "Histoire du cycle";
 const String frGraphCycleDaysPeriod = "Période des jours";
 const String frGraphCycleDaysCycle = "jours";
@@ -82,8 +97,10 @@ const String frOptionsDownloadPDF = "Télécharger PDF";
 const String frOptionsViewLandscape = "Mode paysage";
 const String frToolTip = "Afficher le menu";
 const String frCurrentCycle = "Cycle actuel";
-const String frNoDataFound = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
-const String frGraphBodyTempDate = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frNoDataFound =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frGraphBodyTempDate =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frGraphBodyTempTitle = "Unité de température";
 const String frGraphWaterDrinkDate = "Date de consommation d'eau";
 const String frGraphWaterUnitTitle = "Unité d'eau";
@@ -91,7 +108,8 @@ const String frGraphWaterUnitLiter = "Litres";
 const String frBodyTempC = "C";
 const String frWeightKg = "kg";
 const String frBodyTempF = "F";
-const String frErrorInvalidSymptomsDate = "Symptômes non valides Date de journalisation. Le format de date est yyyy-mm-dd";
+const String frErrorInvalidSymptomsDate =
+    "Symptômes non valides Date de journalisation. Le format de date est yyyy-mm-dd";
 const String frLblDone = "Fait";
 const String frLblWeight = "Poids";
 const String frLblWeightTitle = "Enregistrez votre poids";
@@ -104,10 +122,12 @@ const String frLblSleepTitle = "Enregistrez votre temps de sommeil";
 const String frLblMeditation = "Méditation";
 const String frLblMeditationTitle = "Enregistrez votre temps de méditation";
 const String frLblWater = "Eau";
-const String frLblWaterTitle = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frLblWaterTitle =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frGraphSleepTitle = "Temps";
 const String frGraphSleepDate = "Date du journal de sommeil";
-const String frGraphWeightUnitTitle = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frGraphWeightUnitTitle =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frGraphWeightLogDate = "Date du journal";
 const String frCategoryFeelings = "Sentiments";
 const String frCategoryMind = "Esprit";
@@ -119,7 +139,8 @@ const String frCategoryPain = "Douleur";
 const String frCategoryVaginalDischarge = "Libération vaginale";
 const String frCategoryDigestion = "Digestion";
 const String frCategoryActivity = "Activité";
-const String frCategoryCravings = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frCategoryCravings =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frCategoryTests = "Tests";
 const String frCategoryAilments = "Affections";
 const String frCategoryAppointments = "Nominations";
@@ -141,7 +162,8 @@ const String frGraphWeightKg = "kg";
 const String frGraphWeighLb = "kg";
 const String frLogPeriodBedtime = "Heure du coucher";
 const String frLogPeriodWakeUpTime = "Temps de réveil";
-const String frLogPeriodWakeUpTimeLog = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frLogPeriodWakeUpTimeLog =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frLogPeriodBedTimeLog = "Enregistrez votre coucher";
 
 const String frSymptomsNameLight = "Lumière";
@@ -170,19 +192,23 @@ const String frSymptomsNameAnxiety = "Anxiété";
 const String frSymptomsNameExcited = "Excité";
 const String frSymptomsNameCalm = "Calme";
 const String frSymptomsNameDistracted = "Distrait";
-const String frSymptomsNameFocused = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameFocused =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frSymptomsNameDepressed = "Déprimé";
 const String frSymptomsNameConfused = "Confus";
 const String frSymptomsNameStressed = "Stressé";
-const String frSymptomsNameMotivated = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
-const String frSymptomsNameUnmotivated = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameMotivated =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameUnmotivated =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frSymptomsNameCreative = "Créatif";
 const String frSymptomsNameProductive = "Productif";
 const String frSymptomsNameUnproductive = "Improductif";
 const String frSymptomsNameNoSex = "Pas de sexe";
 const String frSymptomsNameProtectedSex = "Sexe protégé";
 const String frSymptomsNameUnprotectedSex = "Sexe non protégé";
-const String frSymptomsNameOralSex = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameOralSex =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frSymptomsNameAnalSex = "Sexe anal";
 const String frSymptomsNameMasturbation = "Masturbation";
 const String frSymptomsNameHighSexDrive = "Libido élevé";
@@ -190,7 +216,8 @@ const String frSymptomsNameNeutralSexDrive = "Libido neutre";
 const String frSymptomsNameLowSexDrive = "Lower Sexe";
 const String frSymptomsNameSexToys = "Jouets sexuels";
 const String frSymptomsNameOrgasm = "Orgasme";
-const String frSymptomsNameNoOrgasm = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameNoOrgasm =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frSymptomsNameEverythingWell = "Tout bien";
 const String frSymptomsNameCramps = "Crampes";
 const String frSymptomsNameTenderBreasts = "Seins tendres";
@@ -204,7 +231,8 @@ const String frSymptomsNamePeriodCramps = "Crampes périodiques";
 const String frSymptomsNameOvulation = "Ovulation";
 const String frSymptomsNameBreastTenderness = "Tendreté mammaire";
 const String frSymptomsNameMigraine = "Migraine";
-const String frSymptomsNameMigraineWithAura = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameMigraineWithAura =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frSymptomsNameLowerBack = "Lombes";
 const String frSymptomsNameLeg = "Jambe";
 const String frSymptomsNameJoint = "Articulation";
@@ -218,7 +246,8 @@ const String frSymptomsNameSticky = "Collant";
 const String frSymptomsNameEggWhite = "Blanc d'oeuf";
 const String frSymptomsNameGray = "Gris";
 const String frSymptomsNameGassy = "Gazeux";
-const String frSymptomsNameBloating = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frSymptomsNameBloating =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frSymptomsNameHeartburn = "Brûlures d'estomac";
 const String frSymptomsNameNauseous = "Nauséeux";
 const String frSymptomsNameVomiting = "Vomissement";
@@ -286,7 +315,8 @@ const String frCycleDayTitle = "Jour de cycle";
 const String frFeelingTodayTitle = "Que ressentez-vous aujourd'hui?";
 const String frTodayTitle = "Aujourd'hui";
 const String frYesterdayTitle = "Hier";
-const String frProtectedData = "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String frProtectedData =
+    "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
 const String frRegularTitle = "Régulier";
 const String frNormalTitle = "Normale";
 const String frIrregularTitle = "Irrégulier";

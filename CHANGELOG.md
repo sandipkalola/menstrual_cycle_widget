@@ -1,3 +1,7 @@
+## [3.10.0] - 5 Aug 2025
+
+* Enhancements: Added support for new languages to improve accessibility and user experience across regions.
+
 ## [3.9.2] - 7 july 2025
 
 * Bug Fixes: Resolved minor bugs to enhance overall stability and performance.

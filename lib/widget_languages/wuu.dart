@@ -1,8 +1,10 @@
 const String wuuSecretKeyLabel = "Must required secretKey for data encryption";
 
 const String wuuIvKeyLabel = "Must required ivKey for data encryption";
-const String wuuTotalCycleDaysLabel = "totalCycleDays size must be greater than 0";
-const String wuuTotalPeriodDaysLabel = "totalPeriodDays size must be greater than 0";
+const String wuuTotalCycleDaysLabel =
+    "totalCycleDays size must be greater than 0";
+const String wuuTotalPeriodDaysLabel =
+    "totalPeriodDays size must be greater than 0";
 const String wuuPrintLogLabel = "LOG FROM MENSTRUAL CYCLE";
 const String wuuSaveLabel = "Save";
 const String wuuCancelLabel = "Cancel";
@@ -55,16 +57,23 @@ const String wuuPregnancyChanceMsg4 = "Low chance of getting pregnant";
 const String wuuOvulationDayMsg1 = "Prediction";
 const String wuuOvulationDayTitle = "Ovulation Day";
 const String wuuPredictPeriodDayStartLabel = "Predict period start is in";
-const String wuuPredictPeriodDayStartLabel2 = "May be your period start will be";
+const String wuuPredictPeriodDayStartLabel2 =
+    "May be your period start will be";
 const String wuuPredictPeriodDayStartLabel1 = "Tomorrow";
 
 /// Error
-const String wuuErrorInvalidSize = "Invalid 'MenstrualCyclePhaseView' widget size. Size must be greater than or equal to 200. See ";
-const String wuuErrorInvalidCount = "Invalid 'totalCycleDays' count. Count must be greater than or equal to 10. See ";
-const String wuuErrorInvalidMenstruationDayCount = "Invalid 'menstruationDayCount' count. Count must be greater than or equal to 0. See ";
-const String wuuErrorInvalidFollicularDayCount = "Invalid 'follicularDayCount' count. Count must be greater than or equal to 0. See ";
-const String wuuErrorInvalidOvulationDayCount = "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
-const String wuuErrorInvalidSymptomsLogDate = "Invalid symptoms log date. Date format is yyyy-MM-dd";
+const String wuuErrorInvalidSize =
+    "Invalid 'MenstrualCyclePhaseView' widget size. Size must be greater than or equal to 200. See ";
+const String wuuErrorInvalidCount =
+    "Invalid 'totalCycleDays' count. Count must be greater than or equal to 10. See ";
+const String wuuErrorInvalidMenstruationDayCount =
+    "Invalid 'menstruationDayCount' count. Count must be greater than or equal to 0. See ";
+const String wuuErrorInvalidFollicularDayCount =
+    "Invalid 'follicularDayCount' count. Count must be greater than or equal to 0. See ";
+const String wuuErrorInvalidOvulationDayCount =
+    "Invalid 'ovulationDayCount' count. Count must be greater than or equal to 0. See ";
+const String wuuErrorInvalidSymptomsLogDate =
+    "Invalid symptoms log date. Date format is yyyy-MM-dd";
 const String wuuGraphCycleTitle = "Cycle History";
 const String wuuGraphCycleDaysPeriod = "days period";
 const String wuuGraphCycleDaysCycle = "days";
@@ -91,7 +100,8 @@ const String wuuGraphWaterUnitLiter = "Liters";
 const String wuuBodyTempC = "C";
 const String wuuWeightKg = "kg";
 const String wuuBodyTempF = "F";
-const String wuuErrorInvalidSymptomsDate = "Invalid symptoms log date. Date format is yyyy-MM-dd";
+const String wuuErrorInvalidSymptomsDate =
+    "Invalid symptoms log date. Date format is yyyy-MM-dd";
 const String wuuLblDone = "Done";
 const String wuuLblWeight = "Weight";
 const String wuuLblWeightTitle = "Log your weight";
