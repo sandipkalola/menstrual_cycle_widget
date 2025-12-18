@@ -36,15 +36,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-  sqflite: ^2.4.1
+  sqflite: ^2.4.2
   path_provider: ^2.1.5
-  path: ^1.9.0
-  intl: ^0.19.0
+  path: ^1.9.1
+  intl: ^0.20.2
   encrypt: ^5.0.3
-  crypto: ^3.0.6
-  http: ^1.3.0
-  syncfusion_flutter_charts: ^28.1.41
-  syncfusion_flutter_pdf: ^28.1.41
+  crypto: ^3.0.7
+  http: ^1.6.0
+  syncfusion_flutter_charts: ^32.1.19
+  syncfusion_flutter_pdf: ^32.1.19
 
 dev_dependencies:
   flutter_test:
