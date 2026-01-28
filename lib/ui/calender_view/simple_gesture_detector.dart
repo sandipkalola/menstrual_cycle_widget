@@ -14,7 +14,7 @@ class SimpleGestureDetector extends StatefulWidget {
 
   const SimpleGestureDetector({
     super.key,
-    @required this.child,
+    this.child,
     this.swipeConfig = const SimpleSwipeConfig(),
     this.behavior,
     this.onSwipeUp,

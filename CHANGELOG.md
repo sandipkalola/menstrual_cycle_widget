@@ -1,3 +1,8 @@
+## [4.0.0] - 28 Jan 2026
+
+* Updated the package to be compatible with Flutter 3.38.4.
+* Minor internal adjustments for latest Flutter SDK support.
+
 ## [3.10.0] - 5 Aug 2025
 
 * Enhancements: Added support for new languages to improve accessibility and user experience across regions.
