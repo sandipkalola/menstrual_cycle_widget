@@ -307,3 +307,4 @@ const String itNormalTitle = "Normale";
 const String itIrregularTitle = "Irregolare";
 
 const String itLatePeriod = "Periodo in ritardo";
+const String itMonth = "Mese";

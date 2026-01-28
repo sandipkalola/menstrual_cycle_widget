@@ -298,3 +298,4 @@ const String koNormalTitle = "정상";
 const String koIrregularTitle = "불규칙한";
 
 const String koLatePeriod = "늦은 기간";
+const String koMonth = "월";

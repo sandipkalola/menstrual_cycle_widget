@@ -304,3 +304,4 @@ const String deNormalTitle = "Normal";
 const String deIrregularTitle = "Irregulär";
 
 const String deLatePeriod = "Späte Periode";
+const String deMonth = "Monat";

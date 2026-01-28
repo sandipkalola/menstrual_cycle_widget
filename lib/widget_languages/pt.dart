@@ -305,3 +305,4 @@ const String ptIrregularTitle = "Irregular";
 
 const String ptLatePeriod =
     "Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.";
+const String ptMonth = "Mês";

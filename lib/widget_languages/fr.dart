@@ -322,3 +322,4 @@ const String frNormalTitle = "Normale";
 const String frIrregularTitle = "Irrégulier";
 
 const String frLatePeriod = "Fin de période";
+const String frMonth = "Mois";

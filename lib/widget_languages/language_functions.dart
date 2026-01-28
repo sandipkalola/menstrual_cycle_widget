@@ -7601,3 +7601,30 @@ getIrregularTitle() {
 
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
+
+getMonth() {
+  final logsByLanguage = {
+    Languages.english: enMonth,
+    Languages.hindi: hiMonth,
+    Languages.arabic: arMonth,
+    Languages.spanish: esMonth,
+    Languages.mandarin: zhMonth,
+    Languages.french: frMonth,
+    Languages.bengali: bnMonth,
+    Languages.portuguese: ptMonth,
+    Languages.russian: ruMonth,
+    Languages.japanese: jaMonth,
+    Languages.german: deMonth,
+    Languages.punjabi: paMonth,
+    Languages.javanese: jvMonth,
+    Languages.wuChinese: wuuMonth,
+    Languages.korean: koMonth,
+    Languages.tamil: taMonth,
+    Languages.turkish: trMonth,
+    Languages.urdu: urMonth,
+    Languages.vietnamese: viMonth,
+    Languages.italian: itMonth,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}

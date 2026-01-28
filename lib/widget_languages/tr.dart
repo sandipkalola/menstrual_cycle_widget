@@ -303,3 +303,4 @@ const String trNormalTitle = "Normal";
 const String trIrregularTitle = "Düzensiz";
 
 const String trLatePeriod = "Geç dönem";
+const String trMonth = "Ay";

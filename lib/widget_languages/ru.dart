@@ -300,3 +300,4 @@ const String ruNormalTitle = "Нормальный";
 const String ruIrregularTitle = "Нерегулярный";
 
 const String ruLatePeriod = "Поздний период";
+const String ruMonth = "Месяц";

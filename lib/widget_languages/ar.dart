@@ -292,3 +292,4 @@ const String arProgesteroneLabel = "البروجستيرون";
 const String arLowLabel = "قليل";
 const String arMediumLabel = "واسطة";
 const String arHighLabel = "عالي";
+const String arMonth = "شهر";

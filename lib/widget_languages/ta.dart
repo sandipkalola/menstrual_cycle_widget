@@ -306,3 +306,4 @@ const String taNormalTitle = "சாதாரண";
 const String taIrregularTitle = "ஒழுங்கற்ற";
 
 const String taLatePeriod = "தாமதமான காலம்";
+const String taMonth = "மாதம்";

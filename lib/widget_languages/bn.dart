@@ -310,3 +310,4 @@ const String bnNormalTitle = "সাধারণ";
 const String bnIrregularTitle = "অনিয়মিত";
 
 const String bnLatePeriod = "দেরী সময়";
+const String bnMonth = "মাস";

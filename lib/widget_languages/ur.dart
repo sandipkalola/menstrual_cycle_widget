@@ -299,3 +299,4 @@ const String urNormalTitle = "عام";
 const String urIrregularTitle = "فاسد";
 
 const String urLatePeriod = "دیر سے مدت";
+const String urMonth = "مہینہ";
