@@ -297,3 +297,4 @@ const String jaNormalTitle = "普通";
 const String jaIrregularTitle = "不規則";
 
 const String jaLatePeriod = "後期";
+const String jaMonth = "月";

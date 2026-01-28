@@ -301,3 +301,4 @@ const String enNormalTitle = "Normal";
 const String enIrregularTitle = "Irregular";
 
 const String enLatePeriod = "Late Period";
+const String enMonth = "Month";

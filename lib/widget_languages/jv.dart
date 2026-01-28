@@ -301,3 +301,4 @@ const String jvNormalTitle = "Normal";
 const String jvIrregularTitle = "Irregular";
 
 const String jvLatePeriod = "Late Period";
+const String jvMonth = "Month";

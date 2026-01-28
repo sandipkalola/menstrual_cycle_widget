@@ -303,3 +303,4 @@ const String paNormalTitle = "ਆਮ";
 const String paIrregularTitle = "ਅਨਿਯਮਿਤ";
 
 const String paLatePeriod = "ਦੇਰ ਦੀ ਮਿਆਦ";
+const String paMonth = "ਮਹੀਨਾ";

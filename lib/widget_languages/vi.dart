@@ -302,3 +302,4 @@ const String viNormalTitle = "Bình thường";
 const String viIrregularTitle = "Không đều";
 
 const String viLatePeriod = "Cuối kỳ";
+const String viMonth = "Tháng";

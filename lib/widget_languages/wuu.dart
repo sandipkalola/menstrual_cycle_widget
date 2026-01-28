@@ -302,3 +302,4 @@ const String wuuNormalTitle = "Normal";
 const String wuuIrregularTitle = "Irregular";
 
 const String wuuLatePeriod = "Late Period";
+const String wuuMonth = "Month";

@@ -295,3 +295,4 @@ const String zhNormalTitle = "普通的";
 const String zhIrregularTitle = "不规律的";
 
 const String zhLatePeriod = "后期";
+const String zhMonth = "月";

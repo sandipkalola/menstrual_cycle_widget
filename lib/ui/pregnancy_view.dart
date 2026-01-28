@@ -36,29 +36,30 @@ class PregnancyView extends StatefulWidget {
   final double imageWidth;
   final double imageHeight;
 
-  const PregnancyView(
-      {super.key,
-      required this.size,
-      this.firstTrimesterName = "",
-      this.firstTrimesterColor = defaultMenstruationColor,
-      this.firstTrimesterTextColor = Colors.white,
-      this.secondTrimesterName = "",
-      this.imageUrl = "",
-      this.highlightCurrentMonthColor,
-      this.secondTrimesterColor = defaultFollicularColor,
-      this.secondTrimesterTextColor = Colors.white,
-      this.thirdTrimesterName = "",
-      this.thirdTrimesterColor = defaultOvulationColor,
-      this.thirdTrimesterTextColor = Colors.white,
-      this.titleTextColor = Colors.black,
-      this.titleTextSize = 20,
-      this.imageWidth = 100,
-      this.imageHeight = 100,
-      this.titleFontWeight = FontWeight.bold,
-      this.messageTextColor = Colors.black45,
-      this.messageTextSize = 10,
-      this.messageFontWeight = FontWeight.normal,
-      this.spaceBtnTitleMessage = 5});
+  const PregnancyView({
+    super.key,
+    required this.size,
+    this.firstTrimesterName = "",
+    this.firstTrimesterColor = defaultMenstruationColor,
+    this.firstTrimesterTextColor = Colors.white,
+    this.secondTrimesterName = "",
+    this.imageUrl = "",
+    this.highlightCurrentMonthColor,
+    this.secondTrimesterColor = defaultFollicularColor,
+    this.secondTrimesterTextColor = Colors.white,
+    this.thirdTrimesterName = "",
+    this.thirdTrimesterColor = defaultOvulationColor,
+    this.thirdTrimesterTextColor = Colors.white,
+    this.titleTextColor = Colors.black,
+    this.titleTextSize = 20,
+    this.imageWidth = 100,
+    this.imageHeight = 100,
+    this.titleFontWeight = FontWeight.bold,
+    this.messageTextColor = Colors.black45,
+    this.messageTextSize = 10,
+    this.messageFontWeight = FontWeight.normal,
+    this.spaceBtnTitleMessage = 5,
+  });
 
   @override
   State<PregnancyView> createState() => _PregnancyViewState();
@@ -113,33 +114,34 @@ class _PregnancyViewState extends State<PregnancyView> {
 
   updatePaintObject() {
     _painter = PregnancyPainter(
-        totalTrimester: 3,
-        secondTrimesterColor: widget.secondTrimesterColor,
-        secondTrimesterName: _secondTrimesterName,
-        secondTrimesterTextColor: widget.secondTrimesterTextColor,
-        firstTrimesterColor: widget.firstTrimesterColor,
-        currentMonth: _currentMonth,
-        image: _image,
-        messageIndex: _messageIndex,
-        showImage: _showImage,
-        imageHeight: widget.imageHeight,
-        imageWidth: widget.imageWidth,
-        highlightCurrentMonthColor: _highlightCurrentMonthColor,
-        firstTrimesterName: _firstTrimesterName,
-        firstTrimesterTextColor: widget.firstTrimesterTextColor,
-        thirdTrimesterColor: widget.thirdTrimesterColor,
-        thirdTrimesterName: _thirdTrimesterName,
-        thirdTrimesterTextColor: widget.thirdTrimesterTextColor,
-        title: _title,
-        titleFontWeight: widget.titleFontWeight,
-        titleTextColor: widget.titleTextColor,
-        titleTextSize: widget.titleTextSize,
-        message: _message,
-        message2: _message2,
-        messageFontWeight: widget.messageFontWeight,
-        messageTextColor: widget.messageTextColor,
-        messageTextSize: widget.messageTextSize,
-        spaceBtnTitleMessage: widget.spaceBtnTitleMessage);
+      totalTrimester: 3,
+      secondTrimesterColor: widget.secondTrimesterColor,
+      secondTrimesterName: _secondTrimesterName,
+      secondTrimesterTextColor: widget.secondTrimesterTextColor,
+      firstTrimesterColor: widget.firstTrimesterColor,
+      currentMonth: _currentMonth,
+      image: _image,
+      messageIndex: _messageIndex,
+      showImage: _showImage,
+      imageHeight: widget.imageHeight,
+      imageWidth: widget.imageWidth,
+      highlightCurrentMonthColor: _highlightCurrentMonthColor,
+      firstTrimesterName: _firstTrimesterName,
+      firstTrimesterTextColor: widget.firstTrimesterTextColor,
+      thirdTrimesterColor: widget.thirdTrimesterColor,
+      thirdTrimesterName: _thirdTrimesterName,
+      thirdTrimesterTextColor: widget.thirdTrimesterTextColor,
+      title: _title,
+      titleFontWeight: widget.titleFontWeight,
+      titleTextColor: widget.titleTextColor,
+      titleTextSize: widget.titleTextSize,
+      message: _message,
+      message2: _message2,
+      messageFontWeight: widget.messageFontWeight,
+      messageTextColor: widget.messageTextColor,
+      messageTextSize: widget.messageTextSize,
+      spaceBtnTitleMessage: widget.spaceBtnTitleMessage,
+    );
   }
 
   /// Generate dynamic messages based on different conditions
@@ -155,7 +157,8 @@ class _PregnancyViewState extends State<PregnancyView> {
       int weekNumber = (difference / 7).floor() + 1;
       int monthNumber = (difference / 30).ceil();
       _currentMonth = monthNumber - 1;
-      _message = "$monthNumber${getOrdinalSuffix(monthNumber)} Month";
+      _message =
+          "$monthNumber${getOrdinalSuffix(monthNumber)} ${WidgetBaseLanguage.month}";
       _message2 = "Week $weekNumber";
     }
   }
@@ -246,9 +249,6 @@ class _PregnancyViewState extends State<PregnancyView> {
       }
     }
     size = Size(widgetSize, widgetSize);
-    return CustomPaint(
-      size: Size(widgetSize, widgetSize),
-      painter: _painter,
-    );
+    return CustomPaint(size: Size(widgetSize, widgetSize), painter: _painter);
   }
 }
