@@ -300,3 +300,5 @@ const String urIrregularTitle = "فاسد";
 
 const String urLatePeriod = "دیر سے مدت";
 const String urMonth = "مہینہ";
+const String urWeek = "ہفتہ";
+const String urWeeks = "ہفتے";

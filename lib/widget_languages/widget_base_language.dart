@@ -590,4 +590,8 @@ class WidgetBaseLanguage {
   static String get irregularTitle => getIrregularTitle();
 
   static String get month => getMonth();
+
+  static String get week => getWeek();
+
+  static String get weeks => getWeeks();
 }

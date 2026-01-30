@@ -298,3 +298,5 @@ const String jaIrregularTitle = "不規則";
 
 const String jaLatePeriod = "後期";
 const String jaMonth = "月";
+const String jaWeek = "週";
+const String jaWeeks = "週間";

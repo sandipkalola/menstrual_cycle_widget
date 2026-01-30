@@ -323,3 +323,5 @@ const String frIrregularTitle = "Irrégulier";
 
 const String frLatePeriod = "Fin de période";
 const String frMonth = "Mois";
+const String frWeek = "Semaine";
+const String frWeeks = "Semaines";

@@ -304,3 +304,5 @@ const String trIrregularTitle = "Düzensiz";
 
 const String trLatePeriod = "Geç dönem";
 const String trMonth = "Ay";
+const String trWeek = "Hafta";
+const String trWeeks = "Haftalar";

@@ -311,3 +311,5 @@ const String bnIrregularTitle = "অনিয়মিত";
 
 const String bnLatePeriod = "দেরী সময়";
 const String bnMonth = "মাস";
+const String bnWeek = "সপ্তাহ";
+const String bnWeeks = "সপ্তাহগুলি";

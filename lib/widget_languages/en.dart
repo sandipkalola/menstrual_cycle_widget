@@ -302,3 +302,5 @@ const String enIrregularTitle = "Irregular";
 
 const String enLatePeriod = "Late Period";
 const String enMonth = "Month";
+const String enWeek = "Week";
+const String enWeeks = "Weeks";

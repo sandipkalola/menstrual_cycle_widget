@@ -159,7 +159,7 @@ class _PregnancyViewState extends State<PregnancyView> {
       _currentMonth = monthNumber - 1;
       _message =
           "$monthNumber${getOrdinalSuffix(monthNumber)} ${WidgetBaseLanguage.month}";
-      _message2 = "Week $weekNumber";
+      _message2 = "${WidgetBaseLanguage.week} $weekNumber";
     }
   }
 

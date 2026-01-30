@@ -301,3 +301,5 @@ const String ruIrregularTitle = "Нерегулярный";
 
 const String ruLatePeriod = "Поздний период";
 const String ruMonth = "Месяц";
+const String ruWeek = "Неделя";
+const String ruWeeks = "Недели";

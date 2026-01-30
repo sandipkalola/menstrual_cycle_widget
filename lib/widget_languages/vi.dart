@@ -303,3 +303,5 @@ const String viIrregularTitle = "Không đều";
 
 const String viLatePeriod = "Cuối kỳ";
 const String viMonth = "Tháng";
+const String viWeek = "Tuần";
+const String viWeeks = "Tuần";
