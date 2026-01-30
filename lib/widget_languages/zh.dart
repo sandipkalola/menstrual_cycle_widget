@@ -296,3 +296,5 @@ const String zhIrregularTitle = "不规律的";
 
 const String zhLatePeriod = "后期";
 const String zhMonth = "月";
+const String zhWeek = "周";
+const String zhWeeks = "周";

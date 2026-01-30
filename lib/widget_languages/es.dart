@@ -302,3 +302,5 @@ const String esIrregularTitle = "Irregular";
 
 const String esLatePeriod = "Late Period";
 const String esMonth = "Month";
+const String esWeek = "Week";
+const String esWeeks = "Weeks";

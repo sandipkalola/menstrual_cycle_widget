@@ -305,3 +305,5 @@ const String deIrregularTitle = "Irregulär";
 
 const String deLatePeriod = "Späte Periode";
 const String deMonth = "Monat";
+const String deWeek = "Woche";
+const String deWeeks = "Wochen";

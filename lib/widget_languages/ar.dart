@@ -293,3 +293,5 @@ const String arLowLabel = "قليل";
 const String arMediumLabel = "واسطة";
 const String arHighLabel = "عالي";
 const String arMonth = "شهر";
+const String arWeek = "أسبوع";
+const String arWeeks = "أسابيع";

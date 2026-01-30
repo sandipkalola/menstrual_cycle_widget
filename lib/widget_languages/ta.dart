@@ -307,3 +307,5 @@ const String taIrregularTitle = "ஒழுங்கற்ற";
 
 const String taLatePeriod = "தாமதமான காலம்";
 const String taMonth = "மாதம்";
+const String taWeek = "வாரம்";
+const String taWeeks = "வாரங்கள்";

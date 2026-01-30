@@ -68,7 +68,7 @@ getSaveLogsTitle() {
     Languages.turkish: trSaveLogs,
     Languages.urdu: urSaveLogs,
     Languages.vietnamese: viSaveLogs,
-    Languages.italian: itSaveLogs
+    Languages.italian: itSaveLogs,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -94,7 +94,7 @@ getSecretKeyLabel() {
     Languages.turkish: trSecretKeyLabel,
     Languages.urdu: urSecretKeyLabel,
     Languages.vietnamese: viSecretKeyLabel,
-    Languages.italian: itSecretKeyLabel
+    Languages.italian: itSecretKeyLabel,
   };
   return secretKeyLabels[MenstrualCycleWidget.currentLanguage];
 }
@@ -120,7 +120,7 @@ getIvKeyLabel() {
     Languages.turkish: trIvKeyLabel,
     Languages.urdu: urIvKeyLabel,
     Languages.vietnamese: viIvKeyLabel,
-    Languages.italian: itIvKeyLabel
+    Languages.italian: itIvKeyLabel,
   };
   return ivKeyLabels[MenstrualCycleWidget.currentLanguage];
 }
@@ -146,7 +146,7 @@ getTotalCycleDaysLabel() {
     Languages.turkish: trTotalCycleDaysLabel,
     Languages.urdu: urTotalCycleDaysLabel,
     Languages.vietnamese: viTotalCycleDaysLabel,
-    Languages.italian: itTotalCycleDaysLabel
+    Languages.italian: itTotalCycleDaysLabel,
   };
   return totalCycleDaysLabels[MenstrualCycleWidget.currentLanguage];
 }
@@ -172,7 +172,7 @@ getTotalPeriodDaysLabel() {
     Languages.turkish: trTotalPeriodDaysLabel,
     Languages.urdu: urTotalPeriodDaysLabel,
     Languages.vietnamese: viTotalPeriodDaysLabel,
-    Languages.italian: itTotalPeriodDaysLabel
+    Languages.italian: itTotalPeriodDaysLabel,
   };
   return totalPeriodDaysLabels[MenstrualCycleWidget.currentLanguage];
 }
@@ -198,7 +198,7 @@ getPrintLogLabel() {
     Languages.turkish: trPrintLogLabel,
     Languages.urdu: urPrintLogLabel,
     Languages.vietnamese: viPrintLogLabel,
-    Languages.italian: itPrintLogLabel
+    Languages.italian: itPrintLogLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -224,7 +224,7 @@ getSaveLabel() {
     Languages.turkish: trSaveLabel,
     Languages.urdu: urSaveLabel,
     Languages.vietnamese: viSaveLabel,
-    Languages.italian: itSaveLabel
+    Languages.italian: itSaveLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -250,7 +250,7 @@ getCancelLabel() {
     Languages.turkish: trCancelLabel,
     Languages.urdu: urCancelLabel,
     Languages.vietnamese: viCancelLabel,
-    Languages.italian: itCancelLabel
+    Languages.italian: itCancelLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -276,7 +276,7 @@ getEditPeriodDateLabel() {
     Languages.turkish: trEditPeriodDateLabel,
     Languages.urdu: urEditPeriodDateLabel,
     Languages.vietnamese: viEditPeriodDateLabel,
-    Languages.italian: itEditPeriodDateLabel
+    Languages.italian: itEditPeriodDateLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -302,7 +302,7 @@ getPeriodLabel() {
     Languages.turkish: trPeriodLabel,
     Languages.urdu: urPeriodLabel,
     Languages.vietnamese: viPeriodLabel,
-    Languages.italian: itPeriodLabel
+    Languages.italian: itPeriodLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -328,7 +328,7 @@ getPredictOvulationDateLabel() {
     Languages.turkish: trPredictOvulationDateLabel,
     Languages.urdu: urPredictOvulationDateLabel,
     Languages.vietnamese: viPredictOvulationDateLabel,
-    Languages.italian: itPredictOvulationDateLabel
+    Languages.italian: itPredictOvulationDateLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -354,7 +354,7 @@ getPredictPeriodDateLabel() {
     Languages.turkish: trPredictPeriodDateLabel,
     Languages.urdu: urPredictPeriodDateLabel,
     Languages.vietnamese: viPredictPeriodDateLabel,
-    Languages.italian: itPredictPeriodDateLabel
+    Languages.italian: itPredictPeriodDateLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -380,7 +380,7 @@ getSelectedDateLabel() {
     Languages.turkish: trSelectedDateLabel,
     Languages.urdu: urSelectedDateLabel,
     Languages.vietnamese: viSelectedDateLabel,
-    Languages.italian: itSelectedDateLabel
+    Languages.italian: itSelectedDateLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -406,7 +406,7 @@ getTodayLabel() {
     Languages.turkish: trTodayLabel,
     Languages.urdu: urTodayLabel,
     Languages.vietnamese: viTodayLabel,
-    Languages.italian: itTodayLabel
+    Languages.italian: itTodayLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -432,7 +432,7 @@ getMenstruationLabel() {
     Languages.turkish: trMenstruationLabel,
     Languages.urdu: urMenstruationLabel,
     Languages.vietnamese: viMenstruationLabel,
-    Languages.italian: itMenstruationLabel
+    Languages.italian: itMenstruationLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -458,7 +458,7 @@ getThirdTrimesterName() {
     Languages.turkish: trThirdTrimesterName,
     Languages.urdu: urThirdTrimesterName,
     Languages.vietnamese: viThirdTrimesterName,
-    Languages.italian: itThirdTrimesterName
+    Languages.italian: itThirdTrimesterName,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -484,7 +484,7 @@ getSecondTrimesterName() {
     Languages.turkish: trSecondTrimesterName,
     Languages.urdu: urSecondTrimesterName,
     Languages.vietnamese: viSecondTrimesterName,
-    Languages.italian: itSecondTrimesterName
+    Languages.italian: itSecondTrimesterName,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -510,7 +510,7 @@ getFirstTrimesterName() {
     Languages.turkish: trFirstTrimesterName,
     Languages.urdu: urFirstTrimesterName,
     Languages.vietnamese: viFirstTrimesterName,
-    Languages.italian: itFirstTrimesterName
+    Languages.italian: itFirstTrimesterName,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -536,7 +536,7 @@ getFollicularPhaseLabel() {
     Languages.turkish: trFollicularPhaseLabel,
     Languages.urdu: urFollicularPhaseLabel,
     Languages.vietnamese: viFollicularPhaseLabel,
-    Languages.italian: itFollicularPhaseLabel
+    Languages.italian: itFollicularPhaseLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -562,7 +562,7 @@ getOvulationLabel() {
     Languages.turkish: trOvulationLabel,
     Languages.urdu: urOvulationLabel,
     Languages.vietnamese: viOvulationLabel,
-    Languages.italian: itOvulationLabel
+    Languages.italian: itOvulationLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -588,7 +588,7 @@ getLutealPhaseLabel() {
     Languages.turkish: trLutealPhaseLabel,
     Languages.urdu: urLutealPhaseLabel,
     Languages.vietnamese: viLutealPhaseLabel,
-    Languages.italian: itLutealPhaseLabel
+    Languages.italian: itLutealPhaseLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -614,7 +614,7 @@ getMediumLabel() {
     Languages.turkish: trMediumLabel,
     Languages.urdu: urMediumLabel,
     Languages.vietnamese: viMediumLabel,
-    Languages.italian: itMediumLabel
+    Languages.italian: itMediumLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -640,7 +640,7 @@ getLowLabel() {
     Languages.turkish: trLowLabel,
     Languages.urdu: urLowLabel,
     Languages.vietnamese: viLowLabel,
-    Languages.italian: itLowLabel
+    Languages.italian: itLowLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -666,7 +666,7 @@ getHighLabel() {
     Languages.turkish: trHighLabel,
     Languages.urdu: urHighLabel,
     Languages.vietnamese: viHighLabel,
-    Languages.italian: itHighLabel
+    Languages.italian: itHighLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -692,7 +692,7 @@ getEstrogenLabel() {
     Languages.turkish: trEstrogenLabel,
     Languages.urdu: urEstrogenLabel,
     Languages.vietnamese: viEstrogenLabel,
-    Languages.italian: itEstrogenLabel
+    Languages.italian: itEstrogenLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -718,7 +718,7 @@ getProgesteroneLabel() {
     Languages.turkish: trProgesteroneLabel,
     Languages.urdu: urProgesteroneLabel,
     Languages.vietnamese: viProgesteroneLabel,
-    Languages.italian: itProgesteroneLabel
+    Languages.italian: itProgesteroneLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -744,7 +744,7 @@ getLatePeriodLabel() {
     Languages.turkish: trLatePeriod,
     Languages.urdu: urLatePeriod,
     Languages.vietnamese: viLatePeriod,
-    Languages.italian: itLatePeriod
+    Languages.italian: itLatePeriod,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -770,7 +770,7 @@ getDayLabel() {
     Languages.turkish: trDayLabel,
     Languages.urdu: urDayLabel,
     Languages.vietnamese: viDayLabel,
-    Languages.italian: itDayLabel
+    Languages.italian: itDayLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -796,7 +796,7 @@ getLogPeriodLabel() {
     Languages.turkish: trLogPeriodLabel,
     Languages.urdu: urLogPeriodLabel,
     Languages.vietnamese: viLogPeriodLabel,
-    Languages.italian: itLogPeriodLabel
+    Languages.italian: itLogPeriodLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -822,7 +822,7 @@ getPastCycleLabel() {
     Languages.turkish: trPastCycleLabel,
     Languages.urdu: urPastCycleLabel,
     Languages.vietnamese: viPastCycleLabel,
-    Languages.italian: itPastCycleLabel
+    Languages.italian: itPastCycleLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -848,7 +848,7 @@ getCircleDaysLateLabel() {
     Languages.turkish: trCircleDaysLateLabel,
     Languages.urdu: urCircleDaysLateLabel,
     Languages.vietnamese: viCircleDaysLateLabel,
-    Languages.italian: itCircleDaysLateLabel
+    Languages.italian: itCircleDaysLateLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -874,7 +874,7 @@ getCircleDayLateLabel() {
     Languages.turkish: trCircleDayLateLabel,
     Languages.urdu: urCircleDayLateLabel,
     Languages.vietnamese: viCircleDayLateLabel,
-    Languages.italian: itCircleDayLateLabel
+    Languages.italian: itCircleDayLateLabel,
   };
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
 }
@@ -900,7 +900,7 @@ getLateLabel() {
     Languages.turkish: trLateLabel,
     Languages.urdu: urLateLabel,
     Languages.vietnamese: viLateLabel,
-    Languages.italian: itLateLabel
+    Languages.italian: itLateLabel,
   };
 
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];
@@ -7624,6 +7624,60 @@ getMonth() {
     Languages.urdu: urMonth,
     Languages.vietnamese: viMonth,
     Languages.italian: itMonth,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
+getWeek() {
+  final logsByLanguage = {
+    Languages.english: enWeek,
+    Languages.hindi: hiWeek,
+    Languages.arabic: arWeek,
+    Languages.spanish: esWeek,
+    Languages.mandarin: zhWeek,
+    Languages.french: frWeek,
+    Languages.bengali: bnWeek,
+    Languages.portuguese: ptWeek,
+    Languages.russian: ruWeek,
+    Languages.japanese: jaWeek,
+    Languages.german: deWeek,
+    Languages.punjabi: paWeek,
+    Languages.javanese: jvWeek,
+    Languages.wuChinese: wuuWeek,
+    Languages.korean: koWeek,
+    Languages.tamil: taWeek,
+    Languages.turkish: trWeek,
+    Languages.urdu: urWeek,
+    Languages.vietnamese: viWeek,
+    Languages.italian: itWeek,
+  };
+
+  return logsByLanguage[MenstrualCycleWidget.currentLanguage];
+}
+
+getWeeks() {
+  final logsByLanguage = {
+    Languages.english: enWeeks,
+    Languages.hindi: hiWeeks,
+    Languages.arabic: arWeeks,
+    Languages.spanish: esWeeks,
+    Languages.mandarin: zhWeeks,
+    Languages.french: frWeeks,
+    Languages.bengali: bnWeeks,
+    Languages.portuguese: ptWeeks,
+    Languages.russian: ruWeeks,
+    Languages.japanese: jaWeeks,
+    Languages.german: deWeeks,
+    Languages.punjabi: paWeeks,
+    Languages.javanese: jvWeeks,
+    Languages.wuChinese: wuuWeeks,
+    Languages.korean: koWeeks,
+    Languages.tamil: taWeeks,
+    Languages.turkish: trWeeks,
+    Languages.urdu: urWeeks,
+    Languages.vietnamese: viWeeks,
+    Languages.italian: itWeeks,
   };
 
   return logsByLanguage[MenstrualCycleWidget.currentLanguage];

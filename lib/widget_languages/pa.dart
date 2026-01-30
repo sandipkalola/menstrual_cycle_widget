@@ -304,3 +304,5 @@ const String paIrregularTitle = "ਅਨਿਯਮਿਤ";
 
 const String paLatePeriod = "ਦੇਰ ਦੀ ਮਿਆਦ";
 const String paMonth = "ਮਹੀਨਾ";
+const String paWeek = "ਹਫ਼ਤਾ";
+const String paWeeks = "ਹਫ਼ਤੇ";

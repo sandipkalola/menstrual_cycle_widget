@@ -302,3 +302,5 @@ const String jvIrregularTitle = "Irregular";
 
 const String jvLatePeriod = "Late Period";
 const String jvMonth = "Month";
+const String jvWeek = "Week";
+const String jvWeeks = "Weeks";
