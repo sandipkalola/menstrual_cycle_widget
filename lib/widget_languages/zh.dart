@@ -12,10 +12,10 @@ const String zhPredictOvulationDateLabel = "预测排卵日期";
 const String zhPredictPeriodDateLabel = "预测期限日期";
 const String zhSelectedDateLabel = "选定的日期";
 const String zhTodayLabel = "今天";
-const String zhMenstruationLabel = "月经";
-const String zhFollicularPhaseLabel = "卵泡";
-const String zhOvulationLabel = "排卵";
-const String zhLutealPhaseLabel = "黄体";
+const String zhMenstruationLabel = "月經期";
+const String zhFollicularPhaseLabel = "卵泡期";
+const String zhOvulationLabel = "排卵期";
+const String zhLutealPhaseLabel = "黄体期";
 const String zhEstrogenLabel = "雌激素";
 const String zhProgesteroneLabel = "孕酮";
 
